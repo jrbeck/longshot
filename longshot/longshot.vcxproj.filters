@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\ai">
+      <UniqueIdentifier>{d3dcbec5-ee2c-4547-883a-c91b11a83cf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\galaxy">
+      <UniqueIdentifier>{5a45af98-d861-4b17-9efb-e2609f812989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game">
+      <UniqueIdentifier>{c61856ba-04d4-4a6b-a13d-dfc3f295167d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{ad3e6f15-7010-4523-b28c-40e3afcbcf28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utility">
+      <UniqueIdentifier>{df481f64-0495-4791-8ccd-b5c4ecc35a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\view">
+      <UniqueIdentifier>{c387dbc7-e6d9-4073-afab-070f5dcd13d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\world">
+      <UniqueIdentifier>{ab0df329-c7d5-4291-ba14-8f65d6c326d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ai">
+      <UniqueIdentifier>{a51d41df-2ff0-4e3b-b50c-8a5825b0af75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\galaxy">
+      <UniqueIdentifier>{1ded208b-8eb6-483c-b56b-1002f632feb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{2103670e-01f4-43d7-aea5-d04cb72bc260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{7aed881c-8625-42c8-8394-101455e54594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\world">
+      <UniqueIdentifier>{45fd677a-0ffb-4d20-9156-519ebd35eac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\view">
+      <UniqueIdentifier>{3ab66e45-ed1b-4794-b920-bf88d182c664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utility">
+      <UniqueIdentifier>{ef7a3b31-c4e2-4583-b8af-9ec3cd439827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utility\dungeon">
+      <UniqueIdentifier>{a1dd88cb-a8b2-4732-aadb-ac0eded027d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utility\dungeon">
+      <UniqueIdentifier>{f155c20a-17e3-4ae0-8dc6-0b99e10363cc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\AiEntity.cpp">
+      <Filter>Source Files\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AiManager.cpp">
+      <Filter>Source Files\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AiSpecies.cpp">
+      <Filter>Source Files\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AiStateMachine.cpp">
+      <Filter>Source Files\ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\StarShip.cpp">
+      <Filter>Source Files\galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\StarSystem.cpp">
+      <Filter>Source Files\galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Galaxy.cpp">
+      <Filter>Source Files\galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\OrbitSky.cpp">
+      <Filter>Source Files\galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Planet.cpp">
+      <Filter>Source Files\galaxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Player.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RogueViewer.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AssetManager.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Constants.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Edit.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Game.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GameInput.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\HeadBobble.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\InactiveList.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Inventory.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ItemManager.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Location.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Longshot.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Physics.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\v2d.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\v3d.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BoundingBox.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BoundingSphere.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MathUtil.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Plane3d.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PseudoRandom.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Rectangle2d.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Simplex.cpp">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\dungeon\BigRoomDungeon.cpp">
+      <Filter>Source Files\utility\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\dungeon\DungeonModel.cpp">
+      <Filter>Source Files\utility\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\dungeon\DungeonTile.cpp">
+      <Filter>Source Files\utility\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\dungeon\DungeonUtil.cpp">
+      <Filter>Source Files\utility\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\dungeon\MoleculeDungeon.cpp">
+      <Filter>Source Files\utility\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\dungeon\SnakeDungeon.cpp">
+      <Filter>Source Files\utility\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\TextureRegion.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\XmlParser.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Animation.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BitmapModel.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GlBitmapFont.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GlCamera.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LoadScreen.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Menu.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ObjectLoader.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RogueMap.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RtsCam.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SdlInterface.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SoundSystem.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SpriteBatcher.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Texture.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WorldMapView.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AiView.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GalaxyMap.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MerchantView.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PhysicsView.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RogueMapViewer.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BlockTypeData.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\CloudSim.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FeatureGenerator.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\InactiveColumnManager.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LightManager.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LightSource.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Periodics.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PlanetMap.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SkySim.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Terrain.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WorldChunk.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WorldColumn.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WorldLight.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WorldLighting.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WorldMap.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\main.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\include\AiEntity.h">
+      <Filter>Header Files\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\AiManager.h">
+      <Filter>Header Files\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\AiSpecies.h">
+      <Filter>Header Files\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\AiStateMachine.h">
+      <Filter>Header Files\ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\StarSystem.h">
+      <Filter>Header Files\galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Galaxy.h">
+      <Filter>Header Files\galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\OrbitSky.h">
+      <Filter>Header Files\galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Planet.h">
+      <Filter>Header Files\galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\StarShip.h">
+      <Filter>Header Files\galaxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\RogueViewer.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\AssetManager.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Constants.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Edit.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Game.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GameInput.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\HeadBobble.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\InactiveList.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Inventory.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\ItemManager.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Location.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Longshot.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Physics.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Player.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Simplex.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\v2d.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\v3d.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\BoundingBox.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\BoundingSphere.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\MathUtil.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Plane3d.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\PseudoRandom.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Rectangle2d.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\dungeon\BigRoomDungeon.h">
+      <Filter>Header Files\utility\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\dungeon\DungeonModel.h">
+      <Filter>Header Files\utility\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\dungeon\DungeonTile.h">
+      <Filter>Header Files\utility\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\dungeon\DungeonUtil.h">
+      <Filter>Header Files\utility\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\dungeon\MoleculeDungeon.h">
+      <Filter>Header Files\utility\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\dungeon\SnakeDungeon.h">
+      <Filter>Header Files\utility\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\XmlParser.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Animation.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\BitmapModel.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GlBitmapFont.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GlCamera.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\LoadScreen.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Menu.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\ObjectLoader.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\RogueMap.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\RtsCam.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\SdlInterface.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\SoundSystem.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\SpriteBatcher.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Texture.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\TextureRegion.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldMapView.h">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\AiView.h">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GalaxyMap.h">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\MerchantView.h">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\PhysicsView.h">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\RogueMapViewer.h">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldLighting.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldMap.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\BlockTypeData.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\CloudSim.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\FeatureGenerator.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\InactiveColumnManager.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\LightManager.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\LightSource.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Periodics.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\PlanetMap.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\SkySim.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Terrain.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\World.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldChunk.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldColumn.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldLight.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\longshot.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource\longshot.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

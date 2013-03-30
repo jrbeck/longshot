@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7160B3CC-B992-424F-8AF1-AEA4F7291D30}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>longshot</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\theJody\Desktop\longshot\source\include</AdditionalIncludeDirectories>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\theJody\Desktop\longshot\source\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;SDL_image.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\AiEntity.cpp" />
+    <ClCompile Include="..\source\AiManager.cpp" />
+    <ClCompile Include="..\source\AiSpecies.cpp" />
+    <ClCompile Include="..\source\AiStateMachine.cpp" />
+    <ClCompile Include="..\source\AiView.cpp" />
+    <ClCompile Include="..\source\Animation.cpp" />
+    <ClCompile Include="..\source\AssetManager.cpp" />
+    <ClCompile Include="..\source\BitmapModel.cpp" />
+    <ClCompile Include="..\source\BlockTypeData.cpp" />
+    <ClCompile Include="..\source\BoundingBox.cpp" />
+    <ClCompile Include="..\source\BoundingSphere.cpp" />
+    <ClCompile Include="..\source\CloudSim.cpp" />
+    <ClCompile Include="..\source\Constants.cpp" />
+    <ClCompile Include="..\source\dungeon\BigRoomDungeon.cpp" />
+    <ClCompile Include="..\source\dungeon\DungeonModel.cpp" />
+    <ClCompile Include="..\source\dungeon\DungeonTile.cpp" />
+    <ClCompile Include="..\source\dungeon\DungeonUtil.cpp" />
+    <ClCompile Include="..\source\dungeon\MoleculeDungeon.cpp" />
+    <ClCompile Include="..\source\dungeon\SnakeDungeon.cpp" />
+    <ClCompile Include="..\source\Edit.cpp" />
+    <ClCompile Include="..\source\FeatureGenerator.cpp" />
+    <ClCompile Include="..\source\Galaxy.cpp" />
+    <ClCompile Include="..\source\GalaxyMap.cpp" />
+    <ClCompile Include="..\source\Game.cpp" />
+    <ClCompile Include="..\source\GameInput.cpp" />
+    <ClCompile Include="..\source\GlBitmapFont.cpp" />
+    <ClCompile Include="..\source\GlCamera.cpp" />
+    <ClCompile Include="..\source\HeadBobble.cpp" />
+    <ClCompile Include="..\source\InactiveColumnManager.cpp" />
+    <ClCompile Include="..\source\InactiveList.cpp" />
+    <ClCompile Include="..\source\Inventory.cpp" />
+    <ClCompile Include="..\source\ItemManager.cpp" />
+    <ClCompile Include="..\source\LightManager.cpp" />
+    <ClCompile Include="..\source\LightSource.cpp" />
+    <ClCompile Include="..\source\LoadScreen.cpp" />
+    <ClCompile Include="..\source\Location.cpp" />
+    <ClCompile Include="..\source\Longshot.cpp" />
+    <ClCompile Include="..\source\main.cpp" />
+    <ClCompile Include="..\source\MathUtil.cpp" />
+    <ClCompile Include="..\source\Menu.cpp" />
+    <ClCompile Include="..\source\MerchantView.cpp" />
+    <ClCompile Include="..\source\ObjectLoader.cpp" />
+    <ClCompile Include="..\source\OrbitSky.cpp" />
+    <ClCompile Include="..\source\Periodics.cpp" />
+    <ClCompile Include="..\source\Physics.cpp" />
+    <ClCompile Include="..\source\PhysicsView.cpp" />
+    <ClCompile Include="..\source\Plane3d.cpp" />
+    <ClCompile Include="..\source\Planet.cpp" />
+    <ClCompile Include="..\source\PlanetMap.cpp" />
+    <ClCompile Include="..\source\Player.cpp" />
+    <ClCompile Include="..\source\PseudoRandom.cpp" />
+    <ClCompile Include="..\source\Rectangle2d.cpp" />
+    <ClCompile Include="..\source\RogueMap.cpp" />
+    <ClCompile Include="..\source\RogueMapViewer.cpp" />
+    <ClCompile Include="..\source\RogueViewer.cpp" />
+    <ClCompile Include="..\source\RtsCam.cpp" />
+    <ClCompile Include="..\source\SdlInterface.cpp" />
+    <ClCompile Include="..\source\Simplex.cpp" />
+    <ClCompile Include="..\source\SkySim.cpp" />
+    <ClCompile Include="..\source\SoundSystem.cpp" />
+    <ClCompile Include="..\source\SpriteBatcher.cpp" />
+    <ClCompile Include="..\source\StarShip.cpp" />
+    <ClCompile Include="..\source\StarSystem.cpp" />
+    <ClCompile Include="..\source\Terrain.cpp" />
+    <ClCompile Include="..\source\Texture.cpp" />
+    <ClCompile Include="..\source\TextureRegion.cpp" />
+    <ClCompile Include="..\source\v2d.cpp" />
+    <ClCompile Include="..\source\v3d.cpp" />
+    <ClCompile Include="..\source\World.cpp" />
+    <ClCompile Include="..\source\WorldChunk.cpp" />
+    <ClCompile Include="..\source\WorldColumn.cpp" />
+    <ClCompile Include="..\source\WorldLight.cpp" />
+    <ClCompile Include="..\source\WorldLighting.cpp" />
+    <ClCompile Include="..\source\WorldMap.cpp" />
+    <ClCompile Include="..\source\WorldMapView.cpp" />
+    <ClCompile Include="..\source\XmlParser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\dungeon\BigRoomDungeon.h" />
+    <ClInclude Include="..\source\dungeon\DungeonModel.h" />
+    <ClInclude Include="..\source\dungeon\DungeonTile.h" />
+    <ClInclude Include="..\source\dungeon\DungeonUtil.h" />
+    <ClInclude Include="..\source\dungeon\MoleculeDungeon.h" />
+    <ClInclude Include="..\source\dungeon\SnakeDungeon.h" />
+    <ClInclude Include="..\source\include\AiEntity.h" />
+    <ClInclude Include="..\source\include\AiManager.h" />
+    <ClInclude Include="..\source\include\AiSpecies.h" />
+    <ClInclude Include="..\source\include\AiStateMachine.h" />
+    <ClInclude Include="..\source\include\AiView.h" />
+    <ClInclude Include="..\source\include\Animation.h" />
+    <ClInclude Include="..\source\include\AssetManager.h" />
+    <ClInclude Include="..\source\include\BitmapModel.h" />
+    <ClInclude Include="..\source\include\BlockTypeData.h" />
+    <ClInclude Include="..\source\include\BoundingBox.h" />
+    <ClInclude Include="..\source\include\BoundingSphere.h" />
+    <ClInclude Include="..\source\include\CloudSim.h" />
+    <ClInclude Include="..\source\include\Constants.h" />
+    <ClInclude Include="..\source\include\Edit.h" />
+    <ClInclude Include="..\source\include\FeatureGenerator.h" />
+    <ClInclude Include="..\source\include\Galaxy.h" />
+    <ClInclude Include="..\source\include\GalaxyMap.h" />
+    <ClInclude Include="..\source\include\Game.h" />
+    <ClInclude Include="..\source\include\GameInput.h" />
+    <ClInclude Include="..\source\include\GlBitmapFont.h" />
+    <ClInclude Include="..\source\include\GlCamera.h" />
+    <ClInclude Include="..\source\include\HeadBobble.h" />
+    <ClInclude Include="..\source\include\InactiveColumnManager.h" />
+    <ClInclude Include="..\source\include\InactiveList.h" />
+    <ClInclude Include="..\source\include\Inventory.h" />
+    <ClInclude Include="..\source\include\ItemManager.h" />
+    <ClInclude Include="..\source\include\LightManager.h" />
+    <ClInclude Include="..\source\include\LightSource.h" />
+    <ClInclude Include="..\source\include\LoadScreen.h" />
+    <ClInclude Include="..\source\include\Location.h" />
+    <ClInclude Include="..\source\include\Longshot.h" />
+    <ClInclude Include="..\source\include\MathUtil.h" />
+    <ClInclude Include="..\source\include\Menu.h" />
+    <ClInclude Include="..\source\include\MerchantView.h" />
+    <ClInclude Include="..\source\include\ObjectLoader.h" />
+    <ClInclude Include="..\source\include\OrbitSky.h" />
+    <ClInclude Include="..\source\include\Periodics.h" />
+    <ClInclude Include="..\source\include\Physics.h" />
+    <ClInclude Include="..\source\include\PhysicsView.h" />
+    <ClInclude Include="..\source\include\Plane3d.h" />
+    <ClInclude Include="..\source\include\Planet.h" />
+    <ClInclude Include="..\source\include\PlanetMap.h" />
+    <ClInclude Include="..\source\include\Player.h" />
+    <ClInclude Include="..\source\include\PseudoRandom.h" />
+    <ClInclude Include="..\source\include\Rectangle2d.h" />
+    <ClInclude Include="..\source\include\RogueMap.h" />
+    <ClInclude Include="..\source\include\RogueMapViewer.h" />
+    <ClInclude Include="..\source\include\RogueViewer.h" />
+    <ClInclude Include="..\source\include\RtsCam.h" />
+    <ClInclude Include="..\source\include\SdlInterface.h" />
+    <ClInclude Include="..\source\include\Simplex.h" />
+    <ClInclude Include="..\source\include\SkySim.h" />
+    <ClInclude Include="..\source\include\SoundSystem.h" />
+    <ClInclude Include="..\source\include\SpriteBatcher.h" />
+    <ClInclude Include="..\source\include\StarShip.h" />
+    <ClInclude Include="..\source\include\StarSystem.h" />
+    <ClInclude Include="..\source\include\Terrain.h" />
+    <ClInclude Include="..\source\include\Texture.h" />
+    <ClInclude Include="..\source\include\TextureRegion.h" />
+    <ClInclude Include="..\source\include\v2d.h" />
+    <ClInclude Include="..\source\include\v3d.h" />
+    <ClInclude Include="..\source\include\World.h" />
+    <ClInclude Include="..\source\include\WorldChunk.h" />
+    <ClInclude Include="..\source\include\WorldColumn.h" />
+    <ClInclude Include="..\source\include\WorldLight.h" />
+    <ClInclude Include="..\source\include\WorldLighting.h" />
+    <ClInclude Include="..\source\include\WorldMap.h" />
+    <ClInclude Include="..\source\include\WorldMapView.h" />
+    <ClInclude Include="..\source\include\XmlParser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\longshot.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource\longshot.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
