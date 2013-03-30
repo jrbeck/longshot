@@ -300,7 +300,7 @@ void RogueMapViewer::randomizeDungeon() {
 	SelectiveDungeonTile waterTile;
 	waterTile.setType( DUNGEON_TILE_WATER );
 
-	dungeon->setAllTiles( floorTile );
+	dungeon->setAllTiles( wallTile );
 
 	//dungeon->drawLine(
 	//	r_numi( 0, ROGUE_MAP_SIDE ),
@@ -344,6 +344,34 @@ void RogueMapViewer::randomizeDungeon() {
 	//	wallTile );
 
 
+	// draw central room
+	dungeon->drawFilledCircle(
+		(ROGUE_MAP_SIDE / 2) + r_numi( -10, 10 ),
+		(ROGUE_MAP_SIDE / 2) + r_numi( -10, 10 ),
+		r_num( 40.0, 60.0 ),
+		floorTile );
+
+
+	for( int i = 0; i < 5; i ++ ) {
+		int x = r_numi( 0, ROGUE_MAP_SIDE );
+		int y = r_numi( 0, ROGUE_MAP_SIDE );
+
+		dungeon->drawFilledCircle(
+			x,
+			y,
+			r_num( 20.0, 50.0 ),
+			floorTile );
+
+		dungeon->drawCrookedLine(
+			x,
+			y,
+			ROGUE_MAP_SIDE / 2,
+			ROGUE_MAP_SIDE / 2,
+			4, // subdiv
+			10.0, // displacement
+			2.0, // brushSize
+			floorTile );
+	}
 
 	dungeon->drawCrookedLine(
 		0, //r_numi( 0, ROGUE_MAP_SIDE ),
