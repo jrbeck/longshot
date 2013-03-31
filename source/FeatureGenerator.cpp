@@ -1,6 +1,6 @@
 #include "FeatureGenerator.h"
 
-void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World &world) {
+void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 	// this is the RogueMap used to place set pieces on the world
 	RogueMap worldRogueMap;
 	worldRogueMap.resize (ROGUE_W, ROGUE_H);
@@ -1223,6 +1223,16 @@ void FeatureGenerator::clearDungeonBlock (int worldX, int worldY, int worldZ, Wo
 	worldMap.fillVolume (nearCorner, farCorner, BLOCK_TYPE_AIR);
 }
 
+void FeatureGenerator::draw2x2Block( v3di_t worldPos, char blockType, WorldMap& worldMap ) {
+	worldMap.setBlockType( worldPos, blockType );
+	worldPos.x++;
+	worldMap.setBlockType( worldPos, blockType );
+	worldPos.z++;
+	worldMap.setBlockType( worldPos, blockType );
+	worldPos.x--;
+	worldMap.setBlockType( worldPos, blockType );
+}
+
 
 // cornerIndex = chunk index "bottom left"
 // depth = dungeon levels
@@ -1490,7 +1500,7 @@ v2di_t FeatureGenerator::createRogueRec (
 // create a level of the dungeon
 // returns the stairsUp location
 // 
-v2di_t FeatureGenerator::createDungeonRec (
+v2di_t FeatureGenerator::createDungeonRec(
 	v2di_t cornerIndex,
 	v2di_t stairsUp,
 	int height,
@@ -1516,7 +1526,6 @@ v2di_t FeatureGenerator::createDungeonRec (
 		//stairDownRoomCorner = rogueMap.random_room (500, 6, 6);
 
 		// TEMP: this puts it in the same place as the last one ...
-		// wonder what will happen
 		stairDownRoomCorner = v2di_v( dungeonSide / 2, dungeonSide / 2 );
 	}
 
@@ -1589,47 +1598,29 @@ void FeatureGenerator::hollowOutDungeon2x( DungeonUtil* dungeon, WorldMap& world
 	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
 	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	for( int rz = 0; rz < dungeonSide; rz++ ) {
-		for( int rx = 0; rx < dungeonSide; rx++ ) {
-			int wx = worldX + (rx * 2);
-			int wz = worldZ + (rz * 2);
+	v3di_t worldPos = v3di_v( 0, 0, 0 );
 
-			int type = dungeon->getTile( rx, rz )->type;
+	// iterate through the dungeon
+	for( int dz = 0; dz < dungeonSide; dz++ ) {
+		worldPos.z = worldZ + (dz * 2);
+		for( int dx = 0; dx < dungeonSide; dx++ ) {
+			worldPos.x = worldX + (dx * 2);
+
+			int type = dungeon->getTile( dx, dz )->type;
 
 			if (type != DUNGEON_TILE_WALL) {
 				// clear the block
-				clearDungeonBlock( wx, height - 6, wz, worldMap );
-
-				// just ignore the rest of this...move along!
-				v3di_t pos = v3di_v (static_cast<int>(wx), height - 7, static_cast<int>(wz));
-
-				char blockType;
+				clearDungeonBlock( worldPos.x, height - 6, worldPos.z, worldMap );
 
 				// lay down some flooring
-				blockType = BLOCK_TYPE_GREEN_STAR_TILE;
-
-				worldMap.setBlockType (pos, blockType);
-				pos.x++;
-				worldMap.setBlockType (pos, blockType);
-				pos.z++;
-				worldMap.setBlockType (pos, blockType);
-				pos.x--;
-				worldMap.setBlockType (pos, blockType);
+				worldPos.y = height - 7;
+				draw2x2Block( worldPos, BLOCK_TYPE_GREEN_STAR_TILE, worldMap );
 
 				// now the ceiling
-				blockType = BLOCK_TYPE_GREEN_STAR_TILE;
-
-				pos = v3di_v (static_cast<int>(wx), height - 3, static_cast<int>(wz));
-				worldMap.setBlockType (pos, blockType);
-				pos.x++;
-				worldMap.setBlockType (pos, blockType);
-				pos.z++;
-				worldMap.setBlockType (pos, blockType);
-				pos.x--;
-				worldMap.setBlockType (pos, blockType);
+				worldPos.y = height - 3;
+				draw2x2Block( worldPos, BLOCK_TYPE_GREEN_STAR_TILE, worldMap );
 			}
 		}
 	}
-
 }
 

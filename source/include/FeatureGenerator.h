@@ -45,7 +45,7 @@ enum {
 class FeatureGenerator {
 public:
 
-	static void createSetPieces (int xIndex, int zIndex, World &world);
+	static void createSetPieces (int xIndex, int zIndex, World& world);
 
 	static void loadWorldRegion(v2di_t cornerIndex, int sideLength, World &world, bool doOutcroppings);
 	static height_info_t getHeightInfo (int worldX, int worldZ, int sideX, int sideZ, World &world);
@@ -78,6 +78,7 @@ public:
 	static void createForViewer (v3d_t startPos, int type, World &world);
 
 	static void clearDungeonBlock (int worldX, int worldY, int worldZ, WorldMap &worldMap);
+	static void draw2x2Block( v3di_t worldPos, char blockType, WorldMap& worldMap );
 	static void createDungeon (v2di_t cornerIndex, int depth, World &world);
 	static v2di_t createRogueRec (v2di_t cornerIndex, v2di_t stairsUp, int height, int levelsRemaining, WorldMap &worldMap);
 	static v2di_t createDungeonRec (v2di_t cornerIndex, v2di_t stairsUp, int height, int levelsRemaining, WorldMap &worldMap);
