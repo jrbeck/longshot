@@ -12,17 +12,17 @@ LightManager::~LightManager() {
 }
 
 
-size_t LightManager::addLight(v3d_t position, double radius, IntColor color, WorldMap &worldMap) {
+size_t LightManager::addLight( v3d_t position, double radius, IntColor color, WorldMap &worldMap ) {
 	WorldLight *light = new WorldLight();
 	if (light == NULL) {
 		printf("LightManager::addLight(): error: out of memory\n");
 		return 0;
 	}
 	light->mHandle = mNextHandle++;
-	light->set(position, radius, color);
-	mLights.push_back(light);
+	light->set( position, radius, color );
+	mLights.push_back( light );
 
-	updateWorldColumns(*light, worldMap);
+	updateWorldColumns( *light, worldMap );
 
 	return light->mHandle;
 }

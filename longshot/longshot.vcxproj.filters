@@ -61,6 +61,12 @@
     <Filter Include="Source Files\utility\dungeon">
       <UniqueIdentifier>{f155c20a-17e3-4ae0-8dc6-0b99e10363cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\world\feature">
+      <UniqueIdentifier>{25435f26-bc55-4ebb-baca-dbb0bc8a237b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\world\feature">
+      <UniqueIdentifier>{20efa704-779a-4e49-8c85-17290e52e95e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\AiEntity.cpp">
@@ -246,9 +252,6 @@
     <ClCompile Include="..\source\CloudSim.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\FeatureGenerator.cpp">
-      <Filter>Source Files\world</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\InactiveColumnManager.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
@@ -290,6 +293,15 @@
     </ClCompile>
     <ClCompile Include="..\source\main.cpp">
       <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\feature\DungeonFeature.cpp">
+      <Filter>Source Files\world\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\feature\FeatureUtil.cpp">
+      <Filter>Source Files\world\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\feature\FeatureGenerator.cpp">
+      <Filter>Source Files\world\feature</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -482,9 +494,6 @@
     <ClInclude Include="..\source\include\CloudSim.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\FeatureGenerator.h">
-      <Filter>Header Files\world</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\InactiveColumnManager.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
@@ -517,6 +526,15 @@
     </ClInclude>
     <ClInclude Include="..\source\include\WorldLight.h">
       <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\feature\DungeonFeature.h">
+      <Filter>Header Files\world\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\feature\FeatureUtil.h">
+      <Filter>Header Files\world\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\feature\FeatureGenerator.h">
+      <Filter>Header Files\world\feature</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -100,7 +100,9 @@
     <ClCompile Include="..\source\dungeon\MoleculeDungeon.cpp" />
     <ClCompile Include="..\source\dungeon\SnakeDungeon.cpp" />
     <ClCompile Include="..\source\Edit.cpp" />
-    <ClCompile Include="..\source\FeatureGenerator.cpp" />
+    <ClCompile Include="..\source\feature\DungeonFeature.cpp" />
+    <ClCompile Include="..\source\feature\FeatureGenerator.cpp" />
+    <ClCompile Include="..\source\feature\FeatureUtil.cpp" />
     <ClCompile Include="..\source\Galaxy.cpp" />
     <ClCompile Include="..\source\GalaxyMap.cpp" />
     <ClCompile Include="..\source\Game.cpp" />
@@ -164,6 +166,9 @@
     <ClInclude Include="..\source\dungeon\DungeonUtil.h" />
     <ClInclude Include="..\source\dungeon\MoleculeDungeon.h" />
     <ClInclude Include="..\source\dungeon\SnakeDungeon.h" />
+    <ClInclude Include="..\source\feature\DungeonFeature.h" />
+    <ClInclude Include="..\source\feature\FeatureGenerator.h" />
+    <ClInclude Include="..\source\feature\FeatureUtil.h" />
     <ClInclude Include="..\source\include\AiEntity.h" />
     <ClInclude Include="..\source\include\AiManager.h" />
     <ClInclude Include="..\source\include\AiSpecies.h" />
@@ -178,7 +183,6 @@
     <ClInclude Include="..\source\include\CloudSim.h" />
     <ClInclude Include="..\source\include\Constants.h" />
     <ClInclude Include="..\source\include\Edit.h" />
-    <ClInclude Include="..\source\include\FeatureGenerator.h" />
     <ClInclude Include="..\source\include\Galaxy.h" />
     <ClInclude Include="..\source\include\GalaxyMap.h" />
     <ClInclude Include="..\source\include\Game.h" />

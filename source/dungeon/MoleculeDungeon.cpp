@@ -13,6 +13,8 @@ void MoleculeDungeon::createDungeon( DungeonUtil& dungeon, v2di_t& startPosition
 	floorTile.setType( DUNGEON_TILE_FLOOR );
 	SelectiveDungeonTile wallTile;
 	wallTile.setType( DUNGEON_TILE_WALL );
+	SelectiveDungeonTile waterTile;
+	waterTile.setType( DUNGEON_TILE_WATER );
 
 	// fill it with wall
 	dungeon.setAllTiles( wallTile );
@@ -51,10 +53,10 @@ void MoleculeDungeon::createDungeon( DungeonUtil& dungeon, v2di_t& startPosition
 		r_numi( 0, dungeonHeight ),
 		dungeonWidth, //r_numi( 0, ROGUE_MAP_SIDE ),
 		r_numi( 0, dungeonHeight ),
-		4, // subdiv
-		3.0, // displacement
-		0.8, // brushSize
-		floorTile );
+		6, // subdiv
+		10.0, // displacement
+		1.0, // brushSize
+		waterTile );
 
 	// draw a wall around the whole thing
 	dungeon.drawRect(
