@@ -300,7 +300,9 @@ void RogueMapViewer::randomizeDungeon() {
 	SelectiveDungeonTile waterTile;
 	waterTile.setType( DUNGEON_TILE_WATER );
 
-	dungeon->setAllTiles( wallTile );
+	MoleculeDungeon::createDungeon( *dungeon, v2di_v( ROGUE_MAP_SIDE / 2, ROGUE_MAP_SIDE / 2 ) );
+
+	//dungeon->setAllTiles( wallTile );
 
 	//dungeon->drawLine(
 	//	r_numi( 0, ROGUE_MAP_SIDE ),
@@ -345,44 +347,51 @@ void RogueMapViewer::randomizeDungeon() {
 
 
 	// draw central room
-	dungeon->drawFilledCircle(
-		(ROGUE_MAP_SIDE / 2) + r_numi( -10, 10 ),
-		(ROGUE_MAP_SIDE / 2) + r_numi( -10, 10 ),
-		r_num( 40.0, 60.0 ),
-		floorTile );
+	//dungeon->drawFilledCircle(
+	//	(ROGUE_MAP_SIDE / 2),
+	//	(ROGUE_MAP_SIDE / 2),
+	//	10,
+	//	floorTile );
 
 
-	for( int i = 0; i < 5; i ++ ) {
-		int x = r_numi( 0, ROGUE_MAP_SIDE );
-		int y = r_numi( 0, ROGUE_MAP_SIDE );
+	//for( int i = 0; i < 5; i ++ ) {
+	//	int x = r_numi( 0, ROGUE_MAP_SIDE );
+	//	int y = r_numi( 0, ROGUE_MAP_SIDE );
 
-		dungeon->drawFilledCircle(
-			x,
-			y,
-			r_num( 20.0, 50.0 ),
-			floorTile );
+	//	dungeon->drawFilledCircle(
+	//		x,
+	//		y,
+	//		r_num( 5.0, 8.0 ),
+	//		floorTile );
 
-		dungeon->drawCrookedLine(
-			x,
-			y,
-			ROGUE_MAP_SIDE / 2,
-			ROGUE_MAP_SIDE / 2,
-			4, // subdiv
-			10.0, // displacement
-			2.0, // brushSize
-			floorTile );
-	}
+	//	dungeon->drawCrookedLine(
+	//		x,
+	//		y,
+	//		ROGUE_MAP_SIDE / 2,
+	//		ROGUE_MAP_SIDE / 2,
+	//		4, // subdiv
+	//		3.0, // displacement
+	//		1.0, // brushSize
+	//		floorTile );
+	//}
 
-	dungeon->drawCrookedLine(
-		0, //r_numi( 0, ROGUE_MAP_SIDE ),
-		r_numi( 0, ROGUE_MAP_SIDE ),
-		ROGUE_MAP_SIDE, //r_numi( 0, ROGUE_MAP_SIDE ),
-		r_numi( 0, ROGUE_MAP_SIDE ),
-		7, // subdiv
-		50.0, // displacement
-		2.0, // brushSize
-		waterTile );
+	//dungeon->drawCrookedLine(
+	//	0, //r_numi( 0, ROGUE_MAP_SIDE ),
+	//	r_numi( 0, ROGUE_MAP_SIDE ),
+	//	ROGUE_MAP_SIDE, //r_numi( 0, ROGUE_MAP_SIDE ),
+	//	r_numi( 0, ROGUE_MAP_SIDE ),
+	//	4, // subdiv
+	//	3.0, // displacement
+	//	0.75, // brushSize
+	//	waterTile );
 
+	//// draw a wall around the whole thing
+	//dungeon->drawRect(
+	//	0,
+	//	0,
+	//	ROGUE_MAP_SIDE - 1,
+	//	ROGUE_MAP_SIDE - 1,
+	//	wallTile );
 }
 
 

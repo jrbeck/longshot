@@ -73,7 +73,7 @@ public:
 	// mostly here for FeatureGenerator
 	int getTerrainHeight (int x, int z);
 
-	static const int WORLD_MAP_SIDE = 24;
+	static const int WORLD_MAP_SIDE = 32;
 
 private:
 	Galaxy *mGalaxy;

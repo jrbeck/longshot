@@ -88,7 +88,7 @@ v3di_t WorldMap::getRegionIndex (const v3d_t &pos) const {
 // those coords. this has nothing to do with wether or not columns are
 // loaded into memory, etc...
 // CANNOT (within the limits of the elementary variables) RETURN A 'BAD' VALUE,
-// since the length of the index will only ever be: mXWidth^mZWidth (i.e. ~40x40)
+// since the length of the index will only ever be: mXWidth*mZWidth (i.e. ~40*40)
 int WorldMap::getColumnIndexByRegionCoords (int xIndex, int zIndex) const {
 	if (xIndex >= mXWidth) {
 		xIndex = xIndex % mXWidth;

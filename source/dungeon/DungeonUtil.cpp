@@ -32,6 +32,10 @@ bool DungeonUtil::isOnMap ( int i, int j ) const {
 	return true;
 }
 
+DungeonTile *DungeonUtil::getTile( int i, int j ) const {
+	return dungeon->getTile( i, j );
+}
+
 void DungeonUtil::setAllTiles( const SelectiveDungeonTile&tile ) {
 	dungeon->setBuffer( tile );
 }

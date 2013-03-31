@@ -14,6 +14,8 @@
 #include "LoadScreen.h"
 #include "World.h"
 #include "RogueMap.h"
+#include "dungeon/DungeonUtil.h"
+#include "dungeon/MoleculeDungeon.h"
 #include "InactiveList.h"
 
 
@@ -77,8 +79,10 @@ public:
 
 	static void clearDungeonBlock (int worldX, int worldY, int worldZ, WorldMap &worldMap);
 	static void createDungeon (v2di_t cornerIndex, int depth, World &world);
+	static v2di_t createRogueRec (v2di_t cornerIndex, v2di_t stairsUp, int height, int levelsRemaining, WorldMap &worldMap);
 	static v2di_t createDungeonRec (v2di_t cornerIndex, v2di_t stairsUp, int height, int levelsRemaining, WorldMap &worldMap);
 
+	static void hollowOutDungeon2x( DungeonUtil* dungeon, WorldMap& worldMap, const v2di_t& cornerIndex, int dungeonSideChunks, int height );
 };
 
 

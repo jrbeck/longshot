@@ -14,6 +14,8 @@
 
 
 class MoleculeDungeon {
+public:
+	static void createDungeon( DungeonUtil& dungeon, v2di_t& startPosition );
 
 };
 

@@ -126,6 +126,9 @@ void game_c::loadShipMenu(void) {
 	mMenu->addButton (v2d_v (0.0, 0.45), v2d_v (0.2, 0.1), fontSize, "merchant",
 		TEXT_JUSTIFICATION_CENTER, GAMEMENU_MERCHANT, color, bgColor);
 
+	mMenu->addButton (v2d_v (0.0, 0.60), v2d_v (0.2, 0.1), fontSize, "dungeon map",
+		TEXT_JUSTIFICATION_CENTER, GAMEMENU_DUNGEON_MAP, color, bgColor);
+
 
 	
 }
@@ -536,7 +539,7 @@ int game_c::handleMenuChoice(int menuChoice) {
 
 		break;
 
-	case 1234: //GAMEMENU_PLANET_MAP:
+	case GAMEMENU_PLANET_MAP:
 		// make a planet map for the player to choose a location
 		planetMap = new PlanetMap();
 
@@ -555,7 +558,7 @@ int game_c::handleMenuChoice(int menuChoice) {
 
 
 		break;
-	case GAMEMENU_PLANET_MAP:
+	case GAMEMENU_DUNGEON_MAP:
 		rogueMapViewer = new RogueMapViewer();
 		rogueMapViewer->startViewer();
 		delete rogueMapViewer;

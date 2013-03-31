@@ -28,6 +28,9 @@ public:
 
 	bool isOnMap ( int i, int j ) const;
 
+	// wrapper method for DungeonModel::getTile()
+	DungeonTile *getTile( int i, int j ) const;
+
 	void setAllTiles( const SelectiveDungeonTile& tile );
 
 	void drawHorizontalLine( int x1, int x2, int y, const SelectiveDungeonTile& tile );

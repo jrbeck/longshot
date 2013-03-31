@@ -16,9 +16,10 @@
 #include "RogueMap.h"
 
 #include "dungeon/DungeonUtil.h"
+#include "dungeon/MoleculeDungeon.h"
 
 
-#define ROGUE_MAP_SIDE			256
+#define ROGUE_MAP_SIDE			64
 #define MAP_MULTIPLIER			128
 
 
