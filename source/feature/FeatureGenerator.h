@@ -14,7 +14,6 @@
 #include "LoadScreen.h"
 #include "World.h"
 #include "RogueMap.h"
-#include "InactiveList.h"
 
 #include "FeatureUtil.h"
 #include "DungeonFeature.h"

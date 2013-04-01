@@ -1,7 +1,7 @@
 #include "Physics.h"
 
 
-physics_c::physics_c () {
+Physics::Physics() {
 
 	// * * * * * * * * * * * * * * * * * * *
 	// lmao...this was getting a bit tedious
@@ -11,18 +11,18 @@ physics_c::physics_c () {
 	// * * * * * * * * * * * * * * * * * * *
 	// * * * * * * * * * * * * * * * * * * *
 
-	reset ();
+	reset();
 }
 
 
 
-physics_c::~physics_c () {
-	clear ();
+Physics::~Physics() {
+	clear();
 }
 
 
-void physics_c::reset (void) {
-	clear ();
+void Physics::reset() {
+	clear();
 
 	mLastUpdateTime = 0.0;
 
@@ -36,36 +36,34 @@ void physics_c::reset (void) {
 }
 
 
-
-void physics_c::clear (void) {
-	obj.clear ();
+void Physics::clear() {
+	obj.clear();
 
 	mLastEntityHandle = 0;
 	mEntityAdded = false;
 
 	mPlayerHandle = 0;
 
-	mMessages.clear ();
+	mMessages.clear();
 	mGotPickupMessage = false;
 }
 
 
-vector <phys_entity_t> *physics_c::getEntityVector(void) {
+vector <phys_entity_t>* Physics::getEntityVector() {
 	return &obj;
 }
 
 
-
-void physics_c::loadInactiveList (void) {
-	mInactiveList.loadFromDisk ("save/inactive.list");
+void Physics::loadInactiveList() {
+//	mInactiveList.load( "save/inactive.list" );
 }
 
 
-
-int physics_c::getIndexFromHandle (size_t handle) {
-	for (size_t index = 0; index < obj.size (); index++) {
+int Physics::getIndexFromHandle( size_t handle ) const {
+	size_t numObjs = obj.size();
+	for (size_t index = 0; index < numObjs; index++) {
 		if (obj[index].handle == handle) {
-			return static_cast<int>(index);
+			return (int)index;
 		}
 	}
 
@@ -74,62 +72,59 @@ int physics_c::getIndexFromHandle (size_t handle) {
 }
 
 
-
-void physics_c::togglePause (void) {
+void Physics::togglePause() {
 	mPaused = !mPaused;
 }
 
 
-bool physics_c::isPaused (void) {
+bool Physics::isPaused() const {
 	return mPaused;
 }
 
 
-
-void physics_c::advanceOneFrame (void) {
+void Physics::advanceOneFrame() {
 	mAdvanceOneFrame = true;
 }
 
 
+void Physics::addQueuedEntities() {
+	if (!mEntityAdded) {
+		return;
+	}
 
-void physics_c::addQueuedEntities (void) {
-	// return if nothing was added
-	if (!mEntityAdded) return;
-
-	for (size_t i = 0; i < obj.size (); i++) {
-		if (obj[i].queued) {
-			obj[i].queued = false;
-		}
+	size_t numObjs = obj.size();
+	for (size_t i = 0; i < numObjs; i++) {
+		obj[i].queued = false;
 	}
 
 	mEntityAdded = false;
 }
 
 
-
-void physics_c::manageEntitiesList (void) {
-	for (int i = 0; i < static_cast<int>(obj.size ()); i++) {
+void Physics::manageEntitiesList() {
+	size_t numObjs = obj.size();
+	for (size_t i = 0; i < numObjs; i++) {
 		if (!obj[i].active) {
 			// clear out the ol' mailbox
-			clearMailBox (static_cast<int>(obj[i].handle));
+			clearMailBox( (int)obj[i].handle );
 
-			int lastIndex = static_cast<int>(obj.size ()) - 1;
+			size_t lastIndex = numObjs - 1;
 
 			if (i == lastIndex) {
-				obj.pop_back ();
+				obj.pop_back();
 			}
 			else {
-				swap (obj[i], obj[lastIndex]);
-				obj.pop_back ();
+				swap( obj[i], obj[lastIndex] );
+				obj.pop_back();
 				i--;
+				numObjs--;
 			}
 		}
 	}
 }
 
 
-
-size_t physics_c::createEntity (int type, v3d_t position, double time, bool center) {
+size_t Physics::createEntity( int type, const v3d_t &position, double time, bool center ) {
 	phys_entity_t e;
 
 	e.handle = ++mLastEntityHandle;
@@ -207,7 +202,7 @@ size_t physics_c::createEntity (int type, v3d_t position, double time, bool cent
 
 
 
-size_t physics_c::createEntity (int type, v3d_t position, v3d_t initialForce, double time, bool center) {
+size_t Physics::createEntity( int type, const v3d_t& position, const v3d_t& initialForce, double time, bool center ) {
 	size_t handle = createEntity (type, position, time, center);
 
 	if (handle != 0) {
@@ -221,7 +216,7 @@ size_t physics_c::createEntity (int type, v3d_t position, v3d_t initialForce, do
 
 
 
-size_t physics_c::createAiEntity (int aiType, v3d_t position, double time) {
+size_t Physics::createAiEntity( int aiType, const v3d_t& position, double time ) {
 	size_t handle = createEntity (OBJTYPE_AI_ENTITY, position, time, true);
 
 	if (handle != 0) {
@@ -235,7 +230,7 @@ size_t physics_c::createAiEntity (int aiType, v3d_t position, double time) {
 
 
 
-void physics_c::removeEntity (size_t handle) {
+void Physics::removeEntity( size_t handle ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -246,7 +241,7 @@ void physics_c::removeEntity (size_t handle) {
 
 
 
-void physics_c::setMass (size_t handle, double mass) {
+void Physics::setMass( size_t handle, double mass ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -258,7 +253,7 @@ void physics_c::setMass (size_t handle, double mass) {
 
 
 
-void physics_c::setHealth (size_t handle, double health) {
+void Physics::setHealth( size_t handle, double health ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -269,7 +264,7 @@ void physics_c::setHealth (size_t handle, double health) {
 
 
 
-void physics_c::setDimensions (size_t handle, v3d_t dimensions) {
+void Physics::setDimensions( size_t handle, const v3d_t& dimensions ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -280,44 +275,44 @@ void physics_c::setDimensions (size_t handle, v3d_t dimensions) {
 
 
 
-phys_entity_t *physics_c::getEntityByHandle (size_t handle) {
+phys_entity_t* Physics::getEntityByHandle( size_t handle ) {
 	int index = getIndexFromHandle (handle);
 	if (index >= 0) {
 		return &obj[index];
 	}
-//	printf ("physics_c::getEntityByHandle (): error: obj (%d) doesn't exist\n", handle);
+//	printf ("Physics::getEntityByHandle (): error: obj (%d) doesn't exist\n", handle);
 
 	return NULL;
 }
 
 
 
-void physics_c::setEntity (phys_entity_t entity) {
-	int index = getIndexFromHandle (entity.handle);
+void Physics::setEntity( const phys_entity_t& entity ) {
+	int index = getIndexFromHandle( entity.handle );
 
 	if (index != -1) {
 		obj[index] = entity;
 	}
 	else {
-		printf ("physics_c::setEntity (): failed to set entity\n");
+		printf ("Physics::setEntity (): failed to set entity\n");
 	}
 }
 
 
 
-v3d_t physics_c::getCenter (size_t handle) {
-	int index = getIndexFromHandle (handle);
+v3d_t Physics::getCenter( size_t handle ) const {
+	int index = getIndexFromHandle( handle );
 
 	if (index != -1) {
-		return obj[index].boundingBox.getCenterPosition ();
+		return obj[index].boundingBox.getCenterPosition();
 	}
 
-	return v3d_zero ();
+	return v3d_zero();
 }
 
 
 
-v3d_t physics_c::getNearCorner (size_t handle) {
+v3d_t Physics::getNearCorner( size_t handle ) const {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -329,11 +324,11 @@ v3d_t physics_c::getNearCorner (size_t handle) {
 
 
 
-v3d_t physics_c::getFarCorner (size_t handle) {
+v3d_t Physics::getFarCorner( size_t handle ) const {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
-		return obj[index].boundingBox.getFarCorner ();
+		return obj[index].boundingBox.getFarCorner();
 	}
 
 	return v3d_zero ();
@@ -341,8 +336,8 @@ v3d_t physics_c::getFarCorner (size_t handle) {
 
 
 
-v3d_t physics_c::getVelocity (size_t handle) {
-	int index = getIndexFromHandle (handle);
+v3d_t Physics::getVelocity( size_t handle ) const {
+	int index = getIndexFromHandle( handle );
 
 	if (index != -1) {
 		return obj[index].vel;
@@ -353,7 +348,7 @@ v3d_t physics_c::getVelocity (size_t handle) {
 
 
 
-void physics_c::setVelocity (size_t handle, v3d_t velocity) {
+void Physics::setVelocity( size_t handle, const v3d_t& velocity ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -363,7 +358,7 @@ void physics_c::setVelocity (size_t handle, v3d_t velocity) {
 
 
 
-void physics_c::set_pos (size_t handle, v3d_t pos) {
+void Physics::set_pos( size_t handle, const v3d_t& pos ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -376,7 +371,7 @@ void physics_c::set_pos (size_t handle, v3d_t pos) {
 
 
 
-void physics_c::setOwner (size_t handle, size_t owner) {
+void Physics::setOwner( size_t handle, size_t owner ) {
 	int index = getIndexFromHandle(handle);
 
 	if (index != -1) {
@@ -387,7 +382,7 @@ void physics_c::setOwner (size_t handle, size_t owner) {
 
 
 // this is for ItemManager items - get the handle and the type
-void physics_c::setItemHandleAndType (size_t handle, size_t itemHandle, int itemType) {
+void Physics::setItemHandleAndType( size_t handle, size_t itemHandle, int itemType ) {
 	int index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -399,40 +394,10 @@ void physics_c::setItemHandleAndType (size_t handle, size_t itemHandle, int item
 
 
 // apply the physics
-int physics_c::update (double time, WorldMap &worldMap, AssetManager &assetManager) {
+int Physics::update( double time, WorldMap& worldMap, AssetManager& assetManager ) {
 
-	// read the mail
-	phys_message_t message;
-	int index;
+	readMail();
 
-	while (getNextMessage (MAILBOX_PHYSICS, &message)) {
-		switch (message.type) {
-			case PHYS_MESSAGE_PLAYERPICKUPITEMS:
-				printf ("got message\n");
-				mGotPickupMessage = true;
-				break;
-
-			case PHYS_MESSAGE_ITEMGRABBED:
-				removeEntity (message.iValue2);
-				break;
-
-			case PHYS_MESSAGE_ADJUSTHEALTH:
-				index = getIndexFromHandle (message.iValue);
-
-				if (index >= 0) {
-					obj[index].health += message.dValue;
-				}
-
-				break;
-
-			default:
-				break;
-		}
-	}
-
-
-//	printf ("phys objs: %d\n", obj.size ());
-	size_t numEntities = obj.size ();
 	bool timeAdvanced;
 
 	if (!mPaused || (mPaused && mAdvanceOneFrame)) {
@@ -443,6 +408,7 @@ int physics_c::update (double time, WorldMap &worldMap, AssetManager &assetManag
 	}
 
 	// step through the objects
+	size_t numEntities = obj.size ();
 	for (size_t index = 0; index < numEntities; index++) {
 		if (obj[index].active == false) continue;
 
@@ -496,7 +462,7 @@ int physics_c::update (double time, WorldMap &worldMap, AssetManager &assetManag
 
 
 	// clean up the object list if possible
-	manageEntitiesList ();
+	manageEntitiesList();
 
 	mAdvanceOneFrame = false;
 
@@ -508,17 +474,14 @@ int physics_c::update (double time, WorldMap &worldMap, AssetManager &assetManag
 	}
 
 	// play the sounds
-	playSoundEvents (assetManager);
-
-//	printf ("phys: %d\n", obj.size ());
-//	printf ("messages: %d\n", mMessages.size ());
+	playSoundEvents( assetManager );
 
 	return static_cast<int>(obj.size ());
 }
 
 
 
-void physics_c::updateEntity (size_t index, double time, WorldMap &worldMap) {
+void Physics::updateEntity( size_t index, double time, WorldMap& worldMap ) {
 	if ((obj[index].expirationTime < time) &&
 		(obj[index].expirationTime >= 0.0))
 	{
@@ -657,8 +620,7 @@ void physics_c::updateEntity (size_t index, double time, WorldMap &worldMap) {
 }
 
 
-
-void physics_c::expireEntity (size_t index, double time, WorldMap &worldMap) {
+void Physics::expireEntity( size_t index, double time, WorldMap& worldMap ) {
 	size_t newHandle, newIndex;
 	v3d_t pos;
 	bool removeEntity = true;
@@ -763,10 +725,7 @@ void physics_c::expireEntity (size_t index, double time, WorldMap &worldMap) {
 }
 
 
-
-
-
-v3d_t physics_c::calculateAcceleration (size_t index) {
+v3d_t Physics::calculateAcceleration( size_t index ) {
 	if (obj[index].type == OBJTYPE_MELEE_ATTACK) {
 		return obj[index].acc;
 	}
@@ -904,8 +863,7 @@ v3d_t physics_c::calculateAcceleration (size_t index) {
 }
 
 
-
-void physics_c::integrate_euler (size_t index, double time, WorldMap &worldMap) {
+void Physics::integrate_euler( size_t index, double time, WorldMap& worldMap ) {
 	if (obj[index].type == OBJTYPE_MELEE_ATTACK) {
 		return;
 	}
@@ -996,7 +954,7 @@ void physics_c::integrate_euler (size_t index, double time, WorldMap &worldMap) 
 }
 
 
-void physics_c::displaceObject (size_t index, WorldMap &worldMap) {
+void Physics::displaceObject( size_t index, WorldMap& worldMap ) {
 	// move the object
 	obj[index].pos = v3d_add (obj[index].pos, obj[index].displacement);
 
@@ -1037,7 +995,7 @@ void physics_c::displaceObject (size_t index, WorldMap &worldMap) {
 
 
 // tests to see if a phys entity is on the ground
-bool physics_c::updateOnGroundStatus (size_t index, WorldMap &worldMap) {
+bool Physics::updateOnGroundStatus( size_t index, WorldMap& worldMap ) {
 	v3d_t nc = obj[index].boundingBox.getNearCorner ();
 
 	// first exit chance, can't be on ground if nc.y is not an integer
@@ -1070,14 +1028,12 @@ bool physics_c::updateOnGroundStatus (size_t index, WorldMap &worldMap) {
 }
 
 
-
-double physics_c::getLastUpdateTime (void) {
+double Physics::getLastUpdateTime() const {
 	return mLastUpdateTime;
 }
 
 
-
-bool physics_c::sweepObjects (size_t indexA, size_t indexB, double &t0, double &t1, int &axis) {
+bool Physics::sweepObjects( size_t indexA, size_t indexB, double& t0, double& t1, int& axis ) const {
 	// if they are intersecting before the translation, return true
 	if (obj[indexA].boundingBox.isIntersecting (obj[indexB].boundingBox)) {
 //		printf ("intersect\n");
@@ -1217,7 +1173,7 @@ bool physics_c::sweepObjects (size_t indexA, size_t indexB, double &t0, double &
 
 
 
-int physics_c::clipDisplacementAgainstOtherObjects (size_t index, WorldMap &worldMap) {
+int Physics::clipDisplacementAgainstOtherObjects( size_t index, WorldMap& worldMap ) {
 
 	int numCollisions = 0;
 
@@ -1565,8 +1521,6 @@ int physics_c::clipDisplacementAgainstOtherObjects (size_t index, WorldMap &worl
 			}
 		}
 	}
-
-
 	
 
 	// reset this
@@ -1577,9 +1531,8 @@ int physics_c::clipDisplacementAgainstOtherObjects (size_t index, WorldMap &worl
 } // END: clipDisplacementAgainstOtherObjects ()
 
 
-
-void physics_c::add_force (size_t handle, v3d_t force) {
-	int index = getIndexFromHandle (handle);
+void Physics::add_force( size_t handle, const v3d_t& force ) {
+	int index = getIndexFromHandle( handle );
 
 	if (index != -1) {
 		obj[index].force = v3d_add (obj[index].force, force);
@@ -1588,8 +1541,7 @@ void physics_c::add_force (size_t handle, v3d_t force) {
 }
 
 
-
-void physics_c::clip_displacement_against_world (WorldMap &worldMap, size_t index) {
+void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index ) {
 	if (v3d_mag (obj[index].displacement) == 0.0) {
 		return;
 	}
@@ -1846,7 +1798,7 @@ void physics_c::clip_displacement_against_world (WorldMap &worldMap, size_t inde
 }
 
 
-bool physics_c::isIntersectingPlant(size_t index, WorldMap &worldMap) {
+bool Physics::isIntersectingPlant( size_t index, const WorldMap& worldMap ) const {
 	block_t *block = worldMap.getBlock(obj[index].boundingBox.getCenterPosition());
 	if (block == NULL) return false;
 	if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
@@ -1858,14 +1810,14 @@ bool physics_c::isIntersectingPlant(size_t index, WorldMap &worldMap) {
 
 
 // return the on_ground flag for an object
-bool physics_c::isIndexOnGround (size_t index) {
+bool Physics::isIndexOnGround( size_t index ) const {
 	return obj[index].on_ground;
 }
 
 
 
 // return the on_ground flag for an object
-bool physics_c::isHandleOnGround (size_t handle) {
+bool Physics::isHandleOnGround( size_t handle ) const {
 	size_t index = getIndexFromHandle (handle);
 
 	if (index != -1) {
@@ -1876,7 +1828,7 @@ bool physics_c::isHandleOnGround (size_t handle) {
 }
 
 
-void physics_c::grenadeExplosion (size_t index, double time, WorldMap &worldMap) {
+void Physics::grenadeExplosion( size_t index, double time, WorldMap& worldMap ) {
 	v3d_t centerPosition = obj[index].boundingBox.getCenterPosition ();
 
 	addSoundEvent (SOUND_GRENADE_EXPLOSION, centerPosition);
@@ -1916,7 +1868,7 @@ void physics_c::grenadeExplosion (size_t index, double time, WorldMap &worldMap)
 
 
 
-void physics_c::spawnExplosion (v3d_t pos, double time, size_t numParticles, WorldMap &worldMap) {
+void Physics::spawnExplosion( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap ) {
 	v3d_t new_pos;
 
 	new_pos.x = pos.x;
@@ -1977,7 +1929,7 @@ void physics_c::spawnExplosion (v3d_t pos, double time, size_t numParticles, Wor
 
 
 
-void physics_c::spawnMeatExplosion (v3d_t pos, double time, size_t numParticles, WorldMap &worldMap) {
+void Physics::spawnMeatExplosion( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap ) {
 	v3d_t new_pos;
 
 	new_pos.x = pos.x;
@@ -2013,7 +1965,7 @@ void physics_c::spawnMeatExplosion (v3d_t pos, double time, size_t numParticles,
 
 
 
-void physics_c::plasmaBombExplode (v3d_t pos, double time, size_t numParticles, WorldMap &worldMap) {
+void Physics::plasmaBombExplode( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap ) {
 	v3d_t new_pos;
 
 	new_pos.x = pos.x;
@@ -2070,10 +2022,7 @@ void physics_c::plasmaBombExplode (v3d_t pos, double time, size_t numParticles, 
 }
 
 
-
-
-
-v3d_t physics_c::getRadialForce (v3d_t pos, v3d_t center, double force, double radius) {
+v3d_t Physics::getRadialForce( const v3d_t& pos, const v3d_t& center, double force, double radius ) const {
 	v3d_t diff = v3d_sub (pos, center);
 
 	double dist = v3d_mag (diff);
@@ -2090,10 +2039,7 @@ v3d_t physics_c::getRadialForce (v3d_t pos, v3d_t center, double force, double r
 }
 
 
-
-
-
-int physics_c::addSoundEvent (int type, v3d_t position) {
+int Physics::addSoundEvent( int type, const v3d_t& position ) {
 	double distanceToPlayer = v3d_dist (getCenter (mPlayerHandle), position);
 
 	if (mNumSoundEvents < MAX_SOUND_EVENTS) {
@@ -2122,10 +2068,9 @@ int physics_c::addSoundEvent (int type, v3d_t position) {
 }
 
 
-
-void physics_c::playSoundEvents (AssetManager &assetManager) {
+void Physics::playSoundEvents( AssetManager& assetManager ) {
 	for (int i = 0; i < mNumSoundEvents; i++) {
-		assetManager.mSoundSystem.playSoundByHandle (mSoundEvents[i], mSoundVolumes[i]);
+		assetManager.mSoundSystem.playSoundByHandle( mSoundEvents[i], mSoundVolumes[i] );
 	}
 	
 	if (mNumSoundEvents > 0) {
@@ -2136,20 +2081,47 @@ void physics_c::playSoundEvents (AssetManager &assetManager) {
 }
 
 
-
-size_t physics_c::getPlayerHandle (void) {
+size_t Physics::getPlayerHandle() const {
 	return mPlayerHandle;
 }
 
 
+void Physics::readMail() {
+	phys_message_t message;
+	int index;
 
-void physics_c::sendMessage (phys_message_t message) {
+	while (getNextMessage (MAILBOX_PHYSICS, &message)) {
+		switch (message.type) {
+			case PHYS_MESSAGE_PLAYERPICKUPITEMS:
+				mGotPickupMessage = true;
+				break;
+
+			case PHYS_MESSAGE_ITEMGRABBED:
+				removeEntity (message.iValue2);
+				break;
+
+			case PHYS_MESSAGE_ADJUSTHEALTH:
+				index = getIndexFromHandle (message.iValue);
+
+				if (index >= 0) {
+					obj[index].health += message.dValue;
+				}
+
+				break;
+
+			default:
+				break;
+		}
+	}
+}
+
+
+void Physics::sendMessage( const phys_message_t& message ) {
 	mMessages.push_back (message);
 }
 
 
-
-int physics_c::getNextMessage (int recipient, phys_message_t *message) {
+int Physics::getNextMessage( int recipient, phys_message_t* message ) {
 	for (size_t i = 0; i < mMessages.size (); i++) {
 		if (mMessages[i].recipient == recipient) {
 			*message = mMessages[i];
@@ -2174,8 +2146,7 @@ int physics_c::getNextMessage (int recipient, phys_message_t *message) {
 }
 
 
-
-void physics_c::clearMailBox (int recipient) {
+void Physics::clearMailBox( int recipient ) {
 	for (size_t i = 0; i < mMessages.size (); i++) {
 		if (mMessages[i].recipient == recipient) {
 			size_t lastMessage = mMessages.size () - 1;
@@ -2194,7 +2165,7 @@ void physics_c::clearMailBox (int recipient) {
 }
 
 
-vector<size_t> physics_c::getAllItemHandles(void) {
+vector<size_t> Physics::getAllItemHandles() const {
 	vector<size_t> itemList;
 
 	for (size_t i = 0; i < obj.size(); i++) {

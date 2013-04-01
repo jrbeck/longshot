@@ -34,23 +34,23 @@ public:
 	
 	void clear(void);
 
-	size_t setPlayerPhysicsHandle (size_t playerPhysicsHandle, physics_c &physics, double time);
+	size_t setPlayerPhysicsHandle (size_t playerPhysicsHandle, Physics &physics, double time);
 	void setPlayerFacingAndIncline (v2d_t facingAndElevation);
 
-	AiEntity *addEntity(int type, const v3d_t &position, physics_c &physics, double time);
+	AiEntity *addEntity(int type, const v3d_t &position, Physics &physics, double time);
 	void removeEntity(size_t handle);
 	AiEntity *getEntityByHandle(size_t handle);
 	vector<AiEntity *> *getEntities(void);
 
 	size_t spawnEntity (int type, v3d_t position, double time,
-		physics_c &physics, ItemManager &itemManager);
+		Physics &physics, ItemManager &itemManager);
 
-	int update (double time, WorldMap &worldMap, physics_c &physics, ItemManager &itemManager);
+	int update (double time, WorldMap &worldMap, Physics &physics, ItemManager &itemManager);
 
-	void releaseItems(int index, physics_c &physics);
+	void releaseItems(int index, Physics &physics);
 	void trimEntitiesList (void);
 
-	void readPhysicsMessages (double time, physics_c &physics, ItemManager &itemManager);
+	void readPhysicsMessages (double time, Physics &physics, ItemManager &itemManager);
 
 	vector<size_t> getAllItemHandles(void);
 

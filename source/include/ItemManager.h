@@ -117,9 +117,9 @@ public:
 	void loadAssets();
 	void freeAssets();
 
-	int update(physics_c &physics);
+	int update(Physics &physics);
 
-	void readPhysicsMessages(physics_c &physics);
+	void readPhysicsMessages(Physics &physics);
 
 	void clear(void);
 
@@ -149,15 +149,15 @@ public:
 	void generateRandomGrenadeLauncher(item_t &newGun, double dps);
 	void generateRandomRocketLauncher(item_t &newGun, double dps);
 
-	size_t spawnPhysicsEntityGun(double value, v3d_t position, double time, physics_c &physics);
+	size_t spawnPhysicsEntityGun(double value, v3d_t position, double time, Physics &physics);
 
-	bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle, physics_c &physics);
-	void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle, physics_c &physics);
+	bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle, Physics &physics);
+	void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle, Physics &physics);
 
-	double useGun(size_t itemHandle, shot_info_t shotInfo, size_t *ammoCounter, physics_c &physics);
-	double useGun(size_t itemHandle, shot_info_t shotInfo, physics_c &physics);
+	double useGun(size_t itemHandle, shot_info_t shotInfo, size_t *ammoCounter, Physics &physics);
+	double useGun(size_t itemHandle, shot_info_t shotInfo, Physics &physics);
 
-	double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo, physics_c &physics);
+	double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo, Physics &physics);
 
 	void drawItem(size_t itemHandle);
 	void drawMeleeWeapon(melee_weapon_state_t weaponState, BitmapModel &model);

@@ -15,6 +15,8 @@ void MoleculeDungeon::createDungeon( DungeonUtil& dungeon, v2di_t& startPosition
 	wallTile.setType( DUNGEON_TILE_WALL );
 	SelectiveDungeonTile waterTile;
 	waterTile.setType( DUNGEON_TILE_WATER );
+	SelectiveDungeonTile monsterTile;
+	monsterTile.setSpecial( DUNGEON_TILE_SPECIAL_MONSTER_GENERATOR );
 
 	// fill it with wall
 	dungeon.setAllTiles( wallTile );
@@ -27,6 +29,7 @@ void MoleculeDungeon::createDungeon( DungeonUtil& dungeon, v2di_t& startPosition
 		floorTile );
 
 
+	// make the satelite rooms
 	for( int i = 0; i < 5; i ++ ) {
 		int x = r_numi( 0, dungeonWidth );
 		int y = r_numi( 0, dungeonHeight );
@@ -46,6 +49,9 @@ void MoleculeDungeon::createDungeon( DungeonUtil& dungeon, v2di_t& startPosition
 			10.0, // displacement
 			1.0, // brushSize
 			floorTile );
+
+		// stick the generator in the middle
+		dungeon.setTile( x, y, monsterTile );
 	}
 
 	dungeon.drawCrookedLine(

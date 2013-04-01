@@ -1,5 +1,5 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * physics_c
+// * Physics
 // *
 // * this provides the AABB physics engine
 // *
@@ -151,105 +151,106 @@ typedef struct {
 
 
 
-// physics_c * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-class physics_c {
+// Physics * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+class Physics {
 public:
-	physics_c ();
-	~physics_c ();
+	Physics();
+	~Physics();
 
-	void reset (void);
-	void clear (void);
+	void reset();
+	void clear();
 
-	vector <phys_entity_t> *getEntityVector(void);
+	vector<phys_entity_t>* getEntityVector();
 
-	void loadInactiveList (void);
+	void loadInactiveList();
 
-	int getIndexFromHandle (size_t handle);
+	int getIndexFromHandle( size_t handle ) const;
 
-	void togglePause (void);
-	bool isPaused (void);
-	void advanceOneFrame (void);
+	void togglePause();
+	bool isPaused() const;
+	void advanceOneFrame();
 
-	void addQueuedEntities (void);
-	void manageEntitiesList (void);
+	void addQueuedEntities();
+	void manageEntitiesList();
 
-	size_t createEntity (int type, v3d_t position, double time, bool center);
-	size_t createEntity (int type, v3d_t position, v3d_t initialForce, double time, bool center);
+	size_t createEntity( int type, const v3d_t& position, double time, bool center );
+	size_t createEntity( int type, const v3d_t& position, const v3d_t& initialForce, double time, bool center );
 
-	size_t createAiEntity (int aiType, v3d_t position, double time);
+	size_t createAiEntity( int aiType, const v3d_t& position, double time );
 
-	void removeEntity (size_t handle);
+	void removeEntity( size_t handle );
 
-	void setMass (size_t handle, double mass);
-	void setHealth (size_t handle, double health);
-	void setDimensions (size_t handle, v3d_t dimensions);
+	void setMass( size_t handle, double mass );
+	void setHealth( size_t handle, double health );
+	void setDimensions( size_t handle, const v3d_t& dimensions );
 
-	phys_entity_t *getEntityByHandle(size_t handle);
-	void setEntity (phys_entity_t entity);
+	phys_entity_t* getEntityByHandle( size_t handle );
+	void setEntity( const phys_entity_t& entity );
 
-	v3d_t getCenter (size_t handle);
-	v3d_t getNearCorner (size_t handle);
-	v3d_t getFarCorner (size_t handle);
+	v3d_t getCenter( size_t handle ) const;
+	v3d_t getNearCorner( size_t handle ) const;
+	v3d_t getFarCorner( size_t handle ) const;
 
-	v3d_t getVelocity (size_t handle);
-	void setVelocity (size_t handle, v3d_t velocity);
+	v3d_t getVelocity( size_t handle ) const;
+	void setVelocity( size_t handle, const v3d_t& velocity );
 
-	void set_pos (size_t handle, v3d_t pos);
+	void set_pos( size_t handle, const v3d_t& pos );
 
-	void setOwner (size_t handle, size_t owner);
-	void setItemHandleAndType (size_t handle, size_t itemHandle, int itemType);
+	void setOwner( size_t handle, size_t owner );
+	void setItemHandleAndType( size_t handle, size_t itemHandle, int itemType );
 
 	// * * * * * * * * UPDATE
-	int update (double time, WorldMap &worldMap, AssetManager &assetManager);
-	void updateEntity (size_t index, double time, WorldMap &worldMap);
-	void expireEntity (size_t index, double time, WorldMap &worldMap);
+	int update( double time, WorldMap& worldMap, AssetManager& assetManager );
+	void updateEntity( size_t index, double time, WorldMap& worldMap );
+	void expireEntity( size_t index, double time, WorldMap& worldMap );
 
-	void integrate_euler (size_t index, double time, WorldMap &worldMap);
-	void displaceObject (size_t index, WorldMap &worldMap);
-	v3d_t calculateAcceleration (size_t handle);
+	void integrate_euler( size_t index, double time, WorldMap& worldMap );
+	void displaceObject( size_t index, WorldMap& worldMap );
+	v3d_t calculateAcceleration( size_t handle );
 
-	bool updateOnGroundStatus (size_t index, WorldMap &worldMap);
+	bool updateOnGroundStatus( size_t index, WorldMap& worldMap );
 
-	double getLastUpdateTime (void);
+	double getLastUpdateTime() const;
 
-	bool sweepObjects (size_t indexA, size_t indexB, double &t0, double &t1, int &axis);
-	int clipDisplacementAgainstOtherObjects (size_t index, WorldMap &worldMap);
-//	int testForEntityCollisions (World &world);
+	bool sweepObjects( size_t indexA, size_t indexB, double& t0, double& t1, int& axis ) const;
+	int clipDisplacementAgainstOtherObjects( size_t index, WorldMap& worldMap );
 
-	void add_force (size_t handle, v3d_t force);
+	void add_force( size_t handle, const v3d_t& force );
 
-	void clip_displacement_against_world (WorldMap &worldMap, size_t index);
-	bool isIntersectingPlant(size_t index, WorldMap &worldMap);
+	void clip_displacement_against_world( WorldMap& worldMap, size_t index );
+	bool isIntersectingPlant( size_t index, const WorldMap& worldMap ) const;
 
-	bool isIndexOnGround (size_t index);
-	bool isHandleOnGround (size_t handle);
+	bool isIndexOnGround( size_t index ) const;
+	bool isHandleOnGround( size_t handle ) const;
 
-	void grenadeExplosion (size_t index, double time, WorldMap &worldMap);
-	void spawnExplosion (v3d_t pos, double time, size_t numParticles, WorldMap &worldMap);
-	void spawnMeatExplosion (v3d_t pos, double time, size_t numParticles, WorldMap &worldMap);
-	void plasmaBombExplode (v3d_t pos, double time, size_t numParticles, WorldMap &worldMap);
-	v3d_t getRadialForce (v3d_t pos, v3d_t center, double force, double radius);
+	void grenadeExplosion( size_t index, double time, WorldMap& worldMap );
+	void spawnExplosion( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap );
+	void spawnMeatExplosion( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap );
+	void plasmaBombExplode( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap );
+	v3d_t getRadialForce( const v3d_t& pos, const v3d_t& center, double force, double radius ) const;
 
-	int addSoundEvent (int type, v3d_t position);
-	void playSoundEvents (AssetManager &assetManager);
+	int addSoundEvent( int type, const v3d_t& position );
+	void playSoundEvents( AssetManager& assetManager );
 
-	size_t getPlayerHandle (void);
+	size_t getPlayerHandle() const;
 
-	void sendMessage (phys_message_t message);
-	int getNextMessage (int recipient, phys_message_t *message);
-	void clearMailBox (int recipient);
+	// is this stuff for real?
+	void readMail();
+	void sendMessage( const phys_message_t& message );
+	int getNextMessage( int recipient, phys_message_t* message );
+	void clearMailBox( int recipient );
 
-	vector<size_t> getAllItemHandles(void);
+	vector<size_t> getAllItemHandles() const;
 
 private:
 	// copy constructor guard
-	physics_c (const physics_c &physics) { }
+	Physics (const Physics &physics) { }
 	// assignment operator guard
-	physics_c & operator=(const physics_c &physics) { return *this; }
+	Physics & operator=(const Physics &physics) { return *this; }
 
 
 	entity_type_info_t mEntityTypeInfo[NUM_OBJTYPES];
-	vector <phys_entity_t> obj;
+	vector<phys_entity_t> obj;
 	size_t mLastEntityHandle;
 
 	size_t mPlayerHandle;

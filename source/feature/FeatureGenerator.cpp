@@ -6,9 +6,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 	worldRogueMap.resize (ROGUE_W, ROGUE_H);
 	worldRogueMap.clear ();
 
-	// this stores any items that are generated
-	InactiveList inactiveList;
-
 	v2di_t mapIndex = v2di_v(xIndex, zIndex);
 
 	LoadScreen loadScreen;
@@ -180,8 +177,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 
 	loadScreen.finish();
 
-	inactiveList.saveToDisk ("save/inactive.list");
-	inactiveList.clear ();
 }
 
 

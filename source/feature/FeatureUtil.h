@@ -1,7 +1,7 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 // * FeatureUtil
 // *
-// * desc:
+// * desc: helper routines for the Feature creators
 // *
 // *
 // *

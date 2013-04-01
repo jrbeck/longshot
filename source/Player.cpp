@@ -100,7 +100,7 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager &itemMana
 
 
 // reset everything but the physics handle
-int player_c::soft_reset (v3d_t &startPosition, physics_c &phys) {
+int player_c::soft_reset (v3d_t &startPosition, Physics &phys) {
 	mHeadOffset = v3d_v (0.25, 1.6, 0.25);
 	mFinalHeadOffset = mHeadOffset;
 	mHeadBobble.reset ();
@@ -326,7 +326,7 @@ bool player_c::pickUpItem (item_t item, AssetManager &assetManager) {
 void player_c::useEquipped (
 	int whichEquip,
 	double time,
-	physics_c &phys,
+	Physics &phys,
 	AssetManager &assetManager,
 	ItemManager &itemManager)
 {
@@ -394,7 +394,7 @@ void player_c::useEquipped (
 
 
 
-double player_c::fireGun(item_t item, double handedness, double time, physics_c &phys, AssetManager &assetManager, ItemManager &itemManager) {
+double player_c::fireGun(item_t item, double handedness, double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager) {
 	v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
 
 	double shoulderOffset = handedness * 0.5;
@@ -420,7 +420,7 @@ double player_c::fireGun(item_t item, double handedness, double time, physics_c 
 
 
 
-double player_c::useMeleeWeapon (item_t item, double time, physics_c &phys, ItemManager &itemManager) {
+double player_c::useMeleeWeapon (item_t item, double time, Physics &phys, ItemManager &itemManager) {
 	v3d_t world_head_pos = v3d_add (mFinalHeadOffset, mPos);
 	
 	v3d_t targAngle = v3d_normalize (v3d_sub (mTarget, world_head_pos));
@@ -445,7 +445,7 @@ double player_c::useMeleeWeapon (item_t item, double time, physics_c &phys, Item
 
 
 
-void player_c::useBackpackItem (double time, physics_c &phys, AssetManager &assetManager, ItemManager &itemManager) {
+void player_c::useBackpackItem (double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager) {
 	// can't use a non-item	
 	if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
 
@@ -863,7 +863,7 @@ void player_c::updateCharacterSheet (ItemManager &itemManager) {
 bool player_c::update (
 	double time,
 	WorldMap &worldMap,
-	physics_c &phys,
+	Physics &phys,
 	GameInput &gi,
 	AssetManager &assetManager,
 	ItemManager &itemManager)
@@ -1330,7 +1330,7 @@ bool player_c::update (
 }
 
 
-void player_c::readPhysicsMessages (physics_c &physics,
+void player_c::readPhysicsMessages (Physics &physics,
 	ItemManager &itemManager,
 	AssetManager &assetManager)
 {

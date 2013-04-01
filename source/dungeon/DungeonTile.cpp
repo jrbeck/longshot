@@ -1,16 +1,18 @@
 #include "DungeonTile.h"
 
 SelectiveDungeonTile::SelectiveDungeonTile() :
-isTypeSet( 0 ),
-isIdSet( 0 ),
-isFloorSet( 0 ),
-isCeilingSet( 0 )
+isTypeSet( false ),
+isIdSet( false ),
+isFloorSet( false ),
+isCeilingSet( false ),
+isSpecialSet( false )
 {
 }
 
 SelectiveDungeonTile::~SelectiveDungeonTile() {
 }
 
+// type * * * * * * * * * * * *
 int* SelectiveDungeonTile::getType() {
 	if ( isTypeSet ) {
 		return &dungeonTile.type;
@@ -27,6 +29,7 @@ void SelectiveDungeonTile::unsetType() {
 	isTypeSet = false;
 }
 
+// id * * * * * * * * * * * *
 int* SelectiveDungeonTile::getId() {
 	if ( isIdSet ) {
 		return &dungeonTile.id;
@@ -43,6 +46,7 @@ void SelectiveDungeonTile::unsetId() {
 	isIdSet = false;
 }
 
+// floor * * * * * * * * * * * *
 int* SelectiveDungeonTile::getFloor() {
 	if ( isFloorSet ) {
 		return &dungeonTile.floor;
@@ -59,6 +63,7 @@ void SelectiveDungeonTile::unsetFloor() {
 	isFloorSet = false;
 }
 
+// ceiling * * * * * * * * * * * *
 int* SelectiveDungeonTile::getCeiling() {
 	if ( isCeilingSet ) {
 		return &dungeonTile.ceiling;
@@ -75,11 +80,30 @@ void SelectiveDungeonTile::unsetCeiling() {
 	isCeilingSet = false;
 }
 
+// special * * * * * * * * * * * *
+int* SelectiveDungeonTile::getSpecial() {
+	if ( isSpecialSet ) {
+		return &dungeonTile.special;
+	}
+	return 0;
+}
+
+void SelectiveDungeonTile::setSpecial( int special ) {
+	dungeonTile.special = special;
+	isSpecialSet = true;
+}
+
+void SelectiveDungeonTile::unsetSpecial() {
+	isSpecialSet = false;
+}
+
+
 void SelectiveDungeonTile::setFromDungeonTile( const DungeonTile& tile ) {
 	setType( tile.type );
 	setId( tile.id );
 	setFloor( tile.floor );
 	setCeiling( tile.ceiling );
+	setSpecial( tile.special );
 }
 
 DungeonTile SelectiveDungeonTile::getDungeonTile() const {
@@ -100,6 +124,13 @@ DungeonTile SelectiveDungeonTile::getDungeonTile() const {
 		tile.ceiling = dungeonTile.ceiling;
 	}
 
+	if( isSpecialSet ) {
+		tile.special = dungeonTile.special;
+	}
+	else {
+		tile.special = DUNGEON_TILE_SPECIAL_NONE;
+	}
+
 	return tile;
 }
 
@@ -118,5 +149,9 @@ void SelectiveDungeonTile::updateDungeonTile( DungeonTile& otherTile ) const {
 
 	if( isCeilingSet ) {
 		otherTile.ceiling = dungeonTile.ceiling;
+	}
+
+	if( isSpecialSet ) {
+		otherTile.special = dungeonTile.special;
 	}
 }

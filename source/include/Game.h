@@ -47,7 +47,7 @@ using namespace std;
 #include "GameInput.h"
 #include "AssetManager.h"
 #include "ItemManager.h"
-#include "FeatureGenerator.h"
+#include "feature/FeatureGenerator.h"
 #include "MerchantView.h"
 
 // let's try to get rid of stuff below here...
@@ -103,7 +103,7 @@ class game_c {
 	WorldMapView mWorldMapView;
 	AiManager mAiManager;	// save
 	AiView *mAiView;
-	physics_c mPhysics;	// save
+	Physics mPhysics;	// save
 	PhysicsView *mPhysicsView;
 	GameInput mGameInput;
 	AssetManager mAssetManager;

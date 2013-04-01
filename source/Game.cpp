@@ -874,7 +874,7 @@ int game_c::load(void) {
 	case LOCATION_WORLD:
 		printf("game_c::load(): loading planet\n");
 		mLocation = new World();
-		initializePlanet(true, mGalaxy->getPlanetByHandle(gameSaveData.planetHandle), &gameSaveData.physicsPos, false);
+		initializePlanet(true, mGalaxy->getPlanetByHandle( gameSaveData.planetHandle ), &gameSaveData.physicsPos, false);
 		break;
 	default:
 		printf("game_c::load(): error, default location\n");
@@ -926,32 +926,32 @@ int game_c::saveGameData(void) {
 }
 
 
-GameSaveData game_c::loadGameData(void) {
+GameSaveData game_c::loadGameData() {
 	GameSaveData gameSaveData;
-	FILE *file = fopen("save/game.dat", "rb");
+	FILE *file = fopen( "save/game.dat", "rb" );
 	if (file == NULL) {
 		gameSaveData.loadSucceeded = false;
 		return gameSaveData;
 	}
-	fread(&gameSaveData, sizeof GameSaveData, 1, file);
-	fclose(file);
+	fread( &gameSaveData, sizeof GameSaveData, 1, file );
+	fclose( file );
 	return gameSaveData;
 }
 
 
-void game_c::saveLocation(void) {
+void game_c::saveLocation() {
 	// see if we need to save the current Location
 	if (mLocation->getType() == LOCATION_SHIP) {
-		FILE *file = fopen("save/playership.dat", "wb");
-		mLocation->save(file);
-		fclose(file);
+		FILE *file = fopen( "save/playership.dat", "wb" );
+		mLocation->save( file );
+		fclose( file );
 	}
 	else if (mCurrentPlanet != NULL) {
-		char fileName[48];
-		sprintf(fileName, "save/planet%d.dat", mCurrentPlanet->mHandle);
-		FILE *file = fopen(fileName, "wb");
-		mLocation->save(file);
-		fclose(file);
+		char fileName[128];
+		sprintf( fileName, "save/planet%d.dat", mCurrentPlanet->mHandle );
+		FILE *file = fopen( fileName, "wb" );
+		mLocation->save( file );
+		fclose( file );
 	}
 }
 

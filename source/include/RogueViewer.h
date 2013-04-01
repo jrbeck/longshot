@@ -13,7 +13,7 @@
 
 
 #include "AssetManager.h"
-#include "FeatureGenerator.h"
+#include "feature/FeatureGenerator.h"
 #include "World.h"
 #include "WorldMapView.h"
 

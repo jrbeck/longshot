@@ -71,29 +71,17 @@ bool InactiveList::isInColumn (v2di_t index, v3d_t position) {
 
 
 
-int InactiveList::saveToDisk (char *filename) {
+int InactiveList::save( FILE* file ) {
 	int size = mItems.size ();
 
-	// generate file name
-//	char filename[50];
-//	sprintf (filename, "save/inactive.list\0");
-
-	// open file
-	FILE *outputFile = fopen (filename, "wb");
-	if (outputFile == NULL) {
-		return 1;
-	}
-
-	// write
-	fwrite (&size, sizeof (int), 1, outputFile);
+	// write the number of items
+	fwrite (&size, sizeof (int), 1, file);
 
 	for (int i = 0; i < size; i++) {
-		fwrite (&mItems[i], sizeof (inactive_item_t), 1, outputFile);
+		fwrite (&mItems[i], sizeof (inactive_item_t), 1, file);
 //		printf ("T: (%d) ", mItems[i].type);
 //		v3d_print ("pos", mItems[i].pos);
 	}
-
-	fclose (outputFile);
 
 	printf ("InactiveList::saveToDisk(): saved %d items\n", size);
 
@@ -102,28 +90,17 @@ int InactiveList::saveToDisk (char *filename) {
 
 
 
-int InactiveList::loadFromDisk (char *filename) {
-	// generate file name
-//	char filename[50];
-//	sprintf (filename, "save/inactive.list\0");
+int InactiveList::load( FILE* file ) {
 
-	// open file
-	FILE *inputFile = fopen (filename, "rb");
-	if (inputFile == NULL) {
-		return 1;
-	}
-
-	// read
+	// read the number of items
 	int size;
-	fread (&size, sizeof (int), 1, inputFile);
+	fread (&size, sizeof (int), 1, file);
 
 	inactive_item_t item;
 	for (int i = 0; i < size; i++) {
-		fread (&item, sizeof (inactive_item_t), 1, inputFile);
+		fread (&item, sizeof (inactive_item_t), 1, file);
 		mItems.push_back (item);
 	}
-
-	fclose (inputFile);
 
 	printf ("InactiveList::loadFromDisk(): loaded %d items\n", size);
 

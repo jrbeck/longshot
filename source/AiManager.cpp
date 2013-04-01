@@ -34,7 +34,7 @@ void AiManager::clear(void) {
 
 
 
-size_t AiManager::setPlayerPhysicsHandle (size_t playerPhysicsHandle, physics_c &physics, double time) {
+size_t AiManager::setPlayerPhysicsHandle (size_t playerPhysicsHandle, Physics &physics, double time) {
 	mPlayerPhysicsHandle = playerPhysicsHandle;
 
 	// add the player as an AI entity
@@ -67,7 +67,7 @@ void AiManager::setPlayerFacingAndIncline (v2d_t facingAndElevation) {
 }
 
 
-AiEntity *AiManager::addEntity(int type, const v3d_t &position, physics_c &physics, double time) {
+AiEntity *AiManager::addEntity(int type, const v3d_t &position, Physics &physics, double time) {
 	AiEntity *e = new AiEntity();
 	if (e == NULL) {
 		printf("AiManager::addEntity(): error: out of mem\n");
@@ -131,7 +131,7 @@ size_t AiManager::spawnEntity(
 	int type,
 	v3d_t position,
 	double time,
-	physics_c &physics,
+	Physics &physics,
 	ItemManager &itemManager)
 {
 	AiEntity *newAiEntity = addEntity(type, position, physics, time);
@@ -251,7 +251,7 @@ size_t AiManager::spawnEntity(
 int AiManager::update (
 	double time,
 	WorldMap &worldMap,
-	physics_c &physics,
+	Physics &physics,
 	ItemManager &itemManager)
 {
 	if (physics.isPaused ()) {
@@ -324,7 +324,7 @@ int AiManager::update (
 }
 
 
-void AiManager::releaseItems(int index, physics_c &physics) {
+void AiManager::releaseItems(int index, Physics &physics) {
 	int items = 0;
 	printf("eliminating inventory\n");
 			
@@ -363,7 +363,7 @@ void AiManager::trimEntitiesList (void) {
 }
 
 
-void AiManager::readPhysicsMessages (double time, physics_c &physics, ItemManager &itemManager) {
+void AiManager::readPhysicsMessages (double time, Physics &physics, ItemManager &itemManager) {
 	phys_message_t message;
 	int type;
 

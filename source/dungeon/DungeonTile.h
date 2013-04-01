@@ -21,12 +21,21 @@ enum {
 	DUNGEON_TILE_WATER
 };
 
+enum {
+	DUNGEON_TILE_SPECIAL_NONE,
+	DUNGEON_TILE_SPECIAL_MONSTER_GENERATOR
+};
+
 
 struct DungeonTile {
+	DungeonTile() :
+		special( DUNGEON_TILE_SPECIAL_NONE ) {}
+
 	int type;
 	int id;
 	int floor;
 	int ceiling;
+	int special;
 };
 
 
@@ -51,6 +60,10 @@ public:
 	void setCeiling( int ceiling );
 	void unsetCeiling();
 
+	int* getSpecial();
+	void setSpecial( int special );
+	void unsetSpecial();
+
 	void setFromDungeonTile( const DungeonTile& tile );
 	DungeonTile getDungeonTile() const;
 	void updateDungeonTile( DungeonTile& otherTile ) const;
@@ -62,4 +75,5 @@ private:
 	bool isIdSet;
 	bool isFloorSet;
 	bool isCeilingSet;
+	bool isSpecialSet;
 };

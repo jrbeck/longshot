@@ -23,7 +23,7 @@ AiEntity::AiEntity (void) {
 void AiEntity::update(
 	double time,
 	WorldMap &worldMap,
-	physics_c &physics,
+	Physics &physics,
 	vector<AiEntity *> &aiEntities,
 	ItemManager &itemManager)
 {
@@ -150,7 +150,7 @@ void AiEntity::update(
 void AiEntity::updateState(
 	double time,
 	WorldMap &worldMap,
-	physics_c &physics,
+	Physics &physics,
 	vector<AiEntity *> &aiEntities,
 	ItemManager &itemManager)
 {
@@ -214,7 +214,7 @@ bool AiEntity::testCondition(
 	int condition,
 	double time,
 	WorldMap &worldMap,
-	physics_c &physics,
+	Physics &physics,
 	vector<AiEntity *> &aiEntities,
 	ItemManager &itemManager)
 {
@@ -249,7 +249,7 @@ bool AiEntity::testCondition(
 }
 
 
-void AiEntity::readMail(physics_c &physics) {
+void AiEntity::readMail(Physics &physics) {
 	// lets read some mail
 	// FIXME: this needs to be different for each type
 	phys_message_t message;
@@ -298,7 +298,7 @@ void AiEntity::readMail(physics_c &physics) {
 
 
 
-void AiEntity::updatePlayer (physics_c &physics) {
+void AiEntity::updatePlayer (Physics &physics) {
 	mPhysicsEntity = physics.getEntityByHandle(mPhysicsHandle);
 	mWorldPosition = physics.getCenter (mPhysicsHandle);
 }
@@ -307,7 +307,7 @@ void AiEntity::updatePlayer (physics_c &physics) {
 void AiEntity::updateBalloon (
 	double time,
 	WorldMap &worldMap,
-	physics_c &physics,
+	Physics &physics,
 	vector<AiEntity *> &aiEntities,
 	ItemManager &itemManager)
 {
@@ -392,7 +392,7 @@ void AiEntity::updateBalloon (
 void AiEntity::updateHopper (
 	double time,
 	WorldMap &worldMap,
-	physics_c &physics,
+	Physics &physics,
 	vector<AiEntity *> &aiEntities,
 	ItemManager &itemManager)
 {
@@ -468,7 +468,7 @@ void AiEntity::updateHopper (
 
 
 
-void AiEntity::updateDummy (double time, WorldMap &worldMap, physics_c &physics, vector<AiEntity *> &aiEntities) {
+void AiEntity::updateDummy (double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities) {
 	// check for line of sight
 /*	v3d_t playerPos = v3d_add (physics.getCenter (1), v3d_v (0.0, 1.6 - 0.9, 0.0));
 
@@ -488,7 +488,7 @@ void AiEntity::updateDummy (double time, WorldMap &worldMap, physics_c &physics,
 }
 
 
-void AiEntity::updateTarget (double time, WorldMap &worldMap, physics_c &physics, vector<AiEntity *> &aiEntities) {
+void AiEntity::updateTarget (double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities) {
 	mTargetPhysicsEntity = NULL;
 
 	if (mTargetPhysicsHandle != 0) {
@@ -516,7 +516,7 @@ void AiEntity::updateTarget (double time, WorldMap &worldMap, physics_c &physics
 
 
 
-void AiEntity::aquireTarget (double time, WorldMap &worldMap, physics_c &physics, vector<AiEntity *> &aiEntities) {
+void AiEntity::aquireTarget (double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities) {
 	double minDistance = 100000.0;
 	int minHandle = -1;
 
@@ -590,7 +590,7 @@ void AiEntity::aquireTarget (double time, WorldMap &worldMap, physics_c &physics
 
 
 
-bool AiEntity::useWeapon(double time, physics_c &physics, ItemManager &itemManager) {
+bool AiEntity::useWeapon(double time, Physics &physics, ItemManager &itemManager) {
 
 	if (mInventory[0] == 0) return false;
 

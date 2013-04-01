@@ -32,8 +32,12 @@ bool DungeonUtil::isOnMap ( int i, int j ) const {
 	return true;
 }
 
-DungeonTile *DungeonUtil::getTile( int i, int j ) const {
+DungeonTile* DungeonUtil::getTile( int i, int j ) const {
 	return dungeon->getTile( i, j );
+}
+
+void DungeonUtil::setTile( int i, int j, const SelectiveDungeonTile& tile ) {
+	dungeon->setTile( i, j, tile );
 }
 
 void DungeonUtil::setAllTiles( const SelectiveDungeonTile&tile ) {
@@ -144,7 +148,7 @@ void DungeonUtil::drawCrookedLine( double x1, double y1, double x2, double y2, i
 
 		double lineLength = v2d_dist( v2d_v( x1, y1 ), v2d_v ( x2, y2 ) );
 
-		int steps = __max( round_int( lineLength / ( brushSize * 0.5 ) ), 1);
+		int steps = __max( round_int( lineLength / ( brushSize * 0.5f ) ), 1);
 
 //		drawLine( round_int( x1 ), round_int( y1 ), round_int( x2 ), round_int( y2 ), brushSize, steps, tile );
 		drawLine( x1, y1, x2, y2, brushSize, steps, tile );

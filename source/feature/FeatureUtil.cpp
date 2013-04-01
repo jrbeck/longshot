@@ -54,7 +54,8 @@ height_info_t FeatureUtil::getHeightInfo (int worldX, int worldZ, int sideX, int
 
 
 
-void FeatureUtil::buildSpiralStaircase (v3di_t southwestInsideCorner,
+void FeatureUtil::buildSpiralStaircase(
+	v3di_t southwestInsideCorner,
 	int stairsPerLevel,
 	int topHeight,
 	int startCorner,

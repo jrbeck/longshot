@@ -46,7 +46,7 @@ void ItemManager::freeAssets (void) {
 
 
 
-int ItemManager::update (physics_c &physics) {
+int ItemManager::update (Physics &physics) {
 	readPhysicsMessages (physics);
 
 	trimItemsList ();
@@ -56,7 +56,7 @@ int ItemManager::update (physics_c &physics) {
 
 
 
-void ItemManager::readPhysicsMessages (physics_c &physics) {
+void ItemManager::readPhysicsMessages (Physics &physics) {
 	phys_message_t message;
 
 	int itemsDestroyed = 0;
@@ -585,7 +585,7 @@ void ItemManager::generateRandomRocketLauncher (item_t &newGun, double dps) {
 
 
 
-size_t ItemManager::spawnPhysicsEntityGun (double value, v3d_t position, double time, physics_c &physics) {
+size_t ItemManager::spawnPhysicsEntityGun (double value, v3d_t position, double time, Physics &physics) {
 	size_t itemHandle = generateRandomGun (value);
 
 	size_t physicsHandle = physics.createEntity (OBJTYPE_ITEM, position, time, false);
@@ -601,7 +601,7 @@ size_t ItemManager::spawnPhysicsEntityGun (double value, v3d_t position, double 
 
 
 // returns whether or not the item was destroyed
-bool ItemManager::useItem (v2d_t walkVector, size_t itemHandle, size_t physicsHandle, physics_c &physics) {
+bool ItemManager::useItem (v2d_t walkVector, size_t itemHandle, size_t physicsHandle, Physics &physics) {
 	item_t item = getItem (itemHandle);
 
 	if (item.type == ITEMTYPE_UNDEFINED) {
@@ -643,7 +643,7 @@ void ItemManager::useRocketPack (
 	v2d_t walkVector,
 	size_t itemHandle,
 	size_t physicsHandle,
-	physics_c &physics)
+	Physics &physics)
 {
 	item_t item = getItem (itemHandle);
 
@@ -706,7 +706,7 @@ double ItemManager::useGun (
 	size_t itemHandle,
 	shot_info_t shotInfo,
 	size_t *ammoCounter,
-	physics_c &physics)
+	Physics &physics)
 {
 	int itemIndex = getIndexFromHandle (itemHandle);
 
@@ -748,7 +748,7 @@ double ItemManager::useGun (
 
 
 // expects shotInfo angle to be normalized
-double ItemManager::useGun (size_t itemHandle, shot_info_t shotInfo, physics_c &physics) {
+double ItemManager::useGun (size_t itemHandle, shot_info_t shotInfo, Physics &physics) {
 	int itemIndex = getIndexFromHandle (itemHandle);
 
 //	printf ("using gun %d\n", itemIndex);
@@ -806,7 +806,7 @@ double ItemManager::useGun (size_t itemHandle, shot_info_t shotInfo, physics_c &
 }
 
 
-double ItemManager::useMeleeWeapon (size_t itemHandle, shot_info_t shotInfo, physics_c &physics) {
+double ItemManager::useMeleeWeapon (size_t itemHandle, shot_info_t shotInfo, Physics &physics) {
 	int itemIndex = getIndexFromHandle (itemHandle);
 
 //	printf ("using gun %d\n", itemIndex);

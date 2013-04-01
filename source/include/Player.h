@@ -59,7 +59,7 @@ public:
 	~player_c ();
 
 	int reset(size_t physicsHandle, size_t aiHandle, ItemManager &itemManager);
-	int soft_reset(v3d_t &startPosition, physics_c &phys);
+	int soft_reset(v3d_t &startPosition, Physics &phys);
 	void setStartPosition(v3d_t &startPosition);
 	void setPhysicsHandle(size_t handle);
 
@@ -85,12 +85,12 @@ public:
 
 	bool pickUpItem(item_t item, AssetManager &assetManager);
 
-	void useEquipped(int whichEquip, double time, physics_c &phys,
+	void useEquipped(int whichEquip, double time, Physics &phys,
 		AssetManager &assetManager, ItemManager &itemManager);
-	double fireGun(item_t item, double handedness, double time, physics_c &phys, AssetManager &assetManager, ItemManager &itemManager);
-	double useMeleeWeapon(item_t item, double time, physics_c &phys, ItemManager &itemManager);
+	double fireGun(item_t item, double handedness, double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager);
+	double useMeleeWeapon(item_t item, double time, Physics &phys, ItemManager &itemManager);
 
-	void useBackpackItem(double time, physics_c &phys, AssetManager &assetManager, ItemManager &itemManager);
+	void useBackpackItem(double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager);
 
 	v2d_t obtainWalkVector(v2d_t walkInput);
 
@@ -105,9 +105,9 @@ public:
 
 	void updateCharacterSheet(ItemManager &itemManager);
 
-	bool update(double time, WorldMap &worldMap, physics_c &phys, GameInput &gi, AssetManager &assetManager, ItemManager &itemManager);
+	bool update(double time, WorldMap &worldMap, Physics &phys, GameInput &gi, AssetManager &assetManager, ItemManager &itemManager);
 
-	void readPhysicsMessages(physics_c &physics, ItemManager &itemManager, AssetManager &assetManager);
+	void readPhysicsMessages(Physics &physics, ItemManager &itemManager, AssetManager &assetManager);
 
 	// HACK
 	void placeLight(LightManager &lightManager, WorldMap &worldMap, GameInput &gi);

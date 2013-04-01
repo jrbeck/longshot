@@ -52,8 +52,8 @@ public:
 
 	bool isInColumn (v2di_t index, v3d_t position);
 
-	int saveToDisk (char *filename);
-	int loadFromDisk (char *filename);
+	int save ( FILE* file );
+	int load ( FILE* file );
 
 
 private:
