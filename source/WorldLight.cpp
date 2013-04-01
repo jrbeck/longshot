@@ -1,7 +1,7 @@
 #include "WorldLight.h"
 
 WorldLight::WorldLight() :
-	mBuffer(NULL)
+	mBuffer( NULL )
 {
 }
 
@@ -13,14 +13,14 @@ WorldLight::~WorldLight() {
 }
 
 
-void WorldLight::set(v3d_t position, double radius, IntColor color) {
+void WorldLight::set( const v3d_t& position, double radius, const IntColor& color ) {
 	mWorldPosition = position;
 	mRadius = radius;
 	mColor.r = color.r;
 	mColor.g = color.g;
 	mColor.b = color.b;
 
-	v3di_t intPosition = v3di_v(mWorldPosition);
+	v3di_t intPosition = v3di_v( mWorldPosition );
 
 	mBufferNear.x = intPosition.x - (int)ceil(mRadius);
 	mBufferNear.y = intPosition.y - (int)ceil(mRadius);
@@ -38,7 +38,7 @@ void WorldLight::set(v3d_t position, double radius, IntColor color) {
 }
 
 
-void WorldLight::initBuffer(void) {
+void WorldLight::initBuffer() {
 	if (mBuffer != NULL) {
 		delete [] mBuffer;
 		mBuffer = NULL;
@@ -46,7 +46,7 @@ void WorldLight::initBuffer(void) {
 
 	mBuffer = new IntColor[mBufferDimensions.x * mBufferDimensions.y * mBufferDimensions.z];
 	if (mBuffer == NULL) {
-		printf("WorldLight::initBuffer(): error: out of memory\n");
+		printf( "WorldLight::initBuffer(): error: out of memory\n" );
 		return;
 	}
 
@@ -86,7 +86,7 @@ void WorldLight::initBuffer(void) {
 }
 
 
-IntColor WorldLight::getLevel(v3di_t worldPosition) const {
+IntColor WorldLight::getLevel( const v3di_t& worldPosition ) const {
 	static IntColor noColor = { 0, 0, 0 };
 	if (isInVolume(worldPosition) == false ||
 		mBuffer == NULL)
@@ -102,7 +102,7 @@ IntColor WorldLight::getLevel(v3di_t worldPosition) const {
 }
 
 
-bool WorldLight::isInVolume(v3di_t worldPosition) const {
+bool WorldLight::isInVolume( const v3di_t& worldPosition ) const {
 	if (worldPosition.x < mBufferNear.x ||
 		worldPosition.x > mBufferFar.x ||
 		worldPosition.y < mBufferNear.y ||
@@ -117,7 +117,7 @@ bool WorldLight::isInVolume(v3di_t worldPosition) const {
 }
 
 
-void WorldLight::turnOff(void) {
+void WorldLight::turnOff() {
 	if (mBuffer != NULL) {
 		delete [] mBuffer;
 		mBuffer = NULL;
@@ -126,28 +126,28 @@ void WorldLight::turnOff(void) {
 
 
 
-void WorldLight::turnOn(void) {
+void WorldLight::turnOn() {
 	initBuffer();
 }
 
 
-void WorldLight::save(FILE *file) {
-	fwrite(&mWorldPosition, sizeof v3d_t, 1, file);
-	fwrite(&mRadius, sizeof (double), 1, file);
-	fwrite(&mColor.r, sizeof (int), 1, file);
-	fwrite(&mColor.g, sizeof (int), 1, file);
-	fwrite(&mColor.b, sizeof (int), 1, file);
+void WorldLight::save( FILE* file ) const {
+	fwrite( &mWorldPosition, sizeof v3d_t, 1, file );
+	fwrite( &mRadius, sizeof (double), 1, file );
+	fwrite( &mColor.r, sizeof (int), 1, file );
+	fwrite( &mColor.g, sizeof (int), 1, file );
+	fwrite( &mColor.b, sizeof (int), 1, file );
 }
 
 
-void WorldLight::load(FILE *file) {
-	fread(&mWorldPosition, sizeof v3d_t, 1, file);
-	fread(&mRadius, sizeof (double), 1, file);
-	fread(&mColor.r, sizeof (int), 1, file);
-	fread(&mColor.g, sizeof (int), 1, file);
-	fread(&mColor.b, sizeof (int), 1, file);
+void WorldLight::load( FILE* file ) {
+	fread( &mWorldPosition, sizeof v3d_t, 1, file );
+	fread( &mRadius, sizeof (double), 1, file );
+	fread( &mColor.r, sizeof (int), 1, file );
+	fread( &mColor.g, sizeof (int), 1, file );
+	fread( &mColor.b, sizeof (int), 1, file );
 
-	set(mWorldPosition, mRadius, mColor);
+	set( mWorldPosition, mRadius, mColor );
 }
 
 

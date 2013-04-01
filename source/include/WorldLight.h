@@ -16,7 +16,7 @@
 class IntColor {
 public:
 
-	void constrain(int minValue, int maxValue) {
+	void constrain( int minValue, int maxValue ) {
 		if (r > maxValue) {
 			r = maxValue;
 		}
@@ -50,18 +50,18 @@ public:
 	WorldLight();
 	~WorldLight();
 
-	void set(v3d_t position, double radius, IntColor color);
-	void initBuffer(void);
+	void set( const v3d_t& position, double radius, const IntColor& color );
+	void initBuffer();
 
-	IntColor getLevel(v3di_t worldPosition) const;
-	bool isInVolume(v3di_t worldPosition) const;
+	IntColor getLevel( const v3di_t& worldPosition ) const;
+	bool isInVolume( const v3di_t& worldPosition ) const;
 
 	// delete the buffer or create a new one
-	void turnOff(void);
-	void turnOn(void);
+	void turnOff();
+	void turnOn();
 
-	void save(FILE *file);
-	void load(FILE *file);
+	void save( FILE* file ) const;
+	void load( FILE* file );
 
 //private:
 	size_t mHandle;
@@ -75,7 +75,7 @@ public:
 	v3di_t mBufferNear;
 	v3di_t mBufferFar;
 	v3di_t mBufferDimensions;
-	IntColor *mBuffer;
+	IntColor* mBuffer;
 };
 
 

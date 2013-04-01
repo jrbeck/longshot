@@ -12,7 +12,7 @@ LightManager::~LightManager() {
 }
 
 
-size_t LightManager::addLight( v3d_t position, double radius, IntColor color, WorldMap &worldMap ) {
+size_t LightManager::addLight( const v3d_t& position, double radius, const IntColor& color, WorldMap& worldMap ) {
 	WorldLight *light = new WorldLight();
 	if (light == NULL) {
 		printf("LightManager::addLight(): error: out of memory\n");
@@ -28,7 +28,7 @@ size_t LightManager::addLight( v3d_t position, double radius, IntColor color, Wo
 }
 
 
-void LightManager::updateWorldColumns(WorldLight &light, WorldMap &worldMap) {
+void LightManager::updateWorldColumns( const WorldLight& light, WorldMap& worldMap) const {
 	v3di_t pos;
 	int columnIndex;
 	int endCheckColumnIndex;
@@ -85,7 +85,7 @@ void LightManager::updateWorldColumns(WorldLight &light, WorldMap &worldMap) {
 
 
 
-void LightManager::removeLight(size_t handle) {
+void LightManager::removeLight( size_t handle ) {
 	// first check the active lights
 	size_t numLights = mLights.size();
 	for (size_t i = 0; i < numLights; i++) {
@@ -114,12 +114,12 @@ void LightManager::removeLight(size_t handle) {
 }
 
 
-IntColor LightManager::getLightLevel(v3di_t position) const {
+IntColor LightManager::getLightLevel( const v3di_t& position) const {
 	IntColor level = { 0, 0, 0 };
 	IntColor temp;
 	size_t numLights = mLights.size();
 	for (size_t i = 0; i < numLights; i++) {
-		temp = mLights[i]->getLevel(position);
+		temp = mLights[i]->getLevel( position );
 		level.r += temp.r;
 		level.g += temp.g;
 		level.b += temp.b;
@@ -128,7 +128,7 @@ IntColor LightManager::getLightLevel(v3di_t position) const {
 }
 
 
-void LightManager::update(WorldMap &worldMap) {
+void LightManager::update( WorldMap& worldMap ) {
 	int count = 0;
 
 	// deactivate lights that are in columns that aren't loaded
@@ -175,7 +175,7 @@ void LightManager::update(WorldMap &worldMap) {
 
 
 
-void LightManager::clear(void) {
+void LightManager::clear() {
 	// clear the active lights
 	if (mLights.size() > 0) {
 		for (size_t i = 0; i < mLights.size(); i++) {
@@ -201,7 +201,7 @@ void LightManager::clear(void) {
 }
 
 
-void LightManager::save(FILE *file) {
+void LightManager::save( FILE* file ) {
 	// we don't really care if they're active or not, just
 	// need to write all the WorldLight info to disk
 	size_t numLights = mLights.size();
@@ -220,7 +220,7 @@ void LightManager::save(FILE *file) {
 }
 
 
-void LightManager::load(FILE *file) {
+void LightManager::load( FILE* file ) {
 	clear();
 
 	// active lights

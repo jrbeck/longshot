@@ -57,8 +57,8 @@ public:
 
 	void setBlockVisibility( const v3di_t& position, BYTE visibility );
 
-	block_t *getBlock( const v3di_t& position ) const;
-	block_t *getBlock( const v3d_t& position ) const;
+	block_t* getBlock( const v3di_t& position ) const;
+	block_t* getBlock( const v3d_t& position ) const;
 	int setBlock( const v3di_t& position, const block_t &block );
 
 	BYTE getUniqueLighting( const v3di_t& position ) const;
@@ -71,6 +71,7 @@ public:
 	double getHealthEffects( const BoundingBox& boundingBox ) const;
 
 	void clearBlock( const v3di_t& position );
+	// this method swaps values, so does not take references
 	void fillVolume( v3di_t a, v3di_t b, int blockType );
 	int fillSphere( const v3d_t& pos, double radius, int blockType, BYTE uniqueLighting );
 	int clearSphere( const v3d_t& pos, double radius );
@@ -91,18 +92,16 @@ public:
 	bool updateLiquidBlock( int blockType, int columnIndex, const v3di_t& worldPosition );
 	int countLiquidNeighbors( int blockType, const v3di_t& worldPosition ) const;
 
-
 	// TODO: should this be merged with the InactiveColumnManager?
 	int save( FILE *file );
 	int load( FILE *file );
-	void swapOutToInactive( void );
-	void saveToInactive( void );
+	void swapOutToInactive();
+	void saveToInactive();
 
 	// these are really utility functions...I imagine they should
 	// be moved out of this class?
 	bool lineOfSight( const v3d_t& a, const v3d_t& b ) const;
 	bool rayCastSolidBlock( const v3d_t &a, const v3d_t &b, v3di_t &hitPosition, int &face ) const;
-
 
 
 // MEMBERS * * * * * * * * * * *
@@ -112,7 +111,7 @@ public:
 
 	int mNumColumns;
 
-	WorldColumn *mColumns;
+	WorldColumn* mColumns;
 
 	BYTE mWorldLightingFloor;
 	BYTE mWorldLightingCeiling;
@@ -128,7 +127,7 @@ public:
 
 	// if this is set, periodics will be consulted when creating a new
 	// WorldChunk. This is to account for digging, etc...
-	Periodics *mPeriodics;
+	Periodics* mPeriodics;
 };
 
 

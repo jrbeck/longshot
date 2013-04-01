@@ -96,7 +96,7 @@ public:
 	size_t getNumColumns (void) const;
 
 private:
-	vector <ColumnDatum *>mColumnData;
+	vector <ColumnDatum*> mColumnData;
 };
 
 

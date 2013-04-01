@@ -1,27 +1,29 @@
 #include "WorldColumn.h"
 
 
-
-WorldColumn::WorldColumn (void) {
+WorldColumn::WorldColumn() {
 	clear ();
 }
 
 
-
-WorldColumn::~WorldColumn (void) {
-	for (size_t i = 0; i < mWorldChunks.size (); i++) {
-		delete mWorldChunks[i];
+WorldColumn::~WorldColumn() {
+	size_t numWorldChunks = mWorldChunks.size();
+	for (size_t i = 0; i < numWorldChunks; i++) {
+		if( mWorldChunks[i] != 0 ) {
+			delete mWorldChunks[i];
+		}
 	}
 }
 
 
-
-void WorldColumn::clear (void) {
-	for (size_t i = 0; i < mWorldChunks.size (); i++) {
-		delete mWorldChunks[i];
+void WorldColumn::clear() {
+	size_t numWorldChunks = mWorldChunks.size();
+	for (size_t i = 0; i < numWorldChunks; i++) {
+		if( mWorldChunks[i] != 0 ) {
+			delete mWorldChunks[i];
+		}
 	}
-
-	mWorldChunks.clear ();
+	mWorldChunks.clear();
 
 	mWorldIndex.x = 1000000;
 	mWorldIndex.y = 1000000;
@@ -45,36 +47,35 @@ void WorldColumn::clear (void) {
 }
 
 
-
-void WorldColumn::clearEmptyChunks (void) {
-	size_t lastChunkIndex = mWorldChunks.size () - 1;
-
+void WorldColumn::clearEmptyChunks() {
 	bool hasClearedChunk = false;
-
-	for (size_t i = 0; i < mWorldChunks.size (); i++) {
+	size_t numWorldChunks = mWorldChunks.size();
+	size_t lastChunkIndex = numWorldChunks - 1;
+	for (size_t i = 0; i < numWorldChunks; i++) {
 		if (mWorldChunks[i]->mNumBlocks == 0) {
 			if (i != lastChunkIndex) {
-				swap (mWorldChunks[i], mWorldChunks[lastChunkIndex]);
+				swap( mWorldChunks[i], mWorldChunks[lastChunkIndex] );
 				i--;
 			}
 
+			// WARNING: unchecked delete...would crash most likely
+			// on the previous access, however
 			delete mWorldChunks[lastChunkIndex];
 			mWorldChunks.pop_back ();
 
+			numWorldChunks--;
+			lastChunkIndex--;
 			hasClearedChunk = true;
-
-			lastChunkIndex = mWorldChunks.size () - 1;
 		}
 	}
 
-	if (hasClearedChunk) {
-		updateHighestAndLowest ();
+	if ( hasClearedChunk ) {
+		updateHighestAndLowest();
 	}
 }
 
 
-
-bool WorldColumn::isInColumn (v3di_t worldPosition) const {
+bool WorldColumn::isInColumn( const v3di_t& worldPosition) const {
 	if ((worldPosition.x < mWorldPosition.x) ||
 		(worldPosition.x >= (mWorldPosition.x + WORLD_CHUNK_SIDE)) ||
 		(worldPosition.z < mWorldPosition.z) ||
@@ -88,7 +89,7 @@ bool WorldColumn::isInColumn (v3di_t worldPosition) const {
 
 
 
-int WorldColumn::pickChunkFromWorldHeight (int height) const {
+int WorldColumn::pickChunkFromWorldHeight( int height ) const {
 	for (int i = 0; i < static_cast<int>(mWorldChunks.size ()); i++) {
 		if (height >= mWorldChunks[i]->mWorldPosition.y &&
 			height < (mWorldChunks[i]->mWorldPosition.y + WORLD_CHUNK_SIDE))
@@ -101,8 +102,7 @@ int WorldColumn::pickChunkFromWorldHeight (int height) const {
 }
 
 
-
-int WorldColumn::getBlockType (v3di_t worldPosition) const {
+int WorldColumn::getBlockType( const v3di_t& worldPosition ) const {
 	int chunkIndex = pickChunkFromWorldHeight (worldPosition.y);
 
 	if (chunkIndex >= 0) {
@@ -113,8 +113,7 @@ int WorldColumn::getBlockType (v3di_t worldPosition) const {
 }
 
 
-
-void WorldColumn::setBlockType (const v3di_t &worldPosition, char type) {
+void WorldColumn::setBlockType( const v3di_t& worldPosition, char type ) {
 	int chunkIndex = pickChunkFromWorldHeight (worldPosition.y);
 
 	if (chunkIndex < 0) {
@@ -127,8 +126,7 @@ void WorldColumn::setBlockType (const v3di_t &worldPosition, char type) {
 }
 
 
-
-block_t *WorldColumn::getBlockAtWorldPosition (const v3di_t &position) const {
+block_t* WorldColumn::getBlockAtWorldPosition( const v3di_t& position ) const {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex >= 0) {
@@ -139,8 +137,7 @@ block_t *WorldColumn::getBlockAtWorldPosition (const v3di_t &position) const {
 }
 
 
-
-void WorldColumn::setBlockAtWorldPosition (const v3di_t &position, const block_t &block) {
+void WorldColumn::setBlockAtWorldPosition( const v3di_t& position, const block_t& block ) {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex < 0) {
@@ -153,8 +150,7 @@ void WorldColumn::setBlockAtWorldPosition (const v3di_t &position, const block_t
 }
 
 
-
-BYTE WorldColumn::getUniqueLighting (v3di_t position) const {
+BYTE WorldColumn::getUniqueLighting( const v3di_t& position ) const {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex >= 0) {
@@ -165,8 +161,7 @@ BYTE WorldColumn::getUniqueLighting (v3di_t position) const {
 }
 
 
-
-void WorldColumn::setUniqueLighting (v3di_t position, BYTE level) {
+void WorldColumn::setUniqueLighting( const v3di_t& position, BYTE level ) {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex >= 0) {
@@ -176,8 +171,7 @@ void WorldColumn::setUniqueLighting (v3di_t position, BYTE level) {
 }
 
 
-
-void WorldColumn::setBlockVisibility (v3di_t position, BYTE visibility) {
+void WorldColumn::setBlockVisibility( const v3di_t& position, BYTE visibility ) {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex >= 0) {
@@ -186,8 +180,7 @@ void WorldColumn::setBlockVisibility (v3di_t position, BYTE visibility) {
 }
 
 
-
-bool WorldColumn::isSolidBlockAtWorldPosition (v3di_t position) const {
+bool WorldColumn::isSolidBlockAtWorldPosition( const v3di_t& position ) const {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex >= 0) {
@@ -198,8 +191,7 @@ bool WorldColumn::isSolidBlockAtWorldPosition (v3di_t position) const {
 }
 
 
-
-void WorldColumn::clearBlockAtWorldPosition (v3di_t position) {
+void WorldColumn::clearBlockAtWorldPosition( const v3di_t& position ) {
 	block_t block;
 
 	block.type = BLOCK_TYPE_AIR;
@@ -210,13 +202,12 @@ void WorldColumn::clearBlockAtWorldPosition (v3di_t position) {
 }
 
 
+int WorldColumn::createChunkContaining( const v3di_t& worldPosition ) {
+	int chunkIndex = pickChunkFromWorldHeight( worldPosition.y );
 
-int WorldColumn::createChunkContaining (v3di_t worldPosition) {
-	int chunkIndex = pickChunkFromWorldHeight (worldPosition.y);
-
-	if (chunkIndex >= 0) {
+	if ( chunkIndex >= 0 ) {
 		// WARNING: this behavior is undefined
-		printf ("WorldColumn::createChunkContaining: warning: chunk already exists (%d)\n", chunkIndex);
+		printf( "WorldColumn::createChunkContaining: warning: chunk already exists (%d)\n", chunkIndex );
 		return chunkIndex;
 	}
 
@@ -224,41 +215,37 @@ int WorldColumn::createChunkContaining (v3di_t worldPosition) {
 	v3di_t worldIndex;
 
 	worldIndex.x = mWorldIndex.x;
-	worldIndex.y = static_cast<int>(floor (
-		static_cast<double>(worldPosition.y) / static_cast<double>(WORLD_CHUNK_SIDE)));
+	worldIndex.y = static_cast<int>( floor (
+		static_cast<double>( worldPosition.y ) / static_cast<double>( WORLD_CHUNK_SIDE ) ) );
 	worldIndex.z = mWorldIndex.z;
 
 //	printf ("num chunks in column: %d\n", mWorldChunks.size ());
 //	v3di_print ("empty world index", worldIndex);
 
-	WorldChunk *chunk = new WorldChunk;
-	chunk->clear ();
-	chunk->setWorldPosition (v3di_scale (WORLD_CHUNK_SIDE, worldIndex));
+	WorldChunk* chunk = new WorldChunk;
+	chunk->clear();
+	chunk->setWorldPosition( v3di_scale ( WORLD_CHUNK_SIDE, worldIndex ) );
 	chunk->mWorldIndex = worldIndex;
-	mWorldChunks.push_back (chunk);
+	mWorldChunks.push_back( chunk );
 
-	updateHighestAndLowest ();
+	updateHighestAndLowest();
 
-	return (static_cast<int>(mWorldChunks.size ()) - 1);
+	return (static_cast<int>( mWorldChunks.size () ) - 1 );
 }
 
 
-
-
-int WorldColumn::getHighestBlockHeight (void) const {
+int WorldColumn::getHighestBlockHeight() const {
 	return mHighestBlock;
 }
 
 
-
-int WorldColumn::getLowestBlockHeight (void) const {
+int WorldColumn::getLowestBlockHeight() const {
 	return mLowestBlock;
 }
 
 
-
 // this is called whenever a chunk is added or removed
-void WorldColumn::updateHighestAndLowest (void) {
+void WorldColumn::updateHighestAndLowest() {
 	if (mWorldChunks.size () == 0) {
 		printf ("WorldColumn::updateHighestAndLowest() : no chunks\n");
 		return;

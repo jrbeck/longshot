@@ -2,14 +2,13 @@
 
 
 
-WorldChunk::WorldChunk (void) {
-	mNumBlocks = 0;
-	mNumWaterBlocks = 0;
-	mNumHiddenBlocks = 0;
-
-	mWasModified = true;
-
-	setWorldPosition (v3di_v (0, 0, 0));
+WorldChunk::WorldChunk() :
+	mNumBlocks( 0 ),
+	mNumWaterBlocks( 0 ),
+	mNumHiddenBlocks( 0 ),
+	mWasModified( true )
+{
+	setWorldPosition( v3di_v( 0, 0, 0 ) );
 
 	mBlocks = new block_t[WORLD_CHUNK_SIDE_CUBED];
 	if (mBlocks == NULL) {
@@ -19,15 +18,14 @@ WorldChunk::WorldChunk (void) {
 
 
 // destructor
-WorldChunk::~WorldChunk (void) {
+WorldChunk::~WorldChunk() {
 	if (mBlocks != NULL) {
 		delete [] mBlocks;
 	}
 }
 
 
-
-void WorldChunk::setWorldPosition (const v3di_t &worldPosition) {
+void WorldChunk::setWorldPosition( const v3di_t& worldPosition ) {
 	mWorldPosition = worldPosition;
 
 	// set the new bounding sphere
@@ -41,7 +39,7 @@ void WorldChunk::setWorldPosition (const v3di_t &worldPosition) {
 
 
 
-void WorldChunk::clear (void) {
+void WorldChunk::clear() {
 //	if (mBlocks != NULL) {
 //		memset (mBlocks, 0, sizeof (*mBlocks) * mSideLength * mSideLengthSquared);
 		for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; i++) {
@@ -58,12 +56,12 @@ void WorldChunk::clear (void) {
 }
 
 
-const block_t *WorldChunk::getBlocks(void) const {
+const block_t* WorldChunk::getBlocks() const {
 	return mBlocks;
 }
 
 
-bool WorldChunk::isInRegion (const v3di_t &position) const {
+bool WorldChunk::isInRegion( const v3di_t& position ) const {
 	if (position.x < mWorldPosition.x ||
 		position.x >= (mWorldPosition.x + WORLD_CHUNK_SIDE) ||
 		position.y < mWorldPosition.y ||
@@ -78,21 +76,18 @@ bool WorldChunk::isInRegion (const v3di_t &position) const {
 }
 
 
-
-void WorldChunk::setBlockType (const v3di_t &worldPosition, char type) {
-	setBlockAtRelativePosition (v3di_sub (worldPosition, mWorldPosition), type);
+void WorldChunk::setBlockType( const v3di_t& worldPosition, char type ) {
+	setBlockAtRelativePosition( v3di_sub( worldPosition, mWorldPosition ), type );
 }
 
 
-
-void WorldChunk::setBlockAtWorldPosition (const v3di_t &worldPosition, const block_t &block) {
-	setBlockAtRelativePosition (v3di_sub (worldPosition, mWorldPosition), block);
+void WorldChunk::setBlockAtWorldPosition( const v3di_t& worldPosition, const block_t& block ) {
+	setBlockAtRelativePosition( v3di_sub( worldPosition, mWorldPosition ), block );
 }
 
 
-
-BYTE WorldChunk::getUniqueLighting (const v3di_t &worldPosition) const {
-	v3di_t relativePosition = v3di_sub (worldPosition, mWorldPosition);
+BYTE WorldChunk::getUniqueLighting( const v3di_t& worldPosition ) const {
+	v3di_t relativePosition = v3di_sub( worldPosition, mWorldPosition );
 
 	// check to see if the pos is in range
 	if (relativePosition.x < 0 || relativePosition.x >= WORLD_CHUNK_SIDE ||
@@ -114,8 +109,7 @@ BYTE WorldChunk::getUniqueLighting (const v3di_t &worldPosition) const {
 }
 
 
-
-void WorldChunk::setUniqueLighting (const v3di_t &worldPosition, BYTE level) {
+void WorldChunk::setUniqueLighting( const v3di_t& worldPosition, BYTE level ) {
 	v3di_t relativePosition = v3di_sub (worldPosition, mWorldPosition);
 
 	// check to see if the pos is in range, return if out of range
@@ -134,8 +128,7 @@ void WorldChunk::setUniqueLighting (const v3di_t &worldPosition, BYTE level) {
 }
 
 
-
-void WorldChunk::setBlockVisibility (const v3di_t &worldPosition, BYTE visibility) {
+void WorldChunk::setBlockVisibility( const v3di_t& worldPosition, BYTE visibility ) {
 	v3di_t relativePosition = v3di_sub (worldPosition, mWorldPosition);
 
 	// check to see if the pos is in range, return if out of range
@@ -154,8 +147,7 @@ void WorldChunk::setBlockVisibility (const v3di_t &worldPosition, BYTE visibilit
 }
 
 
-
-void WorldChunk::setBlockAtRelativePosition (const v3di_t &relativePosition, char type) {
+void WorldChunk::setBlockAtRelativePosition( const v3di_t& relativePosition, char type ) {
 	// check to see if the pos is in range, return -1 if out of range
 	if (relativePosition.x < 0 || relativePosition.x >= WORLD_CHUNK_SIDE ||
 		relativePosition.y < 0 || relativePosition.y >= WORLD_CHUNK_SIDE ||
@@ -178,8 +170,7 @@ void WorldChunk::setBlockAtRelativePosition (const v3di_t &relativePosition, cha
 }
 
 
-
-void WorldChunk::setBlockAtRelativePosition (const v3di_t &relativePosition, const block_t &block) {
+void WorldChunk::setBlockAtRelativePosition( const v3di_t& relativePosition, const block_t& block ) {
 	// check to see if the pos is in range, return -1 if out of range
 	if (relativePosition.x < 0 || relativePosition.x >= WORLD_CHUNK_SIDE ||
 		relativePosition.y < 0 || relativePosition.y >= WORLD_CHUNK_SIDE ||
@@ -201,10 +192,9 @@ void WorldChunk::setBlockAtRelativePosition (const v3di_t &relativePosition, con
 }
 
 
-
 // this function is called whenever a block changes type
 // it ensures that solid/water/... counts are maintained
-void WorldChunk::updateBlockCounts (char oldType, char newType) {
+void WorldChunk::updateBlockCounts( char oldType, char newType ) {
 	int oldSolidity = gBlockData.get(oldType)->solidityType;
 	int newSolidity = gBlockData.get(newType)->solidityType;
 
@@ -241,9 +231,8 @@ void WorldChunk::updateBlockCounts (char oldType, char newType) {
 }
 
 
-
 // get the block at a position if it exists
-block_t *WorldChunk::blockAt (const v3di_t &relativePosition) const {
+block_t *WorldChunk::blockAt( const v3di_t& relativePosition ) const {
 	// check to see if the pos is in range
 	if (relativePosition.x < 0 || relativePosition.x >= WORLD_CHUNK_SIDE ||
 		relativePosition.y < 0 || relativePosition.y >= WORLD_CHUNK_SIDE ||
@@ -257,8 +246,7 @@ block_t *WorldChunk::blockAt (const v3di_t &relativePosition) const {
 }
 
 
-
-int WorldChunk::getBlockType (const v3di_t &worldPosition) const {
+int WorldChunk::getBlockType( const v3di_t& worldPosition ) const {
 	v3di_t relativePosition = v3di_sub (worldPosition, mWorldPosition);
 
 	// check to see if the pos is in range
@@ -274,25 +262,23 @@ int WorldChunk::getBlockType (const v3di_t &worldPosition) const {
 }
 
 
-
-block_t *WorldChunk::getBlockAtWorldPosition (const v3di_t &position) const {
-	return blockAt(v3di_sub (position, mWorldPosition));
+block_t* WorldChunk::getBlockAtWorldPosition( const v3di_t &position ) const {
+	return blockAt( v3di_sub ( position, mWorldPosition ) );
 }
 
 
-
-void WorldChunk::setBlockByIndex (size_t index, const block_t &block) {
+void WorldChunk::setBlockByIndex( size_t index, const block_t& block ) {
 	mBlocks[index] = block;
 }
 
 
-void WorldChunk::setBlockTypeByIndex (size_t index, BYTE type) {
+void WorldChunk::setBlockTypeByIndex( size_t index, BYTE type ) {
 	mBlocks[index].type = type;
 	mBlocks[index].uniqueLighting = LIGHT_LEVEL_NOT_SET;
 }
 
 
-block_t WorldChunk::getBlockByIndex (size_t index) const {
+block_t WorldChunk::getBlockByIndex( size_t index ) const {
 	return mBlocks[index];
 }
 
@@ -302,7 +288,7 @@ BYTE WorldChunk::getBlockTypeByIndex (size_t index) const {
 }
 
 
-bool WorldChunk::isSolidBlockAtWorldPosition (const v3di_t &worldPosition) {
+bool WorldChunk::isSolidBlockAtWorldPosition( const v3di_t& worldPosition ) {
 	int blockType = getBlockType(worldPosition);
 	int solidityType = gBlockData.get(blockType)->solidityType;
 

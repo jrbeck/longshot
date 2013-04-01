@@ -13,7 +13,7 @@
 
 
 #include "v3d.h"
-#include "AssetManager.h"
+//#include "Constants.h"
 #include "WorldMap.h"
 #include "LightManager.h"
 #include "Terrain.h"
@@ -26,13 +26,13 @@ public:
 
 
 	// this method should be called: propagateSunlight()...
-	static void createShadowVolume(int columnIndex, WorldMap &worldMap);
-	static int getNumSolidNeighbors(v3di_t worldPosition, const WorldMap &worldMap);
+	static void createShadowVolume( int columnIndex, WorldMap& worldMap );
+	static int getNumSolidNeighbors( v3di_t worldPosition, const WorldMap& worldMap );
 	static void applyLighting(
 		int columnIndex,
-		WorldMap &worldMap,
-		const LightManager &lightManager,
-		IntColor &sunColor);
+		WorldMap& worldMap,
+		const LightManager& lightManager,
+		IntColor& sunColor );
 
 };
 

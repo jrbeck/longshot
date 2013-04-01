@@ -1,7 +1,5 @@
 #include "WorldMap.h"
 
-
-
 WorldMap::WorldMap() :
 	mXWidth( 0 ),
 	mZWidth( 0 ),
@@ -14,14 +12,12 @@ WorldMap::WorldMap() :
 }
 
 
-
 WorldMap::~WorldMap() {
 	printf("WorldMap::~WorldMap(): deleting columns\n");
 	if (mColumns != NULL) {
 		delete [] mColumns;
 	}
 }
-
 
 
 void WorldMap::resize( int xWidth, int zWidth ) {
@@ -53,7 +49,6 @@ void WorldMap::resize( int xWidth, int zWidth ) {
 }
 
 
-
 void WorldMap::clear( bool clearInactive ) {
 	if (!clearInactive) {
 		saveToInactive ();
@@ -69,7 +64,6 @@ void WorldMap::clear( bool clearInactive ) {
 
 	mChangedList.clear ();
 }
-
 
 
 v3di_t WorldMap::getRegionIndex( const v3d_t &pos ) const {
@@ -110,7 +104,6 @@ int WorldMap::getColumnIndexByRegionCoords( int xIndex, int zIndex ) const {
 }
 
 
-
 int WorldMap::getColumnIndex( const v3di_t& worldPosition ) const {
 //	int xIndex = worldPosition.x / WORLD_CHUNK_SIDE;
 //	int zIndex = worldPosition.z / WORLD_CHUNK_SIDE;
@@ -132,7 +125,6 @@ int WorldMap::getColumnIndex( const v3d_t& worldPosition ) const {
 }
 
 
-
 int WorldMap::pickColumn( const v3di_t& pos ) const {
 	int columnIndex = getColumnIndex (pos);
 
@@ -142,7 +134,6 @@ int WorldMap::pickColumn( const v3di_t& pos ) const {
 
 	return -1;
 }
-
 
 
 bool WorldMap::isColumnLoaded( int xIndex, int zIndex ) const {
@@ -157,7 +148,6 @@ bool WorldMap::isColumnLoaded( int xIndex, int zIndex ) const {
 }
 
 
-
 // only clears/saves if it matches the indices
 void WorldMap::clearColumn( int xIndex, int zIndex ) {
 	int columnIndex = getColumnIndexByRegionCoords (xIndex, zIndex);
@@ -168,7 +158,6 @@ void WorldMap::clearColumn( int xIndex, int zIndex ) {
 		clearColumn (columnIndex);
 	}
 }
-
 
 
 // saves if necessary and clears regardless
@@ -210,7 +199,6 @@ void WorldMap::setBlockType( const v3di_t& position, BYTE type ) {
 }
 
 
-
 void WorldMap::setBlockVisibility( const v3di_t& position, BYTE visibility ) {
 	int column = pickColumn( position );
 
@@ -222,8 +210,7 @@ void WorldMap::setBlockVisibility( const v3di_t& position, BYTE visibility ) {
 }
 
 
-
-block_t *WorldMap::getBlock( const v3di_t& position ) const {
+block_t* WorldMap::getBlock( const v3di_t& position ) const {
 	int column = pickColumn( position );
 
 	if (column == -1) {
@@ -234,8 +221,7 @@ block_t *WorldMap::getBlock( const v3di_t& position ) const {
 }
 
 
-
-block_t *WorldMap::getBlock( const v3d_t& position ) const {
+block_t* WorldMap::getBlock( const v3d_t& position ) const {
 	v3di_t pos = {
 		static_cast<int>(floor( position.x )),
 		static_cast<int>(floor( position.y )),
@@ -244,7 +230,6 @@ block_t *WorldMap::getBlock( const v3d_t& position ) const {
 
 	return getBlock( pos );
 }
-
 
 
 int WorldMap::setBlock( const v3di_t& position, const block_t& block) {
@@ -266,7 +251,6 @@ int WorldMap::setBlock( const v3di_t& position, const block_t& block) {
 }
 
 
-
 BYTE WorldMap::getUniqueLighting( const v3di_t& position ) const {
 	int column = pickColumn( position );
 
@@ -276,7 +260,6 @@ BYTE WorldMap::getUniqueLighting( const v3di_t& position ) const {
 
 	return mColumns[column].getUniqueLighting( position );
 }
-
 
 
 void WorldMap::setUniqueLighting( const v3di_t& position, BYTE level ) {
@@ -290,7 +273,6 @@ void WorldMap::setUniqueLighting( const v3di_t& position, BYTE level ) {
 }
 
 
-
 bool WorldMap::isSolidBlock( const v3di_t& position ) const {
 	int column = pickColumn (position);
 
@@ -300,7 +282,6 @@ bool WorldMap::isSolidBlock( const v3di_t& position ) const {
 
 	return mColumns[column].isSolidBlockAtWorldPosition( position );
 }
-
 
 
 bool WorldMap::isBoundingBoxEmpty( const BoundingBox& boundingBox ) const {
@@ -318,7 +299,6 @@ bool WorldMap::isBoundingBoxEmpty( const BoundingBox& boundingBox ) const {
 }
 
 
-
 bool WorldMap::isBoundingBoxInLiquid( const BoundingBox& boundingBox ) const {
 	for (int z = static_cast<int>(floor (boundingBox.mNearCorner.z)); z <= static_cast<int>(floor (boundingBox.mFarCorner.z)); z++) {
 		for (int y = static_cast<int>(floor (boundingBox.mNearCorner.y)); y <= static_cast<int>(floor (boundingBox.mFarCorner.y)); y++) {
@@ -332,7 +312,6 @@ bool WorldMap::isBoundingBoxInLiquid( const BoundingBox& boundingBox ) const {
 
 	return false;
 }
-
 
 
 double WorldMap::getViscosity( const BoundingBox& boundingBox ) const {
@@ -359,7 +338,6 @@ double WorldMap::getViscosity( const BoundingBox& boundingBox ) const {
 }
 
 
-
 // if boundingBox intersects any blocks with health altering properties
 // (e.g. lava, poison, fairy water...) return the sum of damage/healing
 double WorldMap::getHealthEffects( const BoundingBox& boundingBox ) const {
@@ -384,7 +362,6 @@ double WorldMap::getHealthEffects( const BoundingBox& boundingBox ) const {
 
 	return totalDamage;
 }
-
 
 
 void WorldMap::clearBlock( const v3di_t& position ) {
@@ -434,7 +411,6 @@ void WorldMap::clearBlock( const v3di_t& position ) {
 }
 
 
-
 void WorldMap::fillVolume( v3di_t a, v3di_t b, int blockType ) {
 	if (a.x > b.x) {
 		int temp = a.x;
@@ -466,7 +442,6 @@ void WorldMap::fillVolume( v3di_t a, v3di_t b, int blockType ) {
 		}
 	}
 }
-
 
 
 int WorldMap::fillSphere( const v3d_t& pos, double radius, int blockType, BYTE uniqueLighting ) {
@@ -509,7 +484,6 @@ int WorldMap::fillSphere( const v3d_t& pos, double radius, int blockType, BYTE u
 }
 
 
-
 int WorldMap::clearSphere( const v3d_t& pos, double radius ) {
 	BoundingSphere s (pos, radius);
 
@@ -547,8 +521,6 @@ int WorldMap::clearSphere( const v3d_t& pos, double radius ) {
 }
 
 
-
-
 void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& position ) {
 	// check to see if it has already been loaded
 	if (worldColumn.pickChunkFromWorldHeight (position.y) >= 0) {
@@ -584,7 +556,6 @@ void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& 
 		}
 	}
 }
-
 
 
 bool WorldMap::columnHasFourNeighbors( int columnIndex ) {
@@ -728,7 +699,6 @@ void WorldMap::updateBlockVisibility( int columnIndex ) {
 }
 
 
-
 void WorldMap::addToChangedList( int columnIndex ) {
 	for (size_t i = 0; i < mChangedList.size (); i++) {
 		if (mChangedList[i] == columnIndex) {
@@ -739,7 +709,6 @@ void WorldMap::addToChangedList( int columnIndex ) {
 //	printf ("added %d\n", columnIndex);
 	mChangedList.push_back (columnIndex);
 }
-
 
 
 void WorldMap::removeFromChangedList( int columnIndex ) {
@@ -758,7 +727,6 @@ void WorldMap::removeFromChangedList( int columnIndex ) {
 }
 
 
-
 void WorldMap::updateFluids() {
 	vector <int> tempList = mChangedList;
 
@@ -769,7 +737,6 @@ void WorldMap::updateFluids() {
 //		printf ("updating fluid %d, %d\n", i, tempList[i]);
 	}
 }
-
 
 
 bool WorldMap::updateFluid( int columnIndex ) {
@@ -821,7 +788,6 @@ bool WorldMap::updateFluid( int columnIndex ) {
 
 	return changesMade;
 }
-
 
 
 bool WorldMap::updateLiquidBlock( int blockType, int columnIndex, const v3di_t& worldPosition ) {
@@ -891,7 +857,6 @@ bool WorldMap::updateLiquidBlock( int blockType, int columnIndex, const v3di_t& 
 
 	return changesMade;
 }
-
 
 
 int WorldMap::countLiquidNeighbors( int blockType, const v3di_t& worldPosition ) const {
@@ -973,9 +938,6 @@ int WorldMap::countLiquidNeighbors( int blockType, const v3di_t& worldPosition )
 }
 
 
-
-
-
 int WorldMap::save( FILE *file ) {
 	printf ("saving WorldMap...\n");
 
@@ -998,7 +960,6 @@ int WorldMap::save( FILE *file ) {
 	printf ("WorldMap::saveToDisk(): complete\n");
 	return errorCode;
 }
-
 
 
 int WorldMap::load( FILE *file ) {
@@ -1173,8 +1134,6 @@ bool WorldMap::lineOfSight( const v3d_t &a, const v3d_t &b ) const {
 }
 
 
-
-
 bool WorldMap::rayCastSolidBlock( const v3d_t &a, const v3d_t &b, v3di_t &hitPosition, int &face ) const {
 	v3d_t diff = v3d_sub (b, a);
 
@@ -1255,6 +1214,5 @@ static v3d_t faceAdd[6] = {
 
 	return false;
 }
-
 
 

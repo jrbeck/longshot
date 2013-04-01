@@ -169,13 +169,13 @@ public:
 
 private:
 	// copy constructor guard
-	ItemManager (const ItemManager &itemManager) { }
+	ItemManager( const ItemManager& itemManager ) { }
 	// assignment operator guard
-	ItemManager & operator=(const ItemManager &itemManager) { return *this; }
+	ItemManager& operator=( const ItemManager& itemManager ) { return *this; }
 
 
 	size_t mLastHandle;
-	vector <item_t> mItems;
+	vector<item_t> mItems;
 
 	int mAmmoToPhysicsTable[NUM_AMMO_TYPES];
 

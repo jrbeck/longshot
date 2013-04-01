@@ -44,41 +44,41 @@ typedef struct {
 class WorldColumn {
 private:
 	// copy constructor guard
-	WorldColumn (const WorldColumn &worldColumn) { }
+	WorldColumn( const WorldColumn& worldColumn ) { }
 	// assignment operator guard
-	WorldColumn & operator=(const WorldColumn &worldColumn) { return *this; }
+	WorldColumn& operator=( const WorldColumn& worldColumn ) { return *this; }
 
 public:
-	WorldColumn (void);
-	~WorldColumn (void);
+	WorldColumn();
+	~WorldColumn();
 
-	void clear (void);
+	void clear();
 
-	void clearEmptyChunks (void);
+	void clearEmptyChunks();
 
-	bool isInColumn (v3di_t worldPosition) const;
-	int pickChunkFromWorldHeight (int height) const;
+	bool isInColumn( const v3di_t& worldPosition) const;
+	int pickChunkFromWorldHeight( int height ) const;
 
-	int getBlockType (v3di_t worldPosition) const;
-	void setBlockType (const v3di_t &worldPosition, char type);
+	int getBlockType( const v3di_t& worldPosition) const;
+	void setBlockType( const v3di_t& worldPosition, char type );
 
-	block_t *getBlockAtWorldPosition (const v3di_t &position) const;
-	void setBlockAtWorldPosition (const v3di_t &position, const block_t &block);
+	block_t* getBlockAtWorldPosition( const v3di_t& position ) const;
+	void setBlockAtWorldPosition( const v3di_t& position, const block_t& block );
 
-	BYTE getUniqueLighting (v3di_t position) const;
-	void setUniqueLighting (v3di_t position, BYTE level);
+	BYTE getUniqueLighting( const v3di_t& position ) const;
+	void setUniqueLighting( const v3di_t& position, BYTE level );
 
-	void setBlockVisibility (v3di_t position, BYTE visibility);
+	void setBlockVisibility( const v3di_t& position, BYTE visibility );
 
-	bool isSolidBlockAtWorldPosition (v3di_t position) const;
+	bool isSolidBlockAtWorldPosition( const v3di_t& position ) const;
 
-	void clearBlockAtWorldPosition (v3di_t position);
+	void clearBlockAtWorldPosition( const v3di_t& position );
 
-	int createChunkContaining (v3di_t worldPosition);
+	int createChunkContaining( const v3di_t& worldPosition );
 
-	void updateHighestAndLowest (void);
-	int getHighestBlockHeight (void) const;
-	int getLowestBlockHeight (void) const;
+	void updateHighestAndLowest();
+	int getHighestBlockHeight() const;
+	int getLowestBlockHeight() const;
 
 // public members * * * * * * * * * * * * * * *
 	v3di_t mWorldIndex;
@@ -96,7 +96,7 @@ public:
 
 	int mNumUnderWater;
 
-	vector <WorldChunk *>mWorldChunks;
+	vector<WorldChunk*> mWorldChunks;
 };
 
 
