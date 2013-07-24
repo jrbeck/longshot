@@ -41,19 +41,19 @@ struct inactive_item_t {
 
 class InactiveList {
 public:
-	InactiveList ();
-	~InactiveList ();
+	InactiveList();
+	~InactiveList();
 
-	void clear (void);
+	void clear( void );
 
-	void addItem (inactive_item_t item);
+	void addItem( inactive_item_t item );
 
-	inactive_item_t popNextItemInColumn (v2di_t index);
+	inactive_item_t popNextItemInColumn( v2di_t index );
 
-	bool isInColumn (v2di_t index, v3d_t position);
+	bool isInColumn( v2di_t index, v3d_t position );
 
-	int save ( FILE* file );
-	int load ( FILE* file );
+	int save( FILE* file );
+	int load( FILE* file );
 
 
 private:
