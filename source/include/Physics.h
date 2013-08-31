@@ -244,9 +244,9 @@ public:
 
 private:
 	// copy constructor guard
-	Physics (const Physics &physics) { }
+	Physics( const Physics &physics ) { }
 	// assignment operator guard
-	Physics & operator=(const Physics &physics) { return *this; }
+	Physics & operator=( const Physics &physics ) { return *this; }
 
 
 	entity_type_info_t mEntityTypeInfo[NUM_OBJTYPES];

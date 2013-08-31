@@ -1542,7 +1542,7 @@ void Physics::add_force( size_t handle, const v3d_t& force ) {
 
 
 void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index ) {
-	if (v3d_mag (obj[index].displacement) == 0.0) {
+	if (v3d_mag( obj[index].displacement ) == 0.0) {
 		return;
 	}
 
@@ -1552,15 +1552,15 @@ void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index 
 	v3d_t fc = obj[index].boundingBox.getFarCorner();
 
 	// bounding box for the world block we'll be clipping against
-	BoundingBox bb2(v3d_v (1.0, 1.0, 1.0));
+	BoundingBox bb2( v3d_v( 1.0, 1.0, 1.0 ) );
 
 	v3di_t i;
 	v3d_t time0;
 
 	int y_start;
 
-	if (obj[index].on_ground) y_start = static_cast<int>(floor (nc.y));
-	else y_start = static_cast<int>(floor (nc.y - 1.0));
+	if (obj[index].on_ground) y_start = static_cast<int>(floor( nc.y ));
+	else y_start = static_cast<int>(floor( nc.y - 1.0 ));
 
 	if (obj[index].type == OBJTYPE_PLAYER) {
 //		printf ("y_start: %d\n", y_start);
@@ -1569,10 +1569,10 @@ void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index 
 	// FIXME: this is a horribly inefficient way of doing this
 	// it also fails if the velocity is too high
 	// your mom
-	for (i.z = static_cast<int>(floor (nc.z - 1.0)); i.z <= static_cast<int>(floor (fc.z + 1.0)); i.z++) {
-		for (i.y = y_start; i.y <= static_cast<int>(floor (fc.y + 1.0)); i.y++) {
-			for (i.x = static_cast<int>(floor (nc.x - 1.0)); i.x <= static_cast<int>(floor (fc.x + 1.0)); i.x++) {
-				block_t *block = worldMap.getBlock (i);
+	for (i.z = static_cast<int>(floor( nc.z - 1.0 )); i.z <= static_cast<int>(floor( fc.z + 1.0 )); i.z++) {
+		for (i.y = y_start; i.y <= static_cast<int>(floor( fc.y + 1.0 )); i.y++) {
+			for (i.x = static_cast<int>(floor( nc.x - 1.0 )); i.x <= static_cast<int>(floor( fc.x + 1.0 )); i.x++) {
+				block_t *block = worldMap.getBlock( i );
 				if (block == NULL) {
 					continue;
 				}
