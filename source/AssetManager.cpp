@@ -144,8 +144,6 @@ void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPos
 	mDirectionalLights[0].setDirection (sunPosition);
 	mDirectionalLights[1].setDirection (moonPosition);
 
-	printf("AssetManager::setDirectionalLightPositions(): here\n");
-
 	for (size_t i = 0; i < 6; i++) {
 		mGlobalLightIntensities[i] = v3d_zero ();
 	}

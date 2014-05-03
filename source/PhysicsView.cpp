@@ -619,7 +619,7 @@ void PhysicsView::drawLitBox (v3d_t nearCorner, v3d_t farCorner, WorldMap &world
 
 
 	glBegin (GL_QUADS);
-		assetManager.drawBlock2 (worldLights);
+		assetManager.drawBlock2(worldLights);
 	glEnd ();
 }
 

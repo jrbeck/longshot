@@ -303,6 +303,9 @@
     <ClCompile Include="..\source\feature\FeatureGenerator.cpp">
       <Filter>Source Files\world\feature</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\BiomeMap.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -535,6 +538,9 @@
     </ClInclude>
     <ClInclude Include="..\source\feature\FeatureGenerator.h">
       <Filter>Header Files\world\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\BiomeMap.h">
+      <Filter>Header Files\world</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

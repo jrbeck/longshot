@@ -87,6 +87,7 @@
     <ClCompile Include="..\source\AiView.cpp" />
     <ClCompile Include="..\source\Animation.cpp" />
     <ClCompile Include="..\source\AssetManager.cpp" />
+    <ClCompile Include="..\source\BiomeMap.cpp" />
     <ClCompile Include="..\source\BitmapModel.cpp" />
     <ClCompile Include="..\source\BlockTypeData.cpp" />
     <ClCompile Include="..\source\BoundingBox.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="..\source\include\AiView.h" />
     <ClInclude Include="..\source\include\Animation.h" />
     <ClInclude Include="..\source\include\AssetManager.h" />
+    <ClInclude Include="..\source\include\BiomeMap.h" />
     <ClInclude Include="..\source\include\BitmapModel.h" />
     <ClInclude Include="..\source\include\BlockTypeData.h" />
     <ClInclude Include="..\source\include\BoundingBox.h" />

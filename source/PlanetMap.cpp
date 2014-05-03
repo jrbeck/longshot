@@ -1,28 +1,28 @@
 #include "PlanetMap.h"
 
 PlanetMap::PlanetMap() :
-	mMenu(NULL),
-	mTerrain(NULL),
-	mColors(NULL),
-	mPeriodics(NULL)
+  mMenu(NULL),
+  mTerrain(NULL),
+  mColors(NULL),
+  mPeriodics(NULL)
 {
-	mLeftMouseButtonClicked = false;
+  mLeftMouseButtonClicked = false;
 }
 
 
 PlanetMap::~PlanetMap() {
-	if (mMenu != NULL) {
-		delete mMenu;
-	}
-	if (mTerrain != NULL) {
-		delete mTerrain;
-	}
-	if (mColors != NULL) {
-		delete [] mColors;
-	}
-	if (mPeriodics != NULL) {
-		delete mPeriodics;
-	}
+  if (mMenu != NULL) {
+    delete mMenu;
+  }
+  if (mTerrain != NULL) {
+    delete mTerrain;
+  }
+  if (mColors != NULL) {
+    delete [] mColors;
+  }
+  if (mPeriodics != NULL) {
+    delete mPeriodics;
+  }
 }
 
 
@@ -30,25 +30,25 @@ PlanetMap::~PlanetMap() {
 
 
 void PlanetMap::setUpOpenGl() {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
 
-	mViewRect.mNearCorner.x = 0.0;
-	mViewRect.mNearCorner.y = 0.0;
-	mViewRect.mFarCorner.x = PLANET_MAP_SIDE;
-	mViewRect.mFarCorner.y = PLANET_MAP_SIDE;
+  mViewRect.mNearCorner.x = 0.0;
+  mViewRect.mNearCorner.y = 0.0;
+  mViewRect.mFarCorner.x = PLANET_MAP_SIDE;
+  mViewRect.mFarCorner.y = PLANET_MAP_SIDE;
 
-	glOrtho(
-		mViewRect.mNearCorner.x, mViewRect.mFarCorner.x,
-		mViewRect.mNearCorner.y, mViewRect.mFarCorner.y,
-		-20.0, 20.0);
+  glOrtho(
+    mViewRect.mNearCorner.x, mViewRect.mFarCorner.x,
+    mViewRect.mNearCorner.y, mViewRect.mFarCorner.y,
+    -20.0, 20.0);
 
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glDisable(GL_TEXTURE_2D);
+  glClearColor(0.0, 0.0, 0.0, 1.0);
+  glDisable(GL_TEXTURE_2D);
 
 //	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //	SDL_GL_SwapBuffers();
@@ -58,101 +58,102 @@ void PlanetMap::setUpOpenGl() {
 
 
 bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
-	mMenu = new menu_c();
-	if (mMenu == NULL) {
-		printf("PlanetMap::chooseLocation(): error: out of memory 1\n");
-		return false;
-	}
+  mMenu = new menu_c();
+  if (mMenu == NULL) {
+    printf("PlanetMap::chooseLocation(): error: out of memory 1\n");
+    return false;
+  }
 //	mMenu->setFont(gDefaultFontTextureHandle);
 
-	mTerrain = new Terrain(PLANET_MAP_SIDE);
-	if (mTerrain == NULL) {
-		printf("PlanetMap::chooseLocation(): error: out of memory 2\n");
-		delete mMenu;
-		return false;
-	}
-	mColors = new v3d_t[PLANET_MAP_SIDE * PLANET_MAP_SIDE];
-	if (mColors == NULL) {
-		printf("PlanetMap::chooseLocation(): error: out of memory 3\n");
-		delete mMenu;
-		delete mTerrain;
-		return false;
-	}
-	mPeriodics = new Periodics();
-	if (mPeriodics == NULL) {
-		printf("PlanetMap::chooseLocation(): error: out of memory 4\n");
-		delete mMenu;
-		delete mTerrain;
-		delete [] mColors;
-		return false;
-	}
+  mTerrain = new Terrain(PLANET_MAP_SIDE);
+  if (mTerrain == NULL) {
+    printf("PlanetMap::chooseLocation(): error: out of memory 2\n");
+    delete mMenu;
+    return false;
+  }
+  mColors = new v3d_t[PLANET_MAP_SIDE * PLANET_MAP_SIDE];
+  if (mColors == NULL) {
+    printf("PlanetMap::chooseLocation(): error: out of memory 3\n");
+    delete mMenu;
+    delete mTerrain;
+    return false;
+  }
+  mPeriodics = new Periodics();
+  if (mPeriodics == NULL) {
+    printf("PlanetMap::chooseLocation(): error: out of memory 4\n");
+    delete mMenu;
+    delete mTerrain;
+    delete [] mColors;
+    return false;
+  }
 
-	buildFromPeriodics(planet.mSeed);
+  buildFromPeriodics(planet.mSeed);
 
-	setUpOpenGl();
+  setUpOpenGl();
 
-	char positionString[256];
-	GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.7f };
-	v2d_t fontSize = { 0.01f, 0.02f };
+  char positionString[256];
+  GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+  GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.7f };
+  v2d_t fontSize = { 0.01f, 0.02f };
 
-	bool quit = false;
-	while (!quit) {
-		if (handleInput() == 1) {
-			quit = true;
-		}
+  bool quit = false;
+  while (!quit) {
+    if (handleInput() == 1) {
+      quit = true;
+    }
 
-		if (mLeftMouseButtonClicked) {
-			double x = mViewRect.getWidth() * mMousePos.x / SCREEN_W;
-			double y = mViewRect.getHeight() * mMousePos.y / SCREEN_H;
+    if (mLeftMouseButtonClicked) {
+      double x = mViewRect.getWidth() * mMousePos.x / SCREEN_W;
+      double y = mViewRect.getHeight() * mMousePos.y / SCREEN_H;
 
-			planetPos.x = (x - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
-			planetPos.z = (y - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
-			planetPos.y = mPeriodics->getTerrainHeight(planetPos.x, planetPos.z) + 30.0;
+      planetPos.x = (x - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
+      planetPos.z = (y - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
+      planetPos.y = mPeriodics->getTerrainHeight(planetPos.x, planetPos.z) + 30.0;
 
 
 //			v2d_print("mouse", mMousePos);
-			printf("planetMap: %.0f, %.0f\n", planetPos.x, planetPos.z);
+      printf("planetMap: %.0f, %.0f\n", planetPos.x, planetPos.z);
 
-			mLeftMouseButtonClicked = false;
+      mLeftMouseButtonClicked = false;
 
-			return true;
-		}
-
-
-		// TEMPORARY * * * * * * * * *
-		double x = mViewRect.getWidth() * mMousePos.x / SCREEN_W;
-		double y = mViewRect.getHeight() * mMousePos.y / SCREEN_H;
-
-		v3d_t pPos;
-		pPos.x = (x - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
-		pPos.z = (y - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
-		pPos.y = mPeriodics->getTerrainHeight(pPos.x, pPos.z);
-
-		sprintf(positionString, "x: %.0f, z: %.0f, height: %.0f", pPos.x, pPos.z, pPos.y);
-
-		mMenu->clear();
-		mMenu->addText(
-			v2d_v(0.01, 0.01),
-			v2d_v(0.4, 0.04),
-			fontSize,
-			positionString,
-			TEXT_JUSTIFICATION_LEFT,
-			color,
-			bgColor);
+      return true;
+    }
 
 
-		// k let's draw!
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		drawTerrain();
-		mMenu->draw();
-		SDL_GL_SwapBuffers();
-		setUpOpenGl();
-	}
+    // TEMPORARY * * * * * * * * *
+    double x = mViewRect.getWidth() * mMousePos.x / SCREEN_W;
+    double y = mViewRect.getHeight() * mMousePos.y / SCREEN_H;
 
-	printf("PlanetMap::chooseLocation(): no location chosen\n");
+    v3d_t pPos;
+    pPos.x = (x - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
+    pPos.z = (y - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
+    pPos.y = mPeriodics->getTerrainHeight(pPos.x, pPos.z);
 
-	return false;
+    BiomeInfo bi = mPeriodics->getBiomeInfo(pPos.x, pPos.z);
+    sprintf(positionString, "x: %.0f, z: %.0f, height: %.0f, biome: %d, %.2f", pPos.x, pPos.z, pPos.y, bi.type, bi.value);
+
+    mMenu->clear();
+    mMenu->addText(
+      v2d_v(0.01, 0.01),
+      v2d_v(0.4, 0.04),
+      fontSize,
+      positionString,
+      TEXT_JUSTIFICATION_LEFT,
+      color,
+      bgColor);
+
+
+    // k let's draw!
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawTerrain();
+    mMenu->draw();
+    SDL_GL_SwapBuffers();
+    setUpOpenGl();
+  }
+
+  printf("PlanetMap::chooseLocation(): no location chosen\n");
+
+  return false;
 }
 
 
@@ -163,99 +164,135 @@ void PlanetMap::drawMap(void) {
 
 
 void PlanetMap::buildFromPeriodics(int seed) {
-	mPeriodics->randomize(seed);
-	printf("PlanetMap::buildFromPeriodics():seed: %d\n", seed);
+  mPeriodics->randomize(seed);
+  printf("PlanetMap::buildFromPeriodics():seed: %d\n", seed);
 
-	v3di_t worldPosition;
+  v3di_t worldPosition;
 
-	int halfMapSide = PLANET_MAP_SIDE / 2;
+  int halfMapSide = PLANET_MAP_SIDE / 2;
 
-	for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-		for (int i = 0; i < PLANET_MAP_SIDE; i++) {
-			worldPosition.x = ((i - halfMapSide) * MAP_MULTIPLIER);
-			worldPosition.z = ((j - halfMapSide) * MAP_MULTIPLIER);
+  for (int j = 0; j < PLANET_MAP_SIDE; j++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+      worldPosition.x = ((i - halfMapSide) * MAP_MULTIPLIER);
+      worldPosition.z = ((j - halfMapSide) * MAP_MULTIPLIER);
 
-			int height = worldPosition.y = mPeriodics->getTerrainHeight(worldPosition.x, worldPosition.z);
-			mTerrain->set_value(i, j, height);
+      int height = worldPosition.y = mPeriodics->getTerrainHeight(worldPosition.x, worldPosition.z);
+      mTerrain->set_value(i, j, height);
 
-			int block = mPeriodics->generateBlockAtWorldPosition(worldPosition);
+      int block = mPeriodics->generateBlockAtWorldPosition(worldPosition);
 
-			int colorIndex = i + (j * PLANET_MAP_SIDE);
+      int colorIndex = i + (j * PLANET_MAP_SIDE);
 
-			if (height <= WATER_LEVEL) {
-				mColors[colorIndex].x = 0.0;
-				mColors[colorIndex].y = 0.0;
-				mColors[colorIndex].z = 0.8;
-			}
-			else {
+      if (height <= WATER_LEVEL) {
+        mColors[colorIndex].x = 0.0;
+        mColors[colorIndex].y = 0.0;
+        mColors[colorIndex].z = 0.8;
+      }
+      else {
 
-				switch(block) {
-				case BLOCK_TYPE_GRASS:
-				case BLOCK_TYPE_STONE_GRASS:
-					mColors[colorIndex].x = 0.1;
-					mColors[colorIndex].y = 0.6;
-					mColors[colorIndex].z = 0.2;
-					break;
-				case BLOCK_TYPE_DIRT:
-					mColors[colorIndex].x = 0.45;
-					mColors[colorIndex].y = 0.27;
-					mColors[colorIndex].z = 0.1;
-					break;
-				case BLOCK_TYPE_SAND:
-					mColors[colorIndex].x = 0.9;
-					mColors[colorIndex].y = 0.8;
-					mColors[colorIndex].z = 0.5;
-					break;
-				case BLOCK_TYPE_STONE:
-					mColors[colorIndex].x = 0.5;
-					mColors[colorIndex].y = 0.5;
-					mColors[colorIndex].z = 0.5;
-					break;
-				case BLOCK_TYPE_STONE_SNOW:
-				case BLOCK_TYPE_DIRT_SNOW:
-					mColors[colorIndex].x = 0.9;
-					mColors[colorIndex].y = 0.9;
-					mColors[colorIndex].z = 0.9;
-					break;
+        switch(block) {
+        case BLOCK_TYPE_GRASS:
+        case BLOCK_TYPE_STONE_GRASS:
+          mColors[colorIndex].x = 0.1;
+          mColors[colorIndex].y = 0.6;
+          mColors[colorIndex].z = 0.2;
+          break;
+        case BLOCK_TYPE_DIRT:
+          mColors[colorIndex].x = 0.45;
+          mColors[colorIndex].y = 0.27;
+          mColors[colorIndex].z = 0.1;
+          break;
+        case BLOCK_TYPE_SAND:
+          mColors[colorIndex].x = 0.9;
+          mColors[colorIndex].y = 0.8;
+          mColors[colorIndex].z = 0.5;
+          break;
+        case BLOCK_TYPE_STONE:
+          mColors[colorIndex].x = 0.5;
+          mColors[colorIndex].y = 0.5;
+          mColors[colorIndex].z = 0.5;
+          break;
+        case BLOCK_TYPE_STONE_SNOW:
+        case BLOCK_TYPE_DIRT_SNOW:
+          mColors[colorIndex].x = 0.9;
+          mColors[colorIndex].y = 0.9;
+          mColors[colorIndex].z = 0.9;
+          break;
 
-				case BLOCK_TYPE_MED_STONE:
-					mColors[colorIndex].x = 0.65;
-					mColors[colorIndex].y = 0.65;
-					mColors[colorIndex].z = 0.65;
-					break;
-				default:
-					printf("block: %d\n", block);
-					mColors[colorIndex].x = 0.9;
-					mColors[colorIndex].y = 0.0;
-					mColors[colorIndex].z = 0.0;
-					break;
-				}
-			}
-		}
-	}
+        case BLOCK_TYPE_MED_STONE:
+          mColors[colorIndex].x = 0.65;
+          mColors[colorIndex].y = 0.65;
+          mColors[colorIndex].z = 0.65;
+          break;
+        default:
+          printf("block: %d\n", block);
+          mColors[colorIndex].x = 0.9;
+          mColors[colorIndex].y = 0.0;
+          mColors[colorIndex].z = 0.0;
+          break;
+        }
+      }
+    }
+  }
 
-	mTerrain->normalize(-10.0, 10.0);
+  mTerrain->normalize(-10.0, 10.0);
 
-	// let's do a little shading to make it look nicer
-	for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-		for (int i = 0; i < PLANET_MAP_SIDE; i++) {
-			double height = mTerrain->get_value(i, j);
+  // let's do a little shading to make it look nicer
+  for (int j = 0; j < PLANET_MAP_SIDE; j++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+      double height = mTerrain->get_value(i, j);
 
 
-			GLfloat colorMult = 0.7 * ((GLfloat)height + 10.0f) / 20.0;
+      GLfloat colorMult = 0.7 * ((GLfloat)height + 10.0f) / 20.0;
 //			if (colorMult < 0.2f) {
-				colorMult += 0.3f;
+        colorMult += 0.3f;
 //			}
 
-			int colorIndex = i + (j * PLANET_MAP_SIDE);
-			mColors[colorIndex].x *= colorMult;
-			mColors[colorIndex].y *= colorMult;
-			mColors[colorIndex].z *= colorMult;
+      int colorIndex = i + (j * PLANET_MAP_SIDE);
+      mColors[colorIndex].x *= colorMult;
+      mColors[colorIndex].y *= colorMult;
+      mColors[colorIndex].z *= colorMult;
 
-		}
-	}
+    }
+  }
 
-	printf("PlanetMap::buildFromPeriodics():done\n");
+
+
+
+  // TESTING!!!!!!!!
+  PseudoRandom prng;
+  prng.setSeed(GetTickCount());
+  double lookup[BIOME_TYPE_W * BIOME_TYPE_H][3];
+
+  // make some random colors for the biome types
+  for (int i = 0; i < BIOME_TYPE_W * BIOME_TYPE_H; i++) {
+    lookup[i][0] = prng.getNextDouble();
+    lookup[i][1] = prng.getNextDouble();
+    lookup[i][2] = prng.getNextDouble();
+  }
+
+  for (int j = 0; j < PLANET_MAP_SIDE; j++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+      worldPosition.x = ((i - halfMapSide) * MAP_MULTIPLIER);
+      worldPosition.z = ((j - halfMapSide) * MAP_MULTIPLIER);
+
+      BiomeInfo bi = mPeriodics->getBiomeInfo(worldPosition.x, worldPosition.z);
+
+      int height = mPeriodics->getTerrainHeight(worldPosition.x, worldPosition.z);
+      if (height <= WATER_LEVEL) {
+        bi.value = 0.0;
+      }
+
+      int colorIndex = i + (j * PLANET_MAP_SIDE);
+      mColors[colorIndex].x = lookup[bi.type][0] * bi.value;
+      mColors[colorIndex].y = lookup[bi.type][1] * bi.value;
+      mColors[colorIndex].z = lookup[bi.type][2] * bi.value;
+
+    }
+  }
+
+
+  printf("PlanetMap::buildFromPeriodics():done\n");
 
 }
 
@@ -263,182 +300,182 @@ void PlanetMap::buildFromPeriodics(int seed) {
 
 // handle an SDL_Event
 int PlanetMap::handleInput (void) {
-	int quit = 0;
-	mMouseMoved = 0;
+  int quit = 0;
+  mMouseMoved = 0;
 
-	// goes through all the queued events and deals with each one
-	while (SDL_PollEvent (&sdlevent) && !quit) {
-		switch (sdlevent.type) {
-			case SDL_QUIT:
-				quit = 1;
-				break;
+  // goes through all the queued events and deals with each one
+  while (SDL_PollEvent (&sdlevent) && !quit) {
+    switch (sdlevent.type) {
+      case SDL_QUIT:
+        quit = 1;
+        break;
 
-			case SDL_KEYDOWN:
-				quit = handleKeystroke ();
-				break;
+      case SDL_KEYDOWN:
+        quit = handleKeystroke ();
+        break;
 
-			case SDL_KEYUP:
-				handleKeyup ();
-				break;
+      case SDL_KEYUP:
+        handleKeyup ();
+        break;
 
-			case SDL_MOUSEMOTION:
-				mMouseDelta.x = -sdlevent.motion.xrel;
-				mMouseDelta.y = sdlevent.motion.yrel;
+      case SDL_MOUSEMOTION:
+        mMouseDelta.x = -sdlevent.motion.xrel;
+        mMouseDelta.y = sdlevent.motion.yrel;
 
-				mMousePos.x = sdlevent.motion.x;
-				mMousePos.y = SCREEN_H - sdlevent.motion.y;
+        mMousePos.x = sdlevent.motion.x;
+        mMousePos.y = SCREEN_H - sdlevent.motion.y;
 
-				mMouseMoved = 1;
+        mMouseMoved = 1;
 
-				break;
+        break;
 
-			// handle the mousebuttondown event
-			case SDL_MOUSEBUTTONDOWN:
-				handleMouseButtonDown (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
-				break;
+      // handle the mousebuttondown event
+      case SDL_MOUSEBUTTONDOWN:
+        handleMouseButtonDown (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        break;
 
-			case SDL_MOUSEBUTTONUP:
-				handleMouseButtonUp (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
-				break;
+      case SDL_MOUSEBUTTONUP:
+        handleMouseButtonUp (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        break;
 
-			default:
-				break;
-		}
-	}
+      default:
+        break;
+    }
+  }
 
 
-	// RTS MODE
-	// handle mouse drag
-	// FIXME: not here please!
-	Uint8 ms;
-	ms = SDL_GetMouseState (NULL, NULL);
+  // RTS MODE
+  // handle mouse drag
+  // FIXME: not here please!
+  Uint8 ms;
+  ms = SDL_GetMouseState (NULL, NULL);
 
-	if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_LEFT))) {
-		v2d_t md = v2d_scale (mMouseDelta, 0.1);
+  if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_LEFT))) {
+    v2d_t md = v2d_scale (mMouseDelta, 0.1);
 
-		md.x = -md.x;
+    md.x = -md.x;
 
 //		mRtsCam.translate (md);
-	}
-	if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
-		v2d_t md = v2d_scale (mMouseDelta, 0.002);
+  }
+  if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
+    v2d_t md = v2d_scale (mMouseDelta, 0.002);
 
-		md.x = -md.x;
+    md.x = -md.x;
 
 //		mRtsCam.pan (md);
-	}
+  }
 
-	return quit;
+  return quit;
 }
 
 
 
 int PlanetMap::handleKeystroke (void) {
-	switch (sdlevent.key.keysym.sym) {
-		case SDLK_ESCAPE:	// quit
-			return 1;
+  switch (sdlevent.key.keysym.sym) {
+    case SDLK_ESCAPE:	// quit
+      return 1;
 
-		case SDLK_n:
+    case SDLK_n:
 //			buildFromPeriodics();
-			break;
+      break;
 
-		case SDLK_z:
-			break;
+    case SDLK_z:
+      break;
 
-	}
+  }
 
-	// don't quit!
-	return 0;
+  // don't quit!
+  return 0;
 }
 
 
 int PlanetMap::handleKeyup (void) {
 /*	if (*mode == MODE_PLAYER) {
-		switch (sdlevent.key.keysym.sym) {
-			case SDLK_w:
-				break;
+    switch (sdlevent.key.keysym.sym) {
+      case SDLK_w:
+        break;
 
 
-			case SDLK_SPACE:
-				break;
-		}
-	}
+      case SDLK_SPACE:
+        break;
+    }
+  }
 */
 
-	return 0;
+  return 0;
 }
 
 
 
 void PlanetMap::handleMouseButtonDown (int button, v2d_t pos) {
-	switch (button) {
-		case SDL_BUTTON_WHEELUP:
-			// zoom in
+  switch (button) {
+    case SDL_BUTTON_WHEELUP:
+      // zoom in
 //			mRtsCam.zoom (-20.0);
-			break;
+      break;
 
-		case SDL_BUTTON_WHEELDOWN:
-			// zoom out
+    case SDL_BUTTON_WHEELDOWN:
+      // zoom out
 //			mRtsCam.zoom (20.0);
-			break;
+      break;
 
-		case SDL_BUTTON_RIGHT:
-			break;
-	}
+    case SDL_BUTTON_RIGHT:
+      break;
+  }
 }
 
 
 
 void PlanetMap::handleMouseButtonUp (int button, v2d_t pos) {
-	switch (button) {
-	case SDL_BUTTON_LEFT:
-		mLeftMouseButtonClicked = true;
-		break;
-	case SDL_BUTTON_RIGHT:
-		break;
-	}
+  switch (button) {
+  case SDL_BUTTON_LEFT:
+    mLeftMouseButtonClicked = true;
+    break;
+  case SDL_BUTTON_RIGHT:
+    break;
+  }
 }
 
 
 
 void PlanetMap::drawTerrain(void) const {
-	v3d_t corners[4];
+  v3d_t corners[4];
 
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
-	glBegin(GL_QUADS);
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_BLEND);
+  glBegin(GL_QUADS);
 
-	for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-		for (int i = 0; i < PLANET_MAP_SIDE; i++) {
-			corners[0].x = static_cast<int>(i);
-			corners[0].z = mTerrain->get_value(i, j);
-			corners[0].y = static_cast<int>(j);
+  for (int j = 0; j < PLANET_MAP_SIDE; j++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+      corners[0].x = static_cast<int>(i);
+      corners[0].z = mTerrain->get_value(i, j);
+      corners[0].y = static_cast<int>(j);
 
-			corners[1].x = static_cast<int>(i + 1);
-			corners[1].z = mTerrain->get_value(i + 1, j);
-			corners[1].y = static_cast<int>(j);
+      corners[1].x = static_cast<int>(i + 1);
+      corners[1].z = mTerrain->get_value(i + 1, j);
+      corners[1].y = static_cast<int>(j);
 
-			corners[2].x = static_cast<int>(i + 1);
-			corners[2].z = mTerrain->get_value(i + 1, j + 1);
-			corners[2].y = static_cast<int>(j + 1);
+      corners[2].x = static_cast<int>(i + 1);
+      corners[2].z = mTerrain->get_value(i + 1, j + 1);
+      corners[2].y = static_cast<int>(j + 1);
 
-			corners[3].x = static_cast<int>(i);
-			corners[3].z = mTerrain->get_value(i, j + 1);
-			corners[3].y = static_cast<int>(j + 1);
+      corners[3].x = static_cast<int>(i);
+      corners[3].z = mTerrain->get_value(i, j + 1);
+      corners[3].y = static_cast<int>(j + 1);
 
 
-			int colorIndex = i + (j * PLANET_MAP_SIDE);
+      int colorIndex = i + (j * PLANET_MAP_SIDE);
 
-			glColor3d(mColors[colorIndex].x, mColors[colorIndex].y, mColors[colorIndex].z);
-			glVertex3d(corners[0].x, corners[0].y, corners[0].z);
-			glVertex3d(corners[1].x, corners[1].y, corners[1].z);
-			glVertex3d(corners[2].x, corners[2].y, corners[2].z);
-			glVertex3d(corners[3].x, corners[3].y, corners[3].z);
-		}
-	}
+      glColor3d(mColors[colorIndex].x, mColors[colorIndex].y, mColors[colorIndex].z);
+      glVertex3d(corners[0].x, corners[0].y, corners[0].z);
+      glVertex3d(corners[1].x, corners[1].y, corners[1].z);
+      glVertex3d(corners[2].x, corners[2].y, corners[2].z);
+      glVertex3d(corners[3].x, corners[3].y, corners[3].z);
+    }
+  }
 
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
+  glEnd();
+  glEnable(GL_TEXTURE_2D);
 }
 
 
