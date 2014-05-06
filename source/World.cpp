@@ -181,7 +181,7 @@ void World::loadFeaturesAroundPlayer (v3d_t playerPos) {
 	// build the set pieces
 //	FeatureGenerator::createSetPieces (regionIndex.x - (ROGUE_W / 2), regionIndex.z - (ROGUE_H / 2), mWorldMap);
 
-	glPopMatrix ();
+	glPopMatrix();
 }
 
 
@@ -190,7 +190,7 @@ void World::draw(gl_camera_c &cam) {
 }
 
 
-int World::update (v3d_t playerPosition) {
+int World::update(v3d_t playerPosition) {
 	static Uint32 lastTick = -1000;
 	static Uint32 lastChunkTick = -1000;
 
@@ -222,7 +222,7 @@ int World::update (v3d_t playerPosition) {
 }
 
 
-int World::preloadColumns (int numColumns, v3d_t pos) {
+int World::preloadColumns(int numColumns, v3d_t pos) {
 	int start_ticks = SDL_GetTicks ();
 	printf ("%6d:  World::preloadColumns()", SDL_GetTicks ());
 
@@ -256,7 +256,7 @@ int World::preloadColumns (int numColumns, v3d_t pos) {
 
 
 
-int World::loadSurroundingColumns (v3d_t pos) {
+int World::loadSurroundingColumns(v3d_t pos) {
 	// this will follow a 'square spiral' pattern starting at the
 	// given pos
 	int numColumnsLoaded = 0;
@@ -312,7 +312,7 @@ int World::loadSurroundingColumns (v3d_t pos) {
 
 
 
-int World::loadColumn (int xIndex, int zIndex, bool doOutcroppings) {
+int World::loadColumn(int xIndex, int zIndex, bool doOutcroppings) {
 	int columnIndex = mWorldMap->getColumnIndexByRegionCoords (xIndex, zIndex);
 
 	if (xIndex == mWorldMap->mColumns[columnIndex].mWorldIndex.x &&
@@ -358,7 +358,7 @@ int World::loadColumn (int xIndex, int zIndex, bool doOutcroppings) {
 
 
 
-int World::loadColumn (int xIndex, int zIndex, const int *heightMap) {
+int World::loadColumn(int xIndex, int zIndex, const int *heightMap) {
 	int columnIndex = mWorldMap->getColumnIndexByRegionCoords (xIndex, zIndex);
 
 	int numBlocks = loadColumn (mWorldMap->mColumns[columnIndex], xIndex, zIndex, heightMap, false);
@@ -378,7 +378,7 @@ int World::loadColumn (int xIndex, int zIndex, const int *heightMap) {
 
 
 
-int World::loadColumn (WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings) {
+int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings) {
 	int worldX = xIndex * WORLD_CHUNK_SIDE;
 	int worldZ = zIndex * WORLD_CHUNK_SIDE;
 
@@ -566,7 +566,7 @@ int World::loadColumn (WorldColumn &wc, int xIndex, int zIndex, const int *heigh
 
 
 
-void World::growTree (v3di_t worldPosition, int floorBlockType, int numWaterInColumn) {
+void World::growTree(v3di_t worldPosition, int floorBlockType, int numWaterInColumn) {
 //	if (r_numi (0, 10) >= 5) {
 //		return;
 //	}
@@ -575,11 +575,11 @@ void World::growTree (v3di_t worldPosition, int floorBlockType, int numWaterInCo
 	double i = static_cast<double>(worldPosition.x);
 	double j = static_cast<double>(worldPosition.z);
 
-	double val1 = mPeriodics.mRandomMap.getValueBilerp (i * 0.313, j * 0.313);
-	double val2 = mPeriodics.mRandomMap.getValueBilerp (i * 2.13, j * 2.13);
+	double val1 = mPeriodics.mRandomMap.getValueBilerp(i * 0.313, j * 0.313);
+	double val2 = mPeriodics.mRandomMap.getValueBilerp(i * 2.13, j * 2.13);
 
 
-	double precipitationLevel = mPeriodics.getPrecipitationLevel (worldPosition.x, worldPosition.z);
+	double precipitationLevel = mPeriodics.getPrecipitationLevel(worldPosition.x, worldPosition.z);
 
 	if (floorBlockType == BLOCK_TYPE_SAND &&
 		precipitationLevel < (DESERT_MOISTURE_LEVEL - 0.01) &&
@@ -588,11 +588,11 @@ void World::growTree (v3di_t worldPosition, int floorBlockType, int numWaterInCo
 		val2 < 0.5)
 	{
 		if (numWaterInColumn > 3) {
-			growPalmTree (worldPosition);
+			growPalmTree(worldPosition);
 			
 		}
 		else {
-			growCactusTree (worldPosition);
+			growCactusTree(worldPosition);
 		}
 	}
 	else if (val1 < 0.2 &&
@@ -606,8 +606,8 @@ void World::growTree (v3di_t worldPosition, int floorBlockType, int numWaterInCo
 		val2 > 0.5 &&
 		val2 < 0.6)
 	{
-		growRandomTree (worldPosition);
-//		growBlockTree (worldPosition);
+		growRandomTree(worldPosition);
+//		growBlockTree(worldPosition);
 	}
 
 
@@ -771,7 +771,7 @@ int allowable[] = {
 void World::growRandomTree (v3di_t position) {
 	position.y++;
 
-	block_t *pBlock = mWorldMap->getBlock (position);
+	block_t *pBlock = mWorldMap->getBlock(position);
 	if (pBlock != NULL &&
 		pBlock->type != BLOCK_TYPE_AIR)
 	{
@@ -786,7 +786,7 @@ void World::growRandomTree (v3di_t position) {
 	int trunkHeight = r_numi(3, 7);
 
 	for (int j = 0; j < trunkHeight; j++) {
-		mWorldMap->setBlock (position, block);
+		mWorldMap->setBlock(position, block);
 		position.y++;
 	}
 
@@ -810,25 +810,25 @@ void World::growRandomTree (v3di_t position) {
 	double sphereRadius;
 		
 
-	double radius = r_num (1.0, 2.0);
-	double totalRotation = r_num (2.0, 4.0) * 1.5;
-	double height = r_num (10.0, 20.0);
+	double radius = r_num(1.0, 2.0);
+	double totalRotation = r_num(2.0, 4.0) * 1.5;
+	double height = r_num(10.0, 20.0);
 
 	top.y = bottom + height;
 
 	BYTE uniqueLighting = LIGHT_LEVEL_MIN; //static_cast<GLfloat>(r_num (-0.3, 0.0));
 
 	for (int step = 0; step < numSteps; step++) {
-		percent = static_cast<double> (step) / static_cast<double>(numSteps - 1);
+		percent = static_cast<double>(step) / static_cast<double>(numSteps - 1);
 		angle = percent * totalRotation;
 
-		pos.x = top.x + radius * cos (angle);
-		pos.y = lerp (bottom, top.y, percent);
-		pos.z = top.z + radius * sin (angle);
+		pos.x = top.x + radius * cos(angle);
+		pos.y = lerp(bottom, top.y, percent);
+		pos.z = top.z + radius * sin(angle);
 
-		sphereRadius = lerp (sphereRadiusStart, sphereRadiusEnd, percent);
+		sphereRadius = lerp(sphereRadiusStart, sphereRadiusEnd, percent);
 
-		mWorldMap->fillSphere (pos, sphereRadius, blockType, uniqueLighting);
+		mWorldMap->fillSphere(pos, sphereRadius, blockType, uniqueLighting);
 	}
 }
 

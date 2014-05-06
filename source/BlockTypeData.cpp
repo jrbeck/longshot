@@ -4,7 +4,7 @@
 // FIXME: this can't be kosher
 BlockTypeDataContainer gBlockData;
 
-int gWaterBlockType = BLOCK_TYPE_WATER;
+int gWaterBlockType = BLOCK_TYPE_SLUDGE;
 
 // METHODS * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -69,7 +69,7 @@ void BlockTypeDataContainer::loadBlockTypeData (void) {
 	mData[BLOCK_TYPE_SLUDGE].lightAttenuation = 16;
 	mData[BLOCK_TYPE_SLUDGE].solidityType = BLOCK_SOLIDITY_TYPE_LIQUID;
 	mData[BLOCK_TYPE_SLUDGE].blocksVisibility = 50.0;
-	mData[BLOCK_TYPE_SLUDGE].viscosity = 12.0;
+	mData[BLOCK_TYPE_SLUDGE].viscosity = 15.0;
 
 	mData[BLOCK_TYPE_GREEN_STAR_TILE].lightEmission = 32;
 

@@ -64,7 +64,8 @@ void Periodics::randomize(int seed) {
   mRandomMap.generateTilable(10.0, mPrng);
   mRandomMap.normalize(0.0, 1.0);
 
-  mBiomeMap.randomize(mPrng, BIOME_TYPE_W, BIOME_TYPE_H);
+//  mBiomeMap.randomize(mPrng, BIOME_TYPE_W, BIOME_TYPE_H);
+  mBiomeMap.randomize(mPrng, NUM_BIOME_TYPES, 1);
 }
 
 
@@ -93,6 +94,16 @@ int Periodics::getTerrainHeight (int x, int z) const {
 
   double height = val1 + val2 + val3;
 
+  // TESTING: this is the boundary between the biomes ...
+  // this is just to see where they are and play with some ideas
+  BiomeInfo bi = getBiomeInfo(x, z);
+  if (bi.value < 0.95) {
+//    height -= 4; // (5.0 * (0.95 - bi.value) / 0.95);
+  }
+  else {
+    height += gBiomeTypes[bi.type].terrainHeightOffset;
+  }
+
   if (height < SEA_FLOOR_HEIGHT) {
     height = SEA_FLOOR_HEIGHT;
   }
@@ -120,10 +131,19 @@ BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition) {
 
 
 
-BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition, int terrainHeight) {
+BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight) {
   double x = static_cast<double>(worldPosition.x);
   double y = static_cast<double>(worldPosition.y);
   double z = static_cast<double>(worldPosition.z);
+
+  BiomeInfo biomeInfo = mBiomeMap.getBiomeInfo(x, z);
+  return generateBlockAtWorldPosition(worldPosition, terrainHeight, biomeInfo);
+  // yeah .. so everything else is useless...
+  // yeah .. so everything else is useless...
+
+
+
+
 
   if (getPrecipitationLevel (x, z) < DESERT_MOISTURE_LEVEL) {
     return generateDesertBlock (worldPosition, terrainHeight);
@@ -132,24 +152,20 @@ BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition, int terrainH
   double rValue = mRandomMap.getValueBilerp (x * 0.257, z * 0.257);
 
   BYTE blockType;
-
   double value1 = noise (x * 0.07, y * 0.07, z * 0.07);
-  double value2 = noise (x * 0.013 + (rValue * 0.05),
-    y * 0.013 + (rValue * 0.05),
-    z * 0.013 + (rValue * 0.05));
+  double value2 = noise (x * 0.013 + (rValue * 0.05), y * 0.013 + (rValue * 0.05), z * 0.013 + (rValue * 0.05));
 
-  if (value1 < 0.5) {
-    // ground type 1 (dirt)
-    blockType = BLOCK_TYPE_DIRT;
-  }
-  else {
-    // ground type 2 (stone)
-    blockType = BLOCK_TYPE_STONE;
-  }
 
 
   if (worldPosition.y < terrainHeight) { // below surface
-    // underground - no change to block type
+    if (value1 < 0.5) {
+      // ground type 1 (dirt)
+      blockType = BLOCK_TYPE_DIRT;
+    }
+    else {
+      // ground type 2 (stone)
+      blockType = BLOCK_TYPE_STONE;
+    }
   }
   else if (worldPosition.y == terrainHeight) { // surface
     if (worldPosition.y >= WATER_LEVEL + SNOW_LEVEL + static_cast<int>(floor ((rValue * 20.0)))) { // high altitude
@@ -163,7 +179,6 @@ BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition, int terrainH
     else if (worldPosition.y >= WATER_LEVEL + static_cast<int>(floor ((rValue * 2.5)))) { // mid/low altitude
       if (blockType == BLOCK_TYPE_DIRT) {
         // main groundcover (grass)
-//				blockType = BLOCK_TYPE_GRASS;
         blockType = BLOCK_TYPE_GRASS;
       }
       else if (blockType == BLOCK_TYPE_STONE) {
@@ -176,13 +191,6 @@ BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition, int terrainH
         blockType = BLOCK_TYPE_SAND;
       }
     }
-
-
-    // TESTING!!! overwrite whatever just happened...
-    BiomeInfo bi = mBiomeMap.getBiomeInfo(x, z);
-    if (bi.value < 0.95) BLOCK_TYPE_WATER;
-    else blockType = BLOCK_TYPE_SAND + bi.type;
-//    blockType = BLOCK_TYPE_SAND + bi.type;
 
   }
   else { // above surface
@@ -218,6 +226,37 @@ BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition, int terrainH
     }
   }
   
+  return blockType;
+}
+
+BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight, BiomeInfo &biomeInfo) {
+  double x = static_cast<double>(worldPosition.x);
+  double y = static_cast<double>(worldPosition.y);
+  double z = static_cast<double>(worldPosition.z);
+
+//  if (getPrecipitationLevel (x, z) < DESERT_MOISTURE_LEVEL) {
+//    return generateDesertBlock (worldPosition, terrainHeight);
+//  }
+
+  double rValue = mRandomMap.getValueBilerp (x * 0.257, z * 0.257);
+
+  BYTE blockType;
+
+  BiomeType &biomeType = gBiomeTypes[biomeInfo.type];
+
+  if (worldPosition.y < terrainHeight) { // below surface
+    blockType = biomeType.blockTypeSubterran;
+  }
+  else if (worldPosition.y == terrainHeight) { // surface
+    blockType = biomeType.blockTypeGround;
+  }
+  else if (worldPosition.y < WATER_LEVEL) {
+    blockType = biomeType.blockTypeLiquid;
+  }
+  else {
+    blockType = BLOCK_TYPE_AIR;
+  }
+
   return blockType;
 }
 
@@ -279,7 +318,7 @@ BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
 
     // TESTING!!! overwrite whatever just happened...
     BiomeInfo bi = mBiomeMap.getBiomeInfo(x, z);
-    if (bi.value < 0.95) BLOCK_TYPE_WATER;
+    if (bi.value < 0.95) blockType = BLOCK_TYPE_METAL_TILE_GREEN;
     else blockType = BLOCK_TYPE_SAND + bi.type;
 //    blockType = BLOCK_TYPE_SAND + bi.type;
 

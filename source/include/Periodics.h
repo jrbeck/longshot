@@ -26,8 +26,8 @@
 #define SNOW_LEVEL			(90)
 
 
-#define BIOME_TYPE_W (3)
-#define BIOME_TYPE_H (3)
+//#define BIOME_TYPE_W (2)
+//#define BIOME_TYPE_H (1)
 
 
 
@@ -63,6 +63,7 @@ public:
 
   BYTE generateBlockAtWorldPosition(v3di_t worldPosition);
   BYTE generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight);
+  BYTE generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight, BiomeInfo &biomeInfo);
 
   BYTE generateDesertBlock(v3di_t worldPosition, int terrainHeight);
 

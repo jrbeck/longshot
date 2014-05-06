@@ -12,30 +12,56 @@
 
 #include "PseudoRandom.h"
 #include "Terrain.h"
+#include "BlockTypeData.h"
 
 struct BiomeInfo {
-	int type;
-	float value;
+  int type;
+  float value;
 };
+
+
+struct BiomeType {
+  double terrainHeightOffset;
+  double terrainHeightMultiplier;
+  int noise3dType;
+  double noise3dValue;
+  int blockTypeGround;
+  int blockTypeSubterran;
+  int blockTypeLiquid;
+  int treeScheme;
+
+};
+
+enum {
+	BIOME_TYPE_DESERT,
+  BIOME_TYPE_FIELD,
+  BIOME_TYPE_SNOW,
+  BIOME_TYPE_MARS,
+  NUM_BIOME_TYPES
+};
+
+
+
+extern BiomeType gBiomeTypes[];
 
 
 class BiomeMap {
 public:
-	BiomeMap();
-	~BiomeMap();
+  BiomeMap();
+  ~BiomeMap();
 
-	void randomize(PseudoRandom prng, int typesW, int typesH);
+  void randomize(PseudoRandom prng, int typesW, int typesH);
 
-	BiomeInfo getBiomeInfo(int x, int z) const;
+  BiomeInfo getBiomeInfo(int x, int z) const;
 
 private:
-	Terrain mTerrain1;
-	Terrain mTerrain2;
+  Terrain mTerrain1;
+  Terrain mTerrain2;
 
-	int mTypesW;
-	int mTypesH;
+  int mTypesW;
+  int mTypesH;
 
-	double mInterval1;
-	double mInterval2;
+  double mInterval1;
+  double mInterval2;
 };
 

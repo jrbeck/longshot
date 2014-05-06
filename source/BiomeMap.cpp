@@ -1,5 +1,55 @@
 #include "BiomeMap.h"
 
+// dunno that this is really the place for this ...
+// or that this shouldn't be in an external config file somewehere
+BiomeType gBiomeTypes[] = {
+  { // BIOME_TYPE_DESERT
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_SAND, //  int groundType;
+    BLOCK_TYPE_SAND, //  int blockTypeSubterran;
+    BLOCK_TYPE_WATER, //  int blockTypeLiquid;
+    0 //  int treeScheme;
+  },
+
+  { // BIOME_TYPE_FIELD
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_GRASS, //  int groundType;
+    BLOCK_TYPE_DIRT, //  int blockTypeSubterran;
+    BLOCK_TYPE_SLUDGE, //  int blockTypeLiquid;
+    0 //  int treeScheme;
+  },
+
+  { // BIOME_TYPE_SNOW
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_SNOW, //  int groundType;
+    BLOCK_TYPE_DIRT, //  int blockTypeSubterran;
+    BLOCK_TYPE_WATER, //  int blockTypeLiquid;
+    0 //  int treeScheme;
+  },
+
+  { // BIOME_TYPE_MARS
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_MARS, //  int groundType;
+    BLOCK_TYPE_MARS, //  int blockTypeSubterran;
+    BLOCK_TYPE_BLOOD, //  int blockTypeLiquid;
+    0 //  int treeScheme;
+  },
+};
+
+
+
 
 BiomeMap::BiomeMap() {
 }

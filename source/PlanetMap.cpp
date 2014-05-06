@@ -225,7 +225,6 @@ void PlanetMap::buildFromPeriodics(int seed) {
           mColors[colorIndex].z = 0.65;
           break;
         default:
-          printf("block: %d\n", block);
           mColors[colorIndex].x = 0.9;
           mColors[colorIndex].y = 0.0;
           mColors[colorIndex].z = 0.0;
@@ -262,10 +261,12 @@ void PlanetMap::buildFromPeriodics(int seed) {
   // TESTING!!!!!!!!
   PseudoRandom prng;
   prng.setSeed(GetTickCount());
-  double lookup[BIOME_TYPE_W * BIOME_TYPE_H][3];
+//  double lookup[BIOME_TYPE_W * BIOME_TYPE_H][3];
+  double lookup[NUM_BIOME_TYPES][3];
 
   // make some random colors for the biome types
-  for (int i = 0; i < BIOME_TYPE_W * BIOME_TYPE_H; i++) {
+//  for (int i = 0; i < BIOME_TYPE_W * BIOME_TYPE_H; i++) {
+  for (int i = 0; i < NUM_BIOME_TYPES * 1; i++) {
     lookup[i][0] = prng.getNextDouble();
     lookup[i][1] = prng.getNextDouble();
     lookup[i][2] = prng.getNextDouble();
@@ -279,14 +280,24 @@ void PlanetMap::buildFromPeriodics(int seed) {
       BiomeInfo bi = mPeriodics->getBiomeInfo(worldPosition.x, worldPosition.z);
 
       int height = mPeriodics->getTerrainHeight(worldPosition.x, worldPosition.z);
-      if (height <= WATER_LEVEL) {
-        bi.value = 0.0;
-      }
+
+      bool isWater = height <= WATER_LEVEL;
 
       int colorIndex = i + (j * PLANET_MAP_SIDE);
+
+      if (isWater) {
+        mColors[colorIndex].x = 0.0;
+        mColors[colorIndex].y = 0.0;
+        mColors[colorIndex].z = 0.6;
+      }
+      else {
       mColors[colorIndex].x = lookup[bi.type][0] * bi.value;
       mColors[colorIndex].y = lookup[bi.type][1] * bi.value;
       mColors[colorIndex].z = lookup[bi.type][2] * bi.value;
+        //mColors[colorIndex].x = bi.value;
+        //mColors[colorIndex].y = bi.value;
+        //mColors[colorIndex].z = bi.value;
+      }
 
     }
   }
