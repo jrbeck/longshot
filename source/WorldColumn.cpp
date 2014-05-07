@@ -113,20 +113,20 @@ int WorldColumn::getBlockType( const v3di_t& worldPosition ) const {
 }
 
 
-void WorldColumn::setBlockType( const v3di_t& worldPosition, char type ) {
-	int chunkIndex = pickChunkFromWorldHeight (worldPosition.y);
+void WorldColumn::setBlockType(const v3di_t& worldPosition, char type) {
+	int chunkIndex = pickChunkFromWorldHeight(worldPosition.y);
 
 	if (chunkIndex < 0) {
-		chunkIndex = createChunkContaining (worldPosition);
+		chunkIndex = createChunkContaining(worldPosition);
 	}
 
-	mWorldChunks[chunkIndex]->setBlockType (worldPosition, type);
+	mWorldChunks[chunkIndex]->setBlockType(worldPosition, type);
 
 	mNeedShadowVolume = true;
 }
 
 
-block_t* WorldColumn::getBlockAtWorldPosition( const v3di_t& position ) const {
+block_t* WorldColumn::getBlockAtWorldPosition(const v3di_t& position) const {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex >= 0) {
@@ -137,7 +137,7 @@ block_t* WorldColumn::getBlockAtWorldPosition( const v3di_t& position ) const {
 }
 
 
-void WorldColumn::setBlockAtWorldPosition( const v3di_t& position, const block_t& block ) {
+void WorldColumn::setBlockAtWorldPosition(const v3di_t& position, const block_t& block) {
 	int chunkIndex = pickChunkFromWorldHeight (position.y);
 
 	if (chunkIndex < 0) {

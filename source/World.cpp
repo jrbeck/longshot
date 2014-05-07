@@ -157,7 +157,7 @@ void World::setStartPosition(v3d_t pos) {
 
 
 void World::loadFeaturesAroundPlayer (v3d_t playerPos) {
-  v3di_t regionIndex = getWorldRegionIndex(playerPos);
+  v3di_t regionIndex = WorldUtil::getRegionIndex(playerPos);
 
 
   // gotta do some kinda loading thingie
@@ -260,7 +260,7 @@ int World::loadSurroundingColumns(v3d_t pos) {
   // this will follow a 'square spiral' pattern starting at the
   // given pos
   int numColumnsLoaded = 0;
-  v3di_t regionIndex = getWorldRegionIndex (pos);
+  v3di_t regionIndex = WorldUtil::getRegionIndex (pos);
 
   int maxCount = mWorldMap->mXWidth * mWorldMap->mZWidth;
   static int nextAdd[4][2] = {
@@ -559,10 +559,28 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
     }
   }
 
+  applyOverdrawBlocks(wc);
+
   return 1;
 }
 
 
+void World::applyOverdrawBlocks(WorldColumn &wc) {
+  printf("World::applyOverdrawBlocks() ..... \n");
+  vector<OverdrawBlock*> *overdrawBlocks = mWorldMap->mOverdrawManager.getBlocks(wc.mWorldIndex.x, wc.mWorldIndex.z);
+  if (overdrawBlocks == NULL) {
+    return;
+  }
+  int size = overdrawBlocks->size();
+  printf("World::applyOverdrawBlocks(): %d\n", size);
+  for (int index = 0; index < size; index++) {
+    OverdrawBlock *overdrawBlock = (*overdrawBlocks)[index];
+    printf("World::applyOverdrawBlocks(): setting block: %d\n", overdrawBlock->blockType);
+
+    wc.setBlockType(v3di_v(overdrawBlock->x, overdrawBlock->y, overdrawBlock->z), overdrawBlock->blockType);
+  }
+  mWorldMap->mOverdrawManager.removeColumn(wc.mWorldIndex.x, wc.mWorldIndex.z);
+}
 
 
 

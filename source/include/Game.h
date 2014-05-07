@@ -37,6 +37,7 @@ using namespace std;
 
 #include "GalaxyMap.h"
 #include "World.h"
+#include "WorldUtil.h"
 #include "StarShip.h"
 #include "WorldMapView.h"
 #include "player.h"

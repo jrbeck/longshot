@@ -95,7 +95,7 @@ int WorldMap::getColumnIndex(const v3di_t& worldPosition) const {
 //	int xIndex = worldPosition.x / WORLD_CHUNK_SIDE;
 //	int zIndex = worldPosition.z / WORLD_CHUNK_SIDE;
 
-  // this is really the region index, and should probably be calling getWorldRegionIndex()
+  // this is really the region index, and should probably be calling WorldUtil::getRegionIndex()
   int xIndex = static_cast<int>(floor(static_cast<double>(worldPosition.x) / static_cast<double>(WORLD_CHUNK_SIDE)));
   int zIndex = static_cast<int>(floor(static_cast<double>(worldPosition.z) / static_cast<double>(WORLD_CHUNK_SIDE)));
 
@@ -104,6 +104,7 @@ int WorldMap::getColumnIndex(const v3di_t& worldPosition) const {
 
 
 int WorldMap::getColumnIndex(const v3d_t& worldPosition) const {
+  // this is really the region index, and should probably be calling WorldUtil::getRegionIndex()
   int xIndex = static_cast<int>(floor(worldPosition.x / static_cast<double>(WORLD_CHUNK_SIDE)));
   int zIndex = static_cast<int>(floor(worldPosition.z / static_cast<double>(WORLD_CHUNK_SIDE)));
 
@@ -215,8 +216,8 @@ int WorldMap::setBlock(const v3di_t& position, const block_t& block) {
   int column = pickColumn(position);
 
   if (column == -1) {
-//		printf ("error: WorldMap::setBlockAtPosition() - column not loaded\n");
-    // defer to OverdrawManager
+    printf("WorldMap::setBlock\n");
+    mOverdrawManager.setBlock(position, block.type);
     return -1;
   }
 
@@ -228,6 +229,55 @@ int WorldMap::setBlock(const v3di_t& position, const block_t& block) {
   mColumns[column].setBlockAtWorldPosition(position, block);
 
   return 0;
+}
+
+
+void WorldMap::clearBlock(const v3di_t& position) {
+  int column = pickColumn(position);
+
+  if (column == -1) {
+    printf("WorldMap::clearBlock\n");
+    mOverdrawManager.setBlock(position, BLOCK_TYPE_AIR);
+    return;
+  }
+
+  // just get out if there's no change
+  block_t *block = mColumns[column].getBlockAtWorldPosition (position);
+  if (block != NULL && block->type == BLOCK_TYPE_AIR) {
+    return;
+  }
+
+  // FIXME: this will (re)generate rocky outcroppings...no good
+  // but we need to do it to drill into the ground
+  generateChunkContaining(mColumns[column], position);
+
+  mColumns[column].clearBlockAtWorldPosition(position);
+
+  // make note of that change...
+  addToChangedList(column);
+
+  // check if some plant is on top
+  // FIXME: beware! this is recursive
+  v3di_t neighborPosition = position;
+  neighborPosition.y += 1;
+  if (gBlockData.get(mColumns[column].getBlockType(neighborPosition))->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
+    clearBlock(neighborPosition);
+  }
+
+  // now deal with the boundary issues
+  for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+    neighborPosition = v3di_add(position, gBlockNeighborAddLookup[i]);
+
+    int neighborColumn = pickColumn(neighborPosition);
+
+    if (neighborColumn >= 0) {
+      generateChunkContaining(mColumns[neighborColumn], neighborPosition);
+
+      mColumns[neighborColumn].mNeedShadowVolume = true;
+
+      addToChangedList(neighborColumn);
+    }
+  }
 }
 
 
@@ -341,53 +391,6 @@ double WorldMap::getHealthEffects( const BoundingBox& boundingBox ) const {
   }
 
   return totalDamage;
-}
-
-
-void WorldMap::clearBlock( const v3di_t& position ) {
-  int column = pickColumn(position);
-
-  if (column == -1) {
-    return;
-  }
-
-  // just get out if there's no change
-  block_t *block = mColumns[column].getBlockAtWorldPosition (position);
-  if (block != NULL && block->type == BLOCK_TYPE_AIR) {
-    return;
-  }
-
-  // FIXME: this will (re)generate rocky outcroppings...no good
-  // but we need to do it to drill into the ground
-  generateChunkContaining(mColumns[column], position);
-
-  mColumns[column].clearBlockAtWorldPosition(position);
-
-  // make note of that change...
-  addToChangedList(column);
-
-  // check if some plant is on top
-  // FIXME: beware! this is recursive
-  v3di_t neighborPosition = position;
-  neighborPosition.y += 1;
-  if (gBlockData.get(mColumns[column].getBlockType(neighborPosition))->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
-    clearBlock(neighborPosition);
-  }
-
-  // now deal with the boundary issues
-  for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
-    neighborPosition = v3di_add(position, gBlockNeighborAddLookup[i]);
-
-    int neighborColumn = pickColumn(neighborPosition);
-
-    if (neighborColumn >= 0) {
-      generateChunkContaining(mColumns[neighborColumn], neighborPosition);
-
-      mColumns[neighborColumn].mNeedShadowVolume = true;
-
-      addToChangedList(neighborColumn);
-    }
-  }
 }
 
 
@@ -508,7 +511,7 @@ void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& 
     static_cast<double>(position.y) / static_cast<double>(WORLD_CHUNK_SIDE))) * WORLD_CHUNK_SIDE;
   chunkPosition.z = worldColumn.mWorldPosition.z;
 
-//	v3di_print ("chunk", chunkPosition);
+//	v3di_print("chunk", chunkPosition);
   v3di_t blockPosition;
   block_t block;
   block.type = BLOCK_TYPE_AIR;
@@ -524,7 +527,7 @@ void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& 
           block.type = mPeriodics->generateBlockAtWorldPosition(blockPosition);
         }
 
-        worldColumn.setBlockAtWorldPosition (blockPosition, block);
+        worldColumn.setBlockAtWorldPosition(blockPosition, block);
       }
     }
   }
@@ -594,15 +597,15 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
 
           if (solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
             faceVisibility = 0xff;
-            setBlockVisibility (worldPosition, faceVisibility);
+            setBlockVisibility(worldPosition, faceVisibility);
           }
           // BLOCK_SOLIDITY_TYPE_GLASS
           else if (solidityType == BLOCK_SOLIDITY_TYPE_GLASS)
           {
             for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
               neighborAdd = gBlockNeighborAddLookup[i];
-              neighborPosition = v3di_add (worldPosition, neighborAdd);
-              neighborType = getBlockType (neighborPosition);
+              neighborPosition = v3di_add(worldPosition, neighborAdd);
+              neighborType = getBlockType(neighborPosition);
               neighborAlpha = gBlockData.get(neighborType)->alpha;
 
               if (neighborType != type &&
@@ -620,8 +623,8 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
           {
             for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
               neighborAdd = gBlockNeighborAddLookup[i];
-              neighborPosition = v3di_add (worldPosition, neighborAdd);
-              neighborType = getBlockType (neighborPosition);
+              neighborPosition = v3di_add(worldPosition, neighborAdd);
+              neighborType = getBlockType(neighborPosition);
               neighborAlpha = gBlockData.get(neighborType)->alpha;
 
               if (neighborType != type &&
@@ -631,7 +634,7 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
               }
             }
 
-            setBlockVisibility (worldPosition, faceVisibility);
+            setBlockVisibility(worldPosition, faceVisibility);
           }
           // NON-TRANSLUCENT
           else if (blockAlpha == 1.0) {

@@ -30,62 +30,63 @@
 
 class World : public Location {
 public:
-	World();
-	virtual ~World();
+  World();
+  virtual ~World();
 
-	// these are inherited from Location
-	int initialize(FILE *file, Galaxy *galaxy, int planetHandle);
-	void save(FILE *file);
-	void load(FILE *file);
-		// updates the columns that are loaded in a WorldMap
-	int update(v3d_t playerPosition);
-		// basically draw the stars'n stuff
-	void draw(gl_camera_c &cam);
-		// finds a start position that is conducive to the player within a
-		// certain area of land
-	v3d_t getStartPosition(void);
+  // these are inherited from Location
+  int initialize(FILE *file, Galaxy *galaxy, int planetHandle);
+  void save(FILE *file);
+  void load(FILE *file);
+  // updates the columns that are loaded in a WorldMap
+  int update(v3d_t playerPosition);
+  // basically draw the stars'n stuff
+  void draw(gl_camera_c &cam);
+  // finds a start position that is conducive to the player within a
+  // certain area of land
+  v3d_t getStartPosition(void);
 
-	// World-only methods * * * * * * * * *
-	void setStartPosition(v3d_t pos);
+  // World-only methods * * * * * * * * *
+  void setStartPosition(v3d_t pos);
 
-	void clear(bool clearInactive);
+  void clear(bool clearInactive);
 
-	// loads the set-pieces around some location
-	void loadFeaturesAroundPlayer(v3d_t playerPos);
+  // loads the set-pieces around some location
+  void loadFeaturesAroundPlayer(v3d_t playerPos);
 
-	int preloadColumns(int numColumns, v3d_t pos);
-	int loadSurroundingColumns(v3d_t pos);
+  int preloadColumns(int numColumns, v3d_t pos);
+  int loadSurroundingColumns(v3d_t pos);
 
-	int loadColumn(int xIndex, int zIndex, bool doOutcroppings);
-	int loadColumn(int xIndex, int zIndex, const int *heightMap);
-	int loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings);
+  int loadColumn(int xIndex, int zIndex, bool doOutcroppings);
+  int loadColumn(int xIndex, int zIndex, const int *heightMap);
+  int loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings);
 
-	// these should probably be put into FeatureGenerator?
-	void growTree(v3di_t worldPosition, int floorBlockType, int numWaterInColumn);
-	void growBlockTree(v3di_t position);
-	void growRandomTree(v3di_t position);
-	void growSpiralTree(v3di_t position);
-	void growCactusTree(v3di_t position);
-	void growPalmTree(v3di_t position);
-	void growGrass(v3di_t position);
+  void applyOverdrawBlocks(WorldColumn &wc);
 
-	// mostly here for FeatureGenerator
-	int getTerrainHeight(int x, int z);
+  // these should probably be put into FeatureGenerator?
+  void growTree(v3di_t worldPosition, int floorBlockType, int numWaterInColumn);
+  void growBlockTree(v3di_t position);
+  void growRandomTree(v3di_t position);
+  void growSpiralTree(v3di_t position);
+  void growCactusTree(v3di_t position);
+  void growPalmTree(v3di_t position);
+  void growGrass(v3di_t position);
 
-	static const int WORLD_MAP_SIDE = 32;
+  int getTerrainHeight(int x, int z);
+
+  static const int WORLD_MAP_SIDE = 32;
 
 private:
-	Galaxy *mGalaxy;
-	int mPlanetHandle;
+  Galaxy *mGalaxy;
+  int mPlanetHandle;
 
-	SkySim *mSkySim;
+  SkySim *mSkySim;
 
-	Periodics mPeriodics;
+  Periodics mPeriodics;
 
-	v3d_t mPlayerPosition;
+  v3d_t mPlayerPosition;
 
-	// HACK
-	bool mIsPlayerStartPosSet;
-	v3d_t mPlayerStartPos;
+  // HACK
+  bool mIsPlayerStartPosSet;
+  v3d_t mPlayerStartPos;
 };
 

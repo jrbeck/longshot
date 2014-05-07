@@ -13,6 +13,7 @@
 
 #include "LoadScreen.h"
 #include "World.h"
+#include "WorldUtil.h"
 #include "RogueMap.h"
 
 #include "FeatureUtil.h"

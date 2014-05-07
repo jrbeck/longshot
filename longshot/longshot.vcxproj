@@ -159,6 +159,7 @@
     <ClCompile Include="..\source\WorldLighting.cpp" />
     <ClCompile Include="..\source\WorldMap.cpp" />
     <ClCompile Include="..\source\WorldMapView.cpp" />
+    <ClCompile Include="..\source\WorldUtil.cpp" />
     <ClCompile Include="..\source\XmlParser.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +241,7 @@
     <ClInclude Include="..\source\include\WorldLighting.h" />
     <ClInclude Include="..\source\include\WorldMap.h" />
     <ClInclude Include="..\source\include\WorldMapView.h" />
+    <ClInclude Include="..\source\include\WorldUtil.h" />
     <ClInclude Include="..\source\include\XmlParser.h" />
   </ItemGroup>
   <ItemGroup>

@@ -61,6 +61,7 @@ public:
   block_t* getBlock(const v3di_t& position) const;
   block_t* getBlock(const v3d_t& position) const;
   int setBlock(const v3di_t& position, const block_t &block);
+  void clearBlock( const v3di_t& position);
 
   BYTE getUniqueLighting(const v3di_t& position) const;
   void setUniqueLighting(const v3di_t& position, BYTE level);
@@ -71,7 +72,6 @@ public:
   double getViscosity(const BoundingBox& boundingBox) const;
   double getHealthEffects(const BoundingBox& boundingBox) const;
 
-  void clearBlock( const v3di_t& position);
   // this method swaps values, so does not take references
   void fillVolume(v3di_t a, v3di_t b, int blockType);
   int fillSphere(const v3d_t& pos, double radius, int blockType, BYTE uniqueLighting);

@@ -35,7 +35,6 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0 //  int treeScheme;
   },
-
   { // BIOME_TYPE_MARS
     0.0, //  double terrainHeightOffset;
     0.0, //  double terrainHeightMultiplier;
@@ -44,6 +43,16 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_MARS, //  int groundType;
     BLOCK_TYPE_MARS, //  int blockTypeSubterran;
     BLOCK_TYPE_BLOOD, //  int blockTypeLiquid;
+    0 //  int treeScheme;
+  },
+  { // BIOME_TYPE_METAL
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_METAL_TILE_GREY, //  int groundType;
+    BLOCK_TYPE_METAL_TILE_GREY, //  int blockTypeSubterran;
+    BLOCK_TYPE_SLUDGE, //  int blockTypeLiquid;
     0 //  int treeScheme;
   },
 };

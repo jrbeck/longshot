@@ -18,6 +18,7 @@
 
 #include "AssetManager.h"
 #include "BlockTypeData.h"
+#include "WorldUtil.h"
 
 
 struct OverdrawBlock {
@@ -29,8 +30,8 @@ struct OverdrawBlock {
 
 
 struct OverdrawColumn {
-  int i;
-  int j;
+  int regionIndexX;
+  int regionIndexZ;
   vector<OverdrawBlock*> overdrawBlocks;
 };
 
@@ -47,7 +48,11 @@ public:
   ~OverdrawManager();
 
   void setBlock(const v3di_t& position, BYTE blockType);
-  OverdrawBlock *removeColumn(int i, int j);
+  vector<OverdrawBlock*> *getBlocks(int regionIndexX, int regionIndexZ);
+  void clearBlocks(OverdrawColumn* overdrawColumn);
+
+  void removeColumn(int regionIndexX, int regionIndexZ);
+  void removeColumn(OverdrawColumn* overdrawColum);
 
   void clear();
 
@@ -56,10 +61,10 @@ public:
 
 private:
 
-  OverdrawColumn* getOverdrawColumn(int i, int j);
-  OverdrawColumn* createOverdrawColumn(int i, int j);
+  OverdrawColumn* getOverdrawColumn(int regionIndexX, int regionIndexZ);
+  OverdrawColumn* createOverdrawColumn(int regionIndexX, int regionIndexZ);
 
-  void setOverdrawBlock(OverdrawColumn* overdrawColumn, OverdrawBlock* overdrawBlock);
+  void setOverdrawBlock(OverdrawColumn *overdrawColumn, OverdrawBlock *overdrawBlock);
 
   vector<OverdrawColumn*> mOverdrawColumns;
   

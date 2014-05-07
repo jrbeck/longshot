@@ -309,6 +309,9 @@
     <ClCompile Include="..\source\OverdrawManager.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\WorldUtil.cpp">
+      <Filter>Source Files\world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -546,6 +549,9 @@
       <Filter>Header Files\world</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\OverdrawManager.h">
+      <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\WorldUtil.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
   </ItemGroup>

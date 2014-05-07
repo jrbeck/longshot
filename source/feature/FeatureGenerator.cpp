@@ -941,7 +941,7 @@ void FeatureGenerator::drawPyramid (
 
 void FeatureGenerator::createForViewer (v3d_t startPos, int type, World &world) {
 	WorldMap &worldMap = *world.getWorldMap();
-	v3di_t regionIndex = getWorldRegionIndex(startPos);
+	v3di_t regionIndex = WorldUtil::getRegionIndex(startPos);
 	v2di_t corner = { regionIndex.x, regionIndex.z };
 	printf ("dungeon at (%d, %d)\n", corner.x, corner.y);
 //	createDungeon (corner, 6, worldMap);

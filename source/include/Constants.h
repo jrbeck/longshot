@@ -20,32 +20,6 @@
 #define WORLD_CHUNK_SIDE_CUBED		(4096)
 
 
-// i don't know that this is a great place for this, but ...
-// i need it in both WorldMap and OverdrawManager, and some other places that
-// used to go through WorldMap
-v3di_t getWorldRegionIndex(const v3d_t &pos) {
-  v3di_t ri;
-
-  ri.x = (int)(floor((pos.x / (double)(WORLD_CHUNK_SIDE))));
-  ri.y = (int)(floor((pos.y / (double)(WORLD_CHUNK_SIDE))));
-  ri.z = (int)(floor((pos.z / (double)(WORLD_CHUNK_SIDE))));
-
-  return ri;
-}
-
-v3di_t getWorldRegionIndex(const v3di_t &pos) {
-  v3di_t ri;
-
-  ri.x = pos.x / WORLD_CHUNK_SIDE;
-  ri.y = pos.y / WORLD_CHUNK_SIDE;
-  ri.z = pos.z / WORLD_CHUNK_SIDE;
-
-  return ri;
-}
-
-
-
-
 enum {
   LIGHT_LEVEL_MIN = 0,
   LIGHT_LEVEL_MAX = 64,
