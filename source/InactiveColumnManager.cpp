@@ -237,10 +237,10 @@ ColumnDatum *InactiveColumnManager::readColumn (int x, int z) {
 
 
 
-int InactiveColumnManager::saveToDisk (FILE *file) {
+int InactiveColumnManager::saveToDisk(FILE *file) {
 	// we'll need to know this!
-	size_t numColumns = mColumnData.size ();
-	fwrite (&numColumns, sizeof size_t, 1, file);
+	size_t numColumns = mColumnData.size();
+	fwrite(&numColumns, sizeof size_t, 1, file);
 
 	size_t totalChunks = 0;
 

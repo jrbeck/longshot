@@ -126,6 +126,7 @@
     <ClCompile Include="..\source\MerchantView.cpp" />
     <ClCompile Include="..\source\ObjectLoader.cpp" />
     <ClCompile Include="..\source\OrbitSky.cpp" />
+    <ClCompile Include="..\source\OverdrawManager.cpp" />
     <ClCompile Include="..\source\Periodics.cpp" />
     <ClCompile Include="..\source\Physics.cpp" />
     <ClCompile Include="..\source\PhysicsView.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="..\source\include\MerchantView.h" />
     <ClInclude Include="..\source\include\ObjectLoader.h" />
     <ClInclude Include="..\source\include\OrbitSky.h" />
+    <ClInclude Include="..\source\include\OverdrawManager.h" />
     <ClInclude Include="..\source\include\Periodics.h" />
     <ClInclude Include="..\source\include\Physics.h" />
     <ClInclude Include="..\source\include\PhysicsView.h" />

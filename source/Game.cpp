@@ -276,7 +276,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet *planet, v3d_t *startPos,
 		playerStartPosition = mLocation->getStartPosition();
 	}
 	else if (createSetPieces) {
-		v3di_t worldIndex = static_cast<World *>(mLocation)->getWorldMap()->getRegionIndex(*startPos);
+		v3di_t worldIndex = getWorldRegionIndex(*startPos);
 		FeatureGenerator::createSetPieces(
 			worldIndex.x,
 			worldIndex.z,

@@ -44,9 +44,9 @@ typedef struct {
 class WorldColumn {
 private:
 	// copy constructor guard
-	WorldColumn( const WorldColumn& worldColumn ) { }
+	WorldColumn(const WorldColumn& worldColumn) { }
 	// assignment operator guard
-	WorldColumn& operator=( const WorldColumn& worldColumn ) { return *this; }
+	WorldColumn& operator=(const WorldColumn& worldColumn) { return *this; }
 
 public:
 	WorldColumn();
@@ -56,25 +56,25 @@ public:
 
 	void clearEmptyChunks();
 
-	bool isInColumn( const v3di_t& worldPosition) const;
-	int pickChunkFromWorldHeight( int height ) const;
+	bool isInColumn(const v3di_t& worldPosition) const;
+	int pickChunkFromWorldHeight(int height) const;
 
-	int getBlockType( const v3di_t& worldPosition) const;
-	void setBlockType( const v3di_t& worldPosition, char type );
+	int getBlockType(const v3di_t& worldPosition) const;
+	void setBlockType(const v3di_t& worldPosition, char type);
 
-	block_t* getBlockAtWorldPosition( const v3di_t& position ) const;
-	void setBlockAtWorldPosition( const v3di_t& position, const block_t& block );
+	block_t* getBlockAtWorldPosition(const v3di_t& position) const;
+	void setBlockAtWorldPosition(const v3di_t& position, const block_t& block);
 
-	BYTE getUniqueLighting( const v3di_t& position ) const;
-	void setUniqueLighting( const v3di_t& position, BYTE level );
+	BYTE getUniqueLighting(const v3di_t& position) const;
+	void setUniqueLighting(const v3di_t& position, BYTE level);
 
-	void setBlockVisibility( const v3di_t& position, BYTE visibility );
+	void setBlockVisibility(const v3di_t& position, BYTE visibility);
 
-	bool isSolidBlockAtWorldPosition( const v3di_t& position ) const;
+	bool isSolidBlockAtWorldPosition(const v3di_t& position) const;
 
-	void clearBlockAtWorldPosition( const v3di_t& position );
+	void clearBlockAtWorldPosition(const v3di_t& position);
 
-	int createChunkContaining( const v3di_t& worldPosition );
+	int createChunkContaining(const v3di_t& worldPosition);
 
 	void updateHighestAndLowest();
 	int getHighestBlockHeight() const;

@@ -10,8 +10,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef World_h_
-#define World_h_
+#pragma once
 
 #include <omp.h>
 
@@ -49,29 +48,29 @@ public:
 	// World-only methods * * * * * * * * *
 	void setStartPosition(v3d_t pos);
 
-	void clear (bool clearInactive);
+	void clear(bool clearInactive);
 
 	// loads the set-pieces around some location
-	void loadFeaturesAroundPlayer (v3d_t playerPos);
+	void loadFeaturesAroundPlayer(v3d_t playerPos);
 
-	int preloadColumns (int numColumns, v3d_t pos);
-	int loadSurroundingColumns (v3d_t pos);
+	int preloadColumns(int numColumns, v3d_t pos);
+	int loadSurroundingColumns(v3d_t pos);
 
-	int loadColumn (int xIndex, int zIndex, bool doOutcroppings);
-	int loadColumn (int xIndex, int zIndex, const int *heightMap);
-	int loadColumn (WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings);
+	int loadColumn(int xIndex, int zIndex, bool doOutcroppings);
+	int loadColumn(int xIndex, int zIndex, const int *heightMap);
+	int loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings);
 
 	// these should probably be put into FeatureGenerator?
-	void growTree (v3di_t worldPosition, int floorBlockType, int numWaterInColumn);
-	void growBlockTree (v3di_t position);
-	void growRandomTree (v3di_t position);
-	void growSpiralTree (v3di_t position);
-	void growCactusTree (v3di_t position);
-	void growPalmTree (v3di_t position);
+	void growTree(v3di_t worldPosition, int floorBlockType, int numWaterInColumn);
+	void growBlockTree(v3di_t position);
+	void growRandomTree(v3di_t position);
+	void growSpiralTree(v3di_t position);
+	void growCactusTree(v3di_t position);
+	void growPalmTree(v3di_t position);
 	void growGrass(v3di_t position);
 
 	// mostly here for FeatureGenerator
-	int getTerrainHeight (int x, int z);
+	int getTerrainHeight(int x, int z);
 
 	static const int WORLD_MAP_SIDE = 32;
 
@@ -90,7 +89,3 @@ private:
 	v3d_t mPlayerStartPos;
 };
 
-
-
-
-#endif // World_h_
