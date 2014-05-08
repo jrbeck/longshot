@@ -35,7 +35,7 @@ struct Pixel32 {
 
 class BitmapModel {
 public:
-	BitmapModel(TextureRegion *region);
+	BitmapModel(TextureRegion* region);
 	~BitmapModel();
 
 	void bindTexture();
@@ -46,7 +46,7 @@ public:
 	int mHeight;
 
 private:
-	BYTE getFaceVisibility(GLuint s, GLuint t, Pixel32 *pixelData, TextureRegion *region) const;
+	BYTE getFaceVisibility(GLuint s, GLuint t, Pixel32* pixelData, TextureRegion* region) const;
 	void drawVoxel(
 		BYTE faceVisibility,
 		GLuint s, GLuint t,
@@ -98,7 +98,7 @@ private:
 
 
 // MEMBERS * * * * * * * * * * * * *
-	Texture *mTexture;
+	Texture* mTexture;
 	GLuint mDisplayListHandle;
 };
 

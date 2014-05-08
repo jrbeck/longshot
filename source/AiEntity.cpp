@@ -573,16 +573,20 @@ void AiEntity::aquireTarget(double time, WorldMap &worldMap, Physics &physics, v
 
 
   // perhaps a stroll
-  if (mTargetPhysicsHandle == 0 &&
-    r_numi (0, 5) == 2)
-  {
-    v3d_t baitPosition = v3d_add (mWorldPosition,
-      v3d_v (r_num (-25.0, 25.0), 10.0, r_num (-25.0, 25.0)));
+  if (mTargetPhysicsHandle == 0 && r_numi(0, 5) == 2) {
+    phys_entity_t *playerPhysicsEntity = physics.getEntityByHandle(physics.getPlayerHandle());
+    v3d_t baitPosition;
+    if(playerPhysicsEntity != NULL) {
+      // hehe let's sneak up on the player!
+      baitPosition = v3d_add(playerPhysicsEntity->pos, v3d_v(r_num(-25.0, 25.0), 10.0, r_num(-25.0, 25.0)));
+    }
+    else {
+      baitPosition = v3d_add(mWorldPosition, v3d_v(r_num(-25.0, 25.0), 10.0, r_num(-25.0, 25.0)));
+    }
 
-    size_t baitHandle =	physics.createEntity (OBJTYPE_TIGER_BAIT,
-      baitPosition, time, true);
+    size_t baitHandle =	physics.createEntity(OBJTYPE_TIGER_BAIT, baitPosition, time, true);
 
-    physics.setHealth (baitHandle, 1.0);
+    physics.setHealth(baitHandle, 1.0);
 
     mTargetPhysicsHandle = baitHandle;
     mTargetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);

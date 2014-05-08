@@ -20,29 +20,29 @@ AssetManager::AssetManager() :
 
 	// set up the sun and moon lights
 	LightSource sun;
-	sun.setColor (v3d_v (1.0, 0.95, 0.8));
-	sun.setDirection (v3d_v (0.0, -1.0, 0.0));
+	sun.setColor(v3d_v(1.0, 0.95, 0.8));
+	sun.setDirection(v3d_v(0.0, -1.0, 0.0));
 
 	LightSource moon;
-	moon.setColor (v3d_v (0.6, 0.2, 0.2));
-	moon.setDirection (v3d_v (0.0, 1.0, 0.0));
+	moon.setColor(v3d_v(0.6, 0.2, 0.2));
+	moon.setDirection(v3d_v(0.0, 1.0, 0.0));
 
-	mDirectionalLights.push_back (sun);
-	mDirectionalLights.push_back (moon);
+	mDirectionalLights.push_back(sun);
+	mDirectionalLights.push_back(moon);
 
 	// this is default...
-	setDirectionalLightPositions (v3d_v(0.0, 100.0, 0.0), v3d_v(0.0, -100.0, 0.0));
+	setDirectionalLightPositions(v3d_v(0.0, 100.0, 0.0), v3d_v(0.0, -100.0, 0.0));
 }
 
 
 
-AssetManager::~AssetManager (void) {
-	freeAssets ();
+AssetManager::~AssetManager(void) {
+	freeAssets();
 }
 
 
 
-int AssetManager::loadAssets (void) {
+int AssetManager::loadAssets(void) {
 /*	if (load_texture ("art/32_block_dirt.bmp", &mBlockTextureHandles[BLOCK_TYPE_DIRT]) == 0) {
 		mNumTexturesLoaded++; }
 	if (load_texture ("art/32_block_dirt_grass.bmp", &mBlockTextureHandles[BLOCK_TYPE_DIRT_GRASS]) == 0) {
@@ -76,7 +76,7 @@ int AssetManager::loadAssets (void) {
 
 	// make a call list for the block
 	mBlankBlockCallListHandle = glGenLists(1);
-	glNewList (mBlankBlockCallListHandle, GL_COMPILE);
+	glNewList(mBlankBlockCallListHandle, GL_COMPILE);
 		drawBlankBlock();
 	glEndList();
 
@@ -94,7 +94,7 @@ int AssetManager::loadAssets (void) {
 }
 
 
-void AssetManager::freeAssets (void) {
+void AssetManager::freeAssets(void) {
 	if (mTerrainTextureHandle != 0) {
 		glDeleteTextures(1, &mTerrainTextureHandle);
 		mTerrainTextureHandle = 0;
@@ -694,7 +694,7 @@ void AssetManager::drawBlankBlock (void) {
 
 
 
-void AssetManager::drawBlockFace (int whichFace, const GLfloat intensities[4]) const {
+void AssetManager::drawBlockFace(int whichFace, const GLfloat intensities[4]) const {
 //	glBegin (GL_QUADS);
 
 	switch (whichFace) {
@@ -723,7 +723,7 @@ void AssetManager::drawBlockFace (int whichFace, const GLfloat intensities[4]) c
 
 
 
-void AssetManager::drawBlockFaceLeft (const GLfloat intensities[4]) const {
+void AssetManager::drawBlockFaceLeft(const GLfloat intensities[4]) const {
 	glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
 	glColor4fv (intensities);
 

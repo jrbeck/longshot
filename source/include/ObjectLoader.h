@@ -8,8 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef ObjectLoader_h_
-#define ObjectLoader_h_
+#pragma once
 
 #include <Windows.h>
 #include "GL/glut.h"
@@ -29,21 +28,13 @@ enum {
 };
 
 
-
-
-
 class ObjectLoader {
 public:
-	ObjectLoader ();
-	~ObjectLoader ();
+	ObjectLoader();
+	~ObjectLoader();
 
-	static GLuint loadObjectToDisplayList (const char *fileName);
+	static GLuint loadObjectToDisplayList(const char *fileName);
 
 private:
-	static int loadQuad (XmlParser &xmlParser);
+	static int loadQuad(XmlParser& xmlParser);
 };
-
-
-
-
-#endif // ObjectLoader_h_

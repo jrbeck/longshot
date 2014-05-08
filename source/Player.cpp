@@ -5,8 +5,8 @@
 #pragma warning (disable : 4996)
 
 
-player_c::player_c () {
-  mInventory.resizeBackpack (DEFAULT_BACKPACK_SIZE);
+player_c::player_c() {
+  mInventory.resizeBackpack(DEFAULT_BACKPACK_SIZE);
 
   mShowWorldChunkBoxes = false;
 
@@ -19,29 +19,29 @@ player_c::~player_c () {
 }
 
 
-int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager &itemManager) {
+int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager) {
   mStartLocationFound = false;
-  mStartPosition = v3d_zero ();
+  mStartPosition = v3d_zero();
 
   // set up the head displacement
-  mHeadOffset = v3d_v (0.25, 1.6, 0.25);
+  mHeadOffset = v3d_v(0.25, 1.6, 0.25);
   mFinalHeadOffset = mHeadOffset;
 
-  mFacing = DEG2RAD (DEFAULT_FACING);
+  mFacing = DEG2RAD(DEFAULT_FACING);
 
-  mIncline = DEG2RAD (DEFAULT_INCLINE);
-  mInclineMin = DEG2RAD (DEFAULT_INCLINE_MIN);
-  mInclineMax = DEG2RAD (DEFAULT_INCLINE_MAX);
+  mIncline = DEG2RAD(DEFAULT_INCLINE);
+  mInclineMin = DEG2RAD(DEFAULT_INCLINE_MIN);
+  mInclineMax = DEG2RAD(DEFAULT_INCLINE_MAX);
 
   // setup the camera
-  cam.resize_screen (SCREEN_W, SCREEN_H);
-  cam.set_fov_near_far (45.0, 0.15, 500.0);
+  cam.resize_screen(SCREEN_W, SCREEN_H);
+  cam.set_fov_near_far(45.0, 0.15, 500.0);
 
   // figure out where we're looking
-  update_target ();
+  update_target();
 
   // set up to be straight up
-  up = v3d_v (0, 1, 0);
+  up = v3d_v(0, 1, 0);
 
   // set the physics handle and AI index
   mPhysicsHandle = physicsHandle;
@@ -51,35 +51,32 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager &itemMana
   mNextShotTimePrimary = 0.0;
   mNextShotTimeSecondary = 0.0;
 
-  mInventory.clear ();
+  mInventory.clear();
 
   // give the man a pointy stick
-  int inventoryHandle = mInventory.getNextFreeBackpackSlot ();
+  int inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     mInventory.mBackpack[inventoryHandle] = itemManager.generateRandomGun(1.0);
   }
 
-
   // melee weapon
-  inventoryHandle = mInventory.getNextFreeBackpackSlot ();
+  inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     mInventory.mBackpack[inventoryHandle] = itemManager.generateRandomMeleeWeapon(3.0);
   }
 
   // block
-  inventoryHandle = mInventory.getNextFreeBackpackSlot ();
+  inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     item_t blockItem;
-
-    memset (&blockItem, 0, sizeof item_t);
+    memset(&blockItem, 0, sizeof item_t);
 
     blockItem.active = true;
     blockItem.type = ITEMTYPE_WORLD_BLOCK;
-    strcpy (blockItem.name, "blocker");
+    strcpy(blockItem.name, "blocker");
 
     mInventory.mBackpack[inventoryHandle] = itemManager.createItem(blockItem);
   }
-
 
   mVisionTint[0] = 0.0;
   mVisionTint[1] = 0.0;
@@ -90,20 +87,16 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager &itemMana
 
   mPlacedBlock = false;
 
-  // FIXME: not here!
-//	mHud.setFont(gDefaultFontTextureHandle);
-//	mCharacterSheet.setFont(gDefaultFontTextureHandle);
-
   return 0;
 }
 
 
 
 // reset everything but the physics handle
-int player_c::soft_reset (v3d_t &startPosition, Physics &phys) {
-  mHeadOffset = v3d_v (0.25, 1.6, 0.25);
+int player_c::soft_reset(v3d_t& startPosition, Physics& phys) {
+  mHeadOffset = v3d_v(0.25, 1.6, 0.25);
   mFinalHeadOffset = mHeadOffset;
-  mHeadBobble.reset ();
+  mHeadBobble.reset();
 
   mIsBlockTargeted = false;
 
@@ -111,11 +104,11 @@ int player_c::soft_reset (v3d_t &startPosition, Physics &phys) {
   if (!mStartLocationFound) {
     setStartPosition(startPosition);
   }
-  phys.set_pos (mPhysicsHandle, mStartPosition);
+  phys.set_pos(mPhysicsHandle, mStartPosition);
 
   mMaxHealth = 100.0;
   mCurrentHealth = 100.0;
-  phys.setHealth (mPhysicsHandle, mCurrentHealth);
+  phys.setHealth(mPhysicsHandle, mCurrentHealth);
 
   deathScreamUttered = false;
 
@@ -126,14 +119,14 @@ int player_c::soft_reset (v3d_t &startPosition, Physics &phys) {
 
   mShowCharacterSheet = false;
 
-  memset (&mMeleeStatePrimary, 0, sizeof melee_weapon_state_t);
-  memset (&mMeleeStateSecondary, 0, sizeof melee_weapon_state_t);
+  memset(&mMeleeStatePrimary, 0, sizeof melee_weapon_state_t);
+  memset(&mMeleeStateSecondary, 0, sizeof melee_weapon_state_t);
 
   return 0;
 }
 
 
-void player_c::setStartPosition(v3d_t &startPosition) {
+void player_c::setStartPosition(v3d_t& startPosition) {
     mStartPosition = startPosition;
     mStartLocationFound = true;
 }
@@ -144,7 +137,7 @@ void player_c::setPhysicsHandle(size_t handle) {
 }
 
 
-void player_c::godMode (ItemManager &itemManager) {
+void player_c::godMode(ItemManager& itemManager) {
   printf ("you naughty little stinker you...\n");
 
   // some ammo?
@@ -155,8 +148,7 @@ void player_c::godMode (ItemManager &itemManager) {
   // how bout a couple a nice shooters
   item_t gun;
 
-  int inventoryHandle = mInventory.getNextFreeBackpackSlot ();
-
+  int inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     itemManager.generateRandomRocketLauncher(gun, 1.5);
     gun.type = ITEMTYPE_GUN_ONE_HANDED;
@@ -165,14 +157,13 @@ void player_c::godMode (ItemManager &itemManager) {
     gun.explosionForce = 5000.0; // * 0.2;
     itemManager.nameGun(gun);
 
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem (gun);
+    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(gun);
   }
 
   // okay one more...
-  inventoryHandle = mInventory.getNextFreeBackpackSlot ();
-
+  inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
-    itemManager.generateRandomRocketLauncher (gun, 3.0);
+    itemManager.generateRandomRocketLauncher(gun, 3.0);
 //		gun.bulletType = OBJTYPE_NAPALM;
 //		gun.ammoType = AMMO_NAPALM;
 
@@ -180,104 +171,79 @@ void player_c::godMode (ItemManager &itemManager) {
     gun.ammoType = AMMO_SLIME;
 
     gun.explosionForce = 5000.0 * 0.2;
-    itemManager.nameGun (gun);
+    itemManager.nameGun(gun);
 
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem (gun);
+    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(gun);
   }
 
   // and the rocket pack
-  inventoryHandle = mInventory.getNextFreeBackpackSlot ();
-
+  inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     gun.type = ITEMTYPE_ROCKET_PACK;
     gun.value1 = 2000.0;
-    sprintf (gun.name, "rocket pack");
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem (gun);
+    sprintf(gun.name, "rocket pack");
+    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(gun);
   }
 }
 
-
-
 // constrain the viewing angles
-int player_c::constrain_view_angles (void) {
+int player_c::constrain_view_angles(void) {
   // constrain the view angle elevation
   if (mIncline < mInclineMin) mIncline = mInclineMin;
   else if (mIncline > mInclineMax) mIncline = mInclineMax;
 
-  // this is ugly, but really shouldn't be ever a problem
+  // this is ugly, but really shouldn't ever be a problem
   while (mFacing > MY_2PI) mFacing -= MY_2PI;
   while (mFacing < 0) mFacing += MY_2PI;
 
   return 0;
 }
 
-
-
-v2d_t player_c::getFacingAndIncline (void) {
-  return v2d_v (mFacing, mIncline);
+v2d_t player_c::getFacingAndIncline(void) {
+  return v2d_v(mFacing, mIncline);
 }
 
-
-
-bool player_c::isHeadInWater (void) {
+bool player_c::isHeadInWater(void) {
   return mHeadInWater;
 }
 
-
-
 // update the camera target
-void player_c::update_target (void) {
-  mLookVector = v3d_getLookVector (mFacing, mIncline);
+void player_c::update_target(void) {
+  mLookVector = v3d_getLookVector(mFacing, mIncline);
 
   // now shift to the position
-  mTarget = v3d_add (v3d_add (mFinalHeadOffset, mPos), mLookVector);
+  mTarget = v3d_add(v3d_add(mFinalHeadOffset, mPos), mLookVector);
 }
 
-
-
-void player_c::set_draw_distance (double distance) {
-  cam.set_far (distance);
+void player_c::set_draw_distance(double distance) {
+  cam.set_far(distance);
 }
-
-
 
 // change the far clipping plane distance
-void player_c::adjust_draw_distance (double amount) {
-  cam.adjust_far (amount);
+void player_c::adjust_draw_distance(double amount) {
+  cam.adjust_far(amount);
 }
-
-
 
 // use the gluLookAt () to set view at render time
 // also set the frustum
-gl_camera_c player_c::gl_cam_setup (void) {
-  cam.perspective ();
-
-  cam.look_at (v3d_add (mPos, mFinalHeadOffset), mTarget, up);
-
+gl_camera_c player_c::gl_cam_setup(void) {
+  cam.perspective();
+  cam.look_at(v3d_add(mPos, mFinalHeadOffset), mTarget, up);
   return cam;
 }
 
-
-
 // return the pos vector
-v3d_t player_c::get_pos (void) {
+v3d_t player_c::get_pos(void) {
   return mPos;
 }
 
-
-
 // change the camera position
-int player_c::set_pos (v3d_t a) {
+int player_c::set_pos(v3d_t a) {
   mPos = a;
-
   return 0;
 }
 
-
-
-bool player_c::pickUpItem (item_t item, AssetManager &assetManager) {
-
+bool player_c::pickUpItem(item_t item, AssetManager& assetManager) {
   // special items first:
   if (item.type == ITEMTYPE_AMMO_BULLET ||
     item.type == ITEMTYPE_AMMO_SLIME ||
@@ -285,32 +251,27 @@ bool player_c::pickUpItem (item_t item, AssetManager &assetManager) {
     item.type == ITEMTYPE_AMMO_NAPALM)
   {
     mInventory.mAmmoCounter[item.ammoType] += item.quantity;
-    assetManager.mSoundSystem.playSoundByHandle (SOUND_HEALTHPACK, 192);
+    assetManager.mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
     return true;
   }
 
-
-
   // now for inventory items
-  int inventoryHandle = mInventory.getNextFreeBackpackSlot ();
-
+  int inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle < 0) {
-    printf ("inventory full!\n");
+    printf("inventory full!\n");
     return false;
   }
   else {
     mInventory.mBackpack[inventoryHandle] = item.handle;
   }
 
-
-
   switch (item.type) {
     case ITEMTYPE_HEALTHPACK:
-      assetManager.mSoundSystem.playSoundByHandle (SOUND_HEALTHPACK, 192);
+      assetManager.mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
       break;
     
     case ITEMTYPE_GUN_ONE_HANDED:
-      assetManager.mSoundSystem.playSoundByHandle (SOUND_PISTOL_RELOAD, 192);
+      assetManager.mSoundSystem.playSoundByHandle(SOUND_PISTOL_RELOAD, 192);
       break;
 
     default:
@@ -321,14 +282,12 @@ bool player_c::pickUpItem (item_t item, AssetManager &assetManager) {
   return true;
 }
 
-
-
-void player_c::useEquipped (
+void player_c::useEquipped(
   int whichEquip,
   double time,
-  Physics &phys,
-  AssetManager &assetManager,
-  ItemManager &itemManager)
+  Physics& phys,
+  AssetManager& assetManager,
+  ItemManager& itemManager)
 {
   item_t item;
 
@@ -336,41 +295,39 @@ void player_c::useEquipped (
     case EQUIP_PRIMARY:
       // can't use a non-item	
       if (mInventory.mPrimaryItem <= 0) return;
-      item = itemManager.getItem (mInventory.mPrimaryItem);
+      item = itemManager.getItem(mInventory.mPrimaryItem);
       break;
 
     case EQUIP_SECONDARY:
       if (mInventory.mSecondaryItem <= 0) return;
-      item = itemManager.getItem (mInventory.mSecondaryItem);
+      item = itemManager.getItem(mInventory.mSecondaryItem);
       break;
 
     default:
-      printf ("player_c::useEquipped(): trying to use invalid equip location\n");
+      printf("player_c::useEquipped(): trying to use invalid equip location\n");
       return;
   }
   
-  if (item.type == ITEMTYPE_GUN_ONE_HANDED ||
-    item.type == ITEMTYPE_GUN_TWO_HANDED)
-  {
+  if (item.type == ITEMTYPE_GUN_ONE_HANDED || item.type == ITEMTYPE_GUN_TWO_HANDED) {
     if (whichEquip == EQUIP_PRIMARY) {
       if (mNextShotTimePrimary > time) return;
-      mNextShotTimePrimary = fireGun (item, LEFT_HANDED, time, phys, assetManager, itemManager);
+      mNextShotTimePrimary = fireGun(item, LEFT_HANDED, time, phys, assetManager, itemManager);
     }
     else {
       if (mNextShotTimeSecondary > time) return;
-      mNextShotTimeSecondary = fireGun (item, RIGHT_HANDED, time, phys, assetManager, itemManager);
+      mNextShotTimeSecondary = fireGun(item, RIGHT_HANDED, time, phys, assetManager, itemManager);
     }
   }
   else if (item.type == ITEMTYPE_MELEE_ONE_HANDED) {
     if (whichEquip == EQUIP_PRIMARY) {
       if (mNextShotTimePrimary > time) return;
-      mNextShotTimePrimary = useMeleeWeapon (item, time, phys, itemManager);
+      mNextShotTimePrimary = useMeleeWeapon(item, time, phys, itemManager);
       mMeleeStatePrimary.swingStart = time;
       mMeleeStatePrimary.hasUsed = true;
     }
     else {
       if (mNextShotTimeSecondary > time) return;
-      mNextShotTimeSecondary = useMeleeWeapon (item, time, phys, itemManager);
+      mNextShotTimeSecondary = useMeleeWeapon(item, time, phys, itemManager);
       mMeleeStateSecondary.swingStart = time;
       mMeleeStateSecondary.hasUsed = true;
     }
@@ -379,9 +336,7 @@ void player_c::useEquipped (
     mPlacedBlock = true;
   }
   else {
-    if (itemManager.useItem (obtainWalkVector (mWalkInput),
-      item.handle, mPhysicsHandle, phys))
-    {
+    if (itemManager.useItem(obtainWalkVector(mWalkInput), item.handle, mPhysicsHandle, phys)) {
       if (whichEquip == EQUIP_PRIMARY) {
         mInventory.mPrimaryItem = 0;
       }
@@ -392,9 +347,7 @@ void player_c::useEquipped (
   }
 }
 
-
-
-double player_c::fireGun(item_t item, double handedness, double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager) {
+double player_c::fireGun(item_t item, double handedness, double time, Physics& phys, AssetManager& assetManager, ItemManager& itemManager) {
   v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
 
   double shoulderOffset = handedness * 0.5;
@@ -418,59 +371,43 @@ double player_c::fireGun(item_t item, double handedness, double time, Physics &p
   return itemManager.useGun(item.handle, shotInfo, mInventory.mAmmoCounter, phys);
 }
 
-
-
-double player_c::useMeleeWeapon (item_t item, double time, Physics &phys, ItemManager &itemManager) {
-  v3d_t world_head_pos = v3d_add (mFinalHeadOffset, mPos);
+double player_c::useMeleeWeapon(item_t item, double time, Physics& phys, ItemManager& itemManager) {
+  v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
   
-  v3d_t targAngle = v3d_normalize (v3d_sub (mTarget, world_head_pos));
-  v3d_t displacement = v3d_scale (targAngle, 1.5);
-
-  v3d_t pos = v3d_v (world_head_pos.x + displacement.x,
-            world_head_pos.y + displacement.y,
-            world_head_pos.z + displacement.z);
-
+  v3d_t targAngle = v3d_normalize(v3d_sub(mTarget, world_head_pos));
+  v3d_t displacement = v3d_scale(targAngle, 1.5);
+  v3d_t pos = v3d_add(world_head_pos, displacement);
 
   shot_info_t shotInfo;
-
   shotInfo.angle = targAngle;
   shotInfo.ownerPhysicsHandle = mPhysicsHandle;
   shotInfo.position = pos;
   shotInfo.time = time;
 
-  return itemManager.useMeleeWeapon (item.handle, shotInfo, phys);
+  return itemManager.useMeleeWeapon(item.handle, shotInfo, phys);
 }
 
-
-
-
-
-void player_c::useBackpackItem (double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager) {
+void player_c::useBackpackItem(double time, Physics& phys, AssetManager& assetManager, ItemManager& itemManager) {
   // can't use a non-item	
   if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
 
-  item_t item = itemManager.getItem (mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
+  item_t item = itemManager.getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
   
-  if (item.type == ITEMTYPE_UNDEFINED ||
-    item.type == ITEMTYPE_ROCKET_PACK) {
-  }
-  else if (item.type == ITEMTYPE_GUN_ONE_HANDED ||
-    item.type == ITEMTYPE_GUN_TWO_HANDED)
-  {
-    // bleh!
-  }
-  else {
-    printf ("player using item\n");
-    if (itemManager.useItem (obtainWalkVector (mWalkInput),
-      mInventory.mBackpack[mInventory.mSelectedBackpackItem],
-      mPhysicsHandle, phys))
-    {
+  switch (item.type) {
+  case ITEMTYPE_UNDEFINED:
+  case ITEMTYPE_ROCKET_PACK:
+  case ITEMTYPE_GUN_ONE_HANDED:
+  case ITEMTYPE_GUN_TWO_HANDED:
+    // nothing to do...
+    break;
+  default:
+    printf("player using item\n");
+    if (itemManager.useItem(obtainWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mPhysicsHandle, phys)) {
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
+    break;
   }
 }
-
-
 
 // gives the normalized walk vector
 v2d_t player_c::obtainWalkVector(v2d_t walkInput) {
@@ -487,14 +424,12 @@ v2d_t player_c::obtainWalkVector(v2d_t walkInput) {
   t_lr = v2d_scale(v2d_normal(t1), walkInput.x);
 
   // get the new position
-  t1 = v2d_normalize(v2d_add (t_fb, t_lr));
+  t1 = v2d_normalize(v2d_add(t_fb, t_lr));
 
   return t1;
 }
 
-
-
-void player_c::updateTargetBlock(WorldMap &worldMap) {
+void player_c::updateTargetBlock(WorldMap& worldMap) {
   v3d_t eye = v3d_add(mPos, mFinalHeadOffset);
 
   double rayLength = 2.75;
@@ -509,20 +444,15 @@ void player_c::updateTargetBlock(WorldMap &worldMap) {
   }
 }
 
-
-
-v3di_t *player_c::getTargetBlock(int &targetBlockFace) {
+v3di_t *player_c::getTargetBlock(int& targetBlockFace) {
   if (mIsBlockTargeted) {
     targetBlockFace = mTargetBlockFace;
     return &mTargetBlock;
   }
-
   return NULL;
 }
 
-
-
-void player_c::updateHud(ItemManager &itemManager) {
+void player_c::updateHud(ItemManager& itemManager) {
   mHud.clear();
 
   GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -595,8 +525,6 @@ void player_c::updateHud(ItemManager &itemManager) {
 //		text, TEXT_JUSTIFICATION_CENTER, color, NULL);
 }
 
-
-
 void player_c::drawHud(void) {
   if (mHeadInWater && mVisionTint[3] > 0.0) {
     drawWaterOverlay ();
@@ -609,8 +537,6 @@ void player_c::drawHud(void) {
     mHud.draw ();
   }
 }
-
-
 
 void player_c::drawWaterOverlay(void) {
   // need to set up the opengl viewport
@@ -647,16 +573,14 @@ void player_c::drawWaterOverlay(void) {
   glPopMatrix();
 }
 
-
-
-void player_c::drawEquipped(ItemManager &itemManager, BitmapModel &model) {
+void player_c::drawEquipped(ItemManager& itemManager, BitmapModel& model) {
   mMeleeStatePrimary.facing = mFacing;
   mMeleeStatePrimary.incline = mIncline;
 
-  mMeleeStatePrimary.headPosition = v3d_add (mPos, mFinalHeadOffset);
-  mMeleeStatePrimary.handPosition = v3d_v (0.7, -0.7, 0.2);
+  mMeleeStatePrimary.headPosition = v3d_add(mPos, mFinalHeadOffset);
+  mMeleeStatePrimary.handPosition = v3d_v(0.7, -0.7, 0.2);
 
-  //	mMeleeState.handPosition = v3d_v (0.7, -0.7, -0.2);
+  //	mMeleeState.handPosition = v3d_v(0.7, -0.7, -0.2);
 
   // copy that over
   mMeleeStateSecondary.facing = mMeleeStatePrimary.facing;
@@ -665,7 +589,7 @@ void player_c::drawEquipped(ItemManager &itemManager, BitmapModel &model) {
   mMeleeStateSecondary.handPosition = mMeleeStatePrimary.handPosition;
 
   // primary
-  item_t primaryItem = itemManager.getItem (mInventory.mPrimaryItem);
+  item_t primaryItem = itemManager.getItem(mInventory.mPrimaryItem);
   mMeleeStatePrimary.weaponHandle = primaryItem.handle;
   mMeleeStatePrimary.swingMode = 2;
   mMeleeStatePrimary.swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
@@ -674,14 +598,14 @@ void player_c::drawEquipped(ItemManager &itemManager, BitmapModel &model) {
     mMeleeStatePrimary.swingTime >= 0.0 &&
     mMeleeStatePrimary.swingTime <= 0.4)
   {
-    itemManager.drawMeleeWeapon (mMeleeStatePrimary, model);
+    itemManager.drawMeleeWeapon(mMeleeStatePrimary, model);
   }
   else if (primaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
     drawEquippedGun(LEFT_HANDED, model);
   }
 
   // secondary
-  item_t secondaryItem = itemManager.getItem (mInventory.mSecondaryItem);
+  item_t secondaryItem = itemManager.getItem(mInventory.mSecondaryItem);
   mMeleeStateSecondary.weaponHandle = secondaryItem.handle;
   mMeleeStateSecondary.swingMode = 2;
   mMeleeStateSecondary.swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
@@ -690,18 +614,16 @@ void player_c::drawEquipped(ItemManager &itemManager, BitmapModel &model) {
     mMeleeStateSecondary.swingTime >= 0.0 &&
     mMeleeStateSecondary.swingTime <= 0.4)
   {
-    itemManager.drawMeleeWeapon (mMeleeStateSecondary, model);
+    itemManager.drawMeleeWeapon(mMeleeStateSecondary, model);
   }
   else if (secondaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
     drawEquippedGun(RIGHT_HANDED, model);
   }
 }
 
-
-
-void player_c::drawEquippedGun(double handedness, BitmapModel &model) {
-  v3d_t handPosition = v3d_v (0.0, -0.1, 0.0);
-  v3d_t offset = v3d_v (0.2, 0.0, 0.2);
+void player_c::drawEquippedGun(double handedness, BitmapModel& model) {
+  v3d_t handPosition = v3d_v(0.0, -0.1, 0.0);
+  v3d_t offset = v3d_v(0.2, 0.0, 0.2);
   glEnable(GL_TEXTURE_2D);
   model.bindTexture();
   glColor4d(1.0, 1.0, 1.0, 1.0);
@@ -711,8 +633,7 @@ void player_c::drawEquippedGun(double handedness, BitmapModel &model) {
   glEnable(GL_ALPHA_TEST);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-  glPushMatrix ();
+  glPushMatrix();
     glTranslated(mMeleeStateSecondary.headPosition.x, mMeleeStateSecondary.headPosition.y, mMeleeStateSecondary.headPosition.z);
     glTranslated(handPosition.x, handPosition.y, handPosition.z);
     glRotated(RAD2DEG(-mFacing), 0.0, 1.0, 0.0);
@@ -721,50 +642,42 @@ void player_c::drawEquippedGun(double handedness, BitmapModel &model) {
     glScaled(1.0, 1.0, 1.0);
 
     model.draw();
-  glPopMatrix ();
+  glPopMatrix();
 
   glDisable(GL_ALPHA_TEST);
 }
 
+void player_c::updateCharacterSheet(ItemManager& itemManager) {
+  mCharacterSheet.clear();
 
-void player_c::updateCharacterSheet (ItemManager &itemManager) {
-
-  mCharacterSheet.clear ();
-
-  static GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-  static GLfloat color2[4] = {0.8f, 0.6f, 0.2f, 1.0f};
+  static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+  static GLfloat color2[4] = { 0.8f, 0.6f, 0.2f, 1.0f };
 //	static GLfloat colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.6f};
-  static GLfloat selectedColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+  static GLfloat selectedColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
   
   static v2d_t fontSize = { 0.015f, 0.03f };
 
   // equipped
-  mCharacterSheet.addText (v2d_v (0.1, 0.2), v2d_v (0.3, 0.05), fontSize,
-    "primary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
+  mCharacterSheet.addText(v2d_v(0.1, 0.2), v2d_v(0.3, 0.05), fontSize, "primary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
   if (mInventory.mPrimaryItem != 0) {
-    item_t item = itemManager.getItem (mInventory.mPrimaryItem);
+    item_t item = itemManager.getItem(mInventory.mPrimaryItem);
     if (item.type != ITEMTYPE_UNDEFINED) {
-      mCharacterSheet.addText (v2d_v (0.1, 0.25), v2d_v (0.3, 0.05), fontSize,
-        item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
+      mCharacterSheet.addText(v2d_v(0.1, 0.25), v2d_v(0.3, 0.05), fontSize, item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
     }
   }
   else {
-    mCharacterSheet.addText (v2d_v (0.1, 0.25), v2d_v (0.3, 0.05), fontSize,
-      "---", TEXT_JUSTIFICATION_CENTER, color, NULL);
+    mCharacterSheet.addText(v2d_v(0.1, 0.25), v2d_v(0.3, 0.05), fontSize, "---", TEXT_JUSTIFICATION_CENTER, color, NULL);
   }
 
-  mCharacterSheet.addText (v2d_v (0.1, 0.3), v2d_v (0.3, 0.05), fontSize,
-    "secondary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
+  mCharacterSheet.addText(v2d_v(0.1, 0.3), v2d_v(0.3, 0.05), fontSize, "secondary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
   if (mInventory.mSecondaryItem != 0) {
-    item_t item = itemManager.getItem (mInventory.mSecondaryItem);
+    item_t item = itemManager.getItem(mInventory.mSecondaryItem);
     if (item.type != ITEMTYPE_UNDEFINED) {
-      mCharacterSheet.addText (v2d_v (0.1, 0.35), v2d_v (0.3, 0.05), fontSize,
-        item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
+      mCharacterSheet.addText(v2d_v(0.1, 0.35), v2d_v(0.3, 0.05), fontSize, item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
     }
   }
   else {
-    mCharacterSheet.addText (v2d_v (0.1, 0.35), v2d_v (0.3, 0.05), fontSize,
-      "---", TEXT_JUSTIFICATION_CENTER, color, NULL);
+    mCharacterSheet.addText(v2d_v(0.1, 0.35), v2d_v(0.3, 0.05), fontSize, "---", TEXT_JUSTIFICATION_CENTER, color, NULL);
   }
 
   // ammo
@@ -773,7 +686,7 @@ void player_c::updateCharacterSheet (ItemManager &itemManager) {
   char ammoString[50];
 
   for (size_t i = 0; i < NUM_AMMO_TYPES; i++) {
-    tl = v2d_v (0.1, lerp (0.7, 0.9 - buttonHeight, i, NUM_AMMO_TYPES));
+    tl = v2d_v(0.1, lerp(0.7, 0.9 - buttonHeight, i, NUM_AMMO_TYPES));
 //		br = v2d_v (0.4, lerp (0.7 + (buttonHeight * 0.9), 0.9, i, NUM_AMMO_TYPES));;
     dimensions.x = 0.3;
     dimensions.y = buttonHeight * 0.9;
@@ -781,36 +694,34 @@ void player_c::updateCharacterSheet (ItemManager &itemManager) {
     // FIXME: switch in a for loop? show some class man!
     switch (i) {
       case AMMO_BULLET:
-        sprintf (ammoString, "bullets: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "bullets: %d\0", mInventory.mAmmoCounter[i]);
         break;
       case AMMO_SLIME:
-        sprintf (ammoString, "slime: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "slime: %d\0", mInventory.mAmmoCounter[i]);
         break;
       case AMMO_PLASMA:
-        sprintf (ammoString, "plasma: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "plasma: %d\0", mInventory.mAmmoCounter[i]);
         break;
       case AMMO_NAPALM:
-        sprintf (ammoString, "napalm: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "napalm: %d\0", mInventory.mAmmoCounter[i]);
         break;
       default:
-        sprintf (ammoString, "undefined: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "undefined: %d\0", mInventory.mAmmoCounter[i]);
         break;
     }
 
-    mCharacterSheet.addText (tl, dimensions, fontSize, ammoString, TEXT_JUSTIFICATION_LEFT, color, NULL);
+    mCharacterSheet.addText(tl, dimensions, fontSize, ammoString, TEXT_JUSTIFICATION_LEFT, color, NULL);
   }
 
 
-
   // inventory
-  mCharacterSheet.addText (v2d_v (0.5, 0.2), v2d_v (0.4, 0.1), fontSize,
-    "inventory:", TEXT_JUSTIFICATION_CENTER, color2, NULL);
+  mCharacterSheet.addText(v2d_v(0.5, 0.2), v2d_v(0.4, 0.1), fontSize, "inventory:", TEXT_JUSTIFICATION_CENTER, color2, NULL);
 
-  buttonHeight = (0.9 - 0.3) / static_cast<double>(mInventory.mBackpack.size ());
+  buttonHeight = (0.9 - 0.3) / static_cast<double>(mInventory.mBackpack.size());
   GLfloat *itemColor;
 
-  for (size_t i = 0; i < mInventory.mBackpack.size (); i++) {
-    tl = v2d_v (0.5, lerp (0.3, 0.9 - buttonHeight, i, mInventory.mBackpack.size ()));
+  for (size_t i = 0; i < mInventory.mBackpack.size(); i++) {
+    tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mInventory.mBackpack.size()));
 //		br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size ()));;
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9;
@@ -823,41 +734,33 @@ void player_c::updateCharacterSheet (ItemManager &itemManager) {
     }
 
     if (mInventory.mBackpack[i] != 0) {
-      item_t item = itemManager.getItem (mInventory.mBackpack[i]);
+      item_t item = itemManager.getItem(mInventory.mBackpack[i]);
       if (item.type != ITEMTYPE_UNDEFINED) {
-        mCharacterSheet.addText (tl, dimensions, fontSize,
-          item.name, TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
+        mCharacterSheet.addText(tl, dimensions, fontSize, item.name, TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
       }
     }
     else {
-      mCharacterSheet.addText (tl, dimensions, fontSize,
-        "---", TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
+      mCharacterSheet.addText(tl, dimensions, fontSize, "---", TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
     }
   }
 
-
   // let's give some indication of health status
   static char tempString[50];
-  sprintf (tempString, "health %.0f\0", mCurrentHealth);
-  mCharacterSheet.addText (v2d_v (0.1, 0.1), v2d_v (0.2, 0.04), fontSize,
-    tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
-
+  sprintf(tempString, "health %.0f\0", mCurrentHealth);
+  mCharacterSheet.addText(v2d_v(0.1, 0.1), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
 
   // money money money
-  sprintf (tempString, "credits %d\0", mInventory.mCredits);
-  mCharacterSheet.addText (v2d_v (0.1, 0.6), v2d_v (0.2, 0.04), fontSize,
-    tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
+  sprintf(tempString, "credits %d\0", mInventory.mCredits);
+  mCharacterSheet.addText(v2d_v(0.1, 0.6), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
 }
 
-
-
-bool player_c::update (
+bool player_c::update(
   double time,
-  WorldMap &worldMap,
-  Physics &phys,
-  GameInput &gi,
-  AssetManager &assetManager,
-  ItemManager &itemManager)
+  WorldMap& worldMap,
+  Physics& phys,
+  GameInput& gi,
+  AssetManager& assetManager,
+  ItemManager& itemManager)
 {
   mLastUpdateTime = time;
   int headBobbleAction = HEADBOB_ACTION_STAND;
@@ -867,7 +770,7 @@ bool player_c::update (
   mPos = phys.getNearCorner (mPhysicsHandle);
 
   // weird place for this
-  if (gi.isToggleWorldChunkBoxes ()) {
+  if (gi.isToggleWorldChunkBoxes()) {
     mShowWorldChunkBoxes = !mShowWorldChunkBoxes;
     // FIXME: this is disabled!
 //		worldMap.setShowWorldChunkBoxes (mShowWorldChunkBoxes);
@@ -895,41 +798,40 @@ bool player_c::update (
         mVisionTint[2] = gBlockData.get(blockType)->visionTint[2];
         mVisionTint[3] = gBlockData.get(blockType)->visionTint[3];
       }
-      adjust_draw_distance (-450.0);
+      adjust_draw_distance(-450.0);
     }
     mHeadInWater = true;
   }
   else {
     if (mHeadInWater) {
       // leaving water
-      adjust_draw_distance (450.0);
+      adjust_draw_distance(450.0);
       mVisionTint[3] = 0.0f;
     }
     mHeadInWater = false;
   }
 
-  // read through the physics messages
-  readPhysicsMessages (phys, itemManager, assetManager);
+  readPhysicsMessages(phys, itemManager, assetManager);
 
   // deal with the health
   mCurrentHealth = physicsEntity->health;
   if (mCurrentHealth > mMaxHealth) {
     mCurrentHealth = mMaxHealth;
-    phys.setHealth (mPhysicsHandle, mCurrentHealth);
+    phys.setHealth(mPhysicsHandle, mCurrentHealth);
   }
 
   // does the player want to mess with the draw distance?
-  if (gi.isDecreasingDrawDistance ()) {
-    adjust_draw_distance (-10);
+  if (gi.isDecreasingDrawDistance()) {
+    adjust_draw_distance(-20);
   }
-  if (gi.isIncreasingDrawDistance ()) {
-    adjust_draw_distance (10);
+  if (gi.isIncreasingDrawDistance()) {
+    adjust_draw_distance(20);
   }
 
 
   // deal with an escape press
   bool escapePressed = false;
-  if (gi.isEscapePressed ()) {
+  if (gi.isEscapePressed()) {
     if (mShowCharacterSheet) {
       mShowCharacterSheet = false;
     }
@@ -939,17 +841,15 @@ bool player_c::update (
   }
 
   // accommodate the changes in orientation
-  mFacing += gi.getFacingDelta ();
-  mIncline += gi.getInclinationDelta ();
-
-  constrain_view_angles ();
+  mFacing += gi.getFacingDelta();
+  mIncline += gi.getInclinationDelta();
+  constrain_view_angles();
 
   // update the camera accordingly
-  update_target ();
-
+  update_target();
 
   // check if there's a block that the player is looking at and close to
-  updateTargetBlock (worldMap);
+  updateTargetBlock(worldMap);
 
 
   // * * * * * * begin dead section * * * * * * * * * * *
@@ -958,38 +858,35 @@ bool player_c::update (
 //		printf ("dead\n");
 
     if (!deathScreamUttered) {
-      assetManager.mSoundSystem.playSoundByHandle (SOUND_HUMAN_DEATH, 112);
+      assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_DEATH, 112);
       deathScreamUttered = true;
 
       // put the player close to the ground
       // FIXME: this needs to be formalized
-      mFinalHeadOffset = v3d_v (0.25, 0.2, 0.25);
+      mFinalHeadOffset = v3d_v(0.25, 0.2, 0.25);
     }
 
-    mHud.clear ();
+    mHud.clear();
 
     // let's give some indication of health status
     char healthString[50];
     float color[] = {1.0f, 1.0f, 1.0f, 0.8f};
     v2d_t fontSize = { 0.01f, 0.02f };
 
-    sprintf (healthString, "health: %.0f\0", mCurrentHealth);
-    mHud.addText (v2d_v (0.00, 0.05), v2d_v (0.2, 0.04), fontSize,
-      healthString, TEXT_JUSTIFICATION_LEFT, color, NULL);
-    mHud.addText (v2d_v (0.00, 0.00), v2d_v (0.2, 0.04), fontSize,
-      "press (f1) or (esc)", TEXT_JUSTIFICATION_LEFT, color, NULL);
+    sprintf(healthString, "health: %.0f\0", mCurrentHealth);
+    mHud.addText(v2d_v(0.00, 0.05), v2d_v(0.2, 0.04), fontSize, healthString, TEXT_JUSTIFICATION_LEFT, color, NULL);
+    mHud.addText(v2d_v(0.00, 0.00), v2d_v(0.2, 0.04), fontSize, "press (f1) or (esc)", TEXT_JUSTIFICATION_LEFT, color, NULL);
 
-    if (gi.isSoftReset ()) {
+    if (gi.isSoftReset()) {
       mMaxHealth = 100.0;
       mCurrentHealth = 100.0;
 
-      phys.setHealth (mPhysicsHandle, 100.0);
+      phys.setHealth(mPhysicsHandle, 100.0);
 
       mFinalHeadOffset = mHeadOffset;
 
       deathScreamUttered = false;
     }
-
 
     return escapePressed;
   }
@@ -998,49 +895,46 @@ bool player_c::update (
 
 
   if (mShowCharacterSheet) {
-    if (gi.isClickMouse1 ()) {
+    if (gi.isClickMouse1()) {
       if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
-        mInventory.swapBackPackItemIntoPrimary ();
+        mInventory.swapBackPackItemIntoPrimary();
       }
       else {
-        mInventory.swapBackPackItemIntoPrimary ();
+        mInventory.swapBackPackItemIntoPrimary();
       }
     }
-    if (gi.isClickMouse2 ()) {
+    if (gi.isClickMouse2()) {
       if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
-        mInventory.swapBackPackItemIntoSecondary ();
+        mInventory.swapBackPackItemIntoSecondary();
       }
       else {
-        mInventory.swapBackPackItemIntoSecondary ();
+        mInventory.swapBackPackItemIntoSecondary();
       }
     }
 
     if (gi.isUseBackpackItem()) {
-      item_t item = itemManager.getItem (mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
+      item_t item = itemManager.getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
 
       if (item.type == ITEMTYPE_HEALTHPACK) {
-        useBackpackItem (time, phys, assetManager, itemManager);
+        useBackpackItem(time, phys, assetManager, itemManager);
       }
     }
 
     if (gi.isNextGun()) {
-      mInventory.nextBackPackItem ();
+      mInventory.nextBackPackItem();
     }
 
     if (gi.isPreviousGun()) {
-      mInventory.previousBackPackItem ();
+      mInventory.previousBackPackItem();
     }
 
     // did the player want to drop that item?
     // FIXME: destroys item!
     // this needs to create a physics item...
-    if (gi.isDroppedItem() &&
-      mInventory.mBackpack[mInventory.mSelectedBackpackItem] != 0)
-    {
+    if (gi.isDroppedItem() && mInventory.mBackpack[mInventory.mSelectedBackpackItem] != 0) {
       itemManager.destroyItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
-
   } // end mShowCharacterSheet == true
   else { // if (!mShowCharacterSheet) {
     if (gi.isUsingPrimary()) {
@@ -1052,7 +946,7 @@ bool player_c::update (
   }
 
 /*
-  // HACK * * * * * *
+  // HACK TO PLACE BLOCKS * * * * * *
   if (mPlacedBlock) {
     mPlacedBlock = false;
 
@@ -1092,7 +986,7 @@ bool player_c::update (
 
 
   // does the player wanna pick stuff up?
-  if (gi.isPickUpItem ()) {
+  if (gi.isPickUpItem()) {
     phys_message_t message;
     message.sender = mPhysicsHandle;
     message.recipient = MAILBOX_PHYSICS;
@@ -1100,81 +994,77 @@ bool player_c::update (
 
     // this sends a message to everyone who needs to know that the player
     // wants to pick something up
-    phys.sendMessage (message);
+    phys.sendMessage(message);
   }
 
   // deal with a soft reset
-  if (gi.isSoftReset ()) {
-    soft_reset (mStartPosition, phys);
+  if (gi.isSoftReset()) {
+    soft_reset(mStartPosition, phys);
 
     // this stuff has changed, so take note!
-    physicsEntity = phys.getEntityByHandle (mPhysicsHandle);
+    physicsEntity = phys.getEntityByHandle(mPhysicsHandle);
   }
 
-  updateHud (itemManager);
+  updateHud(itemManager);
 
   // toggle the character sheet on/off according to the user input
-  if (gi.isToggleCharacterSheet ()) {
+  if (gi.isToggleCharacterSheet()) {
     mShowCharacterSheet = !mShowCharacterSheet;
   }
   
-  updateCharacterSheet (itemManager);
+  updateCharacterSheet(itemManager);
 
-  if (gi.isToggleGodMode ()) {
-    godMode (itemManager);
+  if (gi.isToggleGodMode()) {
+    godMode(itemManager);
   }
 
-  if (gi.isTogglePhysics ()) phys.togglePause ();
-  if (gi.isAdvanceOneFrame ()) phys.advanceOneFrame ();
+  if (gi.isTogglePhysics()) phys.togglePause();
+  if (gi.isAdvanceOneFrame()) phys.advanceOneFrame();
 
 
-  mWalkInput = v2d_v (0.0, 0.0);
+  mWalkInput = v2d_v(0.0, 0.0);
+  if (gi.isWalkingForward())		mWalkInput.y += 1.0;
+  if (gi.isWalkingBackward())	mWalkInput.y -= 1.0;
+  if (gi.isWalkingLeft())		mWalkInput.x += 1.0;
+  if (gi.isWalkingRight())		mWalkInput.x -= 1.0;
 
-  if (gi.isWalkingForward ())		mWalkInput.y += 1.0;
-  if (gi.isWalkingBackward ())	mWalkInput.y -= 1.0;
-  if (gi.isWalkingLeft ())		mWalkInput.x += 1.0;
-  if (gi.isWalkingRight ())		mWalkInput.x -= 1.0;
-
-  bool isJumping = gi.isJumping ();
+  bool isJumping = gi.isJumping();
 
   if (physicsEntity->worldViscosity < 0.01) {
     mInWater = false;
 
     // jump from ground
-    if (isJumping && phys.isHandleOnGround (mPhysicsHandle)) {
-      v3d_t force = v3d_v (0.0, 45000.0, 0.0);
+    if (isJumping && phys.isHandleOnGround(mPhysicsHandle)) {
+      v3d_t force = v3d_v(0.0, 45000.0, 0.0);
 
-      phys.add_force (mPhysicsHandle, force);
+      phys.add_force(mPhysicsHandle, force);
 
-      if (r_numi (0, 16) == 3) {
-        assetManager.mSoundSystem.playSoundByHandle (SOUND_HUMAN_JUMP, 72);
+      if (r_numi(0, 16) == 3) {
+        assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_JUMP, 72);
       }
     }
 
     // so the player wants to walk eh?
-    if (v2d_mag (mWalkInput) > EPSILON) {
+    if (v2d_mag(mWalkInput) > EPSILON) {
       v2d_t walk_force_2d;
 
       // player on ground
-      if (phys.isHandleOnGround (mPhysicsHandle)) {
-        walk_force_2d = v2d_scale (obtainWalkVector (mWalkInput), 2500.0);
+      if (phys.isHandleOnGround(mPhysicsHandle)) {
+        walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 2500.0);
 
-        if (time > (mLastFootStep + 0.6) &&
-          v3d_mag (physicsEntity->vel) > 0.2) {
-          assetManager.mSoundSystem.playSoundByHandle (SOUND_FOOTSTEP, r_numi (32, 56));
-
+        if (time > (mLastFootStep + 0.6) && v3d_mag(physicsEntity->vel) > 0.2) {
+          assetManager.mSoundSystem.playSoundByHandle(SOUND_FOOTSTEP, r_numi (32, 56));
           mLastFootStep = time + r_num (0.0, 0.2);
         }
 
         headBobbleAction = HEADBOB_ACTION_WALK_FORWARD;
       }
       else {	// player not on ground
-        walk_force_2d = v2d_scale (obtainWalkVector (mWalkInput), 300.0);
+        walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 300.0);
       }
 
-      v3d_t force = v3d_v (walk_force_2d.x, 0.0, walk_force_2d.y);
-
-      phys.add_force (mPhysicsHandle, force);
+      v3d_t force = v3d_v(walk_force_2d.x, 0.0, walk_force_2d.y);
+      phys.add_force(mPhysicsHandle, force);
     }
 
   /*	if (isJumping && !phys.isHandleOnGround (mPhysicsHandle)) {
@@ -1253,34 +1143,34 @@ bool player_c::update (
   }
   else { // in water
     if (mInWater == false) {
-      assetManager.mSoundSystem.playSoundByHandle (SOUND_SPLASH_MEDIUM, 72);
+      assetManager.mSoundSystem.playSoundByHandle(SOUND_SPLASH_MEDIUM, 72);
     }
     mInWater = true;
 
-    v3d_t swimForce = v3d_zero ();
+    v3d_t swimForce = v3d_zero();
 
     if (physicsEntity->on_ground && isJumping) {
-      phys.add_force (mPhysicsHandle, v3d_v (0.0, 4000.0, 0.0));
+      phys.add_force(mPhysicsHandle, v3d_v(0.0, 4000.0, 0.0));
     }
 
-    if (v2d_mag (mWalkInput) > EPSILON) {
-      v2d_t walkVector = obtainWalkVector (mWalkInput);
-      v3d_t force = v3d_zero ();
+    if (v2d_mag(mWalkInput) > EPSILON) {
+      v2d_t walkVector = obtainWalkVector(mWalkInput);
+      v3d_t force = v3d_zero();
 
       if (mWalkInput.y > 0.0) { // w is pressed
-        double mag = 2500.0 * (sin (time * 10.0) + 1.5);
-        force = v3d_scale (mag, v3d_normalize (mLookVector));
+        double mag = 2500.0 * (sin(time * 10.0) + 1.5);
+        force = v3d_scale(mag, v3d_normalize(mLookVector));
 
         if (mHeadInWater) {
-          force = v3d_add (force, v3d_v (0.0, 600.0, 0.0));
+          force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
         }
       }
       else if (mWalkInput.y < 0.0) { // s is pressed
-        double mag = -2500.0 * (sin (time * 6.0) + 1.5);
-        force = v3d_scale (mag, v3d_normalize (mLookVector));
+        double mag = -2500.0 * (sin(time * 6.0) + 1.5);
+        force = v3d_scale(mag, v3d_normalize(mLookVector));
 
         if (mHeadInWater) {
-          force = v3d_add (force, v3d_v (0.0, 600.0, 0.0));
+          force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
         }
       }
       if (mWalkInput.x != 0.0) {
@@ -1289,61 +1179,61 @@ bool player_c::update (
         force.z += mag * walkVector.y;
 
         if (mHeadInWater) {
-          force = v3d_add (force, v3d_v (0.0, 600.0, 0.0));
+          force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
         }
       }
 
-      swimForce = v3d_add (swimForce, force);
+      swimForce = v3d_add(swimForce, force);
     }
-    if (gi.isSwimming ()) {
+    if (gi.isSwimming()) {
       // 'up' force
-      double mag = 1500.0 * (sin (time * 10.0) + 1.5);
-      phys.add_force (mPhysicsHandle, v3d_v (0.0, mag, 0.0));
+      double mag = 1500.0 * (sin(time * 10.0) + 1.5);
+      phys.add_force(mPhysicsHandle, v3d_v(0.0, mag, 0.0));
     }
 
-    swimForce = v3d_scale (1900.0, v3d_normalize (swimForce));
-
-    phys.add_force (mPhysicsHandle, swimForce);
+    swimForce = v3d_scale(1900.0, v3d_normalize(swimForce));
+    phys.add_force(mPhysicsHandle, swimForce);
   }
 
 
   // now we know what the player is doing, so let's update this
-  mHeadBobble.update (headBobbleAction, time);
+  mHeadBobble.update(headBobbleAction, time);
 
-  v3d_t headBobbleOffset = mHeadBobble.getOffset ();
+  v3d_t headBobbleOffset = mHeadBobble.getOffset();
   v3d_t rotatedHeadBobble = {
-    headBobbleOffset.x * cos (mFacing) - headBobbleOffset.z * sin (mFacing),
+    headBobbleOffset.x * cos(mFacing) - headBobbleOffset.z * sin(mFacing),
     headBobbleOffset.y,
-    headBobbleOffset.x * sin (mFacing) + headBobbleOffset.z * cos (mFacing) };
-  mFinalHeadOffset = v3d_add (mHeadOffset, rotatedHeadBobble);
+    headBobbleOffset.x * sin(mFacing) + headBobbleOffset.z * cos(mFacing) };
+  mFinalHeadOffset = v3d_add(mHeadOffset, rotatedHeadBobble);
 
   return escapePressed;
 }
 
 
-void player_c::readPhysicsMessages (Physics &physics,
-  ItemManager &itemManager,
-  AssetManager &assetManager)
+void player_c::readPhysicsMessages(
+  Physics& physics,
+  ItemManager& itemManager,
+  AssetManager& assetManager)
 {
   phys_message_t message;
 
   size_t itemHandle;
   bool gotItem;
 
-  while (physics.getNextMessage (static_cast<int>(mPhysicsHandle), &message)) {
+  while (physics.getNextMessage(static_cast<int>(mPhysicsHandle), &message)) {
 //		printf ("player message: to: %d, from: %d\n", message.recipient, message.sender);
 
     switch (message.type) {
       case PHYS_MESSAGE_DAMAGE:
         if (message.dValue >= 1.0 &&  mCurrentHealth > 0.0) {
-          assetManager.mSoundSystem.playSoundByHandle (SOUND_HUMAN_PAIN, 96);
+          assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_PAIN, 96);
         }
         break;
 
       case PHYS_MESSAGE_ITEMGRAB:
         itemHandle = message.iValue;
 
-        gotItem = pickUpItem (itemManager.getItem (itemHandle), assetManager);
+        gotItem = pickUpItem(itemManager.getItem(itemHandle), assetManager);
 
         if (gotItem) {
           message.sender = mPhysicsHandle;
@@ -1351,7 +1241,7 @@ void player_c::readPhysicsMessages (Physics &physics,
           message.type = PHYS_MESSAGE_ITEMGRABBED;
 //					message.iValue2 = message.iValue2;
 
-          physics.sendMessage (message);
+          physics.sendMessage(message);
         }
 
         break;
@@ -1365,7 +1255,7 @@ void player_c::readPhysicsMessages (Physics &physics,
 
 
 
-void player_c::placeLight(LightManager &lightManager, WorldMap &worldMap, GameInput &gi) {
+void player_c::placeLight(LightManager& lightManager, WorldMap& worldMap, GameInput& gi) {
   if (mPlacedBlock) {
     mPlacedBlock = false;
 

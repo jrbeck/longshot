@@ -2,7 +2,7 @@
 
 
 
-BitmapModel::BitmapModel(TextureRegion *region) {
+BitmapModel::BitmapModel(TextureRegion* region) {
 	mTexture = region->mTexture;
 
 	mWidth = region->mW;
@@ -55,18 +55,13 @@ BitmapModel::BitmapModel(TextureRegion *region) {
 	// all done with the display list
 	glEndList();
 
-
 	// free those pixels...
 	delete [] pixelData;
 }
 
-
-
 BitmapModel::~BitmapModel() {
 	glDeleteLists(mDisplayListHandle, 1);
 }
-
-
 
 void BitmapModel::bindTexture() {
 //	if (mTexture) {
@@ -74,20 +69,16 @@ void BitmapModel::bindTexture() {
 //	}
 }
 
-
-
 void BitmapModel::draw() {
-	glBegin (GL_QUADS);
-		glCallList (mDisplayListHandle);
-	glEnd ();
+	glBegin(GL_QUADS);
+		glCallList(mDisplayListHandle);
+	glEnd();
 }
-
-
 
 BYTE BitmapModel::getFaceVisibility(
 	GLuint s, GLuint t,
-	Pixel32 *pixelData,
-	TextureRegion *region) const
+	Pixel32* pixelData,
+	TextureRegion* region) const
 {
 
 	// check the current pixel
@@ -102,34 +93,24 @@ BYTE BitmapModel::getFaceVisibility(
 	visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_BAC];
 
 	// check the neighbors
-	if (t == region->mY ||
-		pixelData[s + ((t - 1) * mTexture->mWidth)].a == 0)
-	{
+	if (t == region->mY || pixelData[s + ((t - 1) * mTexture->mWidth)].a == 0) {
 		visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_TOP];
 	}
 
-	if (t == (region->mY + region->mH - 1) ||
-		pixelData[s + ((t + 1) * mTexture->mWidth)].a == 0)
-	{
+	if (t == (region->mY + region->mH - 1) ||	pixelData[s + ((t + 1) * mTexture->mWidth)].a == 0)	{
 		visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_BOT];
 	}
 
-	if (s == region->mX ||
-		pixelData[(s - 1) + (t * mTexture->mWidth)].a == 0)
-	{
+	if (s == region->mX || pixelData[(s - 1) + (t * mTexture->mWidth)].a == 0) {
 		visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_LEF];
 	}
 
-	if (s == (region->mX + region->mW - 1) ||
-		pixelData[(s + 1) + (t * mTexture->mWidth)].a == 0)
-	{
+	if (s == (region->mX + region->mW - 1) || pixelData[(s + 1) + (t * mTexture->mWidth)].a == 0)	{
 		visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_RIG];
 	}
 
 	return visibility;
 }
-
-
 
 void BitmapModel::drawVoxel(
 	BYTE faceVisibility,
@@ -155,13 +136,9 @@ void BitmapModel::drawVoxel(
 	if (faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_BOT]) {
 		drawBlockFaceBottom(s, t, u, v, u + pixelW, v + pixelH);
 	}
-
-
 }
 
-
-
-void BitmapModel::drawFront (
+void BitmapModel::drawFront(
 	GLfloat s1, GLfloat t1,
 	GLfloat s2, GLfloat t2,
 	GLfloat u1, GLfloat v1,
@@ -261,7 +238,6 @@ void BitmapModel::drawBlockFaceFront (
 }
 
 
-
 void BitmapModel::drawBlockFaceBack(
 	GLfloat s, GLfloat t,
 	GLfloat u1, GLfloat v1,
@@ -295,8 +271,7 @@ void BitmapModel::drawBlockFaceBack(
 }
 
 
-
-void BitmapModel::drawBlockFaceLeft (
+void BitmapModel::drawBlockFaceLeft(
 	GLfloat s, GLfloat t,
 	GLfloat u1, GLfloat v1,
 	GLfloat u2, GLfloat v2) const
@@ -329,8 +304,7 @@ void BitmapModel::drawBlockFaceLeft (
 }
 
 
-
-void BitmapModel::drawBlockFaceRight (
+void BitmapModel::drawBlockFaceRight(
 	GLfloat s, GLfloat t,
 	GLfloat u1, GLfloat v1,
 	GLfloat u2, GLfloat v2) const
@@ -363,8 +337,7 @@ void BitmapModel::drawBlockFaceRight (
 }
 
 
-
-void BitmapModel::drawBlockFaceTop (
+void BitmapModel::drawBlockFaceTop(
 	GLfloat s, GLfloat t,
 	GLfloat u1, GLfloat v1,
 	GLfloat u2, GLfloat v2) const
@@ -397,8 +370,7 @@ void BitmapModel::drawBlockFaceTop (
 }
 
 
-
-void BitmapModel::drawBlockFaceBottom (
+void BitmapModel::drawBlockFaceBottom(
 	GLfloat s, GLfloat t,
 	GLfloat u1, GLfloat v1,
 	GLfloat u2, GLfloat v2) const
@@ -429,9 +401,3 @@ void BitmapModel::drawBlockFaceBottom (
 		(t + 1) * VOXEL_SCALE_Y,
 		0.5f * VOXEL_SCALE_Z);
 }
-
-
-
-
-
-

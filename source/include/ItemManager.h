@@ -11,6 +11,7 @@
 #ifndef ItemManager_h_
 #define ItemManager_h_
 
+#include <assert.h>
 
 #include "Physics.h"
 #include "MathUtil.h"
