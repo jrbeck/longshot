@@ -184,7 +184,7 @@ v2d_t v2d_neg (v2d_t a) {
 
 
 // returns a perpendicular vector
-v2d_t v2d_normal (v2d_t a) {
+v2d_t v2d_normal(v2d_t a) {
 	double t = a.x;
 	a.x = a.y;
 	a.y = -t;
@@ -195,12 +195,12 @@ v2d_t v2d_normal (v2d_t a) {
 
 // returns the angle off the x-axis
 double v2d_theta (v2d_t a) {
-	return atan2 (a.y, a.x);
+	return atan2(a.y, a.x);
 }
 
 
 // returns the projection of a onto b
-v2d_t v2d_project (v2d_t a, v2d_t b) {
+v2d_t v2d_project(v2d_t a, v2d_t b) {
 	v2d_t p;
 	double dot = (a.x * b.x) + (a.y * b.y); // dot product of a and b
 	double bsq = (b.x * b.x) + (b.y * b.y); // |b|^2

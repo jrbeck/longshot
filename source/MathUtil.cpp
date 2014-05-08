@@ -5,7 +5,7 @@
 
 // this is Daniel J. Bernstein's hash algorithm
 // requires c string as input
-unsigned long hash (const char *str) {
+unsigned long hash(const char *str) {
 	unsigned long hash = 5381;
 	int c;
 

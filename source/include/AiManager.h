@@ -9,9 +9,7 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-
-#ifndef AiManager_h_
-#define AiManager_h_
+#pragma once
 
 #include <vector>
 
@@ -29,28 +27,27 @@
 
 class AiManager {
 public:
-	AiManager (void);
-	~AiManager (void);
+	AiManager(void);
+	~AiManager(void);
 	
 	void clear(void);
 
-	size_t setPlayerPhysicsHandle (size_t playerPhysicsHandle, Physics &physics, double time);
-	void setPlayerFacingAndIncline (v2d_t facingAndElevation);
+	size_t setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics &physics, double time);
+	void setPlayerFacingAndIncline(v2d_t facingAndElevation);
 
 	AiEntity *addEntity(int type, const v3d_t &position, Physics &physics, double time);
 	void removeEntity(size_t handle);
 	AiEntity *getEntityByHandle(size_t handle);
-	vector<AiEntity *> *getEntities(void);
+	vector<AiEntity*>* getEntities(void);
 
-	size_t spawnEntity (int type, v3d_t position, double time,
-		Physics &physics, ItemManager &itemManager);
+	size_t spawnEntity(int type, v3d_t position, double time, Physics &physics, ItemManager &itemManager);
 
-	int update (double time, WorldMap &worldMap, Physics &physics, ItemManager &itemManager);
+	int update(double time, WorldMap &worldMap, Physics &physics, ItemManager &itemManager);
 
 	void releaseItems(int index, Physics &physics);
 	void trimEntitiesList (void);
 
-	void readPhysicsMessages (double time, Physics &physics, ItemManager &itemManager);
+	void readPhysicsMessages(double time, Physics &physics, ItemManager &itemManager);
 
 	vector<size_t> getAllItemHandles(void);
 
@@ -58,23 +55,17 @@ public:
 
 private:
 	// copy constructor guard
-	AiManager (const AiManager &aiManager) { }
+	AiManager(const AiManager &aiManager) { }
 	// assignment operator guard
-	AiManager & operator=(const AiManager &aiManager) { return *this; }
+	AiManager& operator=(const AiManager &aiManager) { return *this; }
 
 	size_t mNextHandle;
 
 	size_t mPlayerAiHandle;
 	size_t mPlayerPhysicsHandle;
 
-	vector<AiEntity *> mAiEntities;
+	vector<AiEntity*> mAiEntities;
 
 	int mMaxCrittersHACK;
-
 };
 
-
-
-
-
-#endif // AiManager_h_

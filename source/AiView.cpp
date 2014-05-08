@@ -147,11 +147,11 @@ void AiView::updateHeadOrientation(AiEntity &aiEntity) const {
 		}
 
 		// move head towards target around y-axis
-		updateFacingAngle(aiEntity, atan2 (headToTarget.z, headToTarget.x));
+		updateFacingAngle(aiEntity, atan2(headToTarget.z, headToTarget.x));
 
 		// figure out the vertical angle, constrain if too inclined
 		double adjacentLength = sqrt (1.0 - (headToTarget.y * headToTarget.y));
-		updateLookIncline(aiEntity, atan2 (headToTarget.y, adjacentLength));
+		updateLookIncline(aiEntity, atan2(headToTarget.y, adjacentLength));
 
 		aiEntity.mHeadOrientation = v3d_getLookVector (aiEntity.mFacingAngle, aiEntity.mLookIncline);
 	}

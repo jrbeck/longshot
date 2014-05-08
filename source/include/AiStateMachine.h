@@ -8,8 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef AiStateMachine_h_
-#define AiStateMachine_h_
+#pragma once
 
 #include <vector>
 
@@ -70,9 +69,5 @@ public:
 	void addState(AiState state);
 
 	vector<AiState> mStates;
-
 };
-
-
-#endif // AiStateMachine_h_
 

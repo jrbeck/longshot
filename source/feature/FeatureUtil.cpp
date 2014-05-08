@@ -17,7 +17,6 @@ void FeatureUtil::loadWorldRegion (
 }
 
 
-
 // this asks a Periodics (perhaps indirectly) for info about the terrain height
 // the height_info_t posseses a low, high, avg
 height_info_t FeatureUtil::getHeightInfo (int worldX, int worldZ, int sideX, int sideZ, World &world) {

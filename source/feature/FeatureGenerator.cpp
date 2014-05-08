@@ -180,10 +180,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 }
 
 
-
-
-
-
 void FeatureGenerator::createPyramid (int side, v2di_t cornerIndex, World &world) {
 	// WARNING: relative to 0, 0
 	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
@@ -589,7 +585,7 @@ void FeatureGenerator::createCastle8x8 (v2di_t cornerIndex, World &world) {
 
 
 
-void FeatureGenerator::createHouse (v2di_t cornerIndex, World &world) {
+void FeatureGenerator::createHouse(v2di_t cornerIndex, World &world) {
 	// WARNING: this always corners at 0, 0
 	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
 	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
@@ -649,7 +645,7 @@ void FeatureGenerator::createHouse (v2di_t cornerIndex, World &world) {
 
 
 
-void FeatureGenerator::createBuilding2x2 (v2di_t cornerIndex, World &world) {
+void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
 	// WARNING: this always corners at 0, 0
 	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
 	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
@@ -726,7 +722,7 @@ void FeatureGenerator::createBuilding2x2 (v2di_t cornerIndex, World &world) {
 
 
 
-void FeatureGenerator::createPlain (v2di_t cornerIndex, int sideX, int sideZ, World &world) {
+void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, World &world) {
 	// WARNING: this always corners at 0, 0
 	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
 	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
@@ -859,7 +855,7 @@ void FeatureGenerator::createPlain (v2di_t cornerIndex, int sideX, int sideZ, Wo
 				}
 			}
 
-			world.loadColumn (cornerIndex.x + i, cornerIndex.y + k, columnBuffer);
+//			world.loadColumn(cornerIndex.x + i, cornerIndex.y + k, columnBuffer);
 		}
 	}
 
@@ -880,7 +876,7 @@ void FeatureGenerator::createVillage( int side, v2di_t cornerIndex, World& world
 
 	height_info_t heightInfo = FeatureUtil::getHeightInfo( worldX, worldZ, width, width, world );
 
-	FeatureUtil::loadWorldRegion( cornerIndex, side, world, false );
+//	FeatureUtil::loadWorldRegion( cornerIndex, side, world, false );
 
 	RogueMap rogueMap;
 	rogueMap.resize (side, side);
@@ -910,7 +906,7 @@ void FeatureGenerator::createVillage( int side, v2di_t cornerIndex, World& world
 }
 
 
-void FeatureGenerator::drawPyramid (
+void FeatureGenerator::drawPyramid(
 	v3di_t baseNearPoint,
 	int sideLength,
 	char blockType,
@@ -926,7 +922,7 @@ void FeatureGenerator::drawPyramid (
 	WorldMap &worldMap = *world.getWorldMap();
 
 	for (int step = 0; step < halfSide; step++) {
-		worldMap.fillVolume (baseNearPoint, baseFarPoint, blockType);
+		worldMap.fillVolume(baseNearPoint, baseFarPoint, blockType);
 
 		baseNearPoint.x++;
 		baseNearPoint.y++;

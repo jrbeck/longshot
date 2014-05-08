@@ -62,6 +62,9 @@ v3d_t v3d_project(v3d_t a, v3d_t b);
 v3d_t v3d_interpolate(v3d_t a, v3d_t b, double percent);
 v3d_t v3d_random(double length);
 v3d_t v3d_getLookVector(double facing, double incline);
+v3d_t v3d_rotateX(v3d_t a, double angle);
+v3d_t v3d_rotateY(v3d_t a, double angle);
+v3d_t v3d_rotateZ(v3d_t a, double angle);
 
 // INTEGER (v3di_t) * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 void v3di_print(const char *str, v3di_t a);

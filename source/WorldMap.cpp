@@ -168,6 +168,7 @@ void WorldMap::setBlockType(const v3di_t& position, BYTE type) {
   int column = pickColumn(position);
 
   if (column == -1) {
+    mOverdrawManager.setBlock(position, type);
     return;
   }
 
