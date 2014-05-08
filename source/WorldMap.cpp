@@ -216,7 +216,6 @@ int WorldMap::setBlock(const v3di_t& position, const block_t& block) {
   int column = pickColumn(position);
 
   if (column == -1) {
-    printf("WorldMap::setBlock\n");
     mOverdrawManager.setBlock(position, block.type);
     return -1;
   }
@@ -236,7 +235,6 @@ void WorldMap::clearBlock(const v3di_t& position) {
   int column = pickColumn(position);
 
   if (column == -1) {
-    printf("WorldMap::clearBlock\n");
     mOverdrawManager.setBlock(position, BLOCK_TYPE_AIR);
     return;
   }

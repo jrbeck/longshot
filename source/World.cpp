@@ -313,7 +313,7 @@ int World::loadSurroundingColumns(v3d_t pos) {
 
 
 int World::loadColumn(int xIndex, int zIndex, bool doOutcroppings) {
-  int columnIndex = mWorldMap->getColumnIndexByRegionCoords (xIndex, zIndex);
+  int columnIndex = mWorldMap->getColumnIndexByRegionCoords(xIndex, zIndex);
 
   if (xIndex == mWorldMap->mColumns[columnIndex].mWorldIndex.x &&
     zIndex == mWorldMap->mColumns[columnIndex].mWorldIndex.z) {
@@ -340,8 +340,7 @@ int World::loadColumn(int xIndex, int zIndex, bool doOutcroppings) {
 
     for (int k = 0; k < (WORLD_CHUNK_SIDE + 2); k++) {
       for (int i = 0; i < (WORLD_CHUNK_SIDE + 2); i++) {
-        heightMap[i + (k * (WORLD_CHUNK_SIDE + 2))] =
-          mPeriodics.getTerrainHeight(worldX + i - 1, worldZ + k - 1);
+        heightMap[i + (k * (WORLD_CHUNK_SIDE + 2))] = mPeriodics.getTerrainHeight(worldX + i - 1, worldZ + k - 1);
       }
     }
 
@@ -351,7 +350,7 @@ int World::loadColumn(int xIndex, int zIndex, bool doOutcroppings) {
   // prevent fluids from starting...
   // FIXME: this is a hack to compensate for a crappy
   // fluid sim
-  mWorldMap->removeFromChangedList (columnIndex);
+  mWorldMap->removeFromChangedList(columnIndex);
 
   return numBlocks;
 }
@@ -487,7 +486,7 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
             floorBlockType = block.type;
           }
           if (block.type > BLOCK_TYPE_AIR) {
-            wc.setBlockAtWorldPosition (worldPosition, block);
+            wc.setBlockAtWorldPosition(worldPosition, block);
           }
         }
 
@@ -564,25 +563,19 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
   return 1;
 }
 
-
 void World::applyOverdrawBlocks(WorldColumn &wc) {
-  printf("World::applyOverdrawBlocks() ..... \n");
   vector<OverdrawBlock*> *overdrawBlocks = mWorldMap->mOverdrawManager.getBlocks(wc.mWorldIndex.x, wc.mWorldIndex.z);
   if (overdrawBlocks == NULL) {
     return;
   }
   int size = overdrawBlocks->size();
-  printf("World::applyOverdrawBlocks(): %d\n", size);
   for (int index = 0; index < size; index++) {
     OverdrawBlock *overdrawBlock = (*overdrawBlocks)[index];
-    printf("World::applyOverdrawBlocks(): setting block: %d\n", overdrawBlock->blockType);
 
     wc.setBlockType(v3di_v(overdrawBlock->x, overdrawBlock->y, overdrawBlock->z), overdrawBlock->blockType);
   }
   mWorldMap->mOverdrawManager.removeColumn(wc.mWorldIndex.x, wc.mWorldIndex.z);
 }
-
-
 
 void World::growTree(v3di_t worldPosition, int floorBlockType, int numWaterInColumn) {
 //	if (r_numi (0, 10) >= 5) {

@@ -1,6 +1,5 @@
 #include "OverdrawManager.h"
 
-
 OverdrawManager::OverdrawManager() {
 }
 
@@ -9,83 +8,54 @@ OverdrawManager::~OverdrawManager() {
 }
 
 void OverdrawManager::setBlock(const v3di_t& position, BYTE blockType) {
-  printf("OverdrawManager::setBlock\n");
   v3di_t regionIndex = WorldUtil::getRegionIndex(position);
-  OverdrawColumn *overdrawColumn = getOverdrawColumn(regionIndex.x, regionIndex.z);
-  if (overdrawColumn == NULL) {
-    overdrawColumn = createOverdrawColumn(regionIndex.x, regionIndex.z);
-    mOverdrawColumns.push_back(overdrawColumn);
+  int overdrawColumnIndex = getOverdrawColumn(regionIndex.x, regionIndex.z);
+  if (overdrawColumnIndex == -1) {
+    overdrawColumnIndex = addOverdrawColumn(regionIndex.x, regionIndex.z);
   }
 
-  OverdrawBlock *overdrawBlock = new OverdrawBlock;
+  OverdrawBlock *overdrawBlock = new OverdrawBlock();
   overdrawBlock->x = position.x;
   overdrawBlock->y = position.y;
   overdrawBlock->z = position.z;
   overdrawBlock->blockType = blockType;
 
-  setOverdrawBlock(overdrawColumn, overdrawBlock);
+  setOverdrawBlock(overdrawColumnIndex, overdrawBlock);
 }
 
 vector<OverdrawBlock*> *OverdrawManager::getBlocks(int regionIndexX, int regionIndexZ) {
-  printf("GB\n");
-  OverdrawColumn *overdrawColumn = getOverdrawColumn(regionIndexX, regionIndexZ);
-  if(overdrawColumn == NULL) {
+  int overdrawColumnIndex = getOverdrawColumn(regionIndexX, regionIndexZ);
+  if(overdrawColumnIndex == -1) {
     return NULL;
   }
-  return &overdrawColumn->overdrawBlocks;
+  return &mOverdrawColumns[overdrawColumnIndex]->overdrawBlocks;
 }
 
-void OverdrawManager::clearBlocks(OverdrawColumn* overdrawColumn) {
-  int size = overdrawColumn->overdrawBlocks.size();
-  printf("OverdrawManager::clearBlocks(): %d\n", size);
-  if (size == 0) {
-    return;
-  }
-  for (int index = 0; index < size; index++) {
-    if (overdrawColumn->overdrawBlocks[index] == NULL) {
-      printf("NULL BLOCK: %d\n", index);
+void OverdrawManager::clearBlocks(int overlandColumnIndex) {
+  int size = mOverdrawColumns[overlandColumnIndex]->overdrawBlocks.size();
+  for (int blockIndex = 0; blockIndex < size; blockIndex++) {
+    if (mOverdrawColumns[overlandColumnIndex]->overdrawBlocks[blockIndex] == NULL) {
+      printf("NULL BLOCK: %d\n", blockIndex);
     }
     else {
-      delete overdrawColumn->overdrawBlocks[index];
-      overdrawColumn->overdrawBlocks[index] = NULL;
+      delete  mOverdrawColumns[overlandColumnIndex]->overdrawBlocks[blockIndex];
+      mOverdrawColumns[overlandColumnIndex]->overdrawBlocks[blockIndex] = NULL;
     }
   }
-  overdrawColumn->overdrawBlocks.clear();
+  mOverdrawColumns[overlandColumnIndex]->overdrawBlocks.clear();
 }
 
 void OverdrawManager::removeColumn(int regionIndexX, int regionIndexZ) {
-  printf("RC\n");
-  OverdrawColumn *overdrawColumn = getOverdrawColumn(regionIndexX, regionIndexZ);
-  removeColumn(overdrawColumn);
-}
-
-void OverdrawManager::removeColumn(OverdrawColumn* overdrawColumn) {
-  if (overdrawColumn == NULL) {
-    return;
-  }
-  printf("Q\n");
-  clearBlocks(overdrawColumn);
-  printf("W\n");
-  delete overdrawColumn;
-  printf("E\n");
-  overdrawColumn = NULL;
-  printf("R\n");
-  if(mOverdrawColumns.size() > 1) {
-    printf("T\n");
-    swap(overdrawColumn, mOverdrawColumns[mOverdrawColumns.size() - 1]);
-  }
-  printf("Y\n");
-  mOverdrawColumns.pop_back();
-  printf("P\n");
+  int overdrawColumnIndex = getOverdrawColumn(regionIndexX, regionIndexZ);
+  deleteOverdrawColumn(overdrawColumnIndex);
 }
 
 void OverdrawManager::clear() {
-  printf("C\n");
-  int size = mOverdrawColumns.size();
-  for (int index = 0; index < size; index++) {
+  size_t size = mOverdrawColumns.size();
+  for (size_t index = 0; index < size; index++) {
     // this looks dangerous ... however, each removeColumn() call is deleting the
     // first element, so this will work as long as that is valid
-    removeColumn(mOverdrawColumns[0]);
+    deleteOverdrawColumn(0);
   }
   mOverdrawColumns.clear();
 }
@@ -97,45 +67,62 @@ void OverdrawManager::load(FILE* file) {
 }
 
 // this implementation seems a bit naive ...
-OverdrawColumn* OverdrawManager::getOverdrawColumn(int regionIndexX, int regionIndexZ) {
-  printf("OverdrawManager::getOverdrawColumn(): %d, %d\n", regionIndexX, regionIndexZ);
+int OverdrawManager::getOverdrawColumn(int regionIndexX, int regionIndexZ) {
   int size = mOverdrawColumns.size();
   for (int index = 0; index < size; index++) {
     OverdrawColumn *overdrawColumn = mOverdrawColumns[index];
     if (overdrawColumn->regionIndexX == regionIndexX && overdrawColumn->regionIndexZ == regionIndexZ) {
-      return overdrawColumn;
+      return index;
     }
   }
 
-  return NULL;
+  return -1;
 }
 
-OverdrawColumn* OverdrawManager::createOverdrawColumn(int regionIndexX, int regionIndexZ) {
-  printf("OverdrawManager::createOverdrawColumn: %d\n", mOverdrawColumns.size());
-  OverdrawColumn *overdrawColumn = new OverdrawColumn;
+int OverdrawManager::addOverdrawColumn(int regionIndexX, int regionIndexZ) {
+  OverdrawColumn *overdrawColumn = new OverdrawColumn();
   overdrawColumn->regionIndexX = regionIndexX;
   overdrawColumn->regionIndexZ = regionIndexZ;
-  return overdrawColumn;
+  mOverdrawColumns.push_back(overdrawColumn);
+  printf("addedOverdrawColumn: %d\n", mOverdrawColumns.size());
+  return mOverdrawColumns.size() - 1;
 }
 
-void OverdrawManager::setOverdrawBlock(OverdrawColumn* overdrawColumn, OverdrawBlock *overdrawBlock) {
+void OverdrawManager::deleteOverdrawColumn(int overdrawColumnIndex) {
+  size_t size = mOverdrawColumns.size();
+  if (size == 0 || overdrawColumnIndex >= size) {
+    // cough ... *bullshit*
+    return;
+  }
 
-  printf("OverdrawManager::setOverdrawBlock(): %d\n", overdrawColumn->overdrawBlocks.size());
+  clearBlocks(overdrawColumnIndex);
+  delete mOverdrawColumns[overdrawColumnIndex];
 
-  int size = overdrawColumn->overdrawBlocks.size();
+  if (size == overdrawColumnIndex + 1) {
+    mOverdrawColumns.pop_back();
+  printf("deleted OverdrawColumn: %d\n", mOverdrawColumns.size());
+    return;
+  }
+  swap(mOverdrawColumns[overdrawColumnIndex], mOverdrawColumns[size - 1]);
+  mOverdrawColumns.pop_back();
+  printf("deleted OverdrawColumn: %d\n", mOverdrawColumns.size());
+}
+
+void OverdrawManager::setOverdrawBlock(int overdrawColumnIndex, OverdrawBlock *overdrawBlock) {
+  int size = mOverdrawColumns[overdrawColumnIndex]->overdrawBlocks.size();
 
   for (int index = 0; index < size; index++) {
-    OverdrawBlock *existingOverdrawBlock = overdrawColumn->overdrawBlocks[index];
+    OverdrawBlock *existingOverdrawBlock = mOverdrawColumns[overdrawColumnIndex]->overdrawBlocks[index];
     if (existingOverdrawBlock->x == overdrawBlock->x &&
       existingOverdrawBlock->y == overdrawBlock->y &&
       existingOverdrawBlock->z == overdrawBlock->z)
     {
-      delete overdrawColumn->overdrawBlocks[index];
-      overdrawColumn->overdrawBlocks[index] = overdrawBlock;
+      delete mOverdrawColumns[overdrawColumnIndex]->overdrawBlocks[index];
+      mOverdrawColumns[overdrawColumnIndex]->overdrawBlocks[index] = overdrawBlock;
       return;
     }
   }
 
   // couldn't find a match to overwrite, so add it
-  overdrawColumn->overdrawBlocks.push_back(overdrawBlock);
+  mOverdrawColumns[overdrawColumnIndex]->overdrawBlocks.push_back(overdrawBlock);
 }

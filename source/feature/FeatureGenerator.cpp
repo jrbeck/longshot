@@ -351,7 +351,7 @@ void FeatureGenerator::drillCavern (
 		WorldMap &worldMap = *world.getWorldMap();
 		for (int i = 0; i < 75; i++) {
 //			worldMap.clearSphere (pos, 4.0);
-			worldMap.fillSphere (pos, radius, BLOCK_TYPE_DARK_PURPLE, LIGHT_LEVEL_SOLID);
+			worldMap.fillSphere(pos, radius, BLOCK_TYPE_DARK_PURPLE, LIGHT_LEVEL_SOLID);
 
 			pos = v3d_add(pos, vel);
 
@@ -700,7 +700,7 @@ void FeatureGenerator::createBuilding2x2 (v2di_t cornerIndex, World &world) {
 	b.y = floorHeight + roofHeight - 1;
 	b.z = worldZ + 10 + (WORLD_CHUNK_SIDE * zSide);
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+	worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
 
 	// make the door

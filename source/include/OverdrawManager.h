@@ -49,10 +49,7 @@ public:
 
   void setBlock(const v3di_t& position, BYTE blockType);
   vector<OverdrawBlock*> *getBlocks(int regionIndexX, int regionIndexZ);
-  void clearBlocks(OverdrawColumn* overdrawColumn);
-
   void removeColumn(int regionIndexX, int regionIndexZ);
-  void removeColumn(OverdrawColumn* overdrawColum);
 
   void clear();
 
@@ -60,11 +57,14 @@ public:
   void load(FILE* file);
 
 private:
+//  void removeColumn(OverdrawColumn* overdrawColum);
+  void clearBlocks(int index);
 
-  OverdrawColumn* getOverdrawColumn(int regionIndexX, int regionIndexZ);
-  OverdrawColumn* createOverdrawColumn(int regionIndexX, int regionIndexZ);
+  int getOverdrawColumn(int regionIndexX, int regionIndexZ);
+  int addOverdrawColumn(int regionIndexX, int regionIndexZ);
+  void deleteOverdrawColumn(int overdrawColumnIndex);
 
-  void setOverdrawBlock(OverdrawColumn *overdrawColumn, OverdrawBlock *overdrawBlock);
+  void setOverdrawBlock(int overdrawColumnIndex, OverdrawBlock *overdrawBlock);
 
   vector<OverdrawColumn*> mOverdrawColumns;
   
