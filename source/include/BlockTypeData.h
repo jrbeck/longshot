@@ -7,14 +7,12 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef BlockTypeData_h_
-#define BlockTypeData_h_
+#pragma once
 
 #include <Windows.h>
 #include "GL/glut.h"
 
 #include "v2d.h"
-
 
 
 enum {
@@ -153,8 +151,3 @@ public:
 // this is quite important!
 // oh, and creepy.
 extern BlockTypeDataContainer gBlockData;
-
-
-
-
-#endif BlockTypeData_h_

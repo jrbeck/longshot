@@ -30,6 +30,7 @@ struct BiomeType {
   int blockTypeLiquid;
   int treeScheme;
 
+  v3d_t planetMapColor;
 };
 
 enum {
@@ -38,6 +39,8 @@ enum {
   BIOME_TYPE_SNOW,
   BIOME_TYPE_MARS,
   BIOME_TYPE_METAL,
+  BIOME_TYPE_LIGHT_PURPLE,
+  BIOME_TYPE_GLASS,
   NUM_BIOME_TYPES
 };
 

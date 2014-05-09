@@ -8,32 +8,29 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Inventory_h_
-#define Inventory_h_
+#pragma once
 
 #include <vector>
 
 #include "AssetManager.h"
 
-using namespace std;
-
 
 class Inventory {
 public:
-	Inventory ();
-	~Inventory ();
+	Inventory();
+	~Inventory();
 
-	void clear (void);
+	void clear(void);
 
-	void resizeBackpack (int newSize);
+	void resizeBackpack(int newSize);
 
-	int getNextFreeBackpackSlot (void);
+	int getNextFreeBackpackSlot(void);
 
-	bool swapBackPackItemIntoPrimary (void);
-	bool swapBackPackItemIntoSecondary (void);
+	bool swapBackPackItemIntoPrimary(void);
+	bool swapBackPackItemIntoSecondary(void);
 
-	void nextBackPackItem (void);
-	void previousBackPackItem (void);
+	void nextBackPackItem(void);
+	void previousBackPackItem(void);
 
 	void save(FILE *file);
 	void load(FILE *file);
@@ -42,7 +39,7 @@ public:
 // MEMBERS * * * * * * * * * * * *
 	size_t mCredits;
 
-	vector <size_t> mBackpack;
+	vector<size_t> mBackpack;
 	
 	size_t mPrimaryItem;
 	size_t mSecondaryItem;
@@ -56,6 +53,3 @@ public:
 
 	size_t mSelectedBackpackItem;
 };
-
-
-#endif // Inventory_h_

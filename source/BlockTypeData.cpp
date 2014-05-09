@@ -100,6 +100,7 @@ void BlockTypeDataContainer::loadBlockTypeData (void) {
 
 //	BLOCK_TYPE_GLASS
 	mData[BLOCK_TYPE_GLASS].solidityType = BLOCK_SOLIDITY_TYPE_GLASS;
+	mData[BLOCK_TYPE_GLASS].lightAttenuation = 0;
 
 
 	mData[BLOCK_TYPE_FLOWER].lightAttenuation = 6;

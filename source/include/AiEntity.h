@@ -9,8 +9,7 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-#ifndef AiEntity_h_
-#define AiEntity_h_
+#pragma once
 
 #include <vector>
 
@@ -33,40 +32,41 @@ public:
 
 	void update(
 		double time,
-		WorldMap &worldMap,
-		Physics &physics,
-		vector<AiEntity *> &aiEntities,
-		ItemManager &itemManager);
+		WorldMap& worldMap,
+		Physics& physics,
+		vector<AiEntity*>& aiEntities,
+		ItemManager& itemManager);
 	// this is called only if the entity is a AITYPE_PLAYUH
 	void updatePlayer(Physics &physics);
 
 	void updateState(
 		double time,
-		WorldMap &worldMap,
-		Physics &physics,
-		vector<AiEntity *> &aiEntities,
-		ItemManager &itemManager);
+		WorldMap& worldMap,
+		Physics& physics,
+		vector<AiEntity*>& aiEntities,
+		ItemManager& itemManager);
+
 	bool testCondition(
 		int condition,
 		double time,
-		WorldMap &worldMap,
-		Physics &physics,
-		vector<AiEntity *> &aiEntities,
-		ItemManager &itemManager);
+		WorldMap& worldMap,
+		Physics& physics,
+		vector<AiEntity*>& aiEntities,
+		ItemManager& itemManager);
 
 	void readMail(Physics &physics);
 
 
 	// this is mostly slated to be paramaterized and moved out of here.
 	// good riddance!
-	void updateBalloon(double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities, ItemManager &itemManager);
-	void updateHopper(double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities, ItemManager &itemManager);
-	void updateDummy(double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities);
+	void updateBalloon(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
+	void updateHopper(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
+	void updateDummy(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
 
-	void updateTarget(double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities);
-	void aquireTarget(double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities);
+	void updateTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
+	void aquireTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
 
-	bool useWeapon(double time, Physics &physics, ItemManager &itemManager);
+	bool useWeapon(double time, Physics& physics, ItemManager& itemManager);
 	bool isTargetInRange(int gunType, double distanceToTarget);
 
 // members * * * * * * * * * * * * * * * * *
@@ -108,6 +108,3 @@ public:
 	double mLookIncline;
 	v3d_t mHeadOrientation;
 };
-
-
-#endif // AiEntity_h_

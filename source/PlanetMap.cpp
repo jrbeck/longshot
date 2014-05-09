@@ -180,7 +180,6 @@ void PlanetMap::buildFromPeriodics(int seed) {
       mTerrain->set_value(i, j, height);
 
       int block = mPeriodics->generateBlockAtWorldPosition(worldPosition);
-
       int colorIndex = i + (j * PLANET_MAP_SIDE);
 
       if (height <= WATER_LEVEL) {
@@ -189,47 +188,8 @@ void PlanetMap::buildFromPeriodics(int seed) {
         mColors[colorIndex].z = 0.8;
       }
       else {
-
-        switch(block) {
-        case BLOCK_TYPE_GRASS:
-        case BLOCK_TYPE_STONE_GRASS:
-          mColors[colorIndex].x = 0.1;
-          mColors[colorIndex].y = 0.6;
-          mColors[colorIndex].z = 0.2;
-          break;
-        case BLOCK_TYPE_DIRT:
-          mColors[colorIndex].x = 0.45;
-          mColors[colorIndex].y = 0.27;
-          mColors[colorIndex].z = 0.1;
-          break;
-        case BLOCK_TYPE_SAND:
-          mColors[colorIndex].x = 0.9;
-          mColors[colorIndex].y = 0.8;
-          mColors[colorIndex].z = 0.5;
-          break;
-        case BLOCK_TYPE_STONE:
-          mColors[colorIndex].x = 0.5;
-          mColors[colorIndex].y = 0.5;
-          mColors[colorIndex].z = 0.5;
-          break;
-        case BLOCK_TYPE_STONE_SNOW:
-        case BLOCK_TYPE_DIRT_SNOW:
-          mColors[colorIndex].x = 0.9;
-          mColors[colorIndex].y = 0.9;
-          mColors[colorIndex].z = 0.9;
-          break;
-
-        case BLOCK_TYPE_MED_STONE:
-          mColors[colorIndex].x = 0.65;
-          mColors[colorIndex].y = 0.65;
-          mColors[colorIndex].z = 0.65;
-          break;
-        default:
-          mColors[colorIndex].x = 0.9;
-          mColors[colorIndex].y = 0.0;
-          mColors[colorIndex].z = 0.0;
-          break;
-        }
+        BiomeInfo bi = mPeriodics->getBiomeInfo(worldPosition.x, worldPosition.z);
+        mColors[colorIndex] = v3d_scale(1.0, gBiomeTypes[bi.type].planetMapColor);
       }
     }
   }
@@ -241,73 +201,18 @@ void PlanetMap::buildFromPeriodics(int seed) {
     for (int i = 0; i < PLANET_MAP_SIDE; i++) {
       double height = mTerrain->get_value(i, j);
 
-
-      GLfloat colorMult = 0.7 * ((GLfloat)height + 10.0f) / 20.0;
-//			if (colorMult < 0.2f) {
-        colorMult += 0.3f;
-//			}
+      GLfloat colorMult = 0.8 * ((GLfloat)height + 10.0f) / 20.0;
+      colorMult += 0.3f;
 
       int colorIndex = i + (j * PLANET_MAP_SIDE);
       mColors[colorIndex].x *= colorMult;
       mColors[colorIndex].y *= colorMult;
       mColors[colorIndex].z *= colorMult;
-
     }
   }
-
-
-
-
-  // TESTING!!!!!!!!
-  PseudoRandom prng;
-  prng.setSeed(GetTickCount());
-//  double lookup[BIOME_TYPE_W * BIOME_TYPE_H][3];
-  double lookup[NUM_BIOME_TYPES][3];
-
-  // make some random colors for the biome types
-//  for (int i = 0; i < BIOME_TYPE_W * BIOME_TYPE_H; i++) {
-  for (int i = 0; i < NUM_BIOME_TYPES * 1; i++) {
-    lookup[i][0] = prng.getNextDouble();
-    lookup[i][1] = prng.getNextDouble();
-    lookup[i][2] = prng.getNextDouble();
-  }
-
-  for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
-      worldPosition.x = ((i - halfMapSide) * MAP_MULTIPLIER);
-      worldPosition.z = ((j - halfMapSide) * MAP_MULTIPLIER);
-
-      BiomeInfo bi = mPeriodics->getBiomeInfo(worldPosition.x, worldPosition.z);
-
-      int height = mPeriodics->getTerrainHeight(worldPosition.x, worldPosition.z);
-
-      bool isWater = height <= WATER_LEVEL;
-
-      int colorIndex = i + (j * PLANET_MAP_SIDE);
-
-      if (isWater) {
-        mColors[colorIndex].x = 0.0;
-        mColors[colorIndex].y = 0.0;
-        mColors[colorIndex].z = 0.6;
-      }
-      else {
-      mColors[colorIndex].x = lookup[bi.type][0] * bi.value;
-      mColors[colorIndex].y = lookup[bi.type][1] * bi.value;
-      mColors[colorIndex].z = lookup[bi.type][2] * bi.value;
-        //mColors[colorIndex].x = bi.value;
-        //mColors[colorIndex].y = bi.value;
-        //mColors[colorIndex].z = bi.value;
-      }
-
-    }
-  }
-
 
   printf("PlanetMap::buildFromPeriodics():done\n");
-
 }
-
-
 
 // handle an SDL_Event
 int PlanetMap::handleInput (void) {
@@ -437,7 +342,7 @@ void PlanetMap::handleMouseButtonDown (int button, v2d_t pos) {
 
 
 
-void PlanetMap::handleMouseButtonUp (int button, v2d_t pos) {
+void PlanetMap::handleMouseButtonUp(int button, v2d_t pos) {
   switch (button) {
   case SDL_BUTTON_LEFT:
     mLeftMouseButtonClicked = true;
@@ -488,5 +393,3 @@ void PlanetMap::drawTerrain(void) const {
   glEnd();
   glEnable(GL_TEXTURE_2D);
 }
-
-
