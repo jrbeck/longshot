@@ -58,12 +58,12 @@ public:
 	player_c ();
 	~player_c ();
 
-	int reset(size_t physicsHandle, size_t aiHandle, ItemManager &itemManager);
-	int soft_reset(v3d_t &startPosition, Physics &phys);
-	void setStartPosition(v3d_t &startPosition);
+	int reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager);
+	int soft_reset(v3d_t& startPosition, Physics& phys);
+	void setStartPosition(v3d_t& startPosition);
 	void setPhysicsHandle(size_t handle);
 
-	void godMode(ItemManager &itemManager);
+	void godMode(ItemManager& itemManager);
 
 	// update the camera target
 	void update_target(void);
@@ -83,35 +83,34 @@ public:
 	v3d_t get_pos(void);
 	int set_pos(v3d_t a);
 
-	bool pickUpItem(item_t item, AssetManager &assetManager);
+	bool pickUpItem(item_t item, AssetManager& assetManager);
 
-	void useEquipped(int whichEquip, double time, Physics &phys,
-		AssetManager &assetManager, ItemManager &itemManager);
-	double fireGun(item_t item, double handedness, double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager);
-	double useMeleeWeapon(item_t item, double time, Physics &phys, ItemManager &itemManager);
+	void useEquipped(int whichEquip, double time, Physics &phys, AssetManager &assetManager, ItemManager& itemManager);
+	double fireGun(item_t item, double handedness, double time, Physics& phys, AssetManager& assetManager, ItemManager& itemManager);
+	double useMeleeWeapon(item_t item, double time, Physics& phys, ItemManager& itemManager);
 
-	void useBackpackItem(double time, Physics &phys, AssetManager &assetManager, ItemManager &itemManager);
+	void useBackpackItem(double time, Physics& phys, AssetManager& assetManager, ItemManager& itemManager);
 
 	v2d_t obtainWalkVector(v2d_t walkInput);
 
-	void updateTargetBlock(WorldMap &worldMap);
-	v3di_t *getTargetBlock(int &targetBlockFace);
+	void updateTargetBlock(WorldMap& worldMap);
+	v3di_t* getTargetBlock(int& targetBlockFace);
 
-	void updateHud(ItemManager &itemManager);
+	void updateHud(ItemManager& itemManager);
 	void drawHud(void);
 	void drawWaterOverlay(void);
-	void drawEquipped(ItemManager &itemManager, BitmapModel &model);
-	void drawEquippedGun(double handedness, BitmapModel &model);
+	void drawEquipped(ItemManager& itemManager, BitmapModel& model);
+	void drawEquippedGun(double handedness, BitmapModel& model);
 
-	void updateCharacterSheet(ItemManager &itemManager);
+	void updateCharacterSheet(ItemManager& itemManager);
 
-	bool update(double time, WorldMap &worldMap, Physics &phys, GameInput &gi, AssetManager &assetManager, ItemManager &itemManager);
+	bool update(double time, WorldMap& worldMap, Physics& phys, GameInput& gi, AssetManager& assetManager, ItemManager& itemManager);
 
-	void readPhysicsMessages(Physics &physics, ItemManager &itemManager, AssetManager &assetManager);
+	void readPhysicsMessages(Physics& physics, ItemManager& itemManager, AssetManager& assetManager);
 
 	// HACK
-	void placeLight(LightManager &lightManager, WorldMap &worldMap, GameInput &gi);
-	Inventory *getInventory(void);
+	void placeLight(LightManager& lightManager, WorldMap& worldMap, GameInput& gi);
+	Inventory* getInventory(void);
 
 	gl_camera_c cam;
 
@@ -169,8 +168,6 @@ private:
 	double mIncline;		// the angle on the vertical plane off the x-z plane intersection...
 	double mInclineMin;		// upper constraint for incline angle
 	double mInclineMax;		// lower constraint for incline angle
-
-	bool mShowWorldChunkBoxes;
 
 	bool mPlacedBlock;
 

@@ -222,7 +222,7 @@ void AiView::drawBody(
 	WorldMap &worldMap,
 	const LightManager &lightManager)
 {
-	phys_entity_t &pe = *aiEntity.mPhysicsEntity;
+	PhysicsEntity &pe = *aiEntity.mPhysicsEntity;
 
 	// FIXME: this isn't all necessary...
 	// it's leftover from the first lighting style

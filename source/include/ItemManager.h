@@ -8,10 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef ItemManager_h_
-#define ItemManager_h_
-
-#include <assert.h>
+#pragma once
 
 #include "Physics.h"
 #include "MathUtil.h"
@@ -103,9 +100,6 @@ struct item_t {
 	int quantity;
 
 	double mass;
-
-	int equipLocation;
-
 };
 
 
@@ -170,9 +164,9 @@ public:
 
 private:
 	// copy constructor guard
-	ItemManager( const ItemManager& itemManager ) { }
+	ItemManager(const ItemManager& itemManager) { }
 	// assignment operator guard
-	ItemManager& operator=( const ItemManager& itemManager ) { return *this; }
+	ItemManager& operator=(const ItemManager& itemManager) { return *this; }
 
 
 	size_t mLastHandle;
@@ -182,8 +176,3 @@ private:
 
 	GLuint mModelDisplayListHandles[NUM_MELEETYPES];
 };
-
-
-
-
-#endif // ItemManager_h_

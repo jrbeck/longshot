@@ -80,8 +80,8 @@ public:
 	size_t mPhysicsHandle;
 	size_t mTargetPhysicsHandle;
 
-	phys_entity_t *mPhysicsEntity;
-	phys_entity_t *mTargetPhysicsEntity;
+	PhysicsEntity *mPhysicsEntity;
+	PhysicsEntity *mTargetPhysicsEntity;
 
 	float mMaxHealth;
 	float mCurrentHealth;

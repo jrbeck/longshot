@@ -310,7 +310,7 @@ void AiEntity::updateBalloon(
       physics.add_force(mPhysicsHandle, v3d_v(0.0, 8000.0, 0.0));
     }
 
-    phys_entity_t* targetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);
+    PhysicsEntity* targetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);
     if (targetPhysicsEntity == NULL) {
       printf("AiEntity::updateBalloon() - target is NULL\n");
       return;
@@ -419,7 +419,7 @@ void AiEntity::updateHopper(
     physics.add_force(mPhysicsHandle, v3d_v (0.0, 4200.0, 0.0));
   }
   else if (physics.getIndexFromHandle(mTargetPhysicsHandle) >= 0) {
-    phys_entity_t *targetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);
+    PhysicsEntity *targetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);
     v3d_t targetPosition = targetPhysicsEntity->boundingBox.getCenterPosition();
     v3d_t vecToTarget = v3d_sub(targetPosition, mWorldPosition);
 
@@ -574,7 +574,7 @@ void AiEntity::aquireTarget(double time, WorldMap &worldMap, Physics &physics, v
 
   // perhaps a stroll
   if (mTargetPhysicsHandle == 0 && r_numi(0, 5) == 2) {
-    phys_entity_t *playerPhysicsEntity = physics.getEntityByHandle(physics.getPlayerHandle());
+    PhysicsEntity *playerPhysicsEntity = physics.getEntityByHandle(physics.getPlayerHandle());
     v3d_t baitPosition;
     if(playerPhysicsEntity != NULL) {
       // hehe let's sneak up on the player!

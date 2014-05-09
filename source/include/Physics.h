@@ -8,8 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Physics_h_
-#define Physics_h_
+#pragma once
 
 #include "v3d.h"
 
@@ -43,15 +42,7 @@
 // typedefs * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-typedef struct {
-	v3d_t vector;
-
-	double time_start;
-	double time_end;
-} phys_force_t;
-
-
-typedef struct {
+struct entity_type_info_t {
 	double massLow;
 	double massHigh;
 
@@ -68,10 +59,10 @@ typedef struct {
 	double dimensionZHigh;
 
 	GLfloat color[4];
-} entity_type_info_t;
+};
 
 
-typedef struct {
+struct PhysicsEntity {
 	size_t handle;
 
 	GLfloat baseColor[4];
@@ -112,8 +103,7 @@ typedef struct {
 	double worldViscosity;
 
 	double explosionForce;
-
-} phys_entity_t;
+};
 
 
 
@@ -130,9 +120,9 @@ enum {
 };
 
 
-#define MAILBOX_PHYSICS			(-1)
+#define MAILBOX_PHYSICS			  (-1)
 #define MAILBOX_ITEMMANAGER		(-2)
-#define MAILBOX_AIMANAGER		(-3)
+#define MAILBOX_AIMANAGER		  (-3)
 
 
 typedef struct {
@@ -160,11 +150,11 @@ public:
 	void reset();
 	void clear();
 
-	vector<phys_entity_t>* getEntityVector();
+	vector<PhysicsEntity*>* getEntityVector();
 
 	void loadInactiveList();
 
-	int getIndexFromHandle( size_t handle ) const;
+	int getIndexFromHandle(size_t handle) const;
 
 	void togglePause();
 	bool isPaused() const;
@@ -173,84 +163,84 @@ public:
 	void addQueuedEntities();
 	void manageEntitiesList();
 
-	size_t createEntity( int type, const v3d_t& position, double time, bool center );
-	size_t createEntity( int type, const v3d_t& position, const v3d_t& initialForce, double time, bool center );
+	size_t createEntity(int type, const v3d_t& position, double time, bool center);
+	size_t createEntity(int type, const v3d_t& position, const v3d_t& initialForce, double time, bool center);
 
-	size_t createAiEntity( int aiType, const v3d_t& position, double time );
+	size_t createAiEntity(int aiType, const v3d_t& position, double time);
 
-	void removeEntity( size_t handle );
+	void removeEntity(size_t handle);
 
-	void setMass( size_t handle, double mass );
-	void setHealth( size_t handle, double health );
-	void setDimensions( size_t handle, const v3d_t& dimensions );
+	void setMass(size_t handle, double mass);
+	void setHealth(size_t handle, double health);
+	void setDimensions(size_t handle, const v3d_t& dimensions);
 
-	phys_entity_t* getEntityByHandle( size_t handle );
-	void setEntity( const phys_entity_t& entity );
+	PhysicsEntity* getEntityByHandle(size_t handle);
+	void setEntity(PhysicsEntity* entity);
 
-	v3d_t getCenter( size_t handle ) const;
-	v3d_t getNearCorner( size_t handle ) const;
-	v3d_t getFarCorner( size_t handle ) const;
+	v3d_t getCenter(size_t handle) const;
+	v3d_t getNearCorner(size_t handle) const;
+	v3d_t getFarCorner(size_t handle) const;
 
-	v3d_t getVelocity( size_t handle ) const;
-	void setVelocity( size_t handle, const v3d_t& velocity );
+	v3d_t getVelocity(size_t handle) const;
+	void setVelocity(size_t handle, const v3d_t& velocity);
 
-	void set_pos( size_t handle, const v3d_t& pos );
+	void set_pos(size_t handle, const v3d_t& pos);
 
-	void setOwner( size_t handle, size_t owner );
-	void setItemHandleAndType( size_t handle, size_t itemHandle, int itemType );
+	void setOwner(size_t handle, size_t owner);
+	void setItemHandleAndType(size_t handle, size_t itemHandle, int itemType);
 
 	// * * * * * * * * UPDATE
-	int update( double time, WorldMap& worldMap, AssetManager& assetManager );
-	void updateEntity( size_t index, double time, WorldMap& worldMap );
-	void expireEntity( size_t index, double time, WorldMap& worldMap );
+	int update(double time, WorldMap& worldMap, AssetManager& assetManager);
+	void updateEntity(size_t index, double time, WorldMap& worldMap);
+	void expireEntity(size_t index, double time, WorldMap& worldMap);
 
-	void integrate_euler( size_t index, double time, WorldMap& worldMap );
-	void displaceObject( size_t index, WorldMap& worldMap );
-	v3d_t calculateAcceleration( size_t handle );
+	void integrate_euler(size_t index, double time, WorldMap& worldMap);
+	void displaceObject(size_t index, WorldMap& worldMap);
+	v3d_t calculateAcceleration(size_t handle);
 
-	bool updateOnGroundStatus( size_t index, WorldMap& worldMap );
+	bool updateOnGroundStatus(size_t index, WorldMap& worldMap);
 
 	double getLastUpdateTime() const;
 
-	bool sweepObjects( size_t indexA, size_t indexB, double& t0, double& t1, int& axis ) const;
-	int clipDisplacementAgainstOtherObjects( size_t index, WorldMap& worldMap );
+	bool sweepObjects(size_t indexA, size_t indexB, double& t0, double& t1, int& axis) const;
+	int clipDisplacementAgainstOtherObjects(size_t index, WorldMap& worldMap);
 
-	void add_force( size_t handle, const v3d_t& force );
+	void add_force(size_t handle, const v3d_t& force);
 
-	void clip_displacement_against_world( WorldMap& worldMap, size_t index );
-	bool isIntersectingPlant( size_t index, const WorldMap& worldMap ) const;
+	void clip_displacement_against_world(WorldMap& worldMap, size_t index);
+	bool isIntersectingPlant(size_t index, const WorldMap& worldMap) const;
 
-	bool isIndexOnGround( size_t index ) const;
-	bool isHandleOnGround( size_t handle ) const;
+	bool isIndexOnGround(size_t index) const;
+	bool isHandleOnGround(size_t handle) const;
 
-	void grenadeExplosion( size_t index, double time, WorldMap& worldMap );
-	void spawnExplosion( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap );
-	void spawnMeatExplosion( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap );
-	void plasmaBombExplode( const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap );
-	v3d_t getRadialForce( const v3d_t& pos, const v3d_t& center, double force, double radius ) const;
+	void grenadeExplosion(size_t index, double time, WorldMap& worldMap);
+	void spawnExplosion(const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap);
+	void spawnMeatExplosion(const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap);
+	void plasmaBombExplode(const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap);
+	v3d_t getRadialForce(const v3d_t& pos, const v3d_t& center, double force, double radius) const;
 
-	int addSoundEvent( int type, const v3d_t& position );
-	void playSoundEvents( AssetManager& assetManager );
+	int addSoundEvent(int type, const v3d_t& position);
+	void playSoundEvents(AssetManager& assetManager);
 
 	size_t getPlayerHandle() const;
 
 	// is this stuff for real?
 	void readMail();
-	void sendMessage( const phys_message_t& message );
-	int getNextMessage( int recipient, phys_message_t* message );
-	void clearMailBox( int recipient );
+	void sendMessage(const phys_message_t& message);
+	int getNextMessage(int recipient, phys_message_t* message);
+	void clearMailBox(int recipient);
 
 	vector<size_t> getAllItemHandles() const;
 
 private:
 	// copy constructor guard
-	Physics( const Physics &physics ) { }
+	Physics(const Physics& physics) { }
 	// assignment operator guard
-	Physics & operator=( const Physics &physics ) { return *this; }
+	Physics& operator=(const Physics& physics) { return *this; }
 
 
 	entity_type_info_t mEntityTypeInfo[NUM_OBJTYPES];
-	vector<phys_entity_t> obj;
+	vector<PhysicsEntity*> obj;
 	size_t mLastEntityHandle;
 
 	size_t mPlayerHandle;
@@ -264,7 +254,7 @@ private:
 	double mGravity;
 	double mFriction;
 
-	vector <phys_message_t> mMessages;
+	vector<phys_message_t> mMessages;
 
 	// FIXME: hacks
 
@@ -278,7 +268,3 @@ private:
 
 	bool mGotPickupMessage;
 };
-
-
-
-#endif // Physics_h_

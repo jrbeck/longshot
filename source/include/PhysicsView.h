@@ -40,15 +40,15 @@ public:
 	void setViewPosition(v3d_t pos);
 
 	// some things are time based, this allows for that
-	void update(vector<phys_entity_t> *physicsEntities, double time);
-	void setEntityColor (phys_entity_t &entity, double time);
+	void update(vector<PhysicsEntity*>* physicsEntities, double time);
+	void setEntityColor (PhysicsEntity &entity, double time);
 
-	void drawSolidEntities (vector<phys_entity_t> *physicsEntities, WorldMap &worldMap, AssetManager &assetManager);
-	void drawTransparentEntities (vector<phys_entity_t> *physicsEntities, AssetManager &assetManager, bool inWater);
+	void drawSolidEntities (vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager& assetManager);
+	void drawTransparentEntities (vector<PhysicsEntity*>* physicsEntities, AssetManager& assetManager, bool inWater);
 
-	void drawEntity (const phys_entity_t &entity);
-	void drawTextured (const phys_entity_t &entity, WorldMap &worldMap, AssetManager &assetManager);
-	void drawLitBox (v3d_t nearCorner, v3d_t farCorner, WorldMap &worldMap, AssetManager &assetManager);
+	void drawEntity (const PhysicsEntity& entity);
+	void drawTextured (const PhysicsEntity& entity, WorldMap& worldMap, AssetManager& assetManager);
+	void drawLitBox (v3d_t nearCorner, v3d_t farCorner, WorldMap& worldMap, AssetManager& assetManager);
 	void drawBillBoard(v3d_t pos);
 
 private:

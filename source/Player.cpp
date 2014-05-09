@@ -8,8 +8,6 @@
 player_c::player_c() {
   mInventory.resizeBackpack(DEFAULT_BACKPACK_SIZE);
 
-  mShowWorldChunkBoxes = false;
-
   // reset the player
 //	reset (-1);
 }
@@ -765,16 +763,9 @@ bool player_c::update(
   mLastUpdateTime = time;
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
-  phys_entity_t *physicsEntity = phys.getEntityByHandle(mPhysicsHandle);
+  PhysicsEntity *physicsEntity = phys.getEntityByHandle(mPhysicsHandle);
   // get position from physics
   mPos = phys.getNearCorner (mPhysicsHandle);
-
-  // weird place for this
-  if (gi.isToggleWorldChunkBoxes()) {
-    mShowWorldChunkBoxes = !mShowWorldChunkBoxes;
-    // FIXME: this is disabled!
-//		worldMap.setShowWorldChunkBoxes (mShowWorldChunkBoxes);
-  }
 
   // FIXME: this isn't quite right, perhaps the near clip plane needs to be compensated
   // for (vertically) to head pos

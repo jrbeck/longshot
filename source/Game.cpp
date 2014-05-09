@@ -6,7 +6,7 @@
 
 
 
-game_c::game_c (void) :
+game_c::game_c(void) :
 	mGalaxy(NULL),
 	mLocation(NULL),
 	mAiView(NULL),
@@ -15,16 +15,16 @@ game_c::game_c (void) :
 	mMenu(NULL),
 	mMerchantView(NULL)
 {
-	printf ("game_c constructor ----------------\n");
+	printf("game_c constructor ----------------\n");
 	mLastUpdateTime = 0.0;
 
-	loadAssets ();
-	printf ("\n%6d: assets loaded\n", SDL_GetTicks ());
+	loadAssets();
+	printf ("\n%6d: assets loaded\n", SDL_GetTicks());
 }
 
 
 
-game_c::~game_c (void) {
+game_c::~game_c(void) {
 	if (mGalaxy != NULL) {
 		delete mGalaxy;
 	}
@@ -49,16 +49,16 @@ game_c::~game_c (void) {
 
 
 
-void game_c::loadAssets (void) {
-	mAssetManager.loadAssets ();
-	mItemManager.loadAssets ();
+void game_c::loadAssets(void) {
+	mAssetManager.loadAssets();
+	mItemManager.loadAssets();
 
 }
 
 
-void game_c::freeAssets (void) {
-	mAssetManager.freeAssets ();
-	mItemManager.freeAssets ();
+void game_c::freeAssets(void) {
+	mAssetManager.freeAssets();
+	mItemManager.freeAssets();
 }
 
 
@@ -75,15 +75,11 @@ void game_c::loadPlanetMenu(void) {
 	GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.5f };
 	v2d_t fontSize = { 0.015f, 0.03f };
 
-	mMenu->addButton (v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
-	mMenu->addButton (v2d_v (0.80, 0.3), v2d_v (0.2, 0.1), fontSize, "quit to menu",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
-
+	mMenu->addButton (v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
+	mMenu->addButton (v2d_v (0.80, 0.3), v2d_v (0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
 	
 	// TEMP: these are just for testing
-	mMenu->addButton (v2d_v (0.0, 0.15), v2d_v (0.2, 0.1), fontSize, "ship",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_SHIP, color, bgColor);
+	mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "ship", TEXT_JUSTIFICATION_CENTER, GAMEMENU_SHIP, color, bgColor);
 }
 
 
@@ -99,11 +95,8 @@ void game_c::loadShipMenu(void) {
 	GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.5f };
 	v2d_t fontSize = { 0.015f, 0.03f };
 
-	mMenu->addButton (v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
-	mMenu->addButton (v2d_v (0.80, 0.3), v2d_v (0.2, 0.1), fontSize, "quit to menu",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
-
+	mMenu->addButton(v2d_v(0.80, 0.15), v2d_v(0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
+	mMenu->addButton(v2d_v(0.80, 0.3), v2d_v(0.2, 0.1), fontSize, "quit to menu",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
 
 	if (mCurrentPlanet != NULL) {
 		sprintf(mPlanetNameString, "orbiting planet: %d", mCurrentPlanet->mHandle);
@@ -111,73 +104,55 @@ void game_c::loadShipMenu(void) {
 	else {
 		sprintf(mPlanetNameString, "orbiting planet: NULL");
 	}
-	mMenu->addText(v2d_v (0.35, 0.05), v2d_v (0.3, 0.1), fontSize, mPlanetNameString,
-		TEXT_JUSTIFICATION_CENTER, color, bgColor);
-
-	
+	mMenu->addText(v2d_v(0.35, 0.05), v2d_v(0.3, 0.1), fontSize, mPlanetNameString,	TEXT_JUSTIFICATION_CENTER, color, bgColor);
 
 	
 	// TEMP: these are just for testing
-	mMenu->addButton (v2d_v (0.0, 0.15), v2d_v (0.2, 0.1), fontSize, "planet map",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_PLANET_MAP, color, bgColor);
-	mMenu->addButton (v2d_v (0.0, 0.30), v2d_v (0.2, 0.1), fontSize, "galaxy map",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_GALAXY_MAP, color, bgColor);
-
-	mMenu->addButton (v2d_v (0.0, 0.45), v2d_v (0.2, 0.1), fontSize, "merchant",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_MERCHANT, color, bgColor);
-
-	mMenu->addButton (v2d_v (0.0, 0.60), v2d_v (0.2, 0.1), fontSize, "dungeon map",
-		TEXT_JUSTIFICATION_CENTER, GAMEMENU_DUNGEON_MAP, color, bgColor);
-
-
-	
+	mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "planet map",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_PLANET_MAP, color, bgColor);
+	mMenu->addButton (v2d_v(0.0, 0.30), v2d_v(0.2, 0.1), fontSize, "galaxy map", TEXT_JUSTIFICATION_CENTER, GAMEMENU_GALAXY_MAP, color, bgColor);
+	mMenu->addButton (v2d_v(0.0, 0.45), v2d_v(0.2, 0.1), fontSize, "merchant", TEXT_JUSTIFICATION_CENTER, GAMEMENU_MERCHANT, color, bgColor);
+	mMenu->addButton (v2d_v(0.0, 0.60), v2d_v(0.2, 0.1), fontSize, "dungeon map",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_DUNGEON_MAP, color, bgColor);
 }
-
 
 
 void game_c::setup_opengl(void) {
 	glViewport(0, 0, SCREEN_W, SCREEN_H);
 
-	glEnable (GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 //	glEnable (GL_BLEND);
-	glShadeModel (GL_SMOOTH);
-	glEnable (GL_DEPTH_TEST);
-	glClearDepth (1.0f);
-	glDepthFunc (GL_LEQUAL);
-	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable (GL_CULL_FACE);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0f);
+	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-
 //	glColorMaterial (GL_FRONT_AND_BACK, GL_EMISSION);
-	glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 //	glEnable (GL_COLOR_MATERIAL);
 
 	// FOG
-	glFogi (GL_FOG_MODE, GL_LINEAR);					// Fog Mode
+	glFogi(GL_FOG_MODE, GL_LINEAR);					// Fog Mode
 //	glFogfv (GL_FOG_COLOR, color[skyColor]);			// Set Fog Color
-	glFogf (GL_FOG_DENSITY, 0.05f);						// How Dense Will The Fog Be
-	glHint (GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
-	glFogf (GL_FOG_START, 100.0f);						// Fog Start Depth
-	glFogf (GL_FOG_END, 200.0f);						// Fog End Depth
-	glEnable (GL_FOG);									// Enables GL_FOG
+	glFogf(GL_FOG_DENSITY, 0.05f);						// How Dense Will The Fog Be
+	glHint(GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
+	glFogf(GL_FOG_START, 100.0f);						// Fog Start Depth
+	glFogf(GL_FOG_END, 200.0f);						// Fog End Depth
+	glEnable(GL_FOG);									// Enables GL_FOG
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	SDL_GL_SwapBuffers();
 
-
-
-	// go ahead and clear the buffer
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	SDL_GL_SwapBuffers ();
-
-	printf ("\n%6d: opengl_setup done ----------------\n", SDL_GetTicks ());
+	printf("\n%6d: opengl_setup done ----------------\n", SDL_GetTicks());
 }
 
 
 // it is here where the magic begins
 int game_c::enter_game_mode(bool createNewWorld) {
-	printf ("\n%6d: entered GAME mode ----------------\n", SDL_GetTicks ());
+	printf ("\n%6d: entered GAME mode ----------------\n", SDL_GetTicks());
 
 	mGalaxy = new Galaxy();
 
@@ -197,15 +172,15 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
 
 	// grab the cursor
-	SDL_WM_GrabInput (SDL_GRAB_ON);
-	SDL_ShowCursor (0);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_ShowCursor(0);
 
 	// set up the opengl situation
-	setup_opengl ();
+	setup_opengl();
 
 	// initialize the sound
-	mAssetManager.mSoundSystem.initialize ();
-	mAssetManager.mSoundSystem.loadSound ("cow");
+	mAssetManager.mSoundSystem.initialize();
+	mAssetManager.mSoundSystem.loadSound("cow");
 //	mAssetManager.mSoundSystem.playSoundByHandle (SOUND_AMBIENT, 64);
 
 	// the loop
@@ -228,26 +203,26 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
 	mAssetManager.mSoundSystem.stopAllSounds();
 
-	printf ("%6d: exiting GAME mode ----------------\n\n", SDL_GetTicks ());
-	printf ("world seed: %d\n", mWorldSeed);
+	printf("%6d: exiting GAME mode ----------------\n\n", SDL_GetTicks());
+	printf("world seed: %d\n", mWorldSeed);
 
 	return 0;
 }
 
 
-void game_c::initializePlanet(bool resetPlayer, Planet *planet, v3d_t *startPos, bool createSetPieces) {
+void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces) {
 	FILE *file = NULL;
 	mCurrentPlanet = planet;
 	v3d_t playerStartPosition;
 
 	// this is just a generic planet
 	if (planet == NULL) {
-		mWorldSeed = SDL_GetTicks ();
-//		seed = 4450; // major bug: when MAX_CRITTERS_HACK == 15, AiEntity::updateBalloon(),
+		mWorldSeed = SDL_GetTicks();
+//		mWorldSeed = 4450; // major bug: when MAX_CRITTERS_HACK == 15, AiEntity::updateBalloon(),
 //						if allowed to modify mPhysicsEntity->force.y, game slows to ~zero FPS.
 //						only observed once...
 
-		printf ("world seed: %d\n", mWorldSeed);
+		printf("world seed: %d\n", mWorldSeed);
 	}
 	else {
 		// try to open the file for this planet
@@ -330,7 +305,7 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
 		sunColor.b = LIGHT_LEVEL_MAX;
 	}
 	else {
-		GLfloat *starColor = mGalaxy->getStarSystemByHandle(mCurrentPlanet->mHandle)->mStarColor;
+		GLfloat* starColor = mGalaxy->getStarSystemByHandle(mCurrentPlanet->mHandle)->mStarColor;
 		sunColor.r = (starColor[0] + 0.5f) * LIGHT_LEVEL_MAX;
 		sunColor.g = (starColor[1] + 0.5f) * LIGHT_LEVEL_MAX;
 		sunColor.b = (starColor[2] + 0.5f) * LIGHT_LEVEL_MAX;
@@ -391,7 +366,7 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
 		mAiManager.setMaxCritters(0);
 	}
 	else {
-		mPlayer.set_draw_distance(r_num(50.0, 500.0));
+		mPlayer.set_draw_distance(r_num(150.0, 500.0));
 		mAiManager.setMaxCritters(10);
 	}
 
@@ -419,21 +394,21 @@ void game_c::gameLoop(void) {
 	// the main loop
 	while (quit == 0) {
 		// advance the state of the game model
-		escapePressed = update ();
+		escapePressed = update();
 
 		// draw after updates are all completed
-		draw (mLastUpdateTime);
+		draw(mLastUpdateTime);
 
 		// take care of the input/menu
 		if (mGameState == GAMESTATE_PLAY) {
-			mGameInput.update ();
+			mGameInput.update();
 
 			if (escapePressed) {
 				quit = 1;
 			}
 		}
 		else if (mGameState == GAMESTATE_MENU) {
-			int menuChoice = mMenu->menu_choice (false);
+			int menuChoice = mMenu->menu_choice(false);
 			if (escapePressed) {
 				printf("escape\n");
 				menuChoice = GAMEMENU_BACKTOGAME;
@@ -451,7 +426,7 @@ void game_c::gameLoop(void) {
 		// player hit 'esc' in play mode, switch to menu
 		if (quit == 1) {
 			mGameState = GAMESTATE_MENU;
-			SDL_WM_GrabInput (SDL_GRAB_OFF);
+			SDL_WM_GrabInput(SDL_GRAB_OFF);
 			SDL_ShowCursor(1);
 			quit = 0;
 		}
@@ -459,7 +434,7 @@ void game_c::gameLoop(void) {
 		// update the world
 		// FIXME: this should be done in update ()
 		// being done here ties it to the framerate
-		mLocation->update(mPhysics.getCenter (mPlayerPhysicsHandle));
+		mLocation->update(mPhysics.getCenter(mPlayerPhysicsHandle));
 
 		// HACK * * * * * * *
 		mPlayer.placeLight(*mLocation->getLightManager(), *mWorldMap, mGameInput);
@@ -472,19 +447,19 @@ void game_c::gameLoop(void) {
 
 
 		// do some frames per second calculating
-		unsigned int delta_t = SDL_GetTicks () - ticks;
+		unsigned int delta_t = SDL_GetTicks() - ticks;
 		frame++;
 
 		if (delta_t >= 5000 && OUTPUT_FRAME_STATS) {
-			printf ("FPS: %f, total frames: %d\n", (double)frame / ((double)delta_t / 1000.0), frame);
-			printf ("avg frame: %10.3fms\n", (double)delta_t / (double)frame);
+			printf("FPS: %f, total frames: %d\n", (double)frame / ((double)delta_t / 1000.0), frame);
+			printf("avg frame: %10.3fms\n", (double)delta_t / (double)frame);
 			frame = 0;
 			blocks_drawn = 0;
 			ticks = SDL_GetTicks ();
 
-			printf ("num phys: %d\n", mNumPhysicsObjects);
-			printf ("num ai: %d\n", mNumAiObjects);
-			printf ("num items: %d\n\n", mNumItems);
+			printf("num phys: %d\n", mNumPhysicsObjects);
+			printf("num ai: %d\n", mNumAiObjects);
+			printf("num items: %d\n\n", mNumItems);
 
 		}
 
@@ -533,7 +508,7 @@ int game_c::handleMenuChoice(int menuChoice) {
 			loadShipMenu();
 
 			// change our orbit location
-			static_cast<StarShip *>(mLocation)->mOrbitSky->setOrbit(*mGalaxy, mCurrentPlanet->mHandle);
+			static_cast<StarShip*>(mLocation)->mOrbitSky->setOrbit(*mGalaxy, mCurrentPlanet->mHandle);
 		}
 		delete galaxyMap;
 
@@ -576,31 +551,30 @@ int game_c::handleMenuChoice(int menuChoice) {
 	}
 
 	mGameState = GAMESTATE_PLAY;
-	SDL_WM_GrabInput (SDL_GRAB_ON);
-	SDL_ShowCursor (0);
+	SDL_WM_GrabInput(SDL_GRAB_ON);
+	SDL_ShowCursor(0);
 
 	// FIXME: do something to make the GI->elevation and facing delta = 0
 	// i don't think this works
 	SDL_Event sdlEvent;
-	SDL_PollEvent (&sdlEvent);
+	SDL_PollEvent(&sdlEvent);
 
 	return 0;
 }
 
 
 // update the game model
-bool game_c::update (void) {
-	double cur_time = (static_cast<double>(SDL_GetTicks ()) / 1000.0);
+bool game_c::update(void) {
+	double cur_time = (static_cast<double>(SDL_GetTicks()) / 1000.0);
 	bool escapePressed = false;
 
 	while (mLastUpdateTime < cur_time) {
 
 		// update the physics objects
-		mNumPhysicsObjects = mPhysics.update (mLastUpdateTime, *mWorldMap, mAssetManager);
+		mNumPhysicsObjects = mPhysics.update(mLastUpdateTime, *mWorldMap, mAssetManager);
 
 		// apply the player physics/update with input
-		escapePressed = mPlayer.update (mLastUpdateTime, *mWorldMap,
-			mPhysics, mGameInput, mAssetManager, mItemManager) || escapePressed;
+		escapePressed = mPlayer.update(mLastUpdateTime, *mWorldMap, mPhysics, mGameInput, mAssetManager, mItemManager) || escapePressed;
 		// FIXME: this is done like this so that the player
 		// can catch an escape press (i.e. to get out of the
 		// character sheet). this should be done differently
@@ -608,11 +582,10 @@ bool game_c::update (void) {
 			return escapePressed;
 		}
 
-		mAiManager.setPlayerFacingAndIncline (mPlayer.getFacingAndIncline());
+		mAiManager.setPlayerFacingAndIncline(mPlayer.getFacingAndIncline());
 
-		mNumAiObjects = mAiManager.update (mLastUpdateTime, *mWorldMap, mPhysics, mItemManager);
-
-		mNumItems = mItemManager.update (mPhysics);
+		mNumAiObjects = mAiManager.update(mLastUpdateTime, *mWorldMap, mPhysics, mItemManager);
+		mNumItems = mItemManager.update(mPhysics);
 
 		mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
 	}
@@ -627,12 +600,12 @@ bool game_c::update (void) {
 
 
 // draw the game world
-int game_c::draw (double &time) {
+int game_c::draw(double &time) {
 	// clear the buffer before drawing to it
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// get the camera from the player's perspective
-	gl_camera_c cam = mPlayer.gl_cam_setup ();
+	gl_camera_c cam = mPlayer.gl_cam_setup();
 
 	// we need this for the billboard sprites
 	mPhysicsView->setViewPosition(cam.getPosition());
@@ -654,7 +627,7 @@ int game_c::draw (double &time) {
 	mAiView->draw(*mWorldMap, mItemManager, *mLocation->getLightManager());
 
 	// draw the transparent physics objs
-	bool playerHeadInWater = mPlayer.isHeadInWater ();
+	bool playerHeadInWater = mPlayer.isHeadInWater();
 	mPhysicsView->drawTransparentEntities(mPhysics.getEntityVector(), mAssetManager, !playerHeadInWater);
 
 	// draw the liquid/translucent blocks of the WorldMap
@@ -673,7 +646,7 @@ int game_c::draw (double &time) {
 		mMerchantView->draw();
 	}
 
-	SDL_GL_SwapBuffers ();
+	SDL_GL_SwapBuffers();
 
 	// don't wanna just leave that sitting there
 //	glFlush ();
@@ -683,7 +656,7 @@ int game_c::draw (double &time) {
 
 
 
-void game_c::drawPlayerTargetBlock (void) {
+void game_c::drawPlayerTargetBlock(void) {
 	int targetFace;
 
 	v3di_t *playerTarg = mPlayer.getTargetBlock(targetFace);
@@ -758,33 +731,29 @@ void game_c::drawPlayerTargetBlock (void) {
 
 
 // WARNING: Windows specific
-void game_c::deleteAllFilesInFolder (LPWSTR folderPath) {
+void game_c::deleteAllFilesInFolder(LPWSTR folderPath) {
 	WIN32_FIND_DATA info;
 	HANDLE hp;
 
 	wchar_t findPath[260];
-
-	wsprintf (findPath, TEXT ("%s\\*.*"), folderPath);
-
-	hp = FindFirstFile (findPath, &info);
-
+	wsprintf(findPath, TEXT ("%s\\*.*"), folderPath);
+	hp = FindFirstFile(findPath, &info);
 	wchar_t fullName[260];
-
 	int numFilesDeleted = 0;
 
 	do {
-		wsprintf (fullName, TEXT ("%s\\%s"), folderPath, info.cFileName);
+		wsprintf(fullName, TEXT ("%s\\%s"), folderPath, info.cFileName);
 
 		if (!(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 			numFilesDeleted++;
 //			wprintf (TEXT ("deleting: %s\n"), fullName);
-			DeleteFile (fullName);
+			DeleteFile(fullName);
 		}
-	} while (FindNextFile (hp, &info));
+	} while (FindNextFile(hp, &info));
 
-	printf ("deleted: %d files\n", numFilesDeleted);
+	printf("deleted: %d files\n", numFilesDeleted);
 
-	FindClose (hp);
+	FindClose(hp);
 }
 
 
@@ -900,7 +869,6 @@ int game_c::load(void) {
 		fclose(file);
 	}
 
-
 	return LOAD_SUCCESSFUL;
 }
 
@@ -916,7 +884,7 @@ int game_c::saveGameData(void) {
 	gameSaveData.planetHandle = mCurrentPlanet->mHandle;
 
 	// now for the file stuff
-	FILE *file = fopen ("save/game.dat", "wb");
+	FILE *file = fopen("save/game.dat", "wb");
 	if (file == NULL) {
 		return -1;
 	}
@@ -928,13 +896,13 @@ int game_c::saveGameData(void) {
 
 GameSaveData game_c::loadGameData() {
 	GameSaveData gameSaveData;
-	FILE *file = fopen( "save/game.dat", "rb" );
+	FILE *file = fopen("save/game.dat", "rb");
 	if (file == NULL) {
 		gameSaveData.loadSucceeded = false;
 		return gameSaveData;
 	}
-	fread( &gameSaveData, sizeof GameSaveData, 1, file );
-	fclose( file );
+	fread(&gameSaveData, sizeof GameSaveData, 1, file);
+	fclose(file);
 	return gameSaveData;
 }
 
@@ -942,16 +910,16 @@ GameSaveData game_c::loadGameData() {
 void game_c::saveLocation() {
 	// see if we need to save the current Location
 	if (mLocation->getType() == LOCATION_SHIP) {
-		FILE *file = fopen( "save/playership.dat", "wb" );
-		mLocation->save( file );
+		FILE *file = fopen("save/playership.dat", "wb");
+		mLocation->save(file);
 		fclose( file );
 	}
 	else if (mCurrentPlanet != NULL) {
 		char fileName[128];
-		sprintf( fileName, "save/planet%d.dat", mCurrentPlanet->mHandle );
-		FILE *file = fopen( fileName, "wb" );
-		mLocation->save( file );
-		fclose( file );
+		sprintf(fileName, "save/planet%d.dat", mCurrentPlanet->mHandle);
+		FILE *file = fopen(fileName, "wb");
+		mLocation->save(file);
+		fclose(file);
 	}
 }
 

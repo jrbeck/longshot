@@ -103,16 +103,11 @@ void ItemManager::trimItemsList(void) {
     return;
   }
 
-  for (size_t i = 0; i < mItems.size() - 1; i++) {
+  for (int i = 0; i <= ((int)mItems.size() - 1); i++) {
     if (!mItems[i].active) {
       swap(mItems[i], mItems[mItems.size () - 1]);
       mItems.pop_back();
     }
-  }
-
-  // this takes care of some special cases
-  if (mItems.size() > 0 && !mItems[mItems.size () - 1].active) {
-    mItems.pop_back();
   }
 }
 
@@ -565,7 +560,7 @@ void ItemManager::useRocketPack(
 
   // check if in water
   // FIXME: check to see if head is in water??
-  phys_entity_t *physicsEntity = physics.getEntityByHandle(physicsHandle);
+  PhysicsEntity *physicsEntity = physics.getEntityByHandle(physicsHandle);
   if (physicsEntity->worldViscosity > 0.0) {
     return;
   }
@@ -665,7 +660,7 @@ double ItemManager::useGun (size_t itemHandle, shot_info_t shotInfo, Physics& ph
 
     size_t physicsHandle = physics.createEntity(bulletType, shotInfo.position, shotForce, shotInfo.time, true);
 
-    phys_entity_t *projectileEntity = physics.getEntityByHandle(physicsHandle);
+    PhysicsEntity *projectileEntity = physics.getEntityByHandle(physicsHandle);
     projectileEntity->owner = shotInfo.ownerPhysicsHandle;
     projectileEntity->impactDamage = mItems[itemIndex].bulletDamage;
     projectileEntity->explosionForce = mItems[itemIndex].explosionForce;
@@ -695,7 +690,7 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo, Phys
     int bulletType = OBJTYPE_MELEE_ATTACK;
     size_t physicsHandle = physics.createEntity(bulletType, shotInfo.position, shotInfo.time, true);
 
-    phys_entity_t *projectileEntity = physics.getEntityByHandle(physicsHandle);
+    PhysicsEntity *projectileEntity = physics.getEntityByHandle(physicsHandle);
     projectileEntity->owner = shotInfo.ownerPhysicsHandle;
     projectileEntity->impactDamage = mItems[itemIndex].bulletDamage;
     projectileEntity->acc = v3d_scale(shotInfo.angle, mItems[itemIndex].explosionForce);
@@ -774,8 +769,13 @@ void ItemManager::save(FILE *file) {
 
   // write the items themselves
   size_t numItems = mItems.size();
+
+  printf("ItemManager::save() -----\n");
+  printf(" saving: %d items\n", numItems);
+
   fwrite(&numItems, sizeof size_t, 1, file);
   for(size_t i = 0; i < numItems; i++) {
+    printf("%d: %s\n", i, mItems[i].name);
     fwrite(&mItems[i], sizeof item_t, 1, file);
   }
 }

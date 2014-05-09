@@ -176,7 +176,7 @@ int Longshot::loop (void) {
 
 
 	printf ("block_t size: %d\n", sizeof (block_t));
-	printf ("phys_entity_t size: %d\n", sizeof (phys_entity_t));
+	printf ("PhysicsEntity size: %d\n", sizeof (PhysicsEntity));
 
 
 	// bail immediately if constructor failed at some point
