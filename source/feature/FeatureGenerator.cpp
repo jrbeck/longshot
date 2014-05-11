@@ -1,6 +1,6 @@
 #include "FeatureGenerator.h"
 
-void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
+void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, LoadScreen* loadScreen) {
 	// this is the RogueMap used to place set pieces on the world
 	RogueMap worldRogueMap;
 	worldRogueMap.resize (ROGUE_W, ROGUE_H);
@@ -8,12 +8,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 
 	v2di_t mapIndex = v2di_v(xIndex, zIndex);
 
-	LoadScreen loadScreen;
-	loadScreen.setCompletedColor(0.6f, 0.0f, 0.8f);
-	loadScreen.setIncompletedColor(0.3f, 0.0f, 0.4f);
-	loadScreen.start();
-
-	loadScreen.draw( 0, 6 );
+	loadScreen->draw(0, 6);
 
 	// okay, let's get that WorldMap
 	WorldMap &worldMap = *world.getWorldMap();
@@ -21,19 +16,19 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 	for (int i = 0; i < 6; i++) {
 		v2di_t corner;
 
-		corner = worldRogueMap.random_room (ID_START + i, 8, 8);
+		corner = worldRogueMap.random_room(ID_START + i, 8, 8);
 
 		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
-			printf ("dungeon at (%d, %d)\n", corner.x, corner.y);
-			DungeonFeature::createDungeon( corner, 3, world );
+			corner = v2di_add(corner, mapIndex);
+			printf("dungeon at (%d, %d)\n", corner.x, corner.y);
+			DungeonFeature::createDungeon(corner, 3, world);
 //			createPlain (corner, 8, 8, worldMap);
 
 			worldMap.swapOutToInactive();
 		}
 	}
 
-	loadScreen.draw(1, 6);
+	loadScreen->draw(1, 6);
 
 	for (int i = 0; i < 1; i++) {
 		v2di_t corner;
@@ -47,13 +42,13 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 			printf ("great pyramid at (%d, %d)\n", corner.x, corner.y);
 
 			FeatureUtil::loadWorldRegion(corner, side, world, false);
-			createPyramid (side, corner, world);
+			createPyramid(side, corner, world);
 
-			worldMap.swapOutToInactive ();
+			worldMap.swapOutToInactive();
 		}
 	}
 
-	loadScreen.draw(2, 6);
+	loadScreen->draw(2, 6);
 
 	for (int i = 0; i < 1; i++) {
 		v2di_t corner;
@@ -73,7 +68,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 		}
 	}
 
-	loadScreen.draw(3, 6);
+	loadScreen->draw(3, 6);
 
 	// hmmm
 	for (int i = 0; i < 6; i++) {
@@ -122,7 +117,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 		}
 	}
 
-	loadScreen.draw(4, 6);
+	loadScreen->draw(4, 6);
 
 	// castle?
 	for (int i = 0; i < 1; i++) {
@@ -146,23 +141,23 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 		}
 	}
 
-	loadScreen.draw(5, 6);
+	loadScreen->draw(5, 6);
 
 	for (int i = 0; i < 50; i++) {
 		int side = 1;
 
 		v2di_t corner;
 
-		corner = worldRogueMap.random_room (ID_START + i, side, side);
+		corner = worldRogueMap.random_room(ID_START + i, side, side);
 
 		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
+			corner = v2di_add(corner, mapIndex);
 
-			height_info_t heightInfo = FeatureUtil::getHeightInfo (corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
+			height_info_t heightInfo = FeatureUtil::getHeightInfo(corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
 				side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, world);
 
 			if (heightInfo.low > 2) {
-				printf ("house at (%d, %d)\n", corner.x, corner.y);
+				printf("house at (%d, %d)\n", corner.x, corner.y);
 
 				createPlain(corner, side, side, world);
 
@@ -174,9 +169,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world) {
 			}
 		}
 	}
-
-	loadScreen.finish();
-
 }
 
 

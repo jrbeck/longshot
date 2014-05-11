@@ -8,9 +8,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef RogueMapViewer_h_
-#define RogueMapViewer_h_
+#pragma once
 
+#include "GameWindow.h"
 #include "Menu.h"
 #include "Rectangle2d.h"
 #include "RogueMap.h"
@@ -24,43 +24,36 @@
 
 class RogueMapViewer {
 public:
-	RogueMapViewer(void);
-	~RogueMapViewer(void);
+  RogueMapViewer(GameWindow* gameWindow);
+  ~RogueMapViewer();
 
-	void setUpOpenGl(void);
+  void setUpOpenGl();
 
-	// this method enters the interaction mode
-	void startViewer();
+  // this method enters the interaction mode
+  void startViewer();
 
-	void drawMap(void) const;
+  void drawMap() const;
 
-	// TODO: get this i/o junk outta here
-	int handleInput (void);
-	int handleKeystroke (void);
-	int handleKeyup (void);
-	void handleMouseButtonDown (int button, v2d_t pos);
-	void handleMouseButtonUp (int button, v2d_t pos);
+  // TODO: get this i/o junk outta here
+  int handleInput ();
+  int handleKeystroke ();
+  int handleKeyup ();
+  void handleMouseButtonDown (int button, v2d_t pos);
+  void handleMouseButtonUp (int button, v2d_t pos);
 
-	void randomizeDungeon();
+  void randomizeDungeon();
 
 // MEMBERS
-	SDL_Event sdlevent;
-	v2d_t mMousePos;
-	v2d_t mMouseDelta;
-	int mMouseMoved;
-	bool mLeftMouseButtonClicked;
+  GameWindow* mGameWindow;
+  menu_c* mMenu;
 
-	menu_c *mMenu;
+  SDL_Event sdlevent;
+  v2d_t mMousePos;
+  v2d_t mMouseDelta;
+  int mMouseMoved;
+  bool mLeftMouseButtonClicked;
 
-	RogueMap *mRogueMap;
-
-	Rectangle2d mViewRect;
-
-
-	DungeonUtil *dungeon;
+  RogueMap* mRogueMap;
+  Rectangle2d mViewRect;
+  DungeonUtil* dungeon;
 };
-
-
-
-
-#endif // RogueMapViewer_h_

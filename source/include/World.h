@@ -50,10 +50,7 @@ public:
 
   void clear(bool clearInactive);
 
-  // loads the set-pieces around some location
-  void loadFeaturesAroundPlayer(v3d_t playerPos);
-
-  int preloadColumns(int numColumns, v3d_t pos);
+  int preloadColumns(int numColumns, v3d_t pos, LoadScreen* loadScreen);
   int loadSurroundingColumns(v3d_t pos);
 
   int loadColumn(int xIndex, int zIndex, bool doOutcroppings);

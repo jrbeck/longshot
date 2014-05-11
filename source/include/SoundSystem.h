@@ -8,15 +8,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef SoundSystem_h_
-#define SoundSystem_h_
-
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 
 #define NUM_CHANNELS 32
@@ -52,16 +50,16 @@ enum {
 
 class SoundSystem {
 public:
-	SoundSystem ();
-	~SoundSystem ();
+	SoundSystem();
+	~SoundSystem();
 
-	int initialize (void);
+	int initialize(void);
 
-	void playSoundByHandle (int handle, int volume);
+	void playSoundByHandle(int handle, int volume);
 
-	int loadSound (char *fileName);
+	int loadSound(char* fileName);
 
-	void stopAllSounds (void);
+	void stopAllSounds(void);
 
 // members * * * * * * * * * * * * * * * * * *
 	int mAudioRate;
@@ -71,9 +69,5 @@ public:
 
 	int mLastHandle;
 
-	Mix_Chunk *mWav[NUM_SOUNDS];
+	Mix_Chunk* mWav[NUM_SOUNDS];
 };
-
-
-
-#endif SoundSystem_h_

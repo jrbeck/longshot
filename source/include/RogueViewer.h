@@ -8,10 +8,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef RogueViewer_h_
-#define RogueViewer_h_
+#pragma once
 
-
+#include "GameWindow.h"
 #include "AssetManager.h"
 #include "feature/FeatureGenerator.h"
 #include "World.h"
@@ -23,67 +22,59 @@
 
 
 struct CameraState {
-	v3d_t position;
-	v3d_t target;
+  v3d_t position;
+  v3d_t target;
 };
 
 
 
 enum {
-	VIZ_MODE_MODEL,
-	VIZ_MODE_ROGUE,
+  VIZ_MODE_MODEL,
+  VIZ_MODE_ROGUE,
 
-	NUM_VIZ_MODES,
+  NUM_VIZ_MODES,
 
-	VIZ_MODE_PLANET
+  VIZ_MODE_PLANET
 };
 
 
 class RogueViewer {
 private:
-	rts_cam_c mRtsCam;
+  GameWindow *mGameWindow;
+  rts_cam_c mRtsCam;
 
-	SDL_Event sdlevent;
-	v2d_t mMousePos;
-	v2d_t mMouseDelta;
-	int mMouseMoved;
+  SDL_Event sdlevent;
+  v2d_t mMousePos;
+  v2d_t mMouseDelta;
+  int mMouseMoved;
 
-	int mVizMode;
+  int mVizMode;
 
-	CameraState mCameraStates[NUM_VIZ_MODES];
+  CameraState mCameraStates[NUM_VIZ_MODES];
 
-	World mWorld;
-	WorldMap mWorldMap;
-	WorldMapView mWorldMapView;
-	AssetManager mAssetManager;
-	RogueMap mRogueMap;
+  World mWorld;
+  WorldMap mWorldMap;
+  WorldMapView mWorldMapView;
+  AssetManager mAssetManager;
+  RogueMap mRogueMap;
 
 public:
-	RogueViewer (void);
-	~RogueViewer (void);
+  RogueViewer(GameWindow* gameWindow);
+  ~RogueViewer();
 
-	void setupOpenGl (void);
+  void setupOpenGl();
 
-	int start (void);
+  int start();
 
-	v3d_t findStartPosition (WorldMap &worldMap);
+  v3d_t findStartPosition(WorldMap &worldMap);
 
-	// TODO: get this i/o junk outta here
-	int handleInput (void);
-	int handleKeystroke (void);
-	int handleKeyup (void);
-	void handleMouseButtonDown (int button, v2d_t pos);
-	void handleMouseButtonUp (int button, v2d_t pos);
+  // TODO: get this i/o junk outta here
+  int handleInput();
+  int handleKeystroke();
+  int handleKeyup();
+  void handleMouseButtonDown(int button, v2d_t pos);
+  void handleMouseButtonUp(int button, v2d_t pos);
 
-	void swapVizMode (int mode);
-	void generateNewMap (void);
+  void swapVizMode(int mode);
+  void generateNewMap();
 };
-
-
-
-
-
-#endif // RogueViewer_h_
-
-
-

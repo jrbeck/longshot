@@ -15,6 +15,13 @@
 
 #include "v3d.h"
 
+
+// FIXME: WTF IS THIS???
+#define SDL_BUTTON_WHEELUP (4)
+#define SDL_BUTTON_WHEELDOWN (5)
+
+
+
 #define WORLD_CHUNK_SIDE			    (16)
 #define WORLD_CHUNK_SIDE_SQUARED	(256)
 #define WORLD_CHUNK_SIDE_CUBED		(4096)

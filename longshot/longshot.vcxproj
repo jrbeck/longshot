@@ -76,7 +76,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;SDL_image.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;SDL2_image.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -100,7 +100,6 @@
     <ClCompile Include="..\source\dungeon\DungeonUtil.cpp" />
     <ClCompile Include="..\source\dungeon\MoleculeDungeon.cpp" />
     <ClCompile Include="..\source\dungeon\SnakeDungeon.cpp" />
-    <ClCompile Include="..\source\Edit.cpp" />
     <ClCompile Include="..\source\feature\DungeonFeature.cpp" />
     <ClCompile Include="..\source\feature\FeatureGenerator.cpp" />
     <ClCompile Include="..\source\feature\FeatureUtil.cpp" />
@@ -108,6 +107,7 @@
     <ClCompile Include="..\source\GalaxyMap.cpp" />
     <ClCompile Include="..\source\Game.cpp" />
     <ClCompile Include="..\source\GameInput.cpp" />
+    <ClCompile Include="..\source\GameWindow.cpp" />
     <ClCompile Include="..\source\GlBitmapFont.cpp" />
     <ClCompile Include="..\source\GlCamera.cpp" />
     <ClCompile Include="..\source\HeadBobble.cpp" />
@@ -186,11 +186,11 @@
     <ClInclude Include="..\source\include\BoundingSphere.h" />
     <ClInclude Include="..\source\include\CloudSim.h" />
     <ClInclude Include="..\source\include\Constants.h" />
-    <ClInclude Include="..\source\include\Edit.h" />
     <ClInclude Include="..\source\include\Galaxy.h" />
     <ClInclude Include="..\source\include\GalaxyMap.h" />
     <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GameInput.h" />
+    <ClInclude Include="..\source\include\GameWindow.h" />
     <ClInclude Include="..\source\include\GlBitmapFont.h" />
     <ClInclude Include="..\source\include\GlCamera.h" />
     <ClInclude Include="..\source\include\HeadBobble.h" />

@@ -108,9 +108,6 @@
     <ClCompile Include="..\source\Constants.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\Edit.cpp">
-      <Filter>Source Files\game</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Game.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
@@ -264,9 +261,6 @@
     <ClCompile Include="..\source\Periodics.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\PlanetMap.cpp">
-      <Filter>Source Files\world</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\SkySim.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
@@ -312,6 +306,12 @@
     <ClCompile Include="..\source\WorldUtil.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\GameWindow.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PlanetMap.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -348,9 +348,6 @@
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\Constants.h">
-      <Filter>Header Files\game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\include\Edit.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\Game.h">
@@ -515,9 +512,6 @@
     <ClInclude Include="..\source\include\Periodics.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\PlanetMap.h">
-      <Filter>Header Files\world</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\SkySim.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
@@ -553,6 +547,12 @@
     </ClInclude>
     <ClInclude Include="..\source\include\WorldUtil.h">
       <Filter>Header Files\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GameWindow.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\PlanetMap.h">
+      <Filter>Header Files\view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

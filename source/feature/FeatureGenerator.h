@@ -8,8 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef FeatureGenerator_h_
-#define FeatureGenerator_h_
+#pragma once
 
 #include "LoadScreen.h"
 #include "World.h"
@@ -30,7 +29,7 @@
 class FeatureGenerator {
 public:
 
-	static void createSetPieces(int xIndex, int zIndex, World& world);
+	static void createSetPieces(int xIndex, int zIndex, World& world, LoadScreen* loadScreen);
 
 
 	static void createPyramid(int side, v2di_t cornerIndex, World &world);
@@ -61,7 +60,3 @@ public:
 	// will this ever be used again?
 	static v2di_t createRogueRec(v2di_t cornerIndex, v2di_t stairsUp, int height, int levelsRemaining, WorldMap &worldMap);
 };
-
-
-
-#endif // FeatureGenerator_h_

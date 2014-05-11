@@ -8,10 +8,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef GameInput_h_
-#define GameInput_h_
+#pragma once
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "AssetManager.h"
 #include "v2d.h"
@@ -119,7 +118,3 @@ private:
 
 	bool mToggleWorldChunkBoxes;
 };
-
-
-
-#endif // GameInput_h_

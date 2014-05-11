@@ -35,7 +35,6 @@
 #include "SdlInterface.h"
 
 #include "game.h"	// game mode
-#include "edit.h"	// editor
 #include "menu.h"	// menu / interface entry
 #include "rogueviewer.h"
 
@@ -54,16 +53,15 @@
 // Longshot * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 class Longshot {
 public:
-	Longshot (void);
-	~Longshot (void);
+	Longshot();
+	~Longshot();
 
-	void reloadMenu (void);
+	void reloadMenu();
 
-	int loop (void);
+	int loop();
 
 private:
 	enum {
-		PROGRAM_MODE_EDIT,
 		PROGRAM_MODE_MENU,
 		PROGRAM_MODE_NEW_GAME,
 		PROGRAM_MODE_LOAD_GAME,
@@ -75,18 +73,14 @@ private:
 
 	enum {
 		MENU_ENTER_GAME_MODE,
-		MENU_ENTER_EDIT_MODE,
 		MENU_QUIT
 	};
 
-	menu_c *mMainMenu;
-	game_c *mGame;
-	edit_c edit;
-	RogueViewer mRogueViewer;
+	menu_c* mMainMenu;
+	game_c* mGame;
+	RogueViewer* mRogueViewer;
 
 	int program_mode;
-
-	sdl_mode_info_t windowedMode;
 
 	bool constructor_successful;
 };

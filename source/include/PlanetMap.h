@@ -11,6 +11,7 @@
 #ifndef PlanetMap_h_
 #define PlanetMap_h_
 
+#include "GameWindow.h"
 #include "Menu.h"
 #include "Periodics.h"
 #include "Rectangle2d.h"
@@ -23,41 +24,43 @@
 
 class PlanetMap {
 public:
-	PlanetMap(void);
-	~PlanetMap(void);
+  PlanetMap(GameWindow* gameWindow);
+  ~PlanetMap(void);
 
-	void setUpOpenGl(void);
+  void setUpOpenGl(void);
 
-	// this method enters the interaction mode and returns the result
-	bool chooseLocation(Planet &planet, v3d_t &planetPos);
+  // this method enters the interaction mode and returns the result
+  bool chooseLocation(Planet &planet, v3d_t &planetPos);
 
-	void drawMap(void);
+  void drawMap(void);
 
-	void buildFromPeriodics(int seed);
+  void buildFromPeriodics(int seed);
 
-	// TODO: get this i/o junk outta here
-	int handleInput (void);
-	int handleKeystroke (void);
-	int handleKeyup (void);
-	void handleMouseButtonDown (int button, v2d_t pos);
-	void handleMouseButtonUp (int button, v2d_t pos);
+  // TODO: get this i/o junk outta here
+  int handleInput (void);
+  int handleKeystroke (void);
+  int handleKeyup (void);
+  void handleMouseButtonDown (int button, v2d_t pos);
+  void handleMouseButtonUp (int button, v2d_t pos);
 
-	void drawTerrain(void) const;
+  void drawTerrain(void) const;
 
 // MEMBERS
-	SDL_Event sdlevent;
-	v2d_t mMousePos;
-	v2d_t mMouseDelta;
-	int mMouseMoved;
-	bool mLeftMouseButtonClicked;
+  GameWindow* mGameWindow;
 
-	menu_c *mMenu;
+  SDL_Event sdlevent;
+  v2d_t mMousePos;
+  v2d_t mMouseDelta;
+  int mMouseMoved;
+  bool mLeftMouseButtonClicked;
 
-	Terrain *mTerrain;
-	v3d_t *mColors;
-	Periodics *mPeriodics;
+  menu_c *mMenu;
 
-	Rectangle2d mViewRect;
+  Terrain *mTerrain;
+  v3d_t *mColors;
+  Periodics *mPeriodics;
+
+  Rectangle2d mViewRect;
 };
 
 

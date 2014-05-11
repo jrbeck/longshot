@@ -1,11 +1,12 @@
 #include "PlanetMap.h"
 
-PlanetMap::PlanetMap() :
+PlanetMap::PlanetMap(GameWindow* gameWindow) :
   mMenu(NULL),
   mTerrain(NULL),
   mColors(NULL),
   mPeriodics(NULL)
 {
+  mGameWindow = gameWindow;
   mLeftMouseButtonClicked = false;
 }
 
@@ -147,7 +148,7 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawTerrain();
     mMenu->draw();
-    SDL_GL_SwapBuffers();
+    mGameWindow->swapBuffers();
     setUpOpenGl();
   }
 
