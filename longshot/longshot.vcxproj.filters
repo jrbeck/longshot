@@ -213,9 +213,6 @@
     <ClCompile Include="..\source\RtsCam.cpp">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\SdlInterface.cpp">
-      <Filter>Source Files\utility</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\SoundSystem.cpp">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
@@ -453,9 +450,6 @@
       <Filter>Header Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\RtsCam.h">
-      <Filter>Header Files\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\include\SdlInterface.h">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\SoundSystem.h">

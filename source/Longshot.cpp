@@ -77,7 +77,7 @@ void Longshot::reloadMenu(void) {
   if (gDefaultFontTextureHandle != 0) {
     glDeleteTextures(1, &gDefaultFontTextureHandle);
   }
-  if (!loadTexture("art/fonts/font3.png", &gDefaultFontTextureHandle) == 0) {
+  if (!AssetManager::loadTexture("art/fonts/font3.png", &gDefaultFontTextureHandle) == 0) {
     printf("Longshot::reloadMenu(): failed to load font\n");
   }
   menu_c::setDefaultTextureHandle(gDefaultFontTextureHandle);

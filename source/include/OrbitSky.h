@@ -8,13 +8,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef OrbitSky_h_
-#define OrbitSky_h_
+#pragma once
 
 #include <vector>
 
+#include <sdl2/SDL_opengl.h>
+
 #include "Galaxy.h"
-#include "SdlInterface.h"
 #include "AssetManager.h"
 #include "GlCamera.h"
 
@@ -38,6 +38,3 @@ public:
 
 	vector<celestial_body> mBodies;
 };
-
-
-#endif // OrbitSky_h_

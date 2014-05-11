@@ -13,9 +13,6 @@
 // longshot constants * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #define SCREEN_ASPECT_RATIO		((double)SCREEN_W / (double)SCREEN_H)
 
-// the longshot/include directory
-#include "SdlInterface.h"
-
 #include "game.h"	// game mode
 #include "menu.h"	// menu / interface entry
 #include "rogueviewer.h"
@@ -23,6 +20,8 @@
 #include "PseudoRandom.h"
 #include "GalaxyMap.h"
 #include "PlanetMap.h"
+
+#include "AssetManager.h"
 
 #include "World.h"
 

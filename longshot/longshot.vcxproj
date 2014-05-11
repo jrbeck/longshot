@@ -140,7 +140,6 @@
     <ClCompile Include="..\source\RogueMapViewer.cpp" />
     <ClCompile Include="..\source\RogueViewer.cpp" />
     <ClCompile Include="..\source\RtsCam.cpp" />
-    <ClCompile Include="..\source\SdlInterface.cpp" />
     <ClCompile Include="..\source\Simplex.cpp" />
     <ClCompile Include="..\source\SkySim.cpp" />
     <ClCompile Include="..\source\SoundSystem.cpp" />
@@ -222,7 +221,6 @@
     <ClInclude Include="..\source\include\RogueMapViewer.h" />
     <ClInclude Include="..\source\include\RogueViewer.h" />
     <ClInclude Include="..\source\include\RtsCam.h" />
-    <ClInclude Include="..\source\include\SdlInterface.h" />
     <ClInclude Include="..\source\include\Simplex.h" />
     <ClInclude Include="..\source\include\SkySim.h" />
     <ClInclude Include="..\source\include\SoundSystem.h" />

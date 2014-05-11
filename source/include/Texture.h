@@ -8,12 +8,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Texture_h_
-#define Texture_h_
+#pragma once
 
 #include <string>
 
-#include "SdlInterface.h"
+#include <sdl2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <sdl2/SDL_image.h>
 
 class Texture {
 public:
@@ -29,6 +30,3 @@ public:
 	GLuint mHeight;
 	GLuint mGlHandle;
 };
-
-
-#endif // Texture_h_

@@ -8,10 +8,10 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Animation_h_
-#define Animation_h_
+#pragma once
 
 #include <vector>
+#include <SDL2/SDL.h>
 
 #include "TextureRegion.h"
 
@@ -28,13 +28,10 @@ public:
 	~Animation();
 
 	// this class takes control of these pointers
-	void addFrame(TextureRegion *textureRegion);
+	void addFrame(TextureRegion* textureRegion);
 	TextureRegion *getFrame(float stateTime, int mode);
 
 private:
-	std::vector<TextureRegion *> mFrames;
+	std::vector<TextureRegion*> mFrames;
 	float mFrameDuration;
 };
-
-
-#endif // Animation_h_

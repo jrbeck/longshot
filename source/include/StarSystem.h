@@ -8,10 +8,12 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef StarSystem_h_
-#define StarSystem_h_
+#pragma once
 
 #include <vector>
+#include <sdl2/SDL_opengl.h>
+
+#include "MathUtil.h"
 
 #include "Planet.h"
 
@@ -55,6 +57,3 @@ public:
 	vector<Planet *> mPlanets;
 
 };
-
-
-#endif // StarSystem_h_

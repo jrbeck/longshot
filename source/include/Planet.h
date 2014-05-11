@@ -8,13 +8,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Planet_h_
-#define Planet_h_
+#pragma once
 
 #include <cmath>
+#include <sdl2/SDL_opengl.h>
 
 #include "v2d.h"
-#include "SdlInterface.h"
+
 
 using namespace std;
 
@@ -39,9 +39,3 @@ public:
 	GLfloat mOrbitRadius;
 	v2d_t mPosition;
 };
-
-
-
-
-
-#endif // Planet_h_

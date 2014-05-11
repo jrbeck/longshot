@@ -13,6 +13,7 @@
 #pragma once
 
 #include <omp.h>
+#include <sdl2/SDL_opengl.h>
 
 #include "Location.h"
 #include "v3d.h"
@@ -21,7 +22,6 @@
 #include "AssetManager.h"
 #include "SkySim.h"
 #include "Periodics.h"
-#include "SdlInterface.h"
 #include "LoadScreen.h"
 
 
