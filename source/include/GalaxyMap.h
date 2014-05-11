@@ -62,7 +62,7 @@ public:
   int mMouseMoved;
   bool mLeftMouseButtonClicked;
 
-  menu_c* mMenu;
+  GameMenu* mMenu;
 
   int mZoomLevel;
   int mSelectedSystem;

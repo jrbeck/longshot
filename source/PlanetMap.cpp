@@ -59,7 +59,7 @@ void PlanetMap::setUpOpenGl() {
 
 
 bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
   if (mMenu == NULL) {
     printf("PlanetMap::chooseLocation(): error: out of memory 1\n");
     return false;

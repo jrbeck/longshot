@@ -73,7 +73,7 @@ void game_c::loadPlanetMenu(void) {
     delete mMenu;
     mMenu = NULL;
   }
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
 //	mMenu->setFont(gDefaultFontTextureHandle);
 
   GLfloat color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -93,7 +93,7 @@ void game_c::loadShipMenu(void) {
     delete mMenu;
     mMenu = NULL;
   }
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
 //	mMenu->setFont(gDefaultFontTextureHandle);
 
   GLfloat color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -427,7 +427,7 @@ void game_c::gameLoop(void) {
       }
     }
     else if (mGameState == GAMESTATE_MENU) {
-      int menuChoice = mMenu->menu_choice(false);
+      int menuChoice = mMenu->GameMenuhoice(false);
       if (escapePressed) {
         printf("escape\n");
         menuChoice = GAMEMENU_BACKTOGAME;

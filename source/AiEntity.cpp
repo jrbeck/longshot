@@ -1,7 +1,7 @@
-#include "aientity.h"
+#include "AiEntity.h"
 
 
-AiEntity::AiEntity (void) {
+AiEntity::AiEntity() {
   mNextShotTime = 0.0;
   mNextUpdateTime = 0.0;
   mPhysicsHandle = 0;
@@ -239,7 +239,7 @@ bool AiEntity::testCondition(
 }
 
 
-void AiEntity::readMail(Physics &physics) {
+void AiEntity::readMail(Physics& physics) {
   // lets read some mail
   // FIXME: this needs to be different for each type
   phys_message_t message;
@@ -284,7 +284,7 @@ void AiEntity::readMail(Physics &physics) {
 
 
 
-void AiEntity::updatePlayer(Physics &physics) {
+void AiEntity::updatePlayer(Physics& physics) {
   mPhysicsEntity = physics.getEntityByHandle(mPhysicsHandle);
   mWorldPosition = physics.getCenter(mPhysicsHandle);
 }
@@ -416,7 +416,7 @@ void AiEntity::updateHopper(
 
   // keep it afloat in water even without a target
   if (mTargetPhysicsHandle == 0 && mPhysicsEntity->worldViscosity > 0.0) {
-    physics.add_force(mPhysicsHandle, v3d_v (0.0, 4200.0, 0.0));
+    physics.add_force(mPhysicsHandle, v3d_v(0.0, 4200.0, 0.0));
   }
   else if (physics.getIndexFromHandle(mTargetPhysicsHandle) >= 0) {
     PhysicsEntity *targetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);
@@ -431,7 +431,7 @@ void AiEntity::updateHopper(
 
         // give it a little more buoyancy
         if (targetPosition.y - mWorldPosition.y > 0.0) {
-          physics.add_force (mPhysicsHandle, v3d_v (0.0, 2000.0, 0.0));
+          physics.add_force(mPhysicsHandle, v3d_v(0.0, 2000.0, 0.0));
         }
       }
     }
@@ -504,11 +504,9 @@ void AiEntity::updateTarget (double time, WorldMap& worldMap, Physics& physics, 
     if (mTargetPhysicsEntity == NULL) {
       mTargetPhysicsHandle = 0;
     }
-    else {
-      if (mTargetPhysicsEntity->health <= 0.0 && mTargetPhysicsEntity->type == OBJTYPE_PLAYER) {
-        mTargetPhysicsHandle = 0;
-        mTargetPhysicsEntity = NULL;
-      }
+    else if (mTargetPhysicsEntity->health <= 0.0 && mTargetPhysicsEntity->type == OBJTYPE_PLAYER) {
+      mTargetPhysicsHandle = 0;
+      mTargetPhysicsEntity = NULL;
     }
   }
 
@@ -518,9 +516,7 @@ void AiEntity::updateTarget (double time, WorldMap& worldMap, Physics& physics, 
 
 }
 
-
-
-void AiEntity::aquireTarget(double time, WorldMap &worldMap, Physics &physics, vector<AiEntity *> &aiEntities) {
+void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities) {
   double minDistance = 100000.0;
   int minHandle = -1;
 
@@ -537,24 +533,20 @@ void AiEntity::aquireTarget(double time, WorldMap &worldMap, Physics &physics, v
     if (DONT_ATTACK_PLAYER && aiEntities[j]->mType == AITYPE_PLAYER) continue;
     // ignore player if same species...
     // FIXME: hard-wired
-    if (aiEntities[j]->mType == AITYPE_PLAYER &&
-      mType == PLAYER_SPECIES) continue;
+    if (aiEntities[j]->mType == AITYPE_PLAYER && mType == PLAYER_SPECIES) continue;
 
     size_t jPhysicsHandle = aiEntities[j]->mPhysicsHandle;
-
     // don't target if dead
     mTargetPhysicsEntity = physics.getEntityByHandle(jPhysicsHandle);
     if (mTargetPhysicsEntity == NULL) continue;
 
     if (mTargetPhysicsEntity->health <= 0.0) continue;
 
-    double jDistance = v3d_dist (mWorldPosition, physics.getCenter (jPhysicsHandle));
+    double jDistance = v3d_dist(mWorldPosition, physics.getCenter(jPhysicsHandle));
 
-    if (jDistance <= 35.0 && //mSightRange &&
-      jDistance < minDistance)
-    {
+    if (jDistance <= 35.0 && jDistance < minDistance) {
       // check for line of sight
-      if (worldMap.lineOfSight (mWorldPosition, physics.getCenter (jPhysicsHandle))) {
+      if (worldMap.lineOfSight(mWorldPosition, physics.getCenter(jPhysicsHandle))) {
         minHandle = static_cast<int>(jPhysicsHandle);
         minDistance = jDistance;
       }
@@ -598,14 +590,12 @@ void AiEntity::aquireTarget(double time, WorldMap &worldMap, Physics &physics, v
 
 
 
-bool AiEntity::useWeapon(double time, Physics &physics, ItemManager &itemManager) {
+bool AiEntity::useWeapon(double time, Physics& physics, ItemManager& itemManager) {
 
   if (mInventory[0] == 0) return false;
-
   if (mNextShotTime > time) return false;
 
   item_t item = itemManager.getItem(mInventory[0]);
-
   if (item.type != ITEMTYPE_GUN_ONE_HANDED) {
     return false;
   }

@@ -24,7 +24,7 @@ Longshot::Longshot() :
   // show the mouse cursor
   SDL_ShowCursor(1);
 
-  // MENU_C * * * * * * * * * * * * * * * * * * * * * * * *
+  // GameMenu * * * * * * * * * * * * * * * * * * * * * * * *
   reloadMenu();
 
   // start off in the menu
@@ -80,14 +80,14 @@ void Longshot::reloadMenu(void) {
   if (!AssetManager::loadTexture("art/fonts/font3.png", &gDefaultFontTextureHandle) == 0) {
     printf("Longshot::reloadMenu(): failed to load font\n");
   }
-  menu_c::setDefaultTextureHandle(gDefaultFontTextureHandle);
+  GameMenu::setDefaultTextureHandle(gDefaultFontTextureHandle);
 
   // create a new menu
   if (mMainMenu != NULL) {
     delete mMainMenu;
     mMainMenu = NULL;
   }
-  mMainMenu = new menu_c();
+  mMainMenu = new GameMenu();
 
   GLfloat color[4] = { 0.55f, 0.075f, 0.075f, 1.0f };
   GLfloat bgColor[4] = { 0.2f, 0.5f, 0.5f, 1.0f };
@@ -129,7 +129,7 @@ int Longshot::loop(void) {
     mGameWindow->swapBuffers();
 
     // figure out what the user wants to do
-    program_mode = mMainMenu->menu_choice(true);
+    program_mode = mMainMenu->GameMenuhoice(true);
 
     // and do it
     switch (program_mode) {

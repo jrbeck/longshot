@@ -11,7 +11,7 @@
 #pragma once
 
 #include "GameWindow.h"
-#include "Menu.h"
+#include "GameMenu.h"
 #include "Rectangle2d.h"
 #include "RogueMap.h"
 
@@ -45,7 +45,7 @@ public:
 
 // MEMBERS
   GameWindow* mGameWindow;
-  menu_c* mMenu;
+  GameMenu* mMenu;
 
   SDL_Event sdlevent;
   v2d_t mMousePos;

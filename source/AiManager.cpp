@@ -56,7 +56,7 @@ size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics &ph
 
 
 void AiManager::setPlayerFacingAndIncline(v2d_t facingAndElevation) {
-  AiEntity *e = getEntityByHandle(mPlayerAiHandle);
+  AiEntity* e = getEntityByHandle(mPlayerAiHandle);
   if (e == NULL) {
     printf("AiManager::setPlayerFacingAndIncline(): no player entity\n");
     return;
@@ -67,8 +67,8 @@ void AiManager::setPlayerFacingAndIncline(v2d_t facingAndElevation) {
 }
 
 
-AiEntity *AiManager::addEntity(int type, const v3d_t &position, Physics &physics, double time) {
-  AiEntity *e = new AiEntity();
+AiEntity* AiManager::addEntity(int type, const v3d_t& position, Physics& physics, double time) {
+  AiEntity* e = new AiEntity();
   if (e == NULL) {
     printf("AiManager::addEntity(): error: out of mem\n");
     return NULL;

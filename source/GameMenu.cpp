@@ -1,34 +1,34 @@
-#include "Menu.h"
+#include "GameMenu.h"
 
-GLuint menu_c::defaultTextureHandle = 0;
+GLuint GameMenu::defaultTextureHandle = 0;
 
 
-void menu_c::setDefaultTextureHandle(GLuint handle) {
+void GameMenu::setDefaultTextureHandle(GLuint handle) {
   defaultTextureHandle = handle;
 }
 
 
-menu_c::menu_c(void) {
+GameMenu::GameMenu(void) {
   mGlBitmapFont.setupFont(defaultTextureHandle, 128, 16, 16);
 }
 
 
-menu_c::~menu_c(void) {
+GameMenu::~GameMenu(void) {
   clear();
 }
 
 
-void menu_c::clear(void) {
+void GameMenu::clear(void) {
   mMenuItems.clear ();
 }
 
 
-void menu_c::setFont1(int glHandle) {
+void GameMenu::setFont1(int glHandle) {
   mGlBitmapFont.setupFont(glHandle, 128, 16, 16);
 }
 
 
-size_t menu_c::addButton(
+size_t GameMenu::addButton(
   v2d_t position,
   v2d_t dimensions,
   v2d_t fontSize,
@@ -85,7 +85,7 @@ size_t menu_c::addButton(
 }
 
 
-size_t menu_c::addText(
+size_t GameMenu::addText(
   v2d_t position,
   v2d_t dimensions,
   v2d_t fontSize,
@@ -137,7 +137,7 @@ size_t menu_c::addText(
 }
 
 
-int menu_c::menu_choice(bool waitForInput) {
+int GameMenu::GameMenuhoice(bool waitForInput) {
   // release the mouse
   SDL_SetRelativeMouseMode(SDL_FALSE);
   SDL_ShowCursor(1);
@@ -190,7 +190,7 @@ int menu_c::menu_choice(bool waitForInput) {
 }
 
 
-int menu_c::mouse_up(double x, double y) {
+int GameMenu::mouse_up(double x, double y) {
   // see if the dummy actually managed to hit something
   for (size_t i = 0; i < mMenuItems.size (); i++) {
     if (mMenuItems[i].type == MENUITEM_BUTTON) {
@@ -209,18 +209,16 @@ int menu_c::mouse_up(double x, double y) {
 }
 
 
-void menu_c::draw(void) {
+void GameMenu::draw(void) {
   // set up the opengl viewport
   glPushMatrix ();
-
-//	glViewport (0, 0, SCREEN_W, SCREEN_H);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
   glOrtho(0.0, 1.0, 1.0, 0.0, -1.0, 1.0);
 
-  glMatrixMode (GL_MODELVIEW);
+  glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
   glDisable(GL_DEPTH_TEST);
@@ -229,17 +227,17 @@ void menu_c::draw(void) {
 
   // draw the button/text background
   glBegin (GL_QUADS);
-    for (size_t i = 0; i < mMenuItems.size (); i++) {
+    for (size_t i = 0; i < mMenuItems.size(); i++) {
       GLfloat br[2] = {
         mMenuItems[i].position[0] + mMenuItems[i].dimensions[0],
         mMenuItems[i].position[1] + mMenuItems[i].dimensions[1] };
 
 
-      glColor4fv (mMenuItems[i].backgroundColor);
-      glVertex2f (mMenuItems[i].position[0], br[1]);
-      glVertex2f (br[0], br[1]);
-      glVertex2f (br[0], mMenuItems[i].position[1]);
-      glVertex2f (mMenuItems[i].position[0], mMenuItems[i].position[1]);
+      glColor4fv(mMenuItems[i].backgroundColor);
+      glVertex2f(mMenuItems[i].position[0], br[1]);
+      glVertex2f(br[0], br[1]);
+      glVertex2f(br[0], mMenuItems[i].position[1]);
+      glVertex2f(mMenuItems[i].position[0], mMenuItems[i].position[1]);
     }
   glEnd ();
 
@@ -282,7 +280,7 @@ void menu_c::draw(void) {
     mGlBitmapFont.drawString(
       pos,
       mMenuItems[i].fontSize,
-      mMenuItems[i].text.c_str (),
+      mMenuItems[i].text.c_str(),
       mMenuItems[i].color);
   }
 
@@ -290,6 +288,8 @@ void menu_c::draw(void) {
   glEnable(GL_DEPTH_TEST);
 
   glPopMatrix();
+
+//  mGameWindow->swapBuffers();
 }
 
 

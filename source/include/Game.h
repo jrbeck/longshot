@@ -116,7 +116,7 @@ class game_c {
 
   double mLastUpdateTime;
 
-  menu_c *mMenu;
+  GameMenu *mMenu;
   int mGameState;
 
   int mNumPhysicsObjects;

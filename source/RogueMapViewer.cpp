@@ -55,7 +55,7 @@ void RogueMapViewer::setUpOpenGl() {
 
 
 void RogueMapViewer::startViewer() {
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
   if (mMenu == NULL) {
     printf("RogueMapViewer::chooseLocation(): error: out of memory 1\n");
     return;

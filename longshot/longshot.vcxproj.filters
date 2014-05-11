@@ -201,9 +201,6 @@
     <ClCompile Include="..\source\LoadScreen.cpp">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\Menu.cpp">
-      <Filter>Source Files\utility</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\ObjectLoader.cpp">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
@@ -308,6 +305,9 @@
     </ClCompile>
     <ClCompile Include="..\source\PlanetMap.cpp">
       <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GameMenu.cpp">
+      <Filter>Source Files\utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,9 +440,6 @@
     <ClInclude Include="..\source\include\LoadScreen.h">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\Menu.h">
-      <Filter>Header Files\utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\ObjectLoader.h">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -547,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="..\source\include\PlanetMap.h">
       <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GameMenu.h">
+      <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

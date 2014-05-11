@@ -124,7 +124,7 @@
     <ClCompile Include="..\source\Longshot.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\MathUtil.cpp" />
-    <ClCompile Include="..\source\Menu.cpp" />
+    <ClCompile Include="..\source\GameMenu.cpp" />
     <ClCompile Include="..\source\MerchantView.cpp" />
     <ClCompile Include="..\source\ObjectLoader.cpp" />
     <ClCompile Include="..\source\OrbitSky.cpp" />
@@ -205,7 +205,7 @@
     <ClInclude Include="..\source\include\Location.h" />
     <ClInclude Include="..\source\include\Longshot.h" />
     <ClInclude Include="..\source\include\MathUtil.h" />
-    <ClInclude Include="..\source\include\Menu.h" />
+    <ClInclude Include="..\source\include\GameMenu.h" />
     <ClInclude Include="..\source\include\MerchantView.h" />
     <ClInclude Include="..\source\include\ObjectLoader.h" />
     <ClInclude Include="..\source\include\OrbitSky.h" />

@@ -22,89 +22,89 @@
 #include "MathUtil.h"
 
 
-#define DONT_ATTACK_PLAYER		(0)
-#define PLAYER_SPECIES			(AITYPE_HUMAN)
+#define DONT_ATTACK_PLAYER    (false)
+#define PLAYER_SPECIES        (AITYPE_HUMAN)
 
 
 class AiEntity {
 public:
-	AiEntity(void);
+  AiEntity(void);
 
-	void update(
-		double time,
-		WorldMap& worldMap,
-		Physics& physics,
-		vector<AiEntity*>& aiEntities,
-		ItemManager& itemManager);
-	// this is called only if the entity is a AITYPE_PLAYUH
-	void updatePlayer(Physics &physics);
+  void update(
+    double time,
+    WorldMap& worldMap,
+    Physics& physics,
+    vector<AiEntity*>& aiEntities,
+    ItemManager& itemManager);
+  // this is called only if the entity is a AITYPE_PLAYUH
+  void updatePlayer(Physics &physics);
 
-	void updateState(
-		double time,
-		WorldMap& worldMap,
-		Physics& physics,
-		vector<AiEntity*>& aiEntities,
-		ItemManager& itemManager);
+  void updateState(
+    double time,
+    WorldMap& worldMap,
+    Physics& physics,
+    vector<AiEntity*>& aiEntities,
+    ItemManager& itemManager);
 
-	bool testCondition(
-		int condition,
-		double time,
-		WorldMap& worldMap,
-		Physics& physics,
-		vector<AiEntity*>& aiEntities,
-		ItemManager& itemManager);
+  bool testCondition(
+    int condition,
+    double time,
+    WorldMap& worldMap,
+    Physics& physics,
+    vector<AiEntity*>& aiEntities,
+    ItemManager& itemManager);
 
-	void readMail(Physics& physics);
+  void readMail(Physics& physics);
 
 
-	// this is mostly slated to be paramaterized and moved out of here.
-	// good riddance!
-	void updateBalloon(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
-	void updateHopper(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
-	void updateDummy(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
+  // this is mostly slated to be paramaterized and moved out of here.
+  // good riddance!
+  void updateBalloon(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
+  void updateHopper(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
+  void updateDummy(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
 
-	void updateTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
-	void aquireTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
+  void updateTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
+  void aquireTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
 
-	bool useWeapon(double time, Physics& physics, ItemManager& itemManager);
-	bool isTargetInRange(int gunType, double distanceToTarget);
+  bool useWeapon(double time, Physics& physics, ItemManager& itemManager);
+  bool isTargetInRange(int gunType, double distanceToTarget);
 
-// members * * * * * * * * * * * * * * * * *
-	int mActive;
+  // members * * * * * * * * * * * * * * * * *
+  int mActive;
 
-	int mType;
+  int mType;
 
-	v3d_t mWorldPosition;
+  v3d_t mWorldPosition;
 
-	size_t mHandle;
-	size_t mPhysicsHandle;
-	size_t mTargetPhysicsHandle;
+  size_t mHandle;
+  size_t mPhysicsHandle;
+  size_t mTargetPhysicsHandle;
 
-	PhysicsEntity *mPhysicsEntity;
-	PhysicsEntity *mTargetPhysicsEntity;
+  PhysicsEntity *mPhysicsEntity;
+  PhysicsEntity *mTargetPhysicsEntity;
 
-	float mMaxHealth;
-	float mCurrentHealth;
+  float mMaxHealth;
+  float mCurrentHealth;
 
-	int mCurrentState;
+  int mCurrentState;
 
 #define mMinDistanceToPlayer  370.0
 
-	double mNextShotTime;
-	double mNextUpdateTime;
+  double mNextShotTime;
+  double mNextUpdateTime;
 
-	static const int AI_INVENTORY_SIZE = 5;
-	size_t mInventory[AI_INVENTORY_SIZE];
+  static const int AI_INVENTORY_SIZE = 5;
+  size_t mInventory[AI_INVENTORY_SIZE];
 
-	int mCurrentWeapon;
+  int mCurrentWeapon;
 
-	// behavior stuff
-	bool mWasAttacked;
-	int mAttackerHandle;
-	bool mWillAttackSameSpecies;
+  // behavior stuff
+  bool mWasAttacked;
+  int mAttackerHandle;
+  bool mWillAttackSameSpecies;
 
 
-	double mFacingAngle;
-	double mLookIncline;
-	v3d_t mHeadOrientation;
+  double mFacingAngle;
+  double mLookIncline;
+  v3d_t mHeadOrientation;
 };

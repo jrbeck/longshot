@@ -13,8 +13,8 @@
 // longshot constants * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #define SCREEN_ASPECT_RATIO		((double)SCREEN_W / (double)SCREEN_H)
 
-#include "game.h"	// game mode
-#include "menu.h"	// menu / interface entry
+#include "game.h"
+#include "GameMenu.h"
 #include "rogueviewer.h"
 
 #include "PseudoRandom.h"
@@ -53,7 +53,7 @@ private:
   };
 
   GameWindow* mGameWindow;
-  menu_c* mMainMenu;
+  GameMenu* mMainMenu;
   game_c* mGame;
   RogueViewer* mRogueViewer;
 
