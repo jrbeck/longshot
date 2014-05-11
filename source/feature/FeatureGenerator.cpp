@@ -1,370 +1,372 @@
 #include "FeatureGenerator.h"
 
 void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, LoadScreen* loadScreen) {
-	// this is the RogueMap used to place set pieces on the world
-	RogueMap worldRogueMap;
-	worldRogueMap.resize (ROGUE_W, ROGUE_H);
-	worldRogueMap.clear ();
+  // this is the RogueMap used to place set pieces on the world
+  RogueMap worldRogueMap;
+  worldRogueMap.resize(ROGUE_W, ROGUE_H);
+  worldRogueMap.clear();
 
-	v2di_t mapIndex = v2di_v(xIndex, zIndex);
+  v2di_t mapIndex = v2di_v(xIndex, zIndex);
 
-	loadScreen->draw(0, 6);
+  loadScreen->draw(0, 6);
 
-	// okay, let's get that WorldMap
-	WorldMap &worldMap = *world.getWorldMap();
+  // okay, let's get that WorldMap
+  WorldMap &worldMap = *world.getWorldMap();
 
-	for (int i = 0; i < 6; i++) {
-		v2di_t corner;
+  for (int i = 0; i < 6; i++) {
+    v2di_t corner;
 
-		corner = worldRogueMap.random_room(ID_START + i, 8, 8);
+    corner = worldRogueMap.random_room(ID_START + i, 8, 8);
 
-		if (corner.x != 0) {
-			corner = v2di_add(corner, mapIndex);
-			printf("dungeon at (%d, %d)\n", corner.x, corner.y);
-			DungeonFeature::createDungeon(corner, 3, world);
-//			createPlain (corner, 8, 8, worldMap);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
+      printf("dungeon at (%d, %d)\n", corner.x, corner.y);
+      DungeonFeature::createDungeon(corner, 3, world);
+      //			createPlain (corner, 8, 8, worldMap);
 
-			worldMap.swapOutToInactive();
-		}
-	}
+      worldMap.swapOutToInactive();
+    }
+  }
 
-	loadScreen->draw(1, 6);
+  loadScreen->draw(1, 6);
 
-	for (int i = 0; i < 1; i++) {
-		v2di_t corner;
+  for (int i = 0; i < 1; i++) {
+    v2di_t corner;
 
-		int side = 8;
+    int side = 8;
 
-		corner = worldRogueMap.random_room (ID_START + i, side, side);
+    corner = worldRogueMap.random_room(ID_START + i, side, side);
 
-		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
-			printf ("great pyramid at (%d, %d)\n", corner.x, corner.y);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
+      printf("great pyramid at (%d, %d)\n", corner.x, corner.y);
 
-			FeatureUtil::loadWorldRegion(corner, side, world, false);
-			createPyramid(side, corner, world);
+      FeatureUtil::loadWorldRegion(corner, side, world, false);
+      createPyramid(side, corner, world);
 
-			worldMap.swapOutToInactive();
-		}
-	}
+      worldMap.swapOutToInactive();
+    }
+  }
 
-	loadScreen->draw(2, 6);
+  loadScreen->draw(2, 6);
 
-	for (int i = 0; i < 1; i++) {
-		v2di_t corner;
+  for (int i = 0; i < 1; i++) {
+    v2di_t corner;
 
-		int side = 16;
+    int side = 16;
 
-		corner = worldRogueMap.random_room (ID_START + i, side, side);
+    corner = worldRogueMap.random_room(ID_START + i, side, side);
 
-		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
-			printf ("village at (%d, %d)\n", corner.x, corner.y);
-			createVillage (side, corner, world);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
+      printf("village at (%d, %d)\n", corner.x, corner.y);
+      createVillage(side, corner, world);
 
-//			createPlain (corner, side, side, worldMap);
+      //			createPlain (corner, side, side, worldMap);
 
-			worldMap.swapOutToInactive ();
-		}
-	}
+      worldMap.swapOutToInactive();
+    }
+  }
 
-	loadScreen->draw(3, 6);
+  loadScreen->draw(3, 6);
 
-	// hmmm
-	for (int i = 0; i < 6; i++) {
-		v2di_t corner;
+  // hmmm
+  for (int i = 0; i < 6; i++) {
+    v2di_t corner;
 
-		int side = 6;
+    int side = 6;
 
-		corner = worldRogueMap.random_room (ID_START + i, side, side);
+    corner = worldRogueMap.random_room(ID_START + i, side, side);
 
-		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
-			printf ("spiral garden at (%d, %d)\n", corner.x, corner.y);
-//			createPyramid (side, corner, worldMap);
-//			createPlain (corner, side, side, worldMap);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
+      printf("spiral garden at (%d, %d)\n", corner.x, corner.y);
+      //			createPyramid (side, corner, worldMap);
+      //			createPlain (corner, side, side, worldMap);
 
-			FeatureUtil::loadWorldRegion(corner, side, world, false);
+      FeatureUtil::loadWorldRegion(corner, side, world, false);
 
-//			height_info_t hI = getHeightInfo (corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
-//				side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, worldMap);
+      //			height_info_t hI = getHeightInfo (corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
+      //				side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, worldMap);
 
-			growSpiralGarden (corner, side, side, world);
-
-
-			worldMap.swapOutToInactive ();
-		}
-	}
+      growSpiralGarden(corner, side, side, world);
 
 
-	// CAVERNS
-	for (int i = 0; i < 4; i++) {
-		v2di_t corner;
+      worldMap.swapOutToInactive();
+    }
+  }
 
-		int side = 6;
 
-		corner = worldRogueMap.random_room (ID_START + i, side, side);
+  // CAVERNS
+  for (int i = 0; i < 4; i++) {
+    v2di_t corner;
 
-		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
-			printf ("cavern system at (%d, %d)\n", corner.x, corner.y);
+    int side = 6;
 
-			FeatureUtil::loadWorldRegion(corner, side, world, false);
+    corner = worldRogueMap.random_room(ID_START + i, side, side);
 
-			drillCavern (corner, side, side, world);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
+      printf("cavern system at (%d, %d)\n", corner.x, corner.y);
 
-			worldMap.swapOutToInactive ();
-		}
-	}
+      FeatureUtil::loadWorldRegion(corner, side, world, false);
 
-	loadScreen->draw(4, 6);
+      drillCavern(corner, side, side, world);
 
-	// castle?
-	for (int i = 0; i < 1; i++) {
-		v2di_t corner;
+      worldMap.swapOutToInactive();
+    }
+  }
 
-		int side = 8;
+  loadScreen->draw(4, 6);
 
-		corner = worldRogueMap.random_room (ID_START + i, side, side);
+  // castle?
+  for (int i = 0; i < 1; i++) {
+    v2di_t corner;
 
-		if (corner.x != 0) {
-			corner = v2di_add (corner, mapIndex);
-			printf ("castle at (%d, %d)\n", corner.x, corner.y);
-			createPlain(corner, side, side, world);
+    int side = 8;
 
-			height_info_t hI = FeatureUtil::getHeightInfo (corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
-				side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, world);
+    corner = worldRogueMap.random_room(ID_START + i, side, side);
 
-			createCastle8x8 (corner, world);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
+      printf("castle at (%d, %d)\n", corner.x, corner.y);
+      createPlain(corner, side, side, world);
 
-			worldMap.swapOutToInactive ();
-		}
-	}
+      height_info_t hI = FeatureUtil::getHeightInfo(corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
+        side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, world);
 
-	loadScreen->draw(5, 6);
+      createCastle8x8(corner, world);
 
-	for (int i = 0; i < 50; i++) {
-		int side = 1;
+      worldMap.swapOutToInactive();
+    }
+  }
 
-		v2di_t corner;
+  loadScreen->draw(5, 6);
 
-		corner = worldRogueMap.random_room(ID_START + i, side, side);
+  for (int i = 0; i < 50; i++) {
+    int side = 1;
 
-		if (corner.x != 0) {
-			corner = v2di_add(corner, mapIndex);
+    v2di_t corner;
 
-			height_info_t heightInfo = FeatureUtil::getHeightInfo(corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
-				side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, world);
+    corner = worldRogueMap.random_room(ID_START + i, side, side);
 
-			if (heightInfo.low > 2) {
-				printf("house at (%d, %d)\n", corner.x, corner.y);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, mapIndex);
 
-				createPlain(corner, side, side, world);
+      height_info_t heightInfo = FeatureUtil::getHeightInfo(corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
+        side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, world);
 
-				createHouse(corner, world);
-//				createPlain (corner, 1, 1, worldMap);
-//				create1by1Tower (corner, worldMap);
+      if (heightInfo.low > 2) {
+        printf("house at (%d, %d)\n", corner.x, corner.y);
 
-				worldMap.swapOutToInactive ();
-			}
-		}
-	}
+        createPlain(corner, side, side, world);
+
+        createHouse(corner, world);
+        //				createPlain (corner, 1, 1, worldMap);
+        //				create1by1Tower (corner, worldMap);
+
+        worldMap.swapOutToInactive();
+      }
+    }
+  }
+
+  loadScreen->draw(6, 6);
 }
 
 
-void FeatureGenerator::createPyramid (int side, v2di_t cornerIndex, World &world) {
-	// WARNING: relative to 0, 0
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+void FeatureGenerator::createPyramid(int side, v2di_t cornerIndex, World &world) {
+  // WARNING: relative to 0, 0
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	int width = side * WORLD_CHUNK_SIDE;
-	int halfWidth = width >> 1;
+  int width = side * WORLD_CHUNK_SIDE;
+  int halfWidth = width >> 1;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo (worldX, worldZ, width, width, world);
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, width, width, world);
 
-	v3di_t baseNearPoint = {
-		worldX,
-		heightInfo.low,
-		worldZ };
+  v3di_t baseNearPoint = {
+    worldX,
+    heightInfo.low,
+    worldZ };
 
-	drawPyramid (baseNearPoint, side * WORLD_CHUNK_SIDE, BLOCK_TYPE_OBSIDIAN, world);
-}
-
-
-
-void FeatureGenerator::create1by1Tower (v2di_t cornerIndex, int baseHeight, WorldMap &worldMap) {
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
-
-//	height_info_t heightInfo = getHeightInfo (worldX, worldZ, WORLD_CHUNK_SIDE, WORLD_CHUNK_SIDE, worldMap);
-
-//	createPlain (cornerIndex, 1, 1, worldMap);
-
-	// now build the tower
-	v3di_t a, b;
-
-	//heightInfo.avg++;
-	int roofHeight = 25;
-
-	// fill it
-	a.x = worldX + 3;
-	a.y = baseHeight;
-	a.z = worldZ + 3;
-
-	b.x = worldX + 12;
-	b.y = baseHeight + roofHeight;
-	b.z = worldZ + 12;
-
-	worldMap.fillVolume (a, b, BLOCK_TYPE_OLD_BRICK);
-
-	// hollow it out
-	a.x = worldX + 4;
-	a.y = baseHeight;
-	a.z = worldZ + 4;
-
-	b.x = worldX + 11;
-	b.y = baseHeight + roofHeight;
-	b.z = worldZ + 11;
-
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
-
-	// make the door
-	a.x = worldX + 3;
-	a.z = worldZ + 7;
-	a.y = baseHeight;
-
-	b.x = worldX + 3;
-	b.z = worldZ + 8;
-	b.y = a.y;
-
-	for (int i = 0; i < 3; i++) {
-		worldMap.clearBlock (a);
-		worldMap.clearBlock (b);
-		a.y++;
-		b.y++;
-	}
-
-	// draw a couple stairs
-//	v3di_t southwestInsideCorner = v3di_v (worldX + 6, heightInfo.avg, worldZ + 6);
-//	buildSpiralStaircase (southwestInsideCorner, 3, heightInfo.avg + 26,
-//		r_numi (0, FG_NUM_CORNERS), worldMap);
-
-	v3di_t southwestInsideCorner = v3di_v (worldX + 5, baseHeight, worldZ + 5);
-	FeatureUtil::buildSpiralStaircase (southwestInsideCorner, 5, baseHeight + 26,
-		r_numi (0, FG_NUM_CORNERS), worldMap);
-
-//	v3di_t southwestInsideCorner = v3di_v (worldX + 3, heightInfo.avg, worldZ + 3);
-//	buildSpiralStaircase (southwestInsideCorner, 9, heightInfo.avg + 27, FG_CORNER_SW, worldMap);
-
-
-//	worldMap.swapOutToInactive ();
-
+  drawPyramid(baseNearPoint, side * WORLD_CHUNK_SIDE, BLOCK_TYPE_OBSIDIAN, world);
 }
 
 
 
+void FeatureGenerator::create1by1Tower(v2di_t cornerIndex, int baseHeight, WorldMap &worldMap) {
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+
+  //	height_info_t heightInfo = getHeightInfo (worldX, worldZ, WORLD_CHUNK_SIDE, WORLD_CHUNK_SIDE, worldMap);
+
+  //	createPlain (cornerIndex, 1, 1, worldMap);
+
+  // now build the tower
+  v3di_t a, b;
+
+  //heightInfo.avg++;
+  int roofHeight = 25;
+
+  // fill it
+  a.x = worldX + 3;
+  a.y = baseHeight;
+  a.z = worldZ + 3;
+
+  b.x = worldX + 12;
+  b.y = baseHeight + roofHeight;
+  b.z = worldZ + 12;
+
+  worldMap.fillVolume(a, b, BLOCK_TYPE_OLD_BRICK);
+
+  // hollow it out
+  a.x = worldX + 4;
+  a.y = baseHeight;
+  a.z = worldZ + 4;
+
+  b.x = worldX + 11;
+  b.y = baseHeight + roofHeight;
+  b.z = worldZ + 11;
+
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
+
+  // make the door
+  a.x = worldX + 3;
+  a.z = worldZ + 7;
+  a.y = baseHeight;
+
+  b.x = worldX + 3;
+  b.z = worldZ + 8;
+  b.y = a.y;
+
+  for (int i = 0; i < 3; i++) {
+    worldMap.clearBlock(a);
+    worldMap.clearBlock(b);
+    a.y++;
+    b.y++;
+  }
+
+  // draw a couple stairs
+  //	v3di_t southwestInsideCorner = v3di_v (worldX + 6, heightInfo.avg, worldZ + 6);
+  //	buildSpiralStaircase (southwestInsideCorner, 3, heightInfo.avg + 26,
+  //		r_numi (0, FG_NUM_CORNERS), worldMap);
+
+  v3di_t southwestInsideCorner = v3di_v(worldX + 5, baseHeight, worldZ + 5);
+  FeatureUtil::buildSpiralStaircase(southwestInsideCorner, 5, baseHeight + 26,
+    r_numi(0, FG_NUM_CORNERS), worldMap);
+
+  //	v3di_t southwestInsideCorner = v3di_v (worldX + 3, heightInfo.avg, worldZ + 3);
+  //	buildSpiralStaircase (southwestInsideCorner, 9, heightInfo.avg + 27, FG_CORNER_SW, worldMap);
+
+
+  //	worldMap.swapOutToInactive ();
+
+}
 
 
 
-void FeatureGenerator::drillSpiral (
-	v3d_t top,
-	double radius,
-	double height,
-	double totalRotation,
-	int numSteps,
-	WorldMap &worldMap)
+
+
+
+void FeatureGenerator::drillSpiral(
+  v3d_t top,
+  double radius,
+  double height,
+  double totalRotation,
+  int numSteps,
+  WorldMap &worldMap)
 {
-	v3d_t pos;
+  v3d_t pos;
 
-	double bottom = top.y - height;
-	double percent;
-	double angle;
+  double bottom = top.y - height;
+  double percent;
+  double angle;
 
-	for (int step = 0; step < numSteps; step++) {
-		percent = static_cast<double> (step) / static_cast<double>(numSteps - 1);
-		angle = percent * totalRotation;
+  for (int step = 0; step < numSteps; step++) {
+    percent = static_cast<double> (step) / static_cast<double>(numSteps - 1);
+    angle = percent * totalRotation;
 
-		pos.x = top.x + radius * cos (angle);
-		pos.y = lerp (bottom, top.y, percent);
-		pos.z = top.z + radius * sin (angle);
+    pos.x = top.x + radius * cos(angle);
+    pos.y = lerp(bottom, top.y, percent);
+    pos.z = top.z + radius * sin(angle);
 
-		worldMap.clearSphere (pos, 3.0);
-	}
+    worldMap.clearSphere(pos, 3.0);
+  }
 }
 
 
 
 
 
-void FeatureGenerator::drillCavern (
-	v2di_t cornerIndex,
-	int sideX,
-	int sideZ,
-	World &world)
+void FeatureGenerator::drillCavern(
+  v2di_t cornerIndex,
+  int sideX,
+  int sideZ,
+  World &world)
 {
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	int sideLengthX = sideX * WORLD_CHUNK_SIDE;
-	int sideLengthZ = sideZ * WORLD_CHUNK_SIDE;
+  int sideLengthX = sideX * WORLD_CHUNK_SIDE;
+  int sideLengthZ = sideZ * WORLD_CHUNK_SIDE;
 
-//	height_info_t heightInfo = getHeightInfo (worldX, worldZ, sideLengthX, sideLengthZ, worldMap);
+  //	height_info_t heightInfo = getHeightInfo (worldX, worldZ, sideLengthX, sideLengthZ, worldMap);
 
-	double halfSideX = (double)sideLengthX / 2;
-	double halfSideZ = (double)sideLengthZ / 2;
+  double halfSideX = (double)sideLengthX / 2;
+  double halfSideZ = (double)sideLengthZ / 2;
 
-	v3d_t centerPos = {
-		(double)worldX + halfSideX,
-		0.0,
-		(double)worldZ + halfSideZ
-	};
+  v3d_t centerPos = {
+    (double)worldX + halfSideX,
+    0.0,
+    (double)worldZ + halfSideZ
+  };
 
-	v3d_t pos;
+  v3d_t pos;
 
-	for (int j = 0; j < 6; j++) {
-		pos.x = centerPos.x + r_num(-halfSideX * 0.9, halfSideX * 0.9);
-		pos.z = centerPos.z + r_num(-halfSideZ * 0.9, halfSideZ * 0.9);
-		pos.y = (double)(world.getTerrainHeight ((int)pos.x, (int)pos.z));
+  for (int j = 0; j < 6; j++) {
+    pos.x = centerPos.x + r_num(-halfSideX * 0.9, halfSideX * 0.9);
+    pos.z = centerPos.z + r_num(-halfSideZ * 0.9, halfSideZ * 0.9);
+    pos.y = (double)(world.getTerrainHeight((int)pos.x, (int)pos.z));
 
-		double angle = r_num(0.0, MY_2PI);
+    double angle = r_num(0.0, MY_2PI);
 
-		v3d_t vel = {
-			cos(angle),
-			0.5,
-			sin(angle)
-		};
+    v3d_t vel = {
+      cos(angle),
+      0.5,
+      sin(angle)
+    };
 
-		double radius = r_num(1.0, 4.0);
+    double radius = r_num(1.0, 4.0);
 
-		WorldMap &worldMap = *world.getWorldMap();
-		for (int i = 0; i < 75; i++) {
-//			worldMap.clearSphere (pos, 4.0);
-			worldMap.fillSphere(pos, radius, BLOCK_TYPE_DARK_PURPLE, LIGHT_LEVEL_SOLID);
+    WorldMap &worldMap = *world.getWorldMap();
+    for (int i = 0; i < 75; i++) {
+      //			worldMap.clearSphere (pos, 4.0);
+      worldMap.fillSphere(pos, radius, BLOCK_TYPE_DARK_PURPLE, LIGHT_LEVEL_SOLID);
 
-			pos = v3d_add(pos, vel);
+      pos = v3d_add(pos, vel);
 
-			radius += r_num(-0.1, 0.1);
-			if (radius < 1.0) {
-				radius = 1.0;
-			}
-			if (radius > 4.0) {
-				radius = 4.0;
-			}
+      radius += r_num(-0.1, 0.1);
+      if (radius < 1.0) {
+        radius = 1.0;
+      }
+      if (radius > 4.0) {
+        radius = 4.0;
+      }
 
-			vel.x += r_num(-0.1, 0.1);
-			vel.z += r_num(-0.1, 0.1);
+      vel.x += r_num(-0.1, 0.1);
+      vel.z += r_num(-0.1, 0.1);
 
-			double delta = ((double)worldX + halfSideX) - pos.x;
-			if (abs(delta) > (double)sideLengthX * 0.4) {
-				vel.x = -vel.x;
-			}
+      double delta = ((double)worldX + halfSideX) - pos.x;
+      if (abs(delta) > (double)sideLengthX * 0.4) {
+        vel.x = -vel.x;
+      }
 
-			delta = ((double)worldZ + halfSideZ) - pos.z;
-			if (abs(delta) > (double)sideLengthZ * 0.4) {
-				vel.z = -vel.z;
-			}
-		}
-	}
+      delta = ((double)worldZ + halfSideZ) - pos.z;
+      if (abs(delta) > (double)sideLengthZ * 0.4) {
+        vel.z = -vel.z;
+      }
+    }
+  }
 }
 
 
@@ -374,118 +376,118 @@ void FeatureGenerator::drillCavern (
 
 
 
-void FeatureGenerator::growSpiralGarden (
-	v2di_t cornerIndex,
-	int sideX,
-	int sideZ,
-	World &world)
+void FeatureGenerator::growSpiralGarden(
+  v2di_t cornerIndex,
+  int sideX,
+  int sideZ,
+  World &world)
 {
 
 
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	int sideLengthX = sideX * WORLD_CHUNK_SIDE;
-	int sideLengthZ = sideZ * WORLD_CHUNK_SIDE;
+  int sideLengthX = sideX * WORLD_CHUNK_SIDE;
+  int sideLengthZ = sideZ * WORLD_CHUNK_SIDE;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo (worldX, worldZ, sideLengthX, sideLengthZ, world);
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, sideLengthX, sideLengthZ, world);
 
-	int blockType;
-	int numSpirals;
-	int blockRNum = r_numi (0, 4);
-	switch (blockRNum) {
-		case 0:
-			blockType = BLOCK_TYPE_DARK_PURPLE;
-			numSpirals = r_numi (20, 35);
-			break;
+  int blockType;
+  int numSpirals;
+  int blockRNum = r_numi(0, 4);
+  switch (blockRNum) {
+  case 0:
+    blockType = BLOCK_TYPE_DARK_PURPLE;
+    numSpirals = r_numi(20, 35);
+    break;
 
-		case 1:
-			blockType = BLOCK_TYPE_FUSCHIA;
-			numSpirals = r_numi (3, 15);
-			break;
+  case 1:
+    blockType = BLOCK_TYPE_FUSCHIA;
+    numSpirals = r_numi(3, 15);
+    break;
 
-		case 2:
-			blockType = BLOCK_TYPE_NAVY_BLUE;
-			numSpirals = r_numi (50, 100);
-			break;
-				
-		case 3:
-		default:
-			blockType = BLOCK_TYPE_BRICK_RED;
-			numSpirals = r_numi (7, 15);
-			break;
-	}
+  case 2:
+    blockType = BLOCK_TYPE_NAVY_BLUE;
+    numSpirals = r_numi(50, 100);
+    break;
 
-	WorldMap &worldMap = *world.getWorldMap();
-	for (int i = 0; i < numSpirals; i++) {
-		v3d_t top;
+  case 3:
+  default:
+    blockType = BLOCK_TYPE_BRICK_RED;
+    numSpirals = r_numi(7, 15);
+    break;
+  }
 
-		double height;
+  WorldMap &worldMap = *world.getWorldMap();
+  for (int i = 0; i < numSpirals; i++) {
+    v3d_t top;
 
-		top.x = worldX + r_num (10.0, static_cast<double>(sideLengthX) - 10.0);
-		top.z = worldZ + r_num (10.0, static_cast<double>(sideLengthZ) - 10.0);
-		double bottom = world.getTerrainHeight (static_cast<int>(top.x), static_cast<int>(top.z));
+    double height;
 
-		v3d_t pos;
+    top.x = worldX + r_num(10.0, static_cast<double>(sideLengthX)-10.0);
+    top.z = worldZ + r_num(10.0, static_cast<double>(sideLengthZ)-10.0);
+    double bottom = world.getTerrainHeight(static_cast<int>(top.x), static_cast<int>(top.z));
 
-		double percent;
-		double angle;
-		int numSteps = 100;
-		double totalRotation;
-		double radius;
+    v3d_t pos;
 
-		double sphereRadiusStart = 2.1;
-		double sphereRadiusEnd = 1.1;
-		double sphereRadius;
-		
+    double percent;
+    double angle;
+    int numSteps = 100;
+    double totalRotation;
+    double radius;
 
-		switch (blockType) {
-			case BLOCK_TYPE_DARK_PURPLE:
-				radius = r_num (2.0, 4.0);
-				totalRotation = r_num (2.0, 4.0) * 2.0;
-				height = r_num (15.0, 30.0);
-				break;
+    double sphereRadiusStart = 2.1;
+    double sphereRadiusEnd = 1.1;
+    double sphereRadius;
 
-			case BLOCK_TYPE_SLUDGE:
-				radius = r_num (4.0, 7.0);
-				totalRotation = r_num (2.0, 4.0) * 6.28;
-				height = r_num (35.0, 75.0);
-				sphereRadiusStart = 2.5;
-				sphereRadiusEnd = 4.0;
-				break;
 
-			case BLOCK_TYPE_NAVY_BLUE:
-				radius = r_num (2.0, 3.0);
-				totalRotation = r_num (2.0, 4.0) * 2.0;
-				height = r_num (10.0, 20.0);
-				sphereRadiusStart = 2.5;
-				sphereRadiusEnd = 1.0;
-				break;
-				
-			case BLOCK_TYPE_BRICK_RED:
-			default:
-				radius = r_num (3.0, 6.0);
-				totalRotation = r_num (2.0, 4.0) * 6.28;
-				height = r_num (10.0, 25.0);
-				break;
-		}
+    switch (blockType) {
+    case BLOCK_TYPE_DARK_PURPLE:
+      radius = r_num(2.0, 4.0);
+      totalRotation = r_num(2.0, 4.0) * 2.0;
+      height = r_num(15.0, 30.0);
+      break;
 
-		top.y = bottom + height;
+    case BLOCK_TYPE_SLUDGE:
+      radius = r_num(4.0, 7.0);
+      totalRotation = r_num(2.0, 4.0) * 6.28;
+      height = r_num(35.0, 75.0);
+      sphereRadiusStart = 2.5;
+      sphereRadiusEnd = 4.0;
+      break;
 
-		for (int step = 0; step < numSteps; step++) {
-			percent = static_cast<double> (step) / static_cast<double>(numSteps - 1);
-			angle = percent * totalRotation;
+    case BLOCK_TYPE_NAVY_BLUE:
+      radius = r_num(2.0, 3.0);
+      totalRotation = r_num(2.0, 4.0) * 2.0;
+      height = r_num(10.0, 20.0);
+      sphereRadiusStart = 2.5;
+      sphereRadiusEnd = 1.0;
+      break;
 
-			pos.x = top.x + radius * cos (angle);
-			pos.y = lerp (bottom, top.y, percent);
-			pos.z = top.z + radius * sin (angle);
+    case BLOCK_TYPE_BRICK_RED:
+    default:
+      radius = r_num(3.0, 6.0);
+      totalRotation = r_num(2.0, 4.0) * 6.28;
+      height = r_num(10.0, 25.0);
+      break;
+    }
 
-			sphereRadius = lerp (sphereRadiusStart, sphereRadiusEnd, percent);
+    top.y = bottom + height;
 
-			worldMap.fillSphere (pos, sphereRadius, blockType, LIGHT_LEVEL_SOLID);
-		}
+    for (int step = 0; step < numSteps; step++) {
+      percent = static_cast<double> (step) / static_cast<double>(numSteps - 1);
+      angle = percent * totalRotation;
 
-	}
+      pos.x = top.x + radius * cos(angle);
+      pos.y = lerp(bottom, top.y, percent);
+      pos.z = top.z + radius * sin(angle);
+
+      sphereRadius = lerp(sphereRadiusStart, sphereRadiusEnd, percent);
+
+      worldMap.fillSphere(pos, sphereRadius, blockType, LIGHT_LEVEL_SOLID);
+    }
+
+  }
 }
 
 
@@ -494,220 +496,220 @@ void FeatureGenerator::growSpiralGarden (
 
 
 
-void FeatureGenerator::createCastle8x8 (v2di_t cornerIndex, World &world) {
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	int sideLength = 8 * WORLD_CHUNK_SIDE;
+  int sideLength = 8 * WORLD_CHUNK_SIDE;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo (worldX, worldZ, sideLength, sideLength, world);
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, sideLength, sideLength, world);
 
-	WorldMap &worldMap = *world.getWorldMap();
-
-
-	v3di_t a, b;
-//	heightInfo.avg++;
-	int roofHeight = 20;
-
-	// fill it
-	a.x = worldX + WORLD_CHUNK_SIDE + 4;
-	a.y = heightInfo.avg + 1;
-	a.z = worldZ + WORLD_CHUNK_SIDE + 4;
-
-	b.x = worldX + (7 * WORLD_CHUNK_SIDE) - 5;
-	b.y = heightInfo.avg + roofHeight;
-	b.z = worldZ + (7 * WORLD_CHUNK_SIDE) - 5;
-
-	worldMap.fillVolume (a, b, BLOCK_TYPE_OLD_BRICK);
-
-	// empty it
-	a.x = worldX + WORLD_CHUNK_SIDE + 12;
-	a.y = heightInfo.avg + 1;
-	a.z = worldZ + WORLD_CHUNK_SIDE + 12;
-
-	b.x = worldX + (7 * WORLD_CHUNK_SIDE) - 13;
-	b.y = heightInfo.avg + roofHeight;
-	b.z = worldZ + (7 * WORLD_CHUNK_SIDE) - 13;
-
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+  WorldMap &worldMap = *world.getWorldMap();
 
 
-	// clear the entrance
-	a.x = worldX + WORLD_CHUNK_SIDE + 4;
-	a.y = heightInfo.avg + 1;
-	a.z = worldZ + (WORLD_CHUNK_SIDE * 3) + 12;
+  v3di_t a, b;
+  //	heightInfo.avg++;
+  int roofHeight = 20;
 
-	b.x = worldX + WORLD_CHUNK_SIDE + 12;
-	b.y = heightInfo.avg + roofHeight - 10;
-	b.z = worldZ + (5 * WORLD_CHUNK_SIDE) - 13;
+  // fill it
+  a.x = worldX + WORLD_CHUNK_SIDE + 4;
+  a.y = heightInfo.avg + 1;
+  a.z = worldZ + WORLD_CHUNK_SIDE + 4;
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+  b.x = worldX + (7 * WORLD_CHUNK_SIDE) - 5;
+  b.y = heightInfo.avg + roofHeight;
+  b.z = worldZ + (7 * WORLD_CHUNK_SIDE) - 5;
+
+  worldMap.fillVolume(a, b, BLOCK_TYPE_OLD_BRICK);
+
+  // empty it
+  a.x = worldX + WORLD_CHUNK_SIDE + 12;
+  a.y = heightInfo.avg + 1;
+  a.z = worldZ + WORLD_CHUNK_SIDE + 12;
+
+  b.x = worldX + (7 * WORLD_CHUNK_SIDE) - 13;
+  b.y = heightInfo.avg + roofHeight;
+  b.z = worldZ + (7 * WORLD_CHUNK_SIDE) - 13;
+
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
 
-	// fill the keep
-	a.x = worldX + (WORLD_CHUNK_SIDE * 3) + 4;
-	a.y = heightInfo.avg + 1;
-	a.z = worldZ + (WORLD_CHUNK_SIDE * 3) + 4;
+  // clear the entrance
+  a.x = worldX + WORLD_CHUNK_SIDE + 4;
+  a.y = heightInfo.avg + 1;
+  a.z = worldZ + (WORLD_CHUNK_SIDE * 3) + 12;
 
-	b.x = worldX + (5 * WORLD_CHUNK_SIDE) - 5;
-	b.y = heightInfo.avg + roofHeight + 15;
-	b.z = worldZ + (5 * WORLD_CHUNK_SIDE) - 5;
+  b.x = worldX + WORLD_CHUNK_SIDE + 12;
+  b.y = heightInfo.avg + roofHeight - 10;
+  b.z = worldZ + (5 * WORLD_CHUNK_SIDE) - 13;
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_OLD_BRICK);
-
-
-//	heightInfo.avg++;
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
 
-	v2di_t towerCorner;
+  // fill the keep
+  a.x = worldX + (WORLD_CHUNK_SIDE * 3) + 4;
+  a.y = heightInfo.avg + 1;
+  a.z = worldZ + (WORLD_CHUNK_SIDE * 3) + 4;
 
-	towerCorner = v2di_v (cornerIndex.x + 1, cornerIndex.y + 1);
-	create1by1Tower (towerCorner, heightInfo.avg + 1, worldMap);
+  b.x = worldX + (5 * WORLD_CHUNK_SIDE) - 5;
+  b.y = heightInfo.avg + roofHeight + 15;
+  b.z = worldZ + (5 * WORLD_CHUNK_SIDE) - 5;
 
-	towerCorner = v2di_v (cornerIndex.x + 6, cornerIndex.y + 1);
-	create1by1Tower (towerCorner, heightInfo.avg + 1, worldMap);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_OLD_BRICK);
 
-	towerCorner = v2di_v (cornerIndex.x + 1, cornerIndex.y + 6);
-	create1by1Tower (towerCorner, heightInfo.avg + 1, worldMap);
 
-	towerCorner = v2di_v (cornerIndex.x + 6, cornerIndex.y + 6);
-	create1by1Tower (towerCorner, heightInfo.avg + 1, worldMap);
+  //	heightInfo.avg++;
+
+
+  v2di_t towerCorner;
+
+  towerCorner = v2di_v(cornerIndex.x + 1, cornerIndex.y + 1);
+  create1by1Tower(towerCorner, heightInfo.avg + 1, worldMap);
+
+  towerCorner = v2di_v(cornerIndex.x + 6, cornerIndex.y + 1);
+  create1by1Tower(towerCorner, heightInfo.avg + 1, worldMap);
+
+  towerCorner = v2di_v(cornerIndex.x + 1, cornerIndex.y + 6);
+  create1by1Tower(towerCorner, heightInfo.avg + 1, worldMap);
+
+  towerCorner = v2di_v(cornerIndex.x + 6, cornerIndex.y + 6);
+  create1by1Tower(towerCorner, heightInfo.avg + 1, worldMap);
 
 }
 
 
 
 void FeatureGenerator::createHouse(v2di_t cornerIndex, World &world) {
-	// WARNING: this always corners at 0, 0
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+  // WARNING: this always corners at 0, 0
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo (worldX, worldZ, WORLD_CHUNK_SIDE, WORLD_CHUNK_SIDE, world);
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, WORLD_CHUNK_SIDE, WORLD_CHUNK_SIDE, world);
 
-	// now build the house
-	v3di_t a, b;
+  // now build the house
+  v3di_t a, b;
 
-	int floorHeight = heightInfo.avg + 1;
-	int roofHeight = 5;
-	int sideLength = 7;
-	int offset = 4;
+  int floorHeight = heightInfo.avg + 1;
+  int roofHeight = 5;
+  int sideLength = 7;
+  int offset = 4;
 
-	// make a roof
-	a.x = worldX + (offset - 1);
-	a.y = floorHeight + roofHeight;
-	a.z = worldZ + (offset - 1);
+  // make a roof
+  a.x = worldX + (offset - 1);
+  a.y = floorHeight + roofHeight;
+  a.z = worldZ + (offset - 1);
 
-	drawPyramid (a, sideLength + 2, BLOCK_TYPE_LIGHT_BLUE, world);
+  drawPyramid(a, sideLength + 2, BLOCK_TYPE_LIGHT_BLUE, world);
 
-	WorldMap &worldMap = *world.getWorldMap();
+  WorldMap &worldMap = *world.getWorldMap();
 
-	// fill it
-	a.x = worldX + offset;
-	a.y = floorHeight;
-	a.z = worldZ + 4;
+  // fill it
+  a.x = worldX + offset;
+  a.y = floorHeight;
+  a.z = worldZ + 4;
 
-	b.x = worldX + offset + sideLength;
-	b.y = floorHeight + roofHeight;
-	b.z = worldZ + offset + sideLength;
+  b.x = worldX + offset + sideLength;
+  b.y = floorHeight + roofHeight;
+  b.z = worldZ + offset + sideLength;
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_LIGHT_STONE);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_LIGHT_STONE);
 
-	// hollow it out
-	a.x = worldX + offset + 1;
-	a.y = floorHeight;
-	a.z = worldZ + offset + 1;
+  // hollow it out
+  a.x = worldX + offset + 1;
+  a.y = floorHeight;
+  a.z = worldZ + offset + 1;
 
-	b.x = worldX + offset + (sideLength - 1);
-	b.y = floorHeight + roofHeight - 1;
-	b.z = worldZ + offset + (sideLength - 1);
+  b.x = worldX + offset + (sideLength - 1);
+  b.y = floorHeight + roofHeight - 1;
+  b.z = worldZ + offset + (sideLength - 1);
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
-	// make the door
-	a.x = worldX + offset;
-	a.y = floorHeight;
-	a.z = worldZ + offset + 3;
+  // make the door
+  a.x = worldX + offset;
+  a.y = floorHeight;
+  a.z = worldZ + offset + 3;
 
-	b.x = worldX + offset;
-	b.y = floorHeight + 2;
-	b.z = worldZ + offset + 4;
+  b.x = worldX + offset;
+  b.y = floorHeight + 2;
+  b.z = worldZ + offset + 4;
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 }
 
 
 
 void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
-	// WARNING: this always corners at 0, 0
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+  // WARNING: this always corners at 0, 0
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	int xSide = 2;
-	int zSide = 2;
+  int xSide = 2;
+  int zSide = 2;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo (
-		worldX, worldZ,
-		WORLD_CHUNK_SIDE * xSide, WORLD_CHUNK_SIDE * zSide,
-		world);
-	WorldMap &worldMap = *world.getWorldMap();
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(
+    worldX, worldZ,
+    WORLD_CHUNK_SIDE * xSide, WORLD_CHUNK_SIDE * zSide,
+    world);
+  WorldMap &worldMap = *world.getWorldMap();
 
-	// now build the house
-	v3di_t a, b;
+  // now build the house
+  v3di_t a, b;
 
-	int floorHeight = heightInfo.low - 1;
-	int roofHeight = 80;
+  int floorHeight = heightInfo.low - 1;
+  int roofHeight = 80;
 
-	// hollow it out
-	a.x = worldX + 5;
-	a.y = floorHeight;
-	a.z = worldZ + 5;
+  // hollow it out
+  a.x = worldX + 5;
+  a.y = floorHeight;
+  a.z = worldZ + 5;
 
-	b.x = worldX + 10 + (WORLD_CHUNK_SIDE * xSide);
-	b.y = floorHeight + roofHeight - 1;
-	b.z = worldZ + 10 + (WORLD_CHUNK_SIDE * zSide);
+  b.x = worldX + 10 + (WORLD_CHUNK_SIDE * xSide);
+  b.y = floorHeight + roofHeight - 1;
+  b.z = worldZ + 10 + (WORLD_CHUNK_SIDE * zSide);
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
-	// fill it
-	a.x = worldX + 4;
-	a.y = floorHeight;
-	a.z = worldZ + 4;
+  // fill it
+  a.x = worldX + 4;
+  a.y = floorHeight;
+  a.z = worldZ + 4;
 
-	b.x = worldX + 11 + (WORLD_CHUNK_SIDE * xSide);
-	b.y = floorHeight + roofHeight;
-	b.z = worldZ + 11 + (WORLD_CHUNK_SIDE * zSide);
+  b.x = worldX + 11 + (WORLD_CHUNK_SIDE * xSide);
+  b.y = floorHeight + roofHeight;
+  b.z = worldZ + 11 + (WORLD_CHUNK_SIDE * zSide);
 
-	worldMap.fillVolume (a, b, BLOCK_TYPE_STONE);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_STONE);
 
-	// hollow it out
-	a.x = worldX + 5;
-	a.y = floorHeight;
-	a.z = worldZ + 5;
+  // hollow it out
+  a.x = worldX + 5;
+  a.y = floorHeight;
+  a.z = worldZ + 5;
 
-	b.x = worldX + 10 + (WORLD_CHUNK_SIDE * xSide);
-	b.y = floorHeight + roofHeight - 1;
-	b.z = worldZ + 10 + (WORLD_CHUNK_SIDE * zSide);
+  b.x = worldX + 10 + (WORLD_CHUNK_SIDE * xSide);
+  b.y = floorHeight + roofHeight - 1;
+  b.z = worldZ + 10 + (WORLD_CHUNK_SIDE * zSide);
 
-	worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
+  worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
 
-	// make the door
-	a.x = worldX + 4;
-	a.z = worldZ + 7;
-	a.y = floorHeight;
+  // make the door
+  a.x = worldX + 4;
+  a.z = worldZ + 7;
+  a.y = floorHeight;
 
-	b.x = worldX + 4;
-	b.z = worldZ + 8;
-	b.y = a.y;
+  b.x = worldX + 4;
+  b.z = worldZ + 8;
+  b.y = a.y;
 
-	for (int i = 0; i < 3; i++) {
-		worldMap.clearBlock (a);
-		worldMap.clearBlock (b);
-		a.y++;
-		b.y++;
-	}
+  for (int i = 0; i < 3; i++) {
+    worldMap.clearBlock(a);
+    worldMap.clearBlock(b);
+    a.y++;
+    b.y++;
+  }
 
-//	worldMap.swapOutToInactive ();
+  //	worldMap.swapOutToInactive ();
 }
 
 
@@ -715,283 +717,283 @@ void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
 
 
 void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, World &world) {
-	// WARNING: this always corners at 0, 0
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+  // WARNING: this always corners at 0, 0
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo (
-		worldX, worldZ,
-		WORLD_CHUNK_SIDE * sideX, WORLD_CHUNK_SIDE * sideZ,
-		world);
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(
+    worldX, worldZ,
+    WORLD_CHUNK_SIDE * sideX, WORLD_CHUNK_SIDE * sideZ,
+    world);
 
-	WorldMap &worldMap = *world.getWorldMap();
+  WorldMap &worldMap = *world.getWorldMap();
 
-	worldMap.resize (sideX, sideZ);
+  worldMap.resize(sideX, sideZ);
 
-	int bufferX = (WORLD_CHUNK_SIDE * sideX) + 2;
-	int bufferZ = (WORLD_CHUNK_SIDE * sideZ) + 2;
+  int bufferX = (WORLD_CHUNK_SIDE * sideX) + 2;
+  int bufferZ = (WORLD_CHUNK_SIDE * sideZ) + 2;
 
-	int *heightMap = new int[bufferX * bufferZ];
-	if (heightMap == NULL) {
-		printf ("FeatureGenerator::createPlain(): error: out of mem 1\n");
-		return;
-	}
+  int *heightMap = new int[bufferX * bufferZ];
+  if (heightMap == NULL) {
+    printf("FeatureGenerator::createPlain(): error: out of mem 1\n");
+    return;
+  }
 
-	int floorHeight = heightInfo.avg;
+  int floorHeight = heightInfo.avg;
 
-	// make it a plain
-	for (int k = 0; k < bufferZ; k++) {
-		for (int i = 0; i < bufferX; i++) {
-			heightMap[i + (k * bufferX)] = floorHeight;
-		}
-	}
+  // make it a plain
+  for (int k = 0; k < bufferZ; k++) {
+    for (int i = 0; i < bufferX; i++) {
+      heightMap[i + (k * bufferX)] = floorHeight;
+    }
+  }
 
-	int indices[4];
+  int indices[4];
 
-	// get actual terrain height for the two edge rows (x-axis)
-	indices[0] = 0;
-	indices[1] = bufferX;
-	indices[2] = bufferX * (bufferZ - 2);
-	indices[3] = bufferX * (bufferZ - 1);
+  // get actual terrain height for the two edge rows (x-axis)
+  indices[0] = 0;
+  indices[1] = bufferX;
+  indices[2] = bufferX * (bufferZ - 2);
+  indices[3] = bufferX * (bufferZ - 1);
 
-	for (int i = 0; i < (WORLD_CHUNK_SIDE * sideX) + 2; i++) {
-		int x = worldX + (i - 1);
-		heightMap[i + indices[0]] = world.getTerrainHeight (x, worldZ - 1);
-		heightMap[i + indices[1]] = world.getTerrainHeight (x, worldZ);
-		heightMap[i + indices[2]] = world.getTerrainHeight (x, worldZ + (bufferZ - 2));
-		heightMap[i + indices[3]] = world.getTerrainHeight (x, worldZ + (bufferZ - 1));
-	}
+  for (int i = 0; i < (WORLD_CHUNK_SIDE * sideX) + 2; i++) {
+    int x = worldX + (i - 1);
+    heightMap[i + indices[0]] = world.getTerrainHeight(x, worldZ - 1);
+    heightMap[i + indices[1]] = world.getTerrainHeight(x, worldZ);
+    heightMap[i + indices[2]] = world.getTerrainHeight(x, worldZ + (bufferZ - 2));
+    heightMap[i + indices[3]] = world.getTerrainHeight(x, worldZ + (bufferZ - 1));
+  }
 
-	// now along the z-axis
-	indices[0] = 0;
-	indices[1] = 1;
-	indices[2] = bufferX - 2;
-	indices[3] = bufferX - 1;
+  // now along the z-axis
+  indices[0] = 0;
+  indices[1] = 1;
+  indices[2] = bufferX - 2;
+  indices[3] = bufferX - 1;
 
-	for (int k = 0; k < (WORLD_CHUNK_SIDE * sideZ) + 2; k++) {
-		int z = worldZ + (k - 1);
-		heightMap[indices[0] + (k * bufferX)] = world.getTerrainHeight (worldX - 1, z);
-		heightMap[indices[1] + (k * bufferX)] = world.getTerrainHeight (worldX, z);
-		heightMap[indices[2] + (k * bufferX)] = world.getTerrainHeight (worldX + (bufferX - 2), z);
-		heightMap[indices[3] + (k * bufferX)] = world.getTerrainHeight (worldX + (bufferX - 1), z);
-	}
+  for (int k = 0; k < (WORLD_CHUNK_SIDE * sideZ) + 2; k++) {
+    int z = worldZ + (k - 1);
+    heightMap[indices[0] + (k * bufferX)] = world.getTerrainHeight(worldX - 1, z);
+    heightMap[indices[1] + (k * bufferX)] = world.getTerrainHeight(worldX, z);
+    heightMap[indices[2] + (k * bufferX)] = world.getTerrainHeight(worldX + (bufferX - 2), z);
+    heightMap[indices[3] + (k * bufferX)] = world.getTerrainHeight(worldX + (bufferX - 1), z);
+  }
 
-	// do a little smoothing
-	indices[0] = bufferX * 2; // keep track of the writing
-	indices[1] = bufferX * (bufferZ - 3);
-	indices[2] = bufferX; // these are for the reading
-	indices[3] = bufferX * (bufferZ - 2);
+  // do a little smoothing
+  indices[0] = bufferX * 2; // keep track of the writing
+  indices[1] = bufferX * (bufferZ - 3);
+  indices[2] = bufferX; // these are for the reading
+  indices[3] = bufferX * (bufferZ - 2);
 
-	for (int i = 2; i < (WORLD_CHUNK_SIDE * sideX); i++) {
-		int x = worldX + (i - 1);
-		heightMap[i + indices[0]] = (heightMap[i + indices[2]] + floorHeight) / 2;
-		heightMap[i + indices[1]] = (heightMap[i + indices[3]] + floorHeight) / 2;
-	}
+  for (int i = 2; i < (WORLD_CHUNK_SIDE * sideX); i++) {
+    int x = worldX + (i - 1);
+    heightMap[i + indices[0]] = (heightMap[i + indices[2]] + floorHeight) / 2;
+    heightMap[i + indices[1]] = (heightMap[i + indices[3]] + floorHeight) / 2;
+  }
 
-	// and again along the z-axis
-	indices[0] = 2; // writing
-	indices[1] = bufferX - 3;
-	indices[2] = 1; // reading
-	indices[3] = bufferX - 2;
+  // and again along the z-axis
+  indices[0] = 2; // writing
+  indices[1] = bufferX - 3;
+  indices[2] = 1; // reading
+  indices[3] = bufferX - 2;
 
-	for (int k = 2; k < (WORLD_CHUNK_SIDE * sideZ); k++) {
-		int z = worldZ + (k - 1);
-		heightMap[indices[0] + (k * bufferX)] = (heightMap[indices[2] + (k * bufferX)] + floorHeight) / 2;
-		heightMap[indices[1] + (k * bufferX)] = (heightMap[indices[3] + (k * bufferX)] + floorHeight) / 2;
-	}
-
-
-	// do a little MORE smoothing
-	indices[0] = bufferX * 3; // keep track of the writing
-	indices[1] = bufferX * (bufferZ - 4);
-	indices[2] = bufferX * 2; // these are for the reading
-	indices[3] = bufferX * (bufferZ - 3);
-
-	for (int i = 3; i < ((WORLD_CHUNK_SIDE * sideX) - 1); i++) {
-		int x = worldX + (i - 1);
-		heightMap[i + indices[0]] = (heightMap[i + indices[2]] + floorHeight) / 2;
-		heightMap[i + indices[1]] = (heightMap[i + indices[3]] + floorHeight) / 2;
-	}
-
-	// and AGAIN along the z-axis
-	indices[0] = 3; // writing
-	indices[1] = bufferX - 4;
-	indices[2] = 2; // reading
-	indices[3] = bufferX - 3;
-
-	for (int k = 3; k < ((WORLD_CHUNK_SIDE * sideZ) - 1); k++) {
-		int z = worldZ + (k - 1);
-		heightMap[indices[0] + (k * bufferX)] = (heightMap[indices[2] + (k * bufferX)] + floorHeight) / 2;
-		heightMap[indices[1] + (k * bufferX)] = (heightMap[indices[3] + (k * bufferX)] + floorHeight) / 2;
-	}
+  for (int k = 2; k < (WORLD_CHUNK_SIDE * sideZ); k++) {
+    int z = worldZ + (k - 1);
+    heightMap[indices[0] + (k * bufferX)] = (heightMap[indices[2] + (k * bufferX)] + floorHeight) / 2;
+    heightMap[indices[1] + (k * bufferX)] = (heightMap[indices[3] + (k * bufferX)] + floorHeight) / 2;
+  }
 
 
+  // do a little MORE smoothing
+  indices[0] = bufferX * 3; // keep track of the writing
+  indices[1] = bufferX * (bufferZ - 4);
+  indices[2] = bufferX * 2; // these are for the reading
+  indices[3] = bufferX * (bufferZ - 3);
 
-	int *columnBuffer = new int[(WORLD_CHUNK_SIDE + 2) * (WORLD_CHUNK_SIDE + 2)];
-	if (columnBuffer == NULL) {
-		printf ("FeatureGenerator::createPlain(): error: out of mem 2\n");
-		delete [] heightMap;
-		return;
-	}
+  for (int i = 3; i < ((WORLD_CHUNK_SIDE * sideX) - 1); i++) {
+    int x = worldX + (i - 1);
+    heightMap[i + indices[0]] = (heightMap[i + indices[2]] + floorHeight) / 2;
+    heightMap[i + indices[1]] = (heightMap[i + indices[3]] + floorHeight) / 2;
+  }
 
-	// now build the columns
-	for (int k = 0; k < sideZ; k++) {
-		for (int i = 0; i < sideX; i++) {
+  // and AGAIN along the z-axis
+  indices[0] = 3; // writing
+  indices[1] = bufferX - 4;
+  indices[2] = 2; // reading
+  indices[3] = bufferX - 3;
 
-			int xCorner = i * (WORLD_CHUNK_SIDE);
-			int zCorner = k * (WORLD_CHUNK_SIDE);
+  for (int k = 3; k < ((WORLD_CHUNK_SIDE * sideZ) - 1); k++) {
+    int z = worldZ + (k - 1);
+    heightMap[indices[0] + (k * bufferX)] = (heightMap[indices[2] + (k * bufferX)] + floorHeight) / 2;
+    heightMap[indices[1] + (k * bufferX)] = (heightMap[indices[3] + (k * bufferX)] + floorHeight) / 2;
+  }
 
-			for (int w = 0; w < (WORLD_CHUNK_SIDE + 2); w++) {
-				for (int u = 0; u < (WORLD_CHUNK_SIDE + 2); u++) {
-					columnBuffer[u + (w * (WORLD_CHUNK_SIDE + 2))] = heightMap[(xCorner + u) + ((zCorner + w) * bufferX)];
-				}
-			}
 
-//			world.loadColumn(cornerIndex.x + i, cornerIndex.y + k, columnBuffer);
-		}
-	}
 
-	delete [] columnBuffer;
-	delete [] heightMap;
+  int *columnBuffer = new int[(WORLD_CHUNK_SIDE + 2) * (WORLD_CHUNK_SIDE + 2)];
+  if (columnBuffer == NULL) {
+    printf("FeatureGenerator::createPlain(): error: out of mem 2\n");
+    delete[] heightMap;
+    return;
+  }
 
-//	worldMap.swapOutToInactive ();
+  // now build the columns
+  for (int k = 0; k < sideZ; k++) {
+    for (int i = 0; i < sideX; i++) {
+
+      int xCorner = i * (WORLD_CHUNK_SIDE);
+      int zCorner = k * (WORLD_CHUNK_SIDE);
+
+      for (int w = 0; w < (WORLD_CHUNK_SIDE + 2); w++) {
+        for (int u = 0; u < (WORLD_CHUNK_SIDE + 2); u++) {
+          columnBuffer[u + (w * (WORLD_CHUNK_SIDE + 2))] = heightMap[(xCorner + u) + ((zCorner + w) * bufferX)];
+        }
+      }
+
+      //			world.loadColumn(cornerIndex.x + i, cornerIndex.y + k, columnBuffer);
+    }
+  }
+
+  delete[] columnBuffer;
+  delete[] heightMap;
+
+  //	worldMap.swapOutToInactive ();
 }
 
 
 
-void FeatureGenerator::createVillage( int side, v2di_t cornerIndex, World& world ) {
-	// WARNING: relative to 0, 0
-	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+void FeatureGenerator::createVillage(int side, v2di_t cornerIndex, World& world) {
+  // WARNING: relative to 0, 0
+  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-	int width = side * WORLD_CHUNK_SIDE;
+  int width = side * WORLD_CHUNK_SIDE;
 
-	height_info_t heightInfo = FeatureUtil::getHeightInfo( worldX, worldZ, width, width, world );
+  height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, width, width, world);
 
-//	FeatureUtil::loadWorldRegion( cornerIndex, side, world, false );
+  //	FeatureUtil::loadWorldRegion( cornerIndex, side, world, false );
 
-	RogueMap rogueMap;
-	rogueMap.resize (side, side);
+  RogueMap rogueMap;
+  rogueMap.resize(side, side);
 
-	for (int i = 0; i < 50; i++) {
+  for (int i = 0; i < 50; i++) {
 
-		int buildingSide = 2;
+    int buildingSide = 2;
 
-		v2di_t corner;
+    v2di_t corner;
 
-		corner = rogueMap.random_room (ID_START + i, buildingSide, buildingSide);
+    corner = rogueMap.random_room(ID_START + i, buildingSide, buildingSide);
 
-		if (corner.x != 0) {
-			corner = v2di_add (corner, cornerIndex);
+    if (corner.x != 0) {
+      corner = v2di_add(corner, cornerIndex);
 
-			printf ("feature at (%d, %d)\n", corner.x, corner.y);
+      printf("feature at (%d, %d)\n", corner.x, corner.y);
 
-//			createPlain (corner, buildingSide, buildingSide, worldMap);
+      //			createPlain (corner, buildingSide, buildingSide, worldMap);
 
-			createPyramid (buildingSide, corner, world);
-//			createBuilding2x2 (corner, worldMap);
-		}
-	}
+      createPyramid(buildingSide, corner, world);
+      //			createBuilding2x2 (corner, worldMap);
+    }
+  }
 
-	// roads?
+  // roads?
 
 }
 
 
 void FeatureGenerator::drawPyramid(
-	v3di_t baseNearPoint,
-	int sideLength,
-	char blockType,
-	World &world)
+  v3di_t baseNearPoint,
+  int sideLength,
+  char blockType,
+  World &world)
 {
-	int halfSide = (sideLength >> 1) + 1;
+  int halfSide = (sideLength >> 1) + 1;
 
-	v3di_t baseFarPoint = {
-		baseNearPoint.x + sideLength,
-		baseNearPoint.y,
-		baseNearPoint.z + sideLength};
+  v3di_t baseFarPoint = {
+    baseNearPoint.x + sideLength,
+    baseNearPoint.y,
+    baseNearPoint.z + sideLength };
 
-	WorldMap &worldMap = *world.getWorldMap();
+  WorldMap &worldMap = *world.getWorldMap();
 
-	for (int step = 0; step < halfSide; step++) {
-		worldMap.fillVolume(baseNearPoint, baseFarPoint, blockType);
+  for (int step = 0; step < halfSide; step++) {
+    worldMap.fillVolume(baseNearPoint, baseFarPoint, blockType);
 
-		baseNearPoint.x++;
-		baseNearPoint.y++;
-		baseNearPoint.z++;
+    baseNearPoint.x++;
+    baseNearPoint.y++;
+    baseNearPoint.z++;
 
-		baseFarPoint.x--;
-		baseFarPoint.y++;
-		baseFarPoint.z--;
-	}
+    baseFarPoint.x--;
+    baseFarPoint.y++;
+    baseFarPoint.z--;
+  }
 }
 
 
-void FeatureGenerator::createForViewer (v3d_t startPos, int type, World &world) {
-	WorldMap &worldMap = *world.getWorldMap();
-	v3di_t regionIndex = WorldUtil::getRegionIndex(startPos);
-	v2di_t corner = { regionIndex.x, regionIndex.z };
-	printf ("dungeon at (%d, %d)\n", corner.x, corner.y);
-//	createDungeon (corner, 6, worldMap);
-//	createPlain (corner, 6, 6, worldMap);
+void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
+  WorldMap &worldMap = *world.getWorldMap();
+  v3di_t regionIndex = WorldUtil::getRegionIndex(startPos);
+  v2di_t corner = { regionIndex.x, regionIndex.z };
+  printf("dungeon at (%d, %d)\n", corner.x, corner.y);
+  //	createDungeon (corner, 6, worldMap);
+  //	createPlain (corner, 6, 6, worldMap);
 
 
 
-	worldMap.resize (6, 6);
+  worldMap.resize(6, 6);
 
-	v3di_t nc = {
-		(int)startPos.x - 64,
-		(int)startPos.y - 5,
-		(int)startPos.z - 64
-	};
+  v3di_t nc = {
+    (int)startPos.x - 64,
+    (int)startPos.y - 5,
+    (int)startPos.z - 64
+  };
 
-	v3di_t fc = {
-		(int)startPos.x + 64,
-		(int)startPos.y - 3,
-		(int)startPos.z + 64
-	};
-	
-
-//	loadWorldRegion(corner, 6, worldMap, true);
+  v3di_t fc = {
+    (int)startPos.x + 64,
+    (int)startPos.y - 3,
+    (int)startPos.z + 64
+  };
 
 
-//	sd
-
-	for (int i = 0; i < 6; i++) {
-		for (int j = 0; j < 6; j++) {
-//			worldMap.loadColumn(corner.x + i, corner.y + j);
-			int xIndex = corner.x + i;
-			int zIndex = corner.y + j;
-
-			int columnIndex = worldMap.getColumnIndexByRegionCoords (xIndex, zIndex);
-
-			if (xIndex == worldMap.mColumns[columnIndex].mWorldIndex.x &&
-				zIndex == worldMap.mColumns[columnIndex].mWorldIndex.z) {
-				printf ("WorldMap::loadColumn() - tried to load a column that is already loaded\n");
-				return;
-			}
-
-			worldMap.clearColumn (columnIndex);
+  //	loadWorldRegion(corner, 6, worldMap, true);
 
 
-			int worldX = xIndex * WORLD_CHUNK_SIDE;
-			int worldZ = zIndex * WORLD_CHUNK_SIDE;
+  //	sd
 
-			worldMap.mColumns[columnIndex].mWorldIndex.x = xIndex;
-			worldMap.mColumns[columnIndex].mWorldIndex.z = zIndex;
+  for (int i = 0; i < 6; i++) {
+    for (int j = 0; j < 6; j++) {
+      //			worldMap.loadColumn(corner.x + i, corner.y + j);
+      int xIndex = corner.x + i;
+      int zIndex = corner.y + j;
 
-			worldMap.mColumns[columnIndex].mWorldPosition.x = worldX;
-			worldMap.mColumns[columnIndex].mWorldPosition.z = worldZ;
+      int columnIndex = worldMap.getColumnIndexByRegionCoords(xIndex, zIndex);
 
-			worldMap.mColumns[columnIndex].mNeedDisplayList = false;
-			worldMap.mColumns[columnIndex].mNeedShadowVolume = true;
+      if (xIndex == worldMap.mColumns[columnIndex].mWorldIndex.x &&
+        zIndex == worldMap.mColumns[columnIndex].mWorldIndex.z) {
+        printf("WorldMap::loadColumn() - tried to load a column that is already loaded\n");
+        return;
+      }
 
-			worldMap.mColumns[columnIndex].updateHighestAndLowest();
+      worldMap.clearColumn(columnIndex);
 
-		}
-	}
 
-	worldMap.fillVolume (nc, fc, BLOCK_TYPE_DIRT);
+      int worldX = xIndex * WORLD_CHUNK_SIDE;
+      int worldZ = zIndex * WORLD_CHUNK_SIDE;
+
+      worldMap.mColumns[columnIndex].mWorldIndex.x = xIndex;
+      worldMap.mColumns[columnIndex].mWorldIndex.z = zIndex;
+
+      worldMap.mColumns[columnIndex].mWorldPosition.x = worldX;
+      worldMap.mColumns[columnIndex].mWorldPosition.z = worldZ;
+
+      worldMap.mColumns[columnIndex].mNeedDisplayList = false;
+      worldMap.mColumns[columnIndex].mNeedShadowVolume = true;
+
+      worldMap.mColumns[columnIndex].updateHighestAndLowest();
+
+    }
+  }
+
+  worldMap.fillVolume(nc, fc, BLOCK_TYPE_DIRT);
 
 }
 

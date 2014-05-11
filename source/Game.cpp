@@ -144,9 +144,9 @@ void game_c::setup_opengl(void) {
 //	glEnable (GL_COLOR_MATERIAL);
 
   // FOG
-  glFogi(GL_FOG_MODE, GL_LINEAR);					// Fog Mode
+  glFogi(GL_FOG_MODE, GL_LINEAR); // Fog Mode
 //	glFogfv (GL_FOG_COLOR, color[skyColor]);			// Set Fog Color
-  glFogf(GL_FOG_DENSITY, 0.05f);						// How Dense Will The Fog Be
+  glFogf(GL_FOG_DENSITY, 0.05f); // How Dense Will The Fog Be
   glHint(GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
   glFogf(GL_FOG_START, 100.0f);						// Fog Start Depth
   glFogf(GL_FOG_END, 200.0f);						// Fog End Depth
@@ -218,6 +218,8 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
 
 void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces) {
+  printf("game_c::initializePlanet()\n");
+
   FILE *file = NULL;
   mCurrentPlanet = planet;
   v3d_t playerStartPosition;
@@ -235,6 +237,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   }
   else {
     // try to open the file for this planet
+    printf("game_c::initializePlanet(): loading planet\n");
     char fileName[48];
     sprintf(fileName, "save/planet%d.dat", planet->mHandle);
     printf("game_c::initializePlanet(): trying to load file: %s\n", fileName);
@@ -250,6 +253,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
     playerStartPosition.z = startPos->z;
   }
 
+  printf("game_c::initializePlanet(): initializing location\n");
   mLocation->initialize(file, mGalaxy, planet->mHandle);
   if (file != NULL) {
     fclose(file);
@@ -260,6 +264,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
     playerStartPosition = mLocation->getStartPosition();
   }
   else if (createSetPieces) {
+    printf("game_c::initializePlanet(): creating set pieces\n");
     v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
     FeatureGenerator::createSetPieces(
       worldIndex.x,

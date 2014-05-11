@@ -94,7 +94,7 @@ int InactiveList::load( FILE* file ) {
 
 	// read the number of items
 	int size;
-	fread (&size, sizeof (int), 1, file);
+  fread (&size, sizeof (int), 1, file);
 
 	inactive_item_t item;
 	for (int i = 0; i < size; i++) {

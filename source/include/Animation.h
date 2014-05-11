@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <vector>
 #include <SDL2/SDL.h>
 
