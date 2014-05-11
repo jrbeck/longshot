@@ -71,7 +71,7 @@ int AssetManager::loadAssets(void) {
   mGunTextureRegion = new TextureRegion(0, 0, 45, 21, mGunTexture);
 //	mGunTextureRegion = new TextureRegion(0, 32, 65, 21, mGunTexture);
   printf("TEYYLFDHJLKHJS\n");
-//  mGunBitmapModel = new BitmapModel(mGunTextureRegion);
+  mGunBitmapModel = new BitmapModel(mGunTextureRegion);
   printf("TEYYLFDHJLKHJS\n");
   // END TESTING
 

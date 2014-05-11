@@ -134,17 +134,17 @@ class game_c {
   char mPlanetNameString[100];
 
 public:
-  game_c(void);
-  ~game_c(void);
+  game_c(GameWindow *gameWindow);
+  ~game_c();
 
-  void loadAssets(void);
-  void freeAssets(void);
+  void loadAssets();
+  void freeAssets();
 
-  void loadPlanetMenu(void);
-  void loadShipMenu(void);
+  void loadPlanetMenu();
+  void loadShipMenu();
 
   GameWindow* getGameWindow();
-  void setup_opengl(void);
+  void setup_opengl();
 
   int enter_game_mode(bool createNewWorld);
 
@@ -154,20 +154,20 @@ public:
 
   void gameLoop();
   int handleMenuChoice(int menuChoice);
-  bool update(void);
+  bool update();
   int draw(double& time);
 
   // this really shouldn't be here...
   // it draws the 'touched' block in front of the player
   // put it in PlayerView
-  void drawPlayerTargetBlock(void);
+  void drawPlayerTargetBlock();
 
   // currently Windows specific
   void deleteAllFilesInFolder(LPWSTR folderPath);
 
-  void save(void);
-  int load(void);
-  int saveGameData(void);
-  GameSaveData loadGameData(void);
-  void saveLocation(void);
+  void save();
+  int load();
+  int saveGameData();
+  GameSaveData loadGameData();
+  void saveLocation();
 };

@@ -74,6 +74,7 @@ public:
   int handleKeyup();
   void handleMouseButtonDown(int button, v2d_t pos);
   void handleMouseButtonUp(int button, v2d_t pos);
+  void handleMouseWeelEvent(SDL_MouseWheelEvent wheelEvent);
 
   void swapVizMode(int mode);
   void generateNewMap();

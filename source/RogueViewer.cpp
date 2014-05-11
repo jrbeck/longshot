@@ -327,16 +327,6 @@ int RogueViewer::handleKeyup (void) {
 
 void RogueViewer::handleMouseButtonDown (int button, v2d_t pos) {
   switch (button) {
-    case SDL_BUTTON_WHEELUP:
-      // zoom in
-      mRtsCam.zoom (-20.0);
-      break;
-
-    case SDL_BUTTON_WHEELDOWN:
-      // zoom out
-      mRtsCam.zoom (20.0);
-      break;
-
     case SDL_BUTTON_RIGHT:
       break;
   }
@@ -352,6 +342,18 @@ void RogueViewer::handleMouseButtonUp (int button, v2d_t pos) {
         break;
     }
   }*/
+}
+
+
+
+void RogueViewer::handleMouseWeelEvent(SDL_MouseWheelEvent wheelEvent) {
+
+  if (wheelEvent.y < 0) {
+      mRtsCam.zoom (20.0);
+  }
+  else if (wheelEvent.y > 0) {
+      mRtsCam.zoom (-20.0);
+  }
 }
 
 
@@ -432,6 +434,3 @@ void RogueViewer::generateNewMap (void) {
 
 
 }
-
-
-

@@ -331,7 +331,7 @@ int GalaxyMap::handleInput (void) {
         break;
 
       case SDL_KEYUP:
-        handleKeyup ();
+        handleKeyup();
         break;
 
       case SDL_MOUSEMOTION:
@@ -347,12 +347,16 @@ int GalaxyMap::handleInput (void) {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDown (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUp (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
+
+      case SDL_MOUSEWHEEL:
+        // this doens't exist ... hasn't been needed yet
+ //       handleMouseWeelEvent(sdlevent.wheel);
 
       default:
         break;
@@ -364,7 +368,7 @@ int GalaxyMap::handleInput (void) {
   // handle mouse drag
   // FIXME: not here please!
   Uint8 ms;
-  ms = SDL_GetMouseState (NULL, NULL);
+  ms = SDL_GetMouseState(NULL, NULL);
 
   if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_LEFT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.1);
@@ -424,16 +428,7 @@ int GalaxyMap::handleKeyup (void) {
 
 void GalaxyMap::handleMouseButtonDown (int button, v2d_t pos) {
   switch (button) {
-    case SDL_BUTTON_WHEELUP:
-      // zoom in
-//			mRtsCam.zoom (-20.0);
-      break;
-
-    case SDL_BUTTON_WHEELDOWN:
-      // zoom out
-//			mRtsCam.zoom (20.0);
-      break;
-
+ 
     case SDL_BUTTON_RIGHT:
       break;
   }

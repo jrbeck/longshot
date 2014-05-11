@@ -326,16 +326,6 @@ int PlanetMap::handleKeyup (void) {
 
 void PlanetMap::handleMouseButtonDown (int button, v2d_t pos) {
   switch (button) {
-    case SDL_BUTTON_WHEELUP:
-      // zoom in
-//			mRtsCam.zoom (-20.0);
-      break;
-
-    case SDL_BUTTON_WHEELDOWN:
-      // zoom out
-//			mRtsCam.zoom (20.0);
-      break;
-
     case SDL_BUTTON_RIGHT:
       break;
   }

@@ -46,6 +46,4 @@ struct sdl_mode_info_t {
 int initSdl(void);
 int deinitSdl(void);
 int setVideoMode(sdl_mode_info_t mode, SDL_Window *window);
-void drawProgressBar(v2d_t lower, v2d_t higher, int numerator, int denominator, rgb_float_t c1, rgb_float_t c2);
-void drawProgressBar(v2d_t lower, v2d_t higher, double percent, rgb_float_t c1, rgb_float_t c2);
 int loadTexture(const char* filename, GLuint* texture_handle);

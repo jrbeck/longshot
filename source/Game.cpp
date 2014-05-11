@@ -6,7 +6,7 @@
 
 
 
-game_c::game_c(void) :
+game_c::game_c(GameWindow *gameWindow) :
   mGalaxy(NULL),
   mLocation(NULL),
   mAiView(NULL),
@@ -18,7 +18,7 @@ game_c::game_c(void) :
   printf("game_c constructor ----------------\n");
   mLastUpdateTime = 0.0;
 
-  mGameWindow = new GameWindow;
+  mGameWindow = gameWindow;
   printf("GameWindow created\n");
 
   loadAssets();
@@ -27,7 +27,7 @@ game_c::game_c(void) :
 
 
 
-game_c::~game_c(void) {
+game_c::~game_c() {
   if (mGalaxy != NULL) {
     delete mGalaxy;
   }
@@ -48,10 +48,6 @@ game_c::~game_c(void) {
   }
 
   freeAssets();
-
-  if (mGameWindow != NULL) {
-    delete mGameWindow;
-  }
 }
 
 

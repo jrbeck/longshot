@@ -18,6 +18,7 @@ Longshot::Longshot() :
     return;
   }
 
+  mGameWindow = new GameWindow;
   // set the window stuff
   // do we need this after the move to SDL2?
 //	SDL_WM_SetCaption("Longshot", NULL);
@@ -59,6 +60,10 @@ Longshot::~Longshot(void) {
 
   if (gDefaultFontTextureHandle != 0) {
     glDeleteTextures(1, &gDefaultFontTextureHandle);
+  }
+
+  if (mGameWindow != NULL) {
+    delete mGameWindow;
   }
 
   deinitSdl();
@@ -130,25 +135,13 @@ int Longshot::loop(void) {
     return -1;
   }
 
-
-// NO NONONONONONONO NON N ON ON ON ON NO!!!!!!
-  mGame = new game_c();
-
-
   while (program_mode != PROGRAM_QUIT && program_mode != MENU_APPLICATION_QUIT) {
     glClearColor(0.1f, 0.0f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   printf("4\n");
     mMainMenu->draw();
   printf("5\n");
-  if(mGame == NULL) {
-    printf("YEPDL<DGL\n");
-  }
-
-  if (mGame->getGameWindow() == NULL) {
-    printf("HUH NULL!!!!!");
-  }
-    mGame->getGameWindow()->swapBuffers();
+    mGameWindow->swapBuffers();
   printf("6\n");
 
     // figure out what the user wants to do
@@ -160,7 +153,7 @@ int Longshot::loop(void) {
     switch (program_mode) {
       case PROGRAM_MODE_NEW_GAME:
         printf("menu choice: new game\n");
-//        mGame = new game_c();
+        mGame = new game_c(mGameWindow);
         mGame->enter_game_mode(true);
         break;
       case PROGRAM_MODE_LOAD_GAME:
@@ -172,7 +165,7 @@ int Longshot::loop(void) {
       case PROGRAM_MODE_TOGGLE_FULLSCREEN:
         printf("menu choice: toggle fullscreen\n");
 
-        mGame->getGameWindow()->toggleFullscreen();
+        mGameWindow->toggleFullscreen();
 
         // since the context has changed, ogl assets must be reloaded
         reloadMenu();
@@ -180,7 +173,7 @@ int Longshot::loop(void) {
 
       case PROGRAM_MODE_ROGUE:
         printf("menu choice: rogue_viz\n");
-        mRogueViewer = new RogueViewer(mGame->getGameWindow());
+        mRogueViewer = new RogueViewer(mGameWindow);
         mRogueViewer->start();
         delete mRogueViewer;
         break;

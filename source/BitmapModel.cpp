@@ -3,9 +3,6 @@
 
 
 BitmapModel::BitmapModel(TextureRegion* region) {
-
-  printf("A\n");
-
   mTexture = region->mTexture;
 
   mWidth = region->mW;
@@ -19,7 +16,6 @@ BitmapModel::BitmapModel(TextureRegion* region) {
 
   Pixel32 *pixelData = new Pixel32[textureWidth * textureHeight];
 
-  printf("A\n");
   glGetTexImage(
     GL_TEXTURE_2D,
     0,
@@ -28,14 +24,12 @@ BitmapModel::BitmapModel(TextureRegion* region) {
     pixelData);
 
 
-  // let's generate a display list
   mDisplayListHandle = glGenLists(1);
   glNewList(mDisplayListHandle, GL_COMPILE);
 
   // these are the normalized pixel width/height
   GLfloat pixelW = 1.0f / (GLfloat)textureWidth;
   GLfloat pixelH = 1.0f / (GLfloat)textureHeight;
-  printf("A\n");
 
   // draw the top, bottom, right, and left sides of the voxels
   for (int t = region->mY; t < (region->mY + region->mH); t++) {
@@ -50,16 +44,12 @@ BitmapModel::BitmapModel(TextureRegion* region) {
     }
   }
 
-  printf("B\n");
   // draw a single textured quad for the front and back
   drawFront(0, 0, region->mW, region->mH, region->u1, region->v1, region->u2, region->v2);
   drawBack(0, 0, region->mW, region->mH, region->u1, region->v1, region->u2, region->v2);
 
-  // all done with the display list
   glEndList();
 
-  printf("B\n");
-  // free those pixels...
   delete [] pixelData;
 }
 
