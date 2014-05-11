@@ -6,6 +6,8 @@ GameWindow::GameWindow() :
 {
   printf("GameWindow constructor....\n");
 
+  initSdl();
+
   SDL_DisplayMode current;
   // TODO: this defaults to display 0 ... there could be more than just the one
   int displayIndex = 0;
@@ -40,6 +42,22 @@ GameWindow::~GameWindow() {
   if(mSdlWindow != NULL) {
     SDL_DestroyWindow(mSdlWindow);
   }
+
+  quitSdl();
+}
+
+
+int GameWindow::initSdl() {
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    printf("Unable to initialize SDL: %s\n", SDL_GetError());
+    return 1;
+  }
+
+  return 0;
+}
+
+void GameWindow::quitSdl() {
+  SDL_Quit();
 }
 
 

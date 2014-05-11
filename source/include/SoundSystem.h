@@ -45,9 +45,6 @@ enum {
 };
 
 
-
-
-
 class SoundSystem {
 public:
 	SoundSystem();

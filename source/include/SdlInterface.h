@@ -27,23 +27,5 @@
 
 
 // TYPEDEFS * * * * * * * * * * * * * * * * * * * * * * * *
-struct rgb_float_t {
-	GLfloat r;
-	GLfloat g;
-	GLfloat b;
-};
 
-
-struct sdl_mode_info_t {
-	int initialized;
-	int screen_w;
-	int screen_h;
-	bool fullscreen;
-
-};
-
-
-int initSdl(void);
-int deinitSdl(void);
-int setVideoMode(sdl_mode_info_t mode, SDL_Window *window);
 int loadTexture(const char* filename, GLuint* texture_handle);

@@ -1,23 +1,5 @@
 #include "SdlInterface.h"
 
-sdl_mode_info_t desktopMode;
-sdl_mode_info_t currentMode;
-
-int initSdl(void) {
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-    printf("Unable to initialize SDL: %s\n", SDL_GetError());
-    return 1;
-  }
-
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-  return 0;
-}
-
-int deinitSdl(void) {
-  SDL_Quit();
-  return 0;
-}
 
 int loadTexture(const char* filename, GLuint* texture_handle) {
   SDL_Surface* surface = IMG_Load(filename);

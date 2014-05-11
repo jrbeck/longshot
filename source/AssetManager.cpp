@@ -64,25 +64,20 @@ int AssetManager::loadAssets(void) {
   if (loadTexture("art/32_terrain.png", &mTerrainTextureHandle) == 0) {
     mNumTexturesLoaded++;
   }
-  printf("TEYYLFDHJLKHJS\n");
 
   // TESTING: BitmapModel
   mGunTexture = new Texture("art/item_sheet.png");
   mGunTextureRegion = new TextureRegion(0, 0, 45, 21, mGunTexture);
 //	mGunTextureRegion = new TextureRegion(0, 32, 65, 21, mGunTexture);
-  printf("TEYYLFDHJLKHJS\n");
   mGunBitmapModel = new BitmapModel(mGunTextureRegion);
-  printf("TEYYLFDHJLKHJS\n");
   // END TESTING
 
-  printf("can we make it? ....\n");
   // make a call list for the block
   mBlankBlockCallListHandle = glGenLists(1);
   glNewList(mBlankBlockCallListHandle, GL_COMPILE);
     drawBlankBlock();
   glEndList();
 
-  printf("can we make it? ....\n");
 //	mBlankBlockCallListHandle = loadObjectFile("art\\models\\3dplus.xml");
 
   // generate the display list for the shaded block
@@ -90,8 +85,6 @@ int AssetManager::loadAssets(void) {
   glNewList(mShadedBlockCallListHandle, GL_COMPILE);
     drawBlock(mGlobalLightIntensities);
   glEndList();
-
-  printf("can we make it? ....\n");
 
   // didn't bring down the house hopefully
   return 0;
