@@ -1879,7 +1879,6 @@ int Physics::getNextMessage(int recipient, phys_message_t* message) {
   return 0;
 }
 
-
 void Physics::clearMailBox(int recipient) {
   for (size_t i = 0; i < mMessages.size(); i++) {
     if (mMessages[i].recipient == recipient) {
@@ -1898,10 +1897,9 @@ void Physics::clearMailBox(int recipient) {
   }
 }
 
-
 vector<size_t> Physics::getAllItemHandles() const {
   vector<size_t> itemList;
-  PhysicsEntity *physicsEntity;
+  PhysicsEntity* physicsEntity;
 
   for (size_t i = 0; i < obj.size(); i++) {
     physicsEntity = obj[i];
@@ -1909,7 +1907,5 @@ vector<size_t> Physics::getAllItemHandles() const {
       itemList.push_back(physicsEntity->itemHandle);
     }
   }
-
   return itemList;
 }
-

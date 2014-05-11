@@ -40,7 +40,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
     if (corner.x != 0) {
       corner = v2di_add(corner, mapIndex);
       printf("great pyramid at (%d, %d)\n", corner.x, corner.y);
-
       FeatureUtil::loadWorldRegion(corner, side, world, false);
       createPyramid(side, corner, world);
 
@@ -153,7 +152,8 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
     if (corner.x != 0) {
       corner = v2di_add(corner, mapIndex);
 
-      height_info_t heightInfo = FeatureUtil::getHeightInfo(corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
+      height_info_t heightInfo = FeatureUtil::getHeightInfo(
+        corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
         side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, world);
 
       if (heightInfo.low > 2) {
@@ -368,10 +368,6 @@ void FeatureGenerator::drillCavern(
     }
   }
 }
-
-
-
-
 
 
 

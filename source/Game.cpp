@@ -228,7 +228,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   LoadScreen* loadScreen = new LoadScreen(mGameWindow);
   loadScreen->setCompletedColor(LOAD_SCREEN_LIGHT_PURPLE);
   loadScreen->setIncompletedColor(LOAD_SCREEN_DARK_PURPLE);
-  loadScreen->start();
+  loadScreen->show();
 
   // this is just a generic planet
   if (planet == NULL) {
@@ -259,7 +259,6 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
     fclose(file);
   }
 
-
   if (startPos == NULL) {
     playerStartPosition = mLocation->getStartPosition();
   }
@@ -278,7 +277,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   // this needs to be done after the lighting info has been set
   static_cast<World*>(mLocation)->preloadColumns(NUM_PRELOADED_COLUMNS, playerStartPosition, loadScreen);
 
-  loadScreen->finish();
+  loadScreen->hide();
   delete loadScreen;
 
   // load the appropriate menu
@@ -326,9 +325,9 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   }
   else {
     GLfloat* starColor = mGalaxy->getStarSystemByHandle(mCurrentPlanet->mHandle)->mStarColor;
-    sunColor.r = (starColor[0] + 0.5f) * LIGHT_LEVEL_MAX;
-    sunColor.g = (starColor[1] + 0.5f) * LIGHT_LEVEL_MAX;
-    sunColor.b = (starColor[2] + 0.5f) * LIGHT_LEVEL_MAX;
+    sunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    sunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
   }
   mWorldMapView.setWorldMap(mWorldMap, sunColor);

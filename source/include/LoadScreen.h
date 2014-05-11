@@ -15,6 +15,8 @@
 
 
 enum {
+  LOAD_SCREEN_BLACK,
+  LOAD_SCREEN_WHITE,
   LOAD_SCREEN_LIGHT_GREEN,
   LOAD_SCREEN_DARK_GREEN,
   LOAD_SCREEN_LIGHT_PURPLE,
@@ -28,17 +30,11 @@ class LoadScreen {
 public:
   LoadScreen(GameWindow* gameWindow);
 
-  void start();
-  void finish();
+  void show();
+  void hide();
 
-  void drawProgressBar(
-    v2d_t lower,
-    v2d_t higher,
-    int numerator,
-    int denominator,
-    rgb_float_t c1,
-    rgb_float_t c2);
-  void drawProgressBar(v2d_t lower, v2d_t higher, double percent, rgb_float_t c1, rgb_float_t c2);
+  void drawProgressBar(v2d_t lower, v2d_t higher, int numerator, int denominator);
+  void drawProgressBar(v2d_t lower, v2d_t higher, double percent);
 
   void draw(int numerator, int denominator);
 
@@ -61,7 +57,7 @@ private:
   v2d_t progressBarTopLeft;
   v2d_t progressBarBottomRight;
 
-  rgb_float_t backgroundColor;
-  rgb_float_t completedColor;
-  rgb_float_t incompletedColor;
+  rgb_float_t mBackgroundColor;
+  rgb_float_t mCompletedColor;
+  rgb_float_t mIncompletedColor;
 };
