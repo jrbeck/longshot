@@ -8,8 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Game_h_
-#define Game_h_
+#pragma once
 
 // the main include directory
 #include <cstdio>
@@ -23,18 +22,18 @@
 
 using namespace std;
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
-#include <SDL/SDL_opengl.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_opengl.h>
 
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "GL/glut.h"
 
-
 // the root/code/include directory
 #include "v2d.h"
 
+#include "GameWindow.h"
 #include "GalaxyMap.h"
 #include "World.h"
 #include "WorldUtil.h"
@@ -61,115 +60,114 @@ using namespace std;
 
 
 typedef struct {
-	bool loadSucceeded;
-	v3d_t physicsPos;
-	int locationType;
-	int planetHandle;
+  bool loadSucceeded;
+  v3d_t physicsPos;
+  int locationType;
+  int planetHandle;
 } GameSaveData;
 
 
 enum {
-	LOAD_SUCCESSFUL,
-	LOAD_UNSUCCESSFUL
+  LOAD_SUCCESSFUL,
+  LOAD_UNSUCCESSFUL
 
 };
 
 
 enum {
-	GAMESTATE_PLAY,
-	GAMESTATE_MENU,
-	GAMESTATE_MERCHANT
+  GAMESTATE_PLAY,
+  GAMESTATE_MENU,
+  GAMESTATE_MERCHANT
 };
 
 enum {
-	GAMEMENU_BACKTOGAME,
-	GAMEMENU_EXITGAME,
+  GAMEMENU_BACKTOGAME,
+  GAMEMENU_EXITGAME,
 
-	GAMEMENU_SHIP,
-	GAMEMENU_GALAXY_MAP,
-	GAMEMENU_PLANET_MAP,
+  GAMEMENU_SHIP,
+  GAMEMENU_GALAXY_MAP,
+  GAMEMENU_PLANET_MAP,
 
-	GAMEMENU_DUNGEON_MAP,
+  GAMEMENU_DUNGEON_MAP,
 
-	GAMEMENU_MERCHANT
+  GAMEMENU_MERCHANT
 };
 
 
 
 class game_c {
-	player_c mPlayer;	// save
-	Galaxy *mGalaxy;	// save
-	Location *mLocation;	// save
-	WorldMap *mWorldMap;
-	WorldMapView mWorldMapView;
-	AiManager mAiManager;	// save
-	AiView *mAiView;
-	Physics mPhysics;	// save
-	PhysicsView *mPhysicsView;
-	GameInput mGameInput;
-	AssetManager mAssetManager;
-	ItemManager mItemManager;	// save
+  player_c mPlayer;	// save
+  Galaxy *mGalaxy;	// save
+  Location *mLocation;	// save
+  WorldMap *mWorldMap;
+  WorldMapView mWorldMapView;
+  AiManager mAiManager;	// save
+  AiView *mAiView;
+  Physics mPhysics;	// save
+  PhysicsView *mPhysicsView;
+  GameInput mGameInput;
+  AssetManager mAssetManager;
+  ItemManager mItemManager;	// save
 
-	MerchantView *mMerchantView;
+  MerchantView *mMerchantView;
 
-	size_t mPlayerPhysicsHandle;
-	size_t mPlayerAiHandle;
+  size_t mPlayerPhysicsHandle;
+  size_t mPlayerAiHandle;
 
-	double mLastUpdateTime;
+  double mLastUpdateTime;
 
-	menu_c *mMenu;
-	int mGameState;
+  menu_c *mMenu;
+  int mGameState;
 
-	int mNumPhysicsObjects;
-	int mNumAiObjects;
-	int mNumItems;
+  int mNumPhysicsObjects;
+  int mNumAiObjects;
+  int mNumItems;
 
-	int mWorldSeed;
-	Planet *mCurrentPlanet;
+  int mWorldSeed;
+  Planet *mCurrentPlanet;
 
-	bool mCycleLighting;
+  bool mCycleLighting;
 
-	// HACKS
-	char mPlanetNameString[100];
+  GameWindow *mGameWindow;
+
+  // HACKS
+  char mPlanetNameString[100];
 
 public:
-	game_c(void);
-	~game_c(void);
+  game_c(GameWindow *gameWindow);
+  ~game_c();
 
-	void loadAssets(void);
-	void freeAssets(void);
+  void loadAssets();
+  void freeAssets();
 
-	void loadPlanetMenu(void);
-	void loadShipMenu(void);
+  void loadPlanetMenu();
+  void loadShipMenu();
 
-	void setup_opengl(void);
+  GameWindow* getGameWindow();
+  void setup_opengl();
 
-	int enter_game_mode(bool createNewWorld);
+  int enter_game_mode(bool createNewWorld);
 
-	void initializePlanet(bool resetPlayer, Planet *planet, v3d_t *startPos, bool createSetPieces);
-	void initSpaceShip(bool resetPlayer);
-	void resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer);
+  void initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces);
+  void initSpaceShip(bool resetPlayer);
+  void resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer);
 
-	void gameLoop();
-	int handleMenuChoice(int menuChoice);
-	bool update (void);
-	int draw (double &time);
+  void gameLoop();
+  int handleMenuChoice(int menuChoice);
+  bool update();
+  int draw(double& time);
 
-	// this really shouldn't be here...
-	// it draws the 'touched' block in front of the player
-	// put it in PlayerView
-	void drawPlayerTargetBlock(void);
+  // this really shouldn't be here...
+  // it draws the 'touched' block in front of the player
+  // put it in PlayerView
+  void drawPlayerTargetBlock();
 
-	// currently Windows specific
-	void deleteAllFilesInFolder(LPWSTR folderPath);
+  // currently Windows specific
+  void deleteAllFilesInFolder(LPWSTR folderPath);
 
-	void save(void);
-	int load(void);
-	int saveGameData(void);
-	GameSaveData loadGameData(void);
-	void saveLocation(void);
+  void save();
+  int load();
+  int saveGameData();
+  GameSaveData loadGameData();
+  void saveLocation();
 };
-
-
-
-#endif // Game_h_

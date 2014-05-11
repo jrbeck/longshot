@@ -8,16 +8,14 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef GlBitmapFont_h_
-#define GlBitmapFont_h_
+#pragma once
 
 #include <string>
-
 #include <Windows.h>
 
-#include "GL/glut.h"
+#include <sdl2/SDL_opengl.h>
 
-#include "SdlInterface.h"
+#include "GL/glut.h"
 
 using namespace std;
 
@@ -74,7 +72,3 @@ private:
 
 	GLfloat mTextureMultiplier[2];		// these get the coords fo the individual chars
 };
-
-
-
-#endif // GlBitmapFont_h_

@@ -8,9 +8,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef GalaxyMap_h_
-#define GalaxyMap_h_
+#pragma once
 
+#include "GameWindow.h"
 #include "Galaxy.h"
 #include "PlanetMap.h"
 
@@ -21,53 +21,51 @@
 #define ACTION_WARP			1
 
 
-typedef struct {
-	int action;
-	StarSystem *starSystem;
-	Planet *planet;
-} GalaxyMapResult;
+struct GalaxyMapResult {
+  int action;
+  StarSystem* starSystem;
+  Planet* planet;
+};
 
 
 class GalaxyMap {
 public:
-	GalaxyMap();
-	~GalaxyMap();
+  GalaxyMap(GameWindow* gameWindow);
+  ~GalaxyMap();
 
-	GalaxyMapResult enterViewMode(Galaxy *galaxy, Planet *selectedPlanet);
+  GalaxyMapResult enterViewMode(Galaxy* galaxy, Planet* selectedPlanet);
 
-	void drawGalaxy(Planet *selectedPlanet);
-	void drawStarSystem(StarSystem &starSystem, Planet *selectedPlanet);
+  void drawGalaxy(Planet* selectedPlanet);
+  void drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet);
 
-	void updateGalaxyMenu(StarSystem *currentSystem, StarSystem *hoverSystem);
-	void updateStarSystemMenu();
+  void updateGalaxyMenu(StarSystem* currentSystem, StarSystem* hoverSystem);
+  void updateStarSystemMenu();
 
-	void setUpOpenGl();
-	void drawHex(float radius, v2d_t center, const GLfloat color[4]);
-	void drawRing(float radius, v2d_t center, const GLfloat color[4]);
+  void setUpOpenGl();
+  void drawHex(float radius, v2d_t center, const GLfloat color[4]);
+  void drawRing(float radius, v2d_t center, const GLfloat color[4]);
 
+  GameWindow* mGameWindow;
 
-	Galaxy *mGalaxy;
+  Galaxy* mGalaxy;
 
-	// TODO: get this i/o junk outta here
-	int handleInput (void);
-	int handleKeystroke (void);
-	int handleKeyup (void);
-	void handleMouseButtonDown (int button, v2d_t pos);
-	void handleMouseButtonUp (int button, v2d_t pos);
+  // TODO: get this i/o junk outta here
+  int handleInput(void);
+  int handleKeystroke(void);
+  int handleKeyup(void);
+  void handleMouseButtonDown(int button, v2d_t pos);
+  void handleMouseButtonUp(int button, v2d_t pos);
 
-	SDL_Event sdlevent;
-	v2d_t mMousePos;
-	v2d_t mMouseDelta;
-	int mMouseMoved;
-	bool mLeftMouseButtonClicked;
+  SDL_Event sdlevent;
+  v2d_t mMousePos;
+  v2d_t mMouseDelta;
+  int mMouseMoved;
+  bool mLeftMouseButtonClicked;
 
-	menu_c *mMenu;
+  menu_c* mMenu;
 
-	int mZoomLevel;
-	int mSelectedSystem;
+  int mZoomLevel;
+  int mSelectedSystem;
 
-	GalaxyMapResult mResult;
+  GalaxyMapResult mResult;
 };
-
-
-#endif // GalaxyMap_h_

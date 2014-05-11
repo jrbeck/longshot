@@ -18,7 +18,7 @@ Texture::~Texture() {
 
 
 int Texture::loadTexture() {
-	SDL_Surface *surface = IMG_Load(mFileName.c_str());
+	SDL_Surface* surface = IMG_Load(mFileName.c_str());
 
 	if (!surface) {
 		printf ("Texture::loadTexture(): failed to load %s: %s\n", mFileName.c_str(), SDL_GetError());

@@ -8,10 +8,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef GameInput_h_
-#define GameInput_h_
+#pragma once
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "AssetManager.h"
 #include "v2d.h"
@@ -21,105 +20,103 @@
 
 class GameInput {
 public:
-	GameInput (void);
-	~GameInput (void);
+  GameInput (void);
+  ~GameInput (void);
 
-	void reset (void);
+  void reset (void);
 
-	double getFacingDelta (void);
-	double getInclinationDelta (void);
+  double getFacingDelta (void);
+  double getInclinationDelta (void);
 
-	bool isEscapePressed (void);
-	bool isWindowClosed (void);
+  bool isEscapePressed (void);
+  bool isWindowClosed (void);
 
-	bool isWalkingForward (void);
-	bool isWalkingBackward (void);
-	bool isWalkingLeft (void);
-	bool isWalkingRight (void);
+  bool isWalkingForward (void);
+  bool isWalkingBackward (void);
+  bool isWalkingLeft (void);
+  bool isWalkingRight (void);
 
-	bool isJumping (void);
+  bool isJumping (void);
 
-	bool isSwimming (void);
+  bool isSwimming (void);
 
-	bool isPickUpItem (void);
-	bool isDroppedItem (void);
+  bool isPickUpItem (void);
+  bool isDroppedItem (void);
 
-	bool isUsingPrimary (void);
-	bool isUsingSecondary (void);
+  bool isUsingPrimary (void);
+  bool isUsingSecondary (void);
 
-	bool isClickMouse1 (void);
-	bool isClickMouse2 (void);
+  bool isClickMouse1 (void);
+  bool isClickMouse2 (void);
 
-	bool isNextGun (void);
-	bool isPreviousGun (void);
+  bool isNextGun (void);
+  bool isPreviousGun (void);
 
-	bool isSoftReset (void);
-	bool isTogglePhysics (void);
-	bool isAdvanceOneFrame (void);
+  bool isSoftReset (void);
+  bool isTogglePhysics (void);
+  bool isAdvanceOneFrame (void);
 
-	bool isIncreasingDrawDistance (void);
-	bool isDecreasingDrawDistance (void);
+  bool isIncreasingDrawDistance (void);
+  bool isDecreasingDrawDistance (void);
 
-	bool isToggleCharacterSheet (void);
-	bool isToggleGodMode (void);
+  bool isToggleCharacterSheet (void);
+  bool isToggleGodMode (void);
 
-	bool isUseBackpackItem (void);
+  bool isUseBackpackItem (void);
 
-	bool isToggleWorldChunkBoxes (void);
+  bool isToggleWorldChunkBoxes (void);
 
-	int update (void);
+  int update (void);
 
 private:
-	int handleKeyDownEvent (int key);
-	int handleKeyUpEvent (int key);
-	void handleMouseButtonDownEvent (int button, v2d_t pos);
-	void handleMouseButtonUpEvent (int button, v2d_t pos);
+  int handleKeyDownEvent(int key);
+  int handleKeyUpEvent(int key);
+  void handleMouseButtonDownEvent(int button, v2d_t pos);
+  void handleMouseButtonUpEvent(int button, v2d_t pos);
+  void handleMouseWeelEvent(SDL_MouseWheelEvent wheelEvent);
 
-	// data members * * * * * * * * * * * *
-	double mMouseSensitivity;
 
-	double mFacingDelta;
-	double mInclinationDelta;
+  // data members * * * * * * * * * * * *
+  double mMouseSensitivity;
 
-	bool mEscapePressed;
-	bool mWindowClosed;
+  double mFacingDelta;
+  double mInclinationDelta;
 
-	bool mWalkForward;
-	bool mWalkBackward;
-	bool mWalkLeft;
-	bool mWalkRight;
+  bool mEscapePressed;
+  bool mWindowClosed;
 
-	bool mJump;
+  bool mWalkForward;
+  bool mWalkBackward;
+  bool mWalkLeft;
+  bool mWalkRight;
 
-	bool mSwim;
+  bool mJump;
 
-	bool mPickUpItem;
-	bool mDropItem;
+  bool mSwim;
 
-	bool mUsePrimary;
-	bool mUseSecondary;
+  bool mPickUpItem;
+  bool mDropItem;
 
-	bool mClickMouse1;
-	bool mClickMouse2;
+  bool mUsePrimary;
+  bool mUseSecondary;
 
-	int mNextGun;
-	int mPreviousGun;
+  bool mClickMouse1;
+  bool mClickMouse2;
 
-	bool mSoftReset;
-	bool mTogglePhysics;
-	bool mAdvanceOneFrame;
+  int mNextGun;
+  int mPreviousGun;
 
-	bool mIncreaseDrawDistance;
-	bool mDecreaseDrawDistance;
+  bool mSoftReset;
+  bool mTogglePhysics;
+  bool mAdvanceOneFrame;
 
-	bool mToggleCharacterSheet;
-	bool mToggleGodMode;
+  bool mIncreaseDrawDistance;
+  bool mDecreaseDrawDistance;
 
-	bool mUseBackpackItem;
+  bool mToggleCharacterSheet;
+  bool mToggleGodMode;
 
-	bool mToggleWorldChunkBoxes;
+  bool mUseBackpackItem;
+
+  bool mToggleWorldChunkBoxes;
 };
-
-
-
-#endif // GameInput_h_

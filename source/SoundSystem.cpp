@@ -37,25 +37,22 @@ int SoundSystem::initialize (void) {
 }
 
 
-void SoundSystem::playSoundByHandle (int handle, int volume) {
+void SoundSystem::playSoundByHandle(int handle, int volume) {
 	if (mWav[handle] != NULL) {
 		int channel;
-
 		if (handle == SOUND_AMBIENT) {
-			channel = Mix_PlayChannel (-1, mWav[handle], -1);
+			channel = Mix_PlayChannel(-1, mWav[handle], -1);
 		}
 		else {
-			channel = Mix_PlayChannel (-1, mWav[handle], 0);
+			channel = Mix_PlayChannel(-1, mWav[handle], 0);
 		}
 
 		if (channel != -1) {
-			Mix_Volume (channel, volume);
-		}
-		else {
+			Mix_Volume(channel, volume);
 		}
 	}
 	else {
-		printf ("SoundSystem::playSoundByHandle: invalid sample!\n");
+		printf ("SoundSystem::playSoundByHandle: invalid sample! %d\n", handle);
 	}
 }
 

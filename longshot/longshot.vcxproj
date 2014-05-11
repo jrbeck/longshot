@@ -76,7 +76,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;SDL_image.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;SDL2_image.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -100,7 +100,6 @@
     <ClCompile Include="..\source\dungeon\DungeonUtil.cpp" />
     <ClCompile Include="..\source\dungeon\MoleculeDungeon.cpp" />
     <ClCompile Include="..\source\dungeon\SnakeDungeon.cpp" />
-    <ClCompile Include="..\source\Edit.cpp" />
     <ClCompile Include="..\source\feature\DungeonFeature.cpp" />
     <ClCompile Include="..\source\feature\FeatureGenerator.cpp" />
     <ClCompile Include="..\source\feature\FeatureUtil.cpp" />
@@ -108,6 +107,7 @@
     <ClCompile Include="..\source\GalaxyMap.cpp" />
     <ClCompile Include="..\source\Game.cpp" />
     <ClCompile Include="..\source\GameInput.cpp" />
+    <ClCompile Include="..\source\GameWindow.cpp" />
     <ClCompile Include="..\source\GlBitmapFont.cpp" />
     <ClCompile Include="..\source\GlCamera.cpp" />
     <ClCompile Include="..\source\HeadBobble.cpp" />
@@ -140,7 +140,6 @@
     <ClCompile Include="..\source\RogueMapViewer.cpp" />
     <ClCompile Include="..\source\RogueViewer.cpp" />
     <ClCompile Include="..\source\RtsCam.cpp" />
-    <ClCompile Include="..\source\SdlInterface.cpp" />
     <ClCompile Include="..\source\Simplex.cpp" />
     <ClCompile Include="..\source\SkySim.cpp" />
     <ClCompile Include="..\source\SoundSystem.cpp" />
@@ -186,11 +185,11 @@
     <ClInclude Include="..\source\include\BoundingSphere.h" />
     <ClInclude Include="..\source\include\CloudSim.h" />
     <ClInclude Include="..\source\include\Constants.h" />
-    <ClInclude Include="..\source\include\Edit.h" />
     <ClInclude Include="..\source\include\Galaxy.h" />
     <ClInclude Include="..\source\include\GalaxyMap.h" />
     <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GameInput.h" />
+    <ClInclude Include="..\source\include\GameWindow.h" />
     <ClInclude Include="..\source\include\GlBitmapFont.h" />
     <ClInclude Include="..\source\include\GlCamera.h" />
     <ClInclude Include="..\source\include\HeadBobble.h" />
@@ -222,7 +221,6 @@
     <ClInclude Include="..\source\include\RogueMapViewer.h" />
     <ClInclude Include="..\source\include\RogueViewer.h" />
     <ClInclude Include="..\source\include\RtsCam.h" />
-    <ClInclude Include="..\source\include\SdlInterface.h" />
     <ClInclude Include="..\source\include\Simplex.h" />
     <ClInclude Include="..\source\include\SkySim.h" />
     <ClInclude Include="..\source\include\SoundSystem.h" />

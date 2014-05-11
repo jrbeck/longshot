@@ -13,6 +13,7 @@
 #pragma once
 
 #include <omp.h>
+#include <sdl2/SDL_opengl.h>
 
 #include "Location.h"
 #include "v3d.h"
@@ -21,7 +22,6 @@
 #include "AssetManager.h"
 #include "SkySim.h"
 #include "Periodics.h"
-#include "SdlInterface.h"
 #include "LoadScreen.h"
 
 
@@ -50,10 +50,7 @@ public:
 
   void clear(bool clearInactive);
 
-  // loads the set-pieces around some location
-  void loadFeaturesAroundPlayer(v3d_t playerPos);
-
-  int preloadColumns(int numColumns, v3d_t pos);
+  int preloadColumns(int numColumns, v3d_t pos, LoadScreen* loadScreen);
   int loadSurroundingColumns(v3d_t pos);
 
   int loadColumn(int xIndex, int zIndex, bool doOutcroppings);

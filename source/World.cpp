@@ -154,38 +154,7 @@ void World::setStartPosition(v3d_t pos) {
   mIsPlayerStartPosSet = true;
 }
 
-
-
-void World::loadFeaturesAroundPlayer (v3d_t playerPos) {
-  v3di_t regionIndex = WorldUtil::getRegionIndex(playerPos);
-
-
-  // gotta do some kinda loading thingie
-  glPushMatrix ();
-
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity ();
-
-//	glOrtho (0, SCREEN_W, SCREEN_H, 0, -1, 1);
-  glOrtho (0.0, 1.0, 1.0, 0.0, -1.0, 1.0);
-
-  glMatrixMode (GL_MODELVIEW);
-  glLoadIdentity ();
-
-  glClearColor (0.0, 0.0, 0.0, 1.0);
-  glDisable (GL_TEXTURE_2D);
-
-  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  SDL_GL_SwapBuffers ();
-
-  // build the set pieces
-//	FeatureGenerator::createSetPieces (regionIndex.x - (ROGUE_W / 2), regionIndex.z - (ROGUE_H / 2), mWorldMap);
-
-  glPopMatrix();
-}
-
-
-void World::draw(gl_camera_c &cam) {
+void World::draw(gl_camera_c& cam) {
   mSkySim->draw(cam, mPlayerPosition);
 }
 
@@ -222,18 +191,12 @@ int World::update(v3d_t playerPosition) {
 }
 
 
-int World::preloadColumns(int numColumns, v3d_t pos) {
+int World::preloadColumns(int numColumns, v3d_t pos, LoadScreen* loadScreen) {
   int start_ticks = SDL_GetTicks ();
   printf ("%6d:  World::preloadColumns()", SDL_GetTicks ());
 
   // resize the WorldMap in case someone was monkeying with it
   mWorldMap->resize (WORLD_MAP_SIDE, WORLD_MAP_SIDE);
-
-  // gotta do some kinda loading thingie
-  LoadScreen loadScreen;
-  loadScreen.setCompletedColor(0.0f, 0.8f, 0.0f);
-  loadScreen.setIncompletedColor(0.0f, 0.4f, 0.0f);
-  loadScreen.start();
 
   // okay, let's actually load something now
   int numColumnsLoaded = 0;
@@ -243,10 +206,8 @@ int World::preloadColumns(int numColumns, v3d_t pos) {
     loadSurroundingColumns(pos);
 
     printf (".");
-    loadScreen.draw(i, numColumns);
+    loadScreen->draw(i, numColumns);
   }
-
-  loadScreen.finish();
 
   printf ("\n      columns loaded: %d, chunks: %d\n", numColumnsLoaded, numChunksLoaded);
   printf ("      time: %d\n\n", SDL_GetTicks () - start_ticks);

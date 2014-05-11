@@ -1,11 +1,12 @@
 #include "PlanetMap.h"
 
-PlanetMap::PlanetMap() :
+PlanetMap::PlanetMap(GameWindow* gameWindow) :
   mMenu(NULL),
   mTerrain(NULL),
   mColors(NULL),
   mPeriodics(NULL)
 {
+  mGameWindow = gameWindow;
   mLeftMouseButtonClicked = false;
 }
 
@@ -147,7 +148,7 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawTerrain();
     mMenu->draw();
-    SDL_GL_SwapBuffers();
+    mGameWindow->swapBuffers();
     setUpOpenGl();
   }
 
@@ -325,16 +326,6 @@ int PlanetMap::handleKeyup (void) {
 
 void PlanetMap::handleMouseButtonDown (int button, v2d_t pos) {
   switch (button) {
-    case SDL_BUTTON_WHEELUP:
-      // zoom in
-//			mRtsCam.zoom (-20.0);
-      break;
-
-    case SDL_BUTTON_WHEELDOWN:
-      // zoom out
-//			mRtsCam.zoom (20.0);
-      break;
-
     case SDL_BUTTON_RIGHT:
       break;
   }

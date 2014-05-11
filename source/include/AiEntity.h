@@ -54,7 +54,7 @@ public:
 		vector<AiEntity*>& aiEntities,
 		ItemManager& itemManager);
 
-	void readMail(Physics &physics);
+	void readMail(Physics& physics);
 
 
 	// this is mostly slated to be paramaterized and moved out of here.

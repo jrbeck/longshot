@@ -8,10 +8,11 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Galaxy_h_
-#define Galaxy_h_
+#pragma once
 
 #include <vector>
+
+#include "MathUtil.h"
 #include "StarSystem.h"
 
 #define GALACTIC_WIDTH		100
@@ -39,6 +40,3 @@ public:
 	int mNextHandle;
 	vector <StarSystem *> mStarSystems;
 };
-
-
-#endif // Galaxy_h_
