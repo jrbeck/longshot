@@ -34,7 +34,7 @@ Longshot::Longshot() :
   // WARNING: windows specific
   CreateDirectory(TEXT("save"), NULL);
 
-  printf("%6d: exiting Longshot constructor\n", SDL_GetTicks ());
+  printf("%6d: exiting Longshot constructor\n", SDL_GetTicks());
   printf("-----------------------------------\n\n");
 }
 
@@ -112,7 +112,7 @@ void Longshot::reloadMenu(void) {
 
 
 // main program loop * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-int Longshot::loop(void) {
+int Longshot::loop() {
 
   printf("block_t size: %d\n", sizeof (block_t));
   printf("PhysicsEntity size: %d\n", sizeof (PhysicsEntity));

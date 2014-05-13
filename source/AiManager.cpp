@@ -1,18 +1,18 @@
 #include "AiManager.h"
 
-AiManager::AiManager(void) {
+AiManager::AiManager() {
   mMaxCrittersHACK = 0;
 }
 
 
 
-AiManager::~AiManager(void) {
+AiManager::~AiManager() {
   clear();
 }
 
 
 
-void AiManager::clear(void) {
+void AiManager::clear() {
   mNextHandle = 1;
 
   mPlayerAiHandle = 0;
@@ -34,7 +34,7 @@ void AiManager::clear(void) {
 
 
 
-size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics &physics, double time) {
+size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& physics, double time) {
   mPlayerPhysicsHandle = playerPhysicsHandle;
 
   // add the player as an AI entity
@@ -131,10 +131,10 @@ size_t AiManager::spawnEntity(
   int type,
   v3d_t position,
   double time,
-  Physics &physics,
-  ItemManager &itemManager)
+  Physics& physics,
+  ItemManager& itemManager)
 {
-  AiEntity *newAiEntity = addEntity(type, position, physics, time);
+  AiEntity* newAiEntity = addEntity(type, position, physics, time);
   if (newAiEntity == NULL) {
     printf("AiManager::spawnEntity(): error: could not allocate new entity\n\n");
     return 0;
@@ -154,7 +154,7 @@ size_t AiManager::spawnEntity(
 
       physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
       physics.setMass(physicsHandle, 10.0);
-      physics.setDimensions(physicsHandle, v3d_v (1.8, 1.8, 1.8));
+      physics.setDimensions(physicsHandle, v3d_v(1.8, 1.8, 1.8));
       break;
 
     case AITYPE_SHOOTER:
@@ -168,7 +168,7 @@ size_t AiManager::spawnEntity(
       break;
 
     case AITYPE_HOPPER:
-      level = r_num (1.0, 3.0);
+      level = r_num(1.0, 3.0);
       newAiEntity->mMaxHealth = (float)level * 5.0f;
       newAiEntity->mCurrentHealth = newAiEntity->mMaxHealth;
       newAiEntity->mWillAttackSameSpecies = true;
@@ -179,14 +179,14 @@ size_t AiManager::spawnEntity(
       break;
 
     case AITYPE_HUMAN:
-      level = r_num (1.0, 3.0);
+      level = r_num(1.0, 3.0);
       newAiEntity->mMaxHealth = (float)level * 5.0f;
       newAiEntity->mCurrentHealth = newAiEntity->mMaxHealth;
       newAiEntity->mWillAttackSameSpecies = false;
 
       physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
       physics.setMass(physicsHandle, 100.0);
-      physics.setDimensions(physicsHandle, v3d_v (0.75, 1.8, 0.75));
+      physics.setDimensions(physicsHandle, v3d_v(0.75, 1.8, 0.75));
       break;
 
     default:
@@ -222,11 +222,11 @@ size_t AiManager::spawnEntity(
         // generate gun in first slot
         if (itemRandom > 9.6) {
           // this one could be dangerous
-          newAiEntity->mInventory[i] = itemManager.generateRandomGun(r_num (5.0, 10.0));
+          newAiEntity->mInventory[i] = itemManager.generateRandomGun(r_num(5.0, 10.0));
         }
         else {
           // 'weak' gun
-          newAiEntity->mInventory[i] = itemManager.generateRandomGun(r_num (1.0, 2.5));
+          newAiEntity->mInventory[i] = itemManager.generateRandomGun(r_num(1.0, 2.5));
         }
       }
       else {
@@ -248,12 +248,12 @@ size_t AiManager::spawnEntity(
 
 int AiManager::update(
   double time,
-  WorldMap &worldMap,
-  Physics &physics,
-  ItemManager &itemManager)
+  WorldMap& worldMap,
+  Physics& physics,
+  ItemManager& itemManager)
 {
   if (physics.isPaused()) {
-    return static_cast<int>(mAiEntities.size());
+    return (int)mAiEntities.size();
   }
 
   // clean up the entity list a bit
@@ -318,11 +318,11 @@ int AiManager::update(
     }
   }
 
-  return static_cast<int>(mAiEntities.size());
+  return (int)mAiEntities.size();
 }
 
 
-void AiManager::releaseItems(int index, Physics &physics) {
+void AiManager::releaseItems(int index, Physics& physics) {
   int items = 0;
   printf("eliminating inventory\n");
       
@@ -332,7 +332,7 @@ void AiManager::releaseItems(int index, Physics &physics) {
       phys_message_t message;
       message.recipient = MAILBOX_ITEMMANAGER;
       message.type = PHYS_MESSAGE_ITEM_DESTROYED;
-      message.iValue = static_cast<int>(mAiEntities[index]->mInventory[inventoryIndex]);
+      message.iValue = (int)mAiEntities[index]->mInventory[inventoryIndex];
       physics.sendMessage(message);
 
       mAiEntities[index]->mInventory[inventoryIndex] = 0;
@@ -346,7 +346,7 @@ void AiManager::releaseItems(int index, Physics &physics) {
 }
 
 
-void AiManager::trimEntitiesList (void) {
+void AiManager::trimEntitiesList() {
   size_t numEntities = mAiEntities.size();
   for (size_t i = 0; i < numEntities; i++) {
     if (mAiEntities[i]->mActive == false) {
@@ -363,7 +363,7 @@ void AiManager::trimEntitiesList (void) {
 }
 
 
-void AiManager::readPhysicsMessages(double time, Physics &physics, ItemManager &itemManager) {
+void AiManager::readPhysicsMessages(double time, Physics& physics, ItemManager& itemManager) {
   phys_message_t message;
   int type;
 

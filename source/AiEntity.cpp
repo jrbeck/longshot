@@ -25,7 +25,7 @@ void AiEntity::update(
   WorldMap& worldMap,
   Physics& physics,
   vector<AiEntity*>& aiEntities,
-  ItemManager &itemManager)
+  ItemManager& itemManager)
 {
   // this has to be non-NULL since AiManager::update() checks before calling this.
   // all the same...
@@ -51,16 +51,16 @@ void AiEntity::update(
     // turn inventory items into phys entities
     for (int i = 0; i < AI_INVENTORY_SIZE; i++) {
       if (mInventory[i] > 0) {
-        item_t item = itemManager.getItem (mInventory[i]);
+        item_t item = itemManager.getItem(mInventory[i]);
 
-        if (item.type == ITEMTYPE_GUN_ONE_HANDED && r_numi (0, 10) < 3) {
-          itemManager.destroyItem (mInventory[i]);
+        if (item.type == ITEMTYPE_GUN_ONE_HANDED && r_numi(0, 10) < 3) {
+          itemManager.destroyItem(mInventory[i]);
         }
         else {
           v3d_t itemForce = v3d_random(20.0);
           itemForce.y = 10.0;
-          size_t itemPhysicsHandle = physics.createEntity (OBJTYPE_ITEM, mWorldPosition, itemForce, time, true);
-          physics.setItemHandleAndType (itemPhysicsHandle, mInventory[i], itemManager.getItemType (mInventory[i]));
+          size_t itemPhysicsHandle = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, time, true);
+          physics.setItemHandleAndType(itemPhysicsHandle, mInventory[i], itemManager.getItemType(mInventory[i]));
         }
 
         mInventory[i] = 0;
@@ -424,10 +424,10 @@ void AiEntity::updateHopper(
     v3d_t vecToTarget = v3d_sub(targetPosition, mWorldPosition);
 
     if (mPhysicsEntity->worldViscosity > 0.0) {
-      if (v3d_mag (vecToTarget) < mMinDistanceToPlayer) {
-        vecToTarget = v3d_scale (1600.0 * (sin (time * 8.0) + 1.5), v3d_normalize (vecToTarget));
+      if (v3d_mag(vecToTarget) < mMinDistanceToPlayer) {
+        vecToTarget = v3d_scale(1600.0 * (sin(time * 8.0) + 1.5), v3d_normalize(vecToTarget));
 
-        movementForce = v3d_add (movementForce, vecToTarget);
+        movementForce = v3d_add(movementForce, vecToTarget);
 
         // give it a little more buoyancy
         if (targetPosition.y - mWorldPosition.y > 0.0) {
@@ -442,16 +442,12 @@ void AiEntity::updateHopper(
         // big leap?
         if (r_numi(0, 60) == 3) {
           vecToTarget = v3d_scale(15000.0, v3d_normalize(vecToTarget));
-
           vecToTarget.y = 60000.0;
-
           movementForce = v3d_add(movementForce, vecToTarget);
         }
         else {
           vecToTarget = v3d_scale(2000.0, v3d_normalize(vecToTarget));
-
           //vecToTarget.y = r_num(8000.0, 10000.0);
-
           movementForce = v3d_add(movementForce, vecToTarget);
         }
       }
@@ -461,9 +457,7 @@ void AiEntity::updateHopper(
 
       if (v3d_mag(vecToTarget) < mMinDistanceToPlayer) {
         vecToTarget = v3d_scale(5.0, v3d_normalize(vecToTarget));
-
   //			vecToPlayer.y = 20.0;
-
         movementForce = v3d_add(movementForce, vecToTarget);
       }
     }
@@ -494,7 +488,7 @@ void AiEntity::updateDummy(double time, WorldMap& worldMap, Physics& physics, ve
 }
 
 
-void AiEntity::updateTarget (double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities) {
+void AiEntity::updateTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities) {
   mTargetPhysicsEntity = NULL;
 
   if (mTargetPhysicsHandle != 0) {
@@ -513,7 +507,6 @@ void AiEntity::updateTarget (double time, WorldMap& worldMap, Physics& physics, 
   if (mTargetPhysicsHandle == 0) {
     aquireTarget(time, worldMap, physics, aiEntities);
   }
-
 }
 
 void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities) {
@@ -523,10 +516,7 @@ void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, v
   // try to find target
   for (size_t j = 0; j < aiEntities.size (); j++) {
     // ignore self and dead things
-    if (!aiEntities[j]->mActive ||
-      aiEntities[j]->mType == mType ||
-      aiEntities[j]->mHandle == mHandle)
-    {
+    if (!aiEntities[j]->mActive || aiEntities[j]->mType == mType || aiEntities[j]->mHandle == mHandle) {
       continue;
     }
 
@@ -539,7 +529,6 @@ void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, v
     // don't target if dead
     mTargetPhysicsEntity = physics.getEntityByHandle(jPhysicsHandle);
     if (mTargetPhysicsEntity == NULL) continue;
-
     if (mTargetPhysicsEntity->health <= 0.0) continue;
 
     double jDistance = v3d_dist(mWorldPosition, physics.getCenter(jPhysicsHandle));
@@ -563,14 +552,13 @@ void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, v
     mTargetPhysicsEntity = NULL;
   }
 
-
-  // perhaps a stroll
+  // perhaps a stroll...
   if (mTargetPhysicsHandle == 0 && r_numi(0, 5) == 2) {
-    PhysicsEntity *playerPhysicsEntity = physics.getEntityByHandle(physics.getPlayerHandle());
+    PhysicsEntity* playerPhysicsEntity = physics.getEntityByHandle(physics.getPlayerHandle());
     v3d_t baitPosition;
     if(playerPhysicsEntity != NULL) {
       // hehe let's sneak up on the player!
-      baitPosition = v3d_add(playerPhysicsEntity->pos, v3d_v(r_num(-25.0, 25.0), 10.0, r_num(-25.0, 25.0)));
+      baitPosition = v3d_add(playerPhysicsEntity->pos, v3d_v(r_num(-40.0, 40.0), 10.0, r_num(-40.0, 40.0)));
     }
     else {
       baitPosition = v3d_add(mWorldPosition, v3d_v(r_num(-25.0, 25.0), 10.0, r_num(-25.0, 25.0)));
@@ -586,12 +574,7 @@ void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, v
   }
 }
 
-
-
-
-
 bool AiEntity::useWeapon(double time, Physics& physics, ItemManager& itemManager) {
-
   if (mInventory[0] == 0) return false;
   if (mNextShotTime > time) return false;
 
@@ -600,17 +583,15 @@ bool AiEntity::useWeapon(double time, Physics& physics, ItemManager& itemManager
     return false;
   }
 
-  v3d_t targetPosition = mTargetPhysicsEntity->boundingBox.getCenterPosition ();
-  v3d_t vecToTarget = v3d_sub (targetPosition, mWorldPosition);
-
-  double distanceToTarget = v3d_mag (vecToTarget);
-
+  v3d_t targetPosition = mTargetPhysicsEntity->boundingBox.getCenterPosition();
+  v3d_t vecToTarget = v3d_sub(targetPosition, mWorldPosition);
+  double distanceToTarget = v3d_mag(vecToTarget);
   if (!isTargetInRange(item.gunType, distanceToTarget)) {
     return false;
   }
 
   shot_info_t shotInfo;
-  shotInfo.angle = v3d_normalize (vecToTarget);
+  shotInfo.angle = v3d_normalize(vecToTarget);
   shotInfo.ownerPhysicsHandle = mPhysicsHandle;
   shotInfo.position = mWorldPosition;
   shotInfo.time = time;
@@ -619,7 +600,6 @@ bool AiEntity::useWeapon(double time, Physics& physics, ItemManager& itemManager
 
   return true;
 }
-
 
 bool AiEntity::isTargetInRange(int gunType, double distanceToTarget) {
   // FIXME: hack! range should be included in item_t?

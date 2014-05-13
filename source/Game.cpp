@@ -6,7 +6,7 @@
 
 
 
-game_c::game_c(GameWindow *gameWindow) :
+game_c::game_c(GameWindow* gameWindow) :
   mGalaxy(NULL),
   mLocation(NULL),
   mAiView(NULL),
@@ -19,7 +19,6 @@ game_c::game_c(GameWindow *gameWindow) :
   mLastUpdateTime = 0.0;
 
   mGameWindow = gameWindow;
-  printf("GameWindow created\n");
 
   loadAssets();
   printf ("\n%6d: assets loaded\n", SDL_GetTicks());
@@ -50,23 +49,18 @@ game_c::~game_c() {
   freeAssets();
 }
 
-
-
-void game_c::loadAssets(void) {
+void game_c::loadAssets() {
   printf("loading assets\n");
   mAssetManager.loadAssets();
   printf("loading item assets\n");
   mItemManager.loadAssets();
-
 }
 
-
-void game_c::freeAssets(void) {
+void game_c::freeAssets() {
+  printf("you must set my assets free!\n");
   mAssetManager.freeAssets();
   mItemManager.freeAssets();
 }
-
-
 
 void game_c::loadPlanetMenu(void) {
   if (mMenu != NULL) {
@@ -123,7 +117,7 @@ GameWindow* game_c::getGameWindow() {
   return mGameWindow;
 }
 
-void game_c::setup_opengl(void) {
+void game_c::setup_opengl() {
   glViewport(0, 0, SCREEN_W, SCREEN_H);
 
   glEnable(GL_TEXTURE_2D);
