@@ -1,10 +1,13 @@
 #include "GameWindow.h"
 
-GameWindow::GameWindow() :
+GameWindow::GameWindow(const char* windowTitle) :
   mSdlWindow(NULL),
   mSdlGlcontext(NULL)
 {
   printf("GameWindow constructor....\n");
+
+  strncpy(mWindowTitle, windowTitle, MAX_WINDOW_TITLE_LENGTH);
+  mWindowTitle[MAX_WINDOW_TITLE_LENGTH - 1] = '\0';
 
   initSdl();
 
@@ -39,13 +42,15 @@ GameWindow::GameWindow() :
 
 
 GameWindow::~GameWindow() {
-  if(mSdlWindow != NULL) {
+  if (mSdlWindow != NULL) {
     SDL_DestroyWindow(mSdlWindow);
   }
-
   quitSdl();
 }
 
+void GameWindow::setIcon(const char *path) {
+  SDL_SetWindowIcon(mSdlWindow, IMG_Load(path));
+}
 
 int GameWindow::initSdl() {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -73,7 +78,7 @@ int GameWindow::setVideoMode(sdl_mode_info_t mode) {
   }
 
   mSdlWindow = SDL_CreateWindow(
-    "Longshot",
+    mWindowTitle,
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     mode.screen_w, mode.screen_h,
     flags);
@@ -82,9 +87,7 @@ int GameWindow::setVideoMode(sdl_mode_info_t mode) {
     printf("Unable to set video mode: %s\n", SDL_GetError());
     return 1;
   }
-  
 
-  SDL_SetWindowIcon(mSdlWindow, IMG_Load("art/resource/longshot_icon.png"));
   mSdlGlcontext = SDL_GL_CreateContext(mSdlWindow);
 
   if (mSdlGlcontext == NULL) {

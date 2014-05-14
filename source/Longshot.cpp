@@ -6,22 +6,17 @@ Longshot::Longshot() :
   mGame(NULL),
   mRogueViewer(NULL)
 {
-//	printf ("%6d: Longshot constructor ----------------\n", SDL_GetTicks ());
   printf("Longshot constructor ----------------\n");
 
   // lets hope this stays this way
   constructor_successful = true;
 
-  mGameWindow = new GameWindow;
+  mGameWindow = new GameWindow("Longshot");
+  mGameWindow->setIcon("art/resource/longshot_icon.png");
   // TODO: here would be a good place to do something like:
   // mGameWindow->getConstructorSuccess() ...
+  // just sayin'...
 
-  // set the window stuff
-  // do we need this after the move to SDL2?
-//	SDL_WM_SetCaption("Longshot", NULL);
-//	SDL_WM_SetIcon(IMG_Load("art/resource/longshot_icon.png" ), NULL);
-  
-  // show the mouse cursor
   SDL_ShowCursor(1);
 
   // GameMenu * * * * * * * * * * * * * * * * * * * * * * * *
