@@ -298,26 +298,26 @@ void WorldMap::setUniqueLighting( const v3di_t& position, BYTE level ) {
     return;
   }
 
-  mColumns[column].setUniqueLighting( position, level );
+  mColumns[column].setUniqueLighting(position, level);
 }
 
 
-bool WorldMap::isSolidBlock( const v3di_t& position ) const {
-  int column = pickColumn (position);
+bool WorldMap::isSolidBlock(const v3di_t& position) const {
+  int column = pickColumn(position);
 
   if (column == -1) {
     return false;
   }
 
-  return mColumns[column].isSolidBlockAtWorldPosition( position );
+  return mColumns[column].isSolidBlockAtWorldPosition(position);
 }
 
 
 bool WorldMap::isBoundingBoxEmpty( const BoundingBox& boundingBox ) const {
-  for (int z = static_cast<int>(floor (boundingBox.mNearCorner.z)); z <= static_cast<int>(floor (boundingBox.mFarCorner.z)); z++) {
-    for (int y = static_cast<int>(floor (boundingBox.mNearCorner.y)); y <= static_cast<int>(floor (boundingBox.mFarCorner.y)); y++) {
-      for (int x = static_cast<int>(floor (boundingBox.mNearCorner.x)); x <= static_cast<int>(floor (boundingBox.mFarCorner.x)); x++) {
-        if (isSolidBlock (v3di_v (x, y, z))) {
+  for (int z = (int)(floor(boundingBox.mNearCorner.z)); z <= (int)(floor(boundingBox.mFarCorner.z)); z++) {
+    for (int y = (int)(floor(boundingBox.mNearCorner.y)); y <= (int)(floor(boundingBox.mFarCorner.y)); y++) {
+      for (int x = (int)(floor(boundingBox.mNearCorner.x)); x <= (int)(floor(boundingBox.mFarCorner.x)); x++) {
+        if (isSolidBlock(v3di_v (x, y, z))) {
           return false;
         }
       }
@@ -329,10 +329,10 @@ bool WorldMap::isBoundingBoxEmpty( const BoundingBox& boundingBox ) const {
 
 
 bool WorldMap::isBoundingBoxInLiquid(const BoundingBox& boundingBox) const {
-  for (int z = static_cast<int>(floor(boundingBox.mNearCorner.z)); z <= static_cast<int>(floor(boundingBox.mFarCorner.z)); z++) {
-    for (int y = static_cast<int>(floor(boundingBox.mNearCorner.y)); y <= static_cast<int>(floor(boundingBox.mFarCorner.y)); y++) {
-      for (int x = static_cast<int>(floor(boundingBox.mNearCorner.x)); x <= static_cast<int>(floor(boundingBox.mFarCorner.x)); x++) {
-        if (gBlockData.get(getBlockType (v3di_v (x, y, z)))->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
+  for (int z = (int)(floor(boundingBox.mNearCorner.z)); z <= (int)(floor(boundingBox.mFarCorner.z)); z++) {
+    for (int y = (int)(floor(boundingBox.mNearCorner.y)); y <= (int)(floor(boundingBox.mFarCorner.y)); y++) {
+      for (int x = (int)(floor(boundingBox.mNearCorner.x)); x <= (int)(floor(boundingBox.mFarCorner.x)); x++) {
+        if (gBlockData.get(getBlockType(v3di_v(x, y, z)))->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
           return true;
         }
       }
@@ -343,17 +343,17 @@ bool WorldMap::isBoundingBoxInLiquid(const BoundingBox& boundingBox) const {
 }
 
 
-double WorldMap::getViscosity( const BoundingBox& boundingBox ) const {
+double WorldMap::getViscosity(const BoundingBox& boundingBox) const {
   double maxViscosity = 0.0;
 
-  int startX = static_cast<int>(floor(boundingBox.mNearCorner.x));
-  int endX = static_cast<int>(floor(boundingBox.mFarCorner.x));
+  int startX = (int)(floor(boundingBox.mNearCorner.x));
+  int endX = (int)(floor(boundingBox.mFarCorner.x));
 
-  int startY = static_cast<int>(floor(boundingBox.mNearCorner.y));
-  int endY = static_cast<int>(floor(boundingBox.mFarCorner.y));
+  int startY = (int)(floor(boundingBox.mNearCorner.y));
+  int endY = (int)(floor(boundingBox.mFarCorner.y));
 
-  int startZ = static_cast<int>(floor(boundingBox.mNearCorner.z));
-  int endZ = static_cast<int>(floor(boundingBox.mFarCorner.z));
+  int startZ = (int)(floor(boundingBox.mNearCorner.z));
+  int endZ = (int)(floor(boundingBox.mFarCorner.z));
 
   for (int z = startZ; z <= endZ; z++) {
     for (int y = startY; y <= endY; y++) {
@@ -369,27 +369,27 @@ double WorldMap::getViscosity( const BoundingBox& boundingBox ) const {
 
 // if boundingBox intersects any blocks with health altering properties
 // (e.g. lava, poison, fairy water...) return the sum of damage/healing
-double WorldMap::getHealthEffects( const BoundingBox& boundingBox ) const {
-  double totalDamage = 0.0;
+double WorldMap::getHealthEffects(const BoundingBox& boundingBox) const {
+  double totalHealthEffect = 0.0;
 
-  int startX = static_cast<int>(floor(boundingBox.mNearCorner.x));
-  int endX = static_cast<int>(floor(boundingBox.mFarCorner.x));
+  int startX = (int)(floor(boundingBox.mNearCorner.x));
+  int endX = (int)(floor(boundingBox.mFarCorner.x));
 
-  int startY = static_cast<int>(floor(boundingBox.mNearCorner.y));
-  int endY = static_cast<int>(floor(boundingBox.mFarCorner.y));
+  int startY = (int)(floor(boundingBox.mNearCorner.y));
+  int endY = (int)(floor(boundingBox.mFarCorner.y));
 
-  int startZ = static_cast<int>(floor(boundingBox.mNearCorner.z));
-  int endZ = static_cast<int>(floor(boundingBox.mFarCorner.z));
+  int startZ = (int)(floor(boundingBox.mNearCorner.z));
+  int endZ = (int)(floor(boundingBox.mFarCorner.z));
 
   for (int z = startZ; z <= endZ; z++) {
     for (int y = startY; y <= endY; y++) {
       for (int x = startX; x <= endX; x++) {
-        totalDamage += gBlockData.get(getBlockType (v3di_v (x, y, z)))->healthEffect;
+        totalHealthEffect += gBlockData.get(getBlockType(v3di_v(x, y, z)))->healthEffect;
       }
     }
   }
 
-  return totalDamage;
+  return totalHealthEffect;
 }
 
 
@@ -961,11 +961,15 @@ int WorldMap::load(FILE *file) {
 
 
 void WorldMap::swapOutToInactive() {
+  printf("WorldMap::swapOutToInactive()\n");
   saveToInactive();
+  printf("A\n");
   for (int i = 0; i < mNumColumns; i++) {
     mColumns[i].clear();
   }
+  printf("B\n");
   mChangedList.clear();
+  printf("D\n");
 }
 
 

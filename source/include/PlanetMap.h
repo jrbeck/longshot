@@ -12,7 +12,7 @@
 #define PlanetMap_h_
 
 #include "GameWindow.h"
-#include "Menu.h"
+#include "GameMenu.h"
 #include "Periodics.h"
 #include "Rectangle2d.h"
 #include "Planet.h"
@@ -54,7 +54,7 @@ public:
   int mMouseMoved;
   bool mLeftMouseButtonClicked;
 
-  menu_c *mMenu;
+  GameMenu *mMenu;
 
   Terrain *mTerrain;
   v3d_t *mColors;

@@ -14,7 +14,7 @@ void OverdrawManager::setBlock(const v3di_t& position, BYTE blockType) {
     overdrawColumnIndex = addOverdrawColumn(regionIndex.x, regionIndex.z);
   }
 
-  OverdrawBlock *overdrawBlock = new OverdrawBlock();
+  OverdrawBlock* overdrawBlock = new OverdrawBlock;
   overdrawBlock->x = position.x;
   overdrawBlock->y = position.y;
   overdrawBlock->z = position.z;
@@ -23,7 +23,7 @@ void OverdrawManager::setBlock(const v3di_t& position, BYTE blockType) {
   setOverdrawBlock(overdrawColumnIndex, overdrawBlock);
 }
 
-vector<OverdrawBlock*> *OverdrawManager::getBlocks(int regionIndexX, int regionIndexZ) {
+vector<OverdrawBlock*>* OverdrawManager::getBlocks(int regionIndexX, int regionIndexZ) {
   int overdrawColumnIndex = getOverdrawColumn(regionIndexX, regionIndexZ);
   if(overdrawColumnIndex == -1) {
     return NULL;
@@ -80,7 +80,7 @@ int OverdrawManager::getOverdrawColumn(int regionIndexX, int regionIndexZ) {
 }
 
 int OverdrawManager::addOverdrawColumn(int regionIndexX, int regionIndexZ) {
-  OverdrawColumn *overdrawColumn = new OverdrawColumn();
+  OverdrawColumn* overdrawColumn = new OverdrawColumn();
   overdrawColumn->regionIndexX = regionIndexX;
   overdrawColumn->regionIndexZ = regionIndexZ;
   mOverdrawColumns.push_back(overdrawColumn);

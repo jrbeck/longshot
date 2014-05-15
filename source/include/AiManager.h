@@ -27,37 +27,37 @@
 
 class AiManager {
 public:
-	AiManager(void);
-	~AiManager(void);
+	AiManager();
+	~AiManager();
 	
-	void clear(void);
+	void clear();
 
-	size_t setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics &physics, double time);
+	size_t setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& physics, double time);
 	void setPlayerFacingAndIncline(v2d_t facingAndElevation);
 
-	AiEntity *addEntity(int type, const v3d_t &position, Physics &physics, double time);
+	AiEntity* addEntity(int type, const v3d_t& position, Physics& physics, double time);
 	void removeEntity(size_t handle);
-	AiEntity *getEntityByHandle(size_t handle);
-	vector<AiEntity*>* getEntities(void);
+	AiEntity* getEntityByHandle(size_t handle);
+	vector<AiEntity*>* getEntities();
 
-	size_t spawnEntity(int type, v3d_t position, double time, Physics &physics, ItemManager &itemManager);
+	size_t spawnEntity(int type, v3d_t position, double time, Physics& physics, ItemManager& itemManager);
 
-	int update(double time, WorldMap &worldMap, Physics &physics, ItemManager &itemManager);
+	int update(double time, WorldMap& worldMap, Physics& physics, ItemManager& itemManager);
 
-	void releaseItems(int index, Physics &physics);
-	void trimEntitiesList (void);
+	void releaseItems(int index, Physics& physics);
+	void trimEntitiesList();
 
-	void readPhysicsMessages(double time, Physics &physics, ItemManager &itemManager);
+	void readPhysicsMessages(double time, Physics& physics, ItemManager& itemManager);
 
-	vector<size_t> getAllItemHandles(void);
+	vector<size_t> getAllItemHandles();
 
 	void setMaxCritters(int num);
 
 private:
 	// copy constructor guard
-	AiManager(const AiManager &aiManager) { }
+	AiManager(const AiManager& aiManager) { }
 	// assignment operator guard
-	AiManager& operator=(const AiManager &aiManager) { return *this; }
+	AiManager& operator=(const AiManager& aiManager) { return *this; }
 
 	size_t mNextHandle;
 

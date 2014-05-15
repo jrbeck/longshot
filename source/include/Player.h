@@ -24,7 +24,7 @@
 
 #include "GameInput.h"
 #include "Physics.h"
-#include "Menu.h"
+#include "GameMenu.h"
 #include "ItemManager.h"
 #include "Inventory.h"
 #include "HeadBobble.h"
@@ -115,9 +115,9 @@ public:
 	gl_camera_c cam;
 
 private:
-	menu_c mHud;
+	GameMenu mHud;
 
-	menu_c mCharacterSheet;
+	GameMenu mCharacterSheet;
 	bool mShowCharacterSheet;
 
 	v3d_t mPos;			// where the 'feet' are

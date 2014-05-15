@@ -6,7 +6,7 @@ GalaxyMap::GalaxyMap(GameWindow* gameWindow) :
   mLeftMouseButtonClicked(false)
 {
   mGameWindow = gameWindow;
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
 
   mResult.action = ACTION_NONE;
   mResult.starSystem = NULL;

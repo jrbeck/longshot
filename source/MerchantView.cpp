@@ -65,7 +65,7 @@ void MerchantView::setupMerchant(Merchant &merchant, ItemManager &itemManager) {
 
 
 int MerchantView::update(player_c &player, ItemManager &itemManager) {
-	int choice = mMenu->menu_choice(false);
+	int choice = mMenu->GameMenuhoice(false);
 
 	switch (choice) {
 
@@ -153,7 +153,7 @@ void MerchantView::setupMenu(player_c &player, ItemManager &itemManager) {
 		delete mMenu;
 		mMenu = NULL;
 	}
-	mMenu = new menu_c();
+	mMenu = new GameMenu();
 
 
 	mMenu->addText(v2d_v(0.6, 0.1), v2d_v(0.3, 0.05), fontSize,

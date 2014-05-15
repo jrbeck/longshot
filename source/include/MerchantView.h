@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#include "Menu.h"
+#include "GameMenu.h"
 #include "Inventory.h"
 #include "Player.h"
 
@@ -75,7 +75,7 @@ public:
 
 // MEMBERS * * * * * * * * * *
 
-	menu_c *mMenu;
+	GameMenu *mMenu;
 
 	int mMode;
 	int mSelectedItem;

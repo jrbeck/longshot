@@ -67,7 +67,7 @@ int RogueViewer::start (void) {
   printf ("%6d: entered rogue_viz ----------------\n", SDL_GetTicks ());
 
   // really? here?
-//	menu_c menu;
+//	GameMenu menu;
 //	menu.clear ();
 //	float color[] = {0.55f, 0.075f, 0.075f, 1.0f};
 //	menu.add_text (v2d_v (0.3, 0.95), v2d_v (0.5, 0.8), "longshot", color);

@@ -6,25 +6,20 @@ Longshot::Longshot() :
   mGame(NULL),
   mRogueViewer(NULL)
 {
-//	printf ("%6d: Longshot constructor ----------------\n", SDL_GetTicks ());
   printf("Longshot constructor ----------------\n");
 
   // lets hope this stays this way
   constructor_successful = true;
 
-  mGameWindow = new GameWindow;
+  mGameWindow = new GameWindow("Longshot");
+  mGameWindow->setIcon("art/resource/longshot_icon.png");
   // TODO: here would be a good place to do something like:
   // mGameWindow->getConstructorSuccess() ...
+  // just sayin'...
 
-  // set the window stuff
-  // do we need this after the move to SDL2?
-//	SDL_WM_SetCaption("Longshot", NULL);
-//	SDL_WM_SetIcon(IMG_Load("art/resource/longshot_icon.png" ), NULL);
-  
-  // show the mouse cursor
   SDL_ShowCursor(1);
 
-  // MENU_C * * * * * * * * * * * * * * * * * * * * * * * *
+  // GameMenu * * * * * * * * * * * * * * * * * * * * * * * *
   reloadMenu();
 
   // start off in the menu
@@ -34,7 +29,7 @@ Longshot::Longshot() :
   // WARNING: windows specific
   CreateDirectory(TEXT("save"), NULL);
 
-  printf("%6d: exiting Longshot constructor\n", SDL_GetTicks ());
+  printf("%6d: exiting Longshot constructor\n", SDL_GetTicks());
   printf("-----------------------------------\n\n");
 }
 
@@ -80,14 +75,14 @@ void Longshot::reloadMenu(void) {
   if (!AssetManager::loadTexture("art/fonts/font3.png", &gDefaultFontTextureHandle) == 0) {
     printf("Longshot::reloadMenu(): failed to load font\n");
   }
-  menu_c::setDefaultTextureHandle(gDefaultFontTextureHandle);
+  GameMenu::setDefaultTextureHandle(gDefaultFontTextureHandle);
 
   // create a new menu
   if (mMainMenu != NULL) {
     delete mMainMenu;
     mMainMenu = NULL;
   }
-  mMainMenu = new menu_c();
+  mMainMenu = new GameMenu();
 
   GLfloat color[4] = { 0.55f, 0.075f, 0.075f, 1.0f };
   GLfloat bgColor[4] = { 0.2f, 0.5f, 0.5f, 1.0f };
@@ -112,7 +107,7 @@ void Longshot::reloadMenu(void) {
 
 
 // main program loop * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-int Longshot::loop(void) {
+int Longshot::loop() {
 
   printf("block_t size: %d\n", sizeof (block_t));
   printf("PhysicsEntity size: %d\n", sizeof (PhysicsEntity));
@@ -129,7 +124,7 @@ int Longshot::loop(void) {
     mGameWindow->swapBuffers();
 
     // figure out what the user wants to do
-    program_mode = mMainMenu->menu_choice(true);
+    program_mode = mMainMenu->GameMenuhoice(true);
 
     // and do it
     switch (program_mode) {

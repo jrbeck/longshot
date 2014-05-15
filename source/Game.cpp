@@ -6,7 +6,7 @@
 
 
 
-game_c::game_c(GameWindow *gameWindow) :
+game_c::game_c(GameWindow* gameWindow) :
   mGalaxy(NULL),
   mLocation(NULL),
   mAiView(NULL),
@@ -19,7 +19,6 @@ game_c::game_c(GameWindow *gameWindow) :
   mLastUpdateTime = 0.0;
 
   mGameWindow = gameWindow;
-  printf("GameWindow created\n");
 
   loadAssets();
   printf ("\n%6d: assets loaded\n", SDL_GetTicks());
@@ -50,30 +49,25 @@ game_c::~game_c() {
   freeAssets();
 }
 
-
-
-void game_c::loadAssets(void) {
+void game_c::loadAssets() {
   printf("loading assets\n");
   mAssetManager.loadAssets();
   printf("loading item assets\n");
   mItemManager.loadAssets();
-
 }
 
-
-void game_c::freeAssets(void) {
+void game_c::freeAssets() {
+  printf("you must set my assets free!\n");
   mAssetManager.freeAssets();
   mItemManager.freeAssets();
 }
-
-
 
 void game_c::loadPlanetMenu(void) {
   if (mMenu != NULL) {
     delete mMenu;
     mMenu = NULL;
   }
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
 //	mMenu->setFont(gDefaultFontTextureHandle);
 
   GLfloat color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -93,7 +87,7 @@ void game_c::loadShipMenu(void) {
     delete mMenu;
     mMenu = NULL;
   }
-  mMenu = new menu_c();
+  mMenu = new GameMenu();
 //	mMenu->setFont(gDefaultFontTextureHandle);
 
   GLfloat color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -123,7 +117,7 @@ GameWindow* game_c::getGameWindow() {
   return mGameWindow;
 }
 
-void game_c::setup_opengl(void) {
+void game_c::setup_opengl() {
   glViewport(0, 0, SCREEN_W, SCREEN_H);
 
   glEnable(GL_TEXTURE_2D);
@@ -144,9 +138,9 @@ void game_c::setup_opengl(void) {
 //	glEnable (GL_COLOR_MATERIAL);
 
   // FOG
-  glFogi(GL_FOG_MODE, GL_LINEAR);					// Fog Mode
+  glFogi(GL_FOG_MODE, GL_LINEAR); // Fog Mode
 //	glFogfv (GL_FOG_COLOR, color[skyColor]);			// Set Fog Color
-  glFogf(GL_FOG_DENSITY, 0.05f);						// How Dense Will The Fog Be
+  glFogf(GL_FOG_DENSITY, 0.05f); // How Dense Will The Fog Be
   glHint(GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
   glFogf(GL_FOG_START, 100.0f);						// Fog Start Depth
   glFogf(GL_FOG_END, 200.0f);						// Fog End Depth
@@ -218,6 +212,8 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
 
 void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces) {
+  printf("game_c::initializePlanet()\n");
+
   FILE *file = NULL;
   mCurrentPlanet = planet;
   v3d_t playerStartPosition;
@@ -226,7 +222,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   LoadScreen* loadScreen = new LoadScreen(mGameWindow);
   loadScreen->setCompletedColor(LOAD_SCREEN_LIGHT_PURPLE);
   loadScreen->setIncompletedColor(LOAD_SCREEN_DARK_PURPLE);
-  loadScreen->start();
+  loadScreen->show();
 
   // this is just a generic planet
   if (planet == NULL) {
@@ -235,6 +231,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   }
   else {
     // try to open the file for this planet
+    printf("game_c::initializePlanet(): loading planet\n");
     char fileName[48];
     sprintf(fileName, "save/planet%d.dat", planet->mHandle);
     printf("game_c::initializePlanet(): trying to load file: %s\n", fileName);
@@ -250,16 +247,17 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
     playerStartPosition.z = startPos->z;
   }
 
+  printf("game_c::initializePlanet(): initializing location\n");
   mLocation->initialize(file, mGalaxy, planet->mHandle);
   if (file != NULL) {
     fclose(file);
   }
 
-
   if (startPos == NULL) {
     playerStartPosition = mLocation->getStartPosition();
   }
   else if (createSetPieces) {
+    printf("game_c::initializePlanet(): creating set pieces\n");
     v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
     FeatureGenerator::createSetPieces(
       worldIndex.x,
@@ -273,7 +271,7 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   // this needs to be done after the lighting info has been set
   static_cast<World*>(mLocation)->preloadColumns(NUM_PRELOADED_COLUMNS, playerStartPosition, loadScreen);
 
-  loadScreen->finish();
+  loadScreen->hide();
   delete loadScreen;
 
   // load the appropriate menu
@@ -321,9 +319,9 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   }
   else {
     GLfloat* starColor = mGalaxy->getStarSystemByHandle(mCurrentPlanet->mHandle)->mStarColor;
-    sunColor.r = (starColor[0] + 0.5f) * LIGHT_LEVEL_MAX;
-    sunColor.g = (starColor[1] + 0.5f) * LIGHT_LEVEL_MAX;
-    sunColor.b = (starColor[2] + 0.5f) * LIGHT_LEVEL_MAX;
+    sunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    sunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
   }
   mWorldMapView.setWorldMap(mWorldMap, sunColor);
@@ -423,7 +421,7 @@ void game_c::gameLoop(void) {
       }
     }
     else if (mGameState == GAMESTATE_MENU) {
-      int menuChoice = mMenu->menu_choice(false);
+      int menuChoice = mMenu->GameMenuhoice(false);
       if (escapePressed) {
         printf("escape\n");
         menuChoice = GAMEMENU_BACKTOGAME;
