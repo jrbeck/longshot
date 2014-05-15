@@ -602,7 +602,7 @@ bool AiEntity::useWeapon(double time, Physics& physics, ItemManager& itemManager
 }
 
 bool AiEntity::isTargetInRange(int gunType, double distanceToTarget) {
-  // FIXME: hack! range should be included in item_t?
+  // HACK: range should be included in item_t?
   switch (gunType) {
   case GUNTYPE_RIFLE:
     if (distanceToTarget > 100.0) {
