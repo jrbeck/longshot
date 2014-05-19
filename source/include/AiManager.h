@@ -29,45 +29,47 @@
 
 class AiManager {
 public:
-	AiManager();
-	~AiManager();
-	
-	void clear();
+  AiManager(GameModel* gameModel);
+  ~AiManager();
 
-	size_t setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& physics, double time);
-	void setPlayerFacingAndIncline(v2d_t facingAndElevation);
+  void clear();
 
-	AiEntity* addEntity(int type, const v3d_t& position, Physics& physics, double time);
-	void removeEntity(size_t handle);
-	AiEntity* getEntityByHandle(size_t handle);
-	vector<AiEntity*>* getEntities();
+  size_t setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& physics, double time);
+  void setPlayerFacingAndIncline(v2d_t facingAndElevation);
 
-	size_t spawnEntity(int type, v3d_t position, double time, Physics& physics, ItemManager& itemManager);
+  AiEntity* addEntity(int type, const v3d_t& position, Physics& physics, double time);
+  void removeEntity(size_t handle);
+  AiEntity* getEntityByHandle(size_t handle);
+  vector<AiEntity*>* getEntities();
 
-	int update(double time, WorldMap& worldMap, Physics& physics, ItemManager& itemManager);
+  size_t spawnEntity(int type, v3d_t position, double time, Physics& physics, ItemManager& itemManager);
 
-	void releaseItems(int index, Physics& physics);
-	void trimEntitiesList();
+  int update(double time, WorldMap& worldMap, Physics& physics, ItemManager& itemManager);
 
-	void readPhysicsMessages(double time, Physics& physics, ItemManager& itemManager);
+  void releaseItems(int index, Physics& physics);
+  void trimEntitiesList();
 
-	vector<size_t> getAllItemHandles();
+  void readPhysicsMessages(double time, Physics& physics, ItemManager& itemManager);
 
-	void setMaxCritters(int num);
+  vector<size_t> getAllItemHandles();
+
+  void setMaxCritters(int num);
 
 private:
-	// copy constructor guard
-	AiManager(const AiManager& aiManager) { }
-	// assignment operator guard
-	AiManager& operator=(const AiManager& aiManager) { return *this; }
+  // copy constructor guard
+  AiManager(const AiManager& aiManager) { }
+  // assignment operator guard
+  AiManager& operator=(const AiManager& aiManager) { return *this; }
 
-	size_t mNextHandle;
+  GameModel* mGameModel;
 
-	size_t mPlayerAiHandle;
-	size_t mPlayerPhysicsHandle;
+  size_t mNextHandle;
 
-	vector<AiEntity*> mAiEntities;
+  size_t mPlayerAiHandle;
+  size_t mPlayerPhysicsHandle;
 
-	int mMaxCrittersHACK;
+  vector<AiEntity*> mAiEntities;
+
+  int mMaxCrittersHACK;
 };
 

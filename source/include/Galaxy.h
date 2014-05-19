@@ -23,20 +23,20 @@
 
 class Galaxy {
 public:
-	Galaxy();
-	~Galaxy();
+  Galaxy();
+  ~Galaxy();
 
-	void clear();
-	void randomize(size_t numSystems);
+  void clear();
+  void randomize(size_t numSystems);
 
-	void save(FILE *file);
-	void load(FILE *file);
+  void save(FILE* file);
+  void load(FILE* file);
 
-	StarSystem *getStarSystemByHandle(int handle);
-	Planet *getPlanetByHandle(int handle);
+  StarSystem* getStarSystemByHandle(int handle);
+  Planet* getPlanetByHandle(int handle);
 
 
-// MEMBERS * * * * * * * * * * *
-	int mNextHandle;
-	vector <StarSystem *> mStarSystems;
+  // MEMBERS * * * * * * * * * * *
+  int mNextHandle;
+  vector<StarSystem*> mStarSystems;
 };

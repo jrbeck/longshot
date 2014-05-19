@@ -133,7 +133,7 @@ public:
   size_t generateRandomMeleeWeapon(double dps);
 
 
-  void nameGun(item_t &gun);
+  void nameGun(item_t& gun);
   size_t generateRandomGun(double dps);
 
   void generateRandomPistol(item_t &newGun, double dps);
@@ -148,7 +148,7 @@ public:
   bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
   void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
 
-  double useGun(size_t itemHandle, shot_info_t shotInfo, size_t *ammoCounter);
+  double useGun(size_t itemHandle, shot_info_t shotInfo, size_t* ammoCounter);
   double useGun(size_t itemHandle, shot_info_t shotInfo);
 
   double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo);
@@ -157,8 +157,8 @@ public:
 
   // REMINDER: this should really see how many items are no longer
   // around, perhaps on load?
-  void save(FILE *file);
-  void load(FILE *file);
+  void save(FILE* file);
+  void load(FILE* file);
 
 private:
   // copy constructor guard

@@ -684,7 +684,7 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo) {
   return shotInfo.time + mItems[itemIndex].shotDelay;
 }
 
-void ItemManager::drawMeleeWeapon(melee_weapon_state_t weaponState, AssetManager &assetManager) {
+void ItemManager::drawMeleeWeapon(melee_weapon_state_t weaponState, AssetManager& assetManager) {
   double handFacing = weaponState.facing + (MY_PI / 4.0);
 
   v3d_t headPosition = weaponState.headPosition;

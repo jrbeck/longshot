@@ -1,6 +1,7 @@
 #include "AiManager.h"
 
-AiManager::AiManager() {
+AiManager::AiManager(GameModel* gameModel) {
+  mGameModel = gameModel;
   mMaxCrittersHACK = 0;
 }
 
@@ -43,7 +44,7 @@ size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& ph
     return 0;
   }
 
-  // HACK - since the caller has already created a phys_entity, and
+  // HACK: since the caller has already created a phys_entity, and
   // AiManager::addEntity() also creates one, we'll just delete the
   // second one
   physics.removeEntity(e->mPhysicsHandle);

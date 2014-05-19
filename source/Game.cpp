@@ -31,7 +31,8 @@ game_c::game_c(GameWindow* gameWindow) :
   mPhysics = new Physics(mGameModel);
   mGameModel->physics = mPhysics;
 
-  mAiManager = new AiManager;
+  mAiManager = new AiManager(mGameModel);
+  mGameModel->aiManager = mAiManager;
 
   mItemManager = new ItemManager(mGameModel);
   mGameModel->itemManager = mItemManager;
@@ -109,7 +110,7 @@ void game_c::loadPlanetMenu(void) {
   GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.5f };
   v2d_t fontSize = { 0.015f, 0.03f };
 
-  mMenu->addButton(v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
+  mMenu->addButton(v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
   mMenu->addButton(v2d_v (0.80, 0.3), v2d_v (0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
   
   // TEMP: these are just for testing
@@ -130,7 +131,7 @@ void game_c::loadShipMenu(void) {
   v2d_t fontSize = { 0.015f, 0.03f };
 
   mMenu->addButton(v2d_v(0.80, 0.15), v2d_v(0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
-  mMenu->addButton(v2d_v(0.80, 0.3), v2d_v(0.2, 0.1), fontSize, "quit to menu",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
+  mMenu->addButton(v2d_v(0.80, 0.3), v2d_v(0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
 
   if (mCurrentPlanet != NULL) {
     sprintf(mPlanetNameString, "orbiting planet: %d", mCurrentPlanet->mHandle);
@@ -142,10 +143,10 @@ void game_c::loadShipMenu(void) {
 
   
   // TEMP: these are just for testing
-  mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "planet map",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_PLANET_MAP, color, bgColor);
+  mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "planet map", TEXT_JUSTIFICATION_CENTER, GAMEMENU_PLANET_MAP, color, bgColor);
   mMenu->addButton(v2d_v(0.0, 0.30), v2d_v(0.2, 0.1), fontSize, "galaxy map", TEXT_JUSTIFICATION_CENTER, GAMEMENU_GALAXY_MAP, color, bgColor);
   mMenu->addButton(v2d_v(0.0, 0.45), v2d_v(0.2, 0.1), fontSize, "merchant", TEXT_JUSTIFICATION_CENTER, GAMEMENU_MERCHANT, color, bgColor);
-  mMenu->addButton(v2d_v(0.0, 0.60), v2d_v(0.2, 0.1), fontSize, "dungeon map",	TEXT_JUSTIFICATION_CENTER, GAMEMENU_DUNGEON_MAP, color, bgColor);
+  mMenu->addButton(v2d_v(0.0, 0.60), v2d_v(0.2, 0.1), fontSize, "dungeon map", TEXT_JUSTIFICATION_CENTER, GAMEMENU_DUNGEON_MAP, color, bgColor);
 }
 
 GameWindow* game_c::getGameWindow() {
@@ -360,7 +361,7 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   destroyItemsOwnedByPhysicsAndAi();
 
   // reset this to be safe
-  mPhysics->reset();
+//  mPhysics->reset();
 
   // create a new PhysicsView
   if (mPhysicsView != NULL) {
@@ -706,7 +707,7 @@ int game_c::draw(double &time) {
 void game_c::drawPlayerTargetBlock(void) {
   int targetFace;
 
-  v3di_t *playerTarg = mPlayer->getTargetBlock(targetFace);
+  v3di_t* playerTarg = mPlayer->getTargetBlock(targetFace);
 
   if (playerTarg == NULL) {
     return;
