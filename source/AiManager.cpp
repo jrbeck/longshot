@@ -17,7 +17,6 @@ void AiManager::clear() {
   mNextHandle = 1;
 
   mPlayerAiHandle = 0;
-  mPlayerPhysicsHandle = 0;
 
   size_t numEntities = mAiEntities.size();
   for (size_t i = 0; i < numEntities; i++) {
@@ -36,8 +35,6 @@ void AiManager::clear() {
 
 
 size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& physics, double time) {
-  mPlayerPhysicsHandle = playerPhysicsHandle;
-
   // add the player as an AI entity
   AiEntity *e = addEntity(AITYPE_PLAYER, v3d_zero(), physics, time);
   if (e == NULL) {
@@ -48,7 +45,7 @@ size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& ph
   // AiManager::addEntity() also creates one, we'll just delete the
   // second one
   physics.removeEntity(e->mPhysicsHandle);
-  e->mPhysicsHandle = mPlayerPhysicsHandle;
+  e->mPhysicsHandle = mGameModel->physics->getPlayerHandle();
 
   mPlayerAiHandle = e->mHandle;
   return mPlayerAiHandle;
@@ -273,7 +270,7 @@ int AiManager::update(
 
   // FIXME: critter spawner
   if (liveCritters < mMaxCrittersHACK) {
-    v3d_t pos = physics.getCenter(mPlayerPhysicsHandle);
+    v3d_t pos = physics.getCenter(mGameModel->physics->getPlayerHandle());
     v2d_t offset = v2d_v(r_num (-10.0, 10.0), r_num(-10.0, 10.0));
     offset = v2d_scale(40.0, v2d_normalize(offset));
 

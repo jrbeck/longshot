@@ -66,7 +66,7 @@ private:
   size_t mNextHandle;
 
   size_t mPlayerAiHandle;
-  size_t mPlayerPhysicsHandle;
+//  size_t mPlayerPhysicsHandle;
 
   vector<AiEntity*> mAiEntities;
 

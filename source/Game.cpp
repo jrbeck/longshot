@@ -361,7 +361,7 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   destroyItemsOwnedByPhysicsAndAi();
 
   // reset this to be safe
-//  mPhysics->reset();
+  mPhysics->reset();
 
   // create a new PhysicsView
   if (mPhysicsView != NULL) {
@@ -392,7 +392,6 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   if (resetPlayer) {
     mPlayer->reset(mGameModel->physics->getPlayerHandle(), mPlayerAiHandle, *mItemManager);
   }
-  mPlayer->setPhysicsHandle(mGameModel->physics->getPlayerHandle());
   mPlayer->setStartPosition(playerStartPosition);
   mPlayer->soft_reset(playerStartPosition);
 
@@ -704,11 +703,10 @@ int game_c::draw(double &time) {
 
 
 
-void game_c::drawPlayerTargetBlock(void) {
+void game_c::drawPlayerTargetBlock() {
   int targetFace;
 
   v3di_t* playerTarg = mPlayer->getTargetBlock(targetFace);
-
   if (playerTarg == NULL) {
     return;
   }

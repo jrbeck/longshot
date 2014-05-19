@@ -39,10 +39,6 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemMana
   // set up to be straight up
   up = v3d_v(0, 1, 0);
 
-  // set the physics handle and AI index
-  mPhysicsHandle = physicsHandle;
-  mAiHandle = aiHandle;
-
   mLastUpdateTime = 0.0;
   mNextShotTimePrimary = 0.0;
   mNextShotTimeSecondary = 0.0;
@@ -100,11 +96,11 @@ int player_c::soft_reset(v3d_t& startPosition) {
   if (!mStartLocationFound) {
     setStartPosition(startPosition);
   }
-  mGameModel->physics->set_pos(mPhysicsHandle, mStartPosition);
+  mGameModel->physics->set_pos(mGameModel->physics->getPlayerHandle(), mStartPosition);
 
   mMaxHealth = 100.0;
   mCurrentHealth = 100.0;
-  mGameModel->physics->setHealth(mPhysicsHandle, mCurrentHealth);
+  mGameModel->physics->setHealth(mGameModel->physics->getPlayerHandle(), mCurrentHealth);
 
   deathScreamUttered = false;
 
@@ -125,11 +121,6 @@ int player_c::soft_reset(v3d_t& startPosition) {
 void player_c::setStartPosition(v3d_t& startPosition) {
     mStartPosition = startPosition;
     mStartLocationFound = true;
-}
-
-
-void player_c::setPhysicsHandle(size_t handle) {
-  mPhysicsHandle = handle;
 }
 
 
@@ -331,7 +322,7 @@ void player_c::useEquipped(
     mPlacedBlock = true;
   }
   else {
-    if (itemManager.useItem(obtainWalkVector(mWalkInput), item.handle, mPhysicsHandle)) {
+    if (itemManager.useItem(obtainWalkVector(mWalkInput), item.handle, mGameModel->physics->getPlayerHandle())) {
       if (whichEquip == EQUIP_PRIMARY) {
         mInventory.mPrimaryItem = 0;
       }
@@ -359,7 +350,7 @@ double player_c::fireGun(item_t item, double handedness, AssetManager& assetMana
 
   shot_info_t shotInfo;
   shotInfo.angle = targAngle;
-  shotInfo.ownerPhysicsHandle = mPhysicsHandle;
+  shotInfo.ownerPhysicsHandle = mGameModel->physics->getPlayerHandle();
   shotInfo.position = pos;
   shotInfo.time = mGameModel->physics->getLastUpdateTime();
 
@@ -375,7 +366,7 @@ double player_c::useMeleeWeapon(item_t item, ItemManager& itemManager) {
 
   shot_info_t shotInfo;
   shotInfo.angle = targAngle;
-  shotInfo.ownerPhysicsHandle = mPhysicsHandle;
+  shotInfo.ownerPhysicsHandle = mGameModel->physics->getPlayerHandle();
   shotInfo.position = pos;
   shotInfo.time = mGameModel->physics->getLastUpdateTime();
 
@@ -397,7 +388,7 @@ void player_c::useBackpackItem(AssetManager& assetManager, ItemManager& itemMana
     break;
   default:
     printf("player using item\n");
-    if (itemManager.useItem(obtainWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mPhysicsHandle)) {
+    if (itemManager.useItem(obtainWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mGameModel->physics->getPlayerHandle())) {
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
     break;
@@ -759,9 +750,9 @@ bool player_c::update(
 
   GameInput& gi = *mGameModel->gameInput;
 
-  PhysicsEntity *physicsEntity = mGameModel->physics->getEntityByHandle(mPhysicsHandle);
+  PhysicsEntity *physicsEntity = mGameModel->physics->getEntityByHandle(mGameModel->physics->getPlayerHandle());
   // get position from physics
-  mPos = mGameModel->physics->getNearCorner(mPhysicsHandle);
+  mPos = physicsEntity->pos;
 
   // FIXME: this isn't quite right, perhaps the near clip plane needs to be compensated
   // for (vertically) to head pos
@@ -804,7 +795,7 @@ bool player_c::update(
   mCurrentHealth = physicsEntity->health;
   if (mCurrentHealth > mMaxHealth) {
     mCurrentHealth = mMaxHealth;
-    mGameModel->physics->setHealth(mPhysicsHandle, mCurrentHealth);
+    mGameModel->physics->setHealth(mGameModel->physics->getPlayerHandle(), mCurrentHealth);
   }
 
   // does the player want to mess with the draw distance?
@@ -868,7 +859,7 @@ bool player_c::update(
       mMaxHealth = 100.0;
       mCurrentHealth = 100.0;
 
-      mGameModel->physics->setHealth(mPhysicsHandle, 100.0);
+      mGameModel->physics->setHealth(mGameModel->physics->getPlayerHandle(), 100.0);
 
       mFinalHeadOffset = mHeadOffset;
 
@@ -975,7 +966,7 @@ bool player_c::update(
   // does the player wanna pick stuff up?
   if (gi.isPickUpItem()) {
     phys_message_t message;
-    message.sender = mPhysicsHandle;
+    message.sender = mGameModel->physics->getPlayerHandle();
     message.recipient = MAILBOX_PHYSICS;
     message.type = PHYS_MESSAGE_PLAYERPICKUPITEMS;
 
@@ -989,7 +980,7 @@ bool player_c::update(
     soft_reset(mStartPosition);
 
     // this stuff has changed, so take note!
-    physicsEntity = mGameModel->physics->getEntityByHandle(mPhysicsHandle);
+    physicsEntity = mGameModel->physics->getEntityByHandle(mGameModel->physics->getPlayerHandle());
   }
 
   updateHud(itemManager);
@@ -1021,10 +1012,10 @@ bool player_c::update(
     mInWater = false;
 
     // jump from ground
-    if (isJumping && mGameModel->physics->isHandleOnGround(mPhysicsHandle)) {
+    if (isJumping && mGameModel->physics->isHandleOnGround(mGameModel->physics->getPlayerHandle())) {
       v3d_t force = v3d_v(0.0, 45000.0, 0.0);
 
-      mGameModel->physics->add_force(mPhysicsHandle, force);
+      mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), force);
 
       if (r_numi(0, 16) == 3) {
         assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_JUMP, 72);
@@ -1036,7 +1027,7 @@ bool player_c::update(
       v2d_t walk_force_2d;
 
       // player on ground
-      if (mGameModel->physics->isHandleOnGround(mPhysicsHandle)) {
+      if (mGameModel->physics->isHandleOnGround(mGameModel->physics->getPlayerHandle())) {
         walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 2500.0);
 
         if (mLastUpdateTime > (mLastFootStep + 0.6) && v3d_mag(physicsEntity->vel) > 0.2) {
@@ -1051,7 +1042,7 @@ bool player_c::update(
       }
 
       v3d_t force = v3d_v(walk_force_2d.x, 0.0, walk_force_2d.y);
-      mGameModel->physics->add_force(mPhysicsHandle, force);
+      mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), force);
     }
 
   /*	if (isJumping && !phys.isHandleOnGround (mPhysicsHandle)) {
@@ -1137,7 +1128,7 @@ bool player_c::update(
     v3d_t swimForce = v3d_zero();
 
     if (physicsEntity->on_ground && isJumping) {
-      mGameModel->physics->add_force(mPhysicsHandle, v3d_v(0.0, 4000.0, 0.0));
+      mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), v3d_v(0.0, 4000.0, 0.0));
     }
 
     if (v2d_mag(mWalkInput) > EPSILON) {
@@ -1175,11 +1166,11 @@ bool player_c::update(
     if (gi.isSwimming()) {
       // 'up' force
       double mag = 1500.0 * (sin(mLastUpdateTime * 10.0) + 1.5);
-      mGameModel->physics->add_force(mPhysicsHandle, v3d_v(0.0, mag, 0.0));
+      mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), v3d_v(0.0, mag, 0.0));
     }
 
     swimForce = v3d_scale(1900.0, v3d_normalize(swimForce));
-    mGameModel->physics->add_force(mPhysicsHandle, swimForce);
+    mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), swimForce);
   }
 
 
@@ -1206,7 +1197,7 @@ void player_c::readPhysicsMessages(
   size_t itemHandle;
   bool gotItem;
 
-  while (mGameModel->physics->getNextMessage(static_cast<int>(mPhysicsHandle), &message)) {
+  while (mGameModel->physics->getNextMessage((int)mGameModel->physics->getPlayerHandle(), &message)) {
 //		printf ("player message: to: %d, from: %d\n", message.recipient, message.sender);
 
     switch (message.type) {
@@ -1222,7 +1213,7 @@ void player_c::readPhysicsMessages(
         gotItem = pickUpItem(itemManager.getItem(itemHandle), assetManager);
 
         if (gotItem) {
-          message.sender = mPhysicsHandle;
+          message.sender = mGameModel->physics->getPlayerHandle();
           message.recipient = MAILBOX_PHYSICS;
           message.type = PHYS_MESSAGE_ITEMGRABBED;
 //					message.iValue2 = message.iValue2;

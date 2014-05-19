@@ -62,7 +62,6 @@ public:
   int reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager);
   int soft_reset(v3d_t& startPosition);
   void setStartPosition(v3d_t& startPosition);
-  void setPhysicsHandle(size_t handle);
 
   void godMode(ItemManager& itemManager);
 
@@ -136,9 +135,6 @@ private:
   bool mIsBlockTargeted;
   v3di_t mTargetBlock;
   int mTargetBlockFace;
-
-  size_t mPhysicsHandle;
-  size_t mAiHandle;
 
   bool mStartLocationFound;
   v3d_t mStartPosition;
