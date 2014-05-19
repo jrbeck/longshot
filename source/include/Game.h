@@ -140,9 +140,6 @@ public:
   game_c(GameWindow* gameWindow);
   ~game_c();
 
-  void loadAssets();
-  void freeAssets();
-
   void loadPlanetMenu();
   void loadShipMenu();
 
@@ -159,7 +156,7 @@ public:
   void gameLoop();
   int handleMenuChoice(int menuChoice);
   bool update();
-  int draw(double& time);
+  int draw();
 
   // this really shouldn't be here...
   // it draws the 'touched' block in front of the player

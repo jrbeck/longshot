@@ -21,50 +21,50 @@
 
 
 enum {
-	SOUND_AMBIENT,
-	SOUND_PISTOL,
-	SOUND_MACHINE_GUN,
-	SOUND_SHOTGUN,
-	SOUND_PLASMA_GUN,
-	SOUND_PLASMA_PISTOL,
-	SOUND_GRENADE_EXPLOSION,
-	SOUND_GRENADE_LAUNCH,
-	SOUND_SPLAT,
-	SOUND_TIGER_ROAR,
-	SOUND_HUMAN_PAIN,
-	SOUND_HUMAN_JUMP,
-	SOUND_HUMAN_DEATH,
-	SOUND_FOOTSTEP,
-	SOUND_SPLASH_MEDIUM,
-	SOUND_HEALTHPACK,
-	SOUND_PISTOL_RELOAD,
-	SOUND_SWOOSH,
-	SOUND_PUNCH,
+  SOUND_AMBIENT,
+  SOUND_PISTOL,
+  SOUND_MACHINE_GUN,
+  SOUND_SHOTGUN,
+  SOUND_PLASMA_GUN,
+  SOUND_PLASMA_PISTOL,
+  SOUND_GRENADE_EXPLOSION,
+  SOUND_GRENADE_LAUNCH,
+  SOUND_SPLAT,
+  SOUND_TIGER_ROAR,
+  SOUND_HUMAN_PAIN,
+  SOUND_HUMAN_JUMP,
+  SOUND_HUMAN_DEATH,
+  SOUND_FOOTSTEP,
+  SOUND_SPLASH_MEDIUM,
+  SOUND_HEALTHPACK,
+  SOUND_PISTOL_RELOAD,
+  SOUND_SWOOSH,
+  SOUND_PUNCH,
 
-	NUM_SOUNDS
+  NUM_SOUNDS
 };
 
 
 class SoundSystem {
 public:
-	SoundSystem();
-	~SoundSystem();
+  SoundSystem();
+  ~SoundSystem();
 
-	int initialize(void);
+  int initialize(void);
 
-	void playSoundByHandle(int handle, int volume);
+  void playSoundByHandle(int handle, int volume);
 
-	int loadSound(char* fileName);
+  int loadSound(char* fileName);
 
-	void stopAllSounds(void);
+  void stopAllSounds(void);
 
-// members * * * * * * * * * * * * * * * * * *
-	int mAudioRate;
-	Uint16 mAudioFormat;
-	int mAudioChannels;
-	int mAudioBuffers;
+  // members * * * * * * * * * * * * * * * * * *
+  int mAudioRate;
+  Uint16 mAudioFormat;
+  int mAudioChannels;
+  int mChunkSize;
 
-	int mLastHandle;
+  int mLastHandle;
 
-	Mix_Chunk* mWav[NUM_SOUNDS];
+  Mix_Chunk* mWav[NUM_SOUNDS];
 };

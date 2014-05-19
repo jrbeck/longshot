@@ -34,9 +34,9 @@ void AiManager::clear() {
 
 
 
-size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& physics, double time) {
+size_t AiManager::setPlayerPhysicsHandle() {
   // add the player as an AI entity
-  AiEntity *e = addEntity(AITYPE_PLAYER, v3d_zero(), physics, time);
+  AiEntity *e = addEntity(AITYPE_PLAYER, v3d_zero());
   if (e == NULL) {
     return 0;
   }
@@ -44,7 +44,7 @@ size_t AiManager::setPlayerPhysicsHandle(size_t playerPhysicsHandle, Physics& ph
   // HACK: since the caller has already created a phys_entity, and
   // AiManager::addEntity() also creates one, we'll just delete the
   // second one
-  physics.removeEntity(e->mPhysicsHandle);
+  mGameModel->physics->removeEntity(e->mPhysicsHandle);
   e->mPhysicsHandle = mGameModel->physics->getPlayerHandle();
 
   mPlayerAiHandle = e->mHandle;
@@ -65,14 +65,14 @@ void AiManager::setPlayerFacingAndIncline(v2d_t facingAndElevation) {
 }
 
 
-AiEntity* AiManager::addEntity(int type, const v3d_t& position, Physics& physics, double time) {
+AiEntity* AiManager::addEntity(int type, const v3d_t& position) {
   AiEntity* e = new AiEntity();
   if (e == NULL) {
     printf("AiManager::addEntity(): error: out of mem\n");
     return NULL;
   }
 
-  size_t physicsHandle = physics.createAiEntity(type, position);
+  size_t physicsHandle = mGameModel->physics->createAiEntity(type, position);
   if (physicsHandle == 0) {
     printf("AiManager::addEntity(): error: failed to create phys entity\n");
     return NULL;
@@ -127,12 +127,9 @@ vector<AiEntity*>* AiManager::getEntities(void) {
 
 size_t AiManager::spawnEntity(
   int type,
-  v3d_t position,
-  double time,
-  Physics& physics,
-  ItemManager& itemManager)
+  v3d_t position)
 {
-  AiEntity* newAiEntity = addEntity(type, position, physics, time);
+  AiEntity* newAiEntity = addEntity(type, position);
   if (newAiEntity == NULL) {
     printf("AiManager::spawnEntity(): error: could not allocate new entity\n\n");
     return 0;
@@ -150,9 +147,9 @@ size_t AiManager::spawnEntity(
       newAiEntity->mCurrentHealth = newAiEntity->mMaxHealth;
       newAiEntity->mWillAttackSameSpecies = true;
 
-      physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
-      physics.setMass(physicsHandle, 10.0);
-      physics.setDimensions(physicsHandle, v3d_v(1.8, 1.8, 1.8));
+      mGameModel->physics->setHealth(physicsHandle, newAiEntity->mMaxHealth);
+      mGameModel->physics->setMass(physicsHandle, 10.0);
+      mGameModel->physics->setDimensions(physicsHandle, v3d_v(1.8, 1.8, 1.8));
       break;
 
     case AITYPE_SHOOTER:
@@ -160,9 +157,9 @@ size_t AiManager::spawnEntity(
       newAiEntity->mCurrentHealth = newAiEntity->mMaxHealth;
       newAiEntity->mWillAttackSameSpecies = false;
 
-      physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
-      physics.setMass(physicsHandle, 100.0);
-      physics.setDimensions(physicsHandle, v3d_v(0.75, 1.8, 0.75));
+      mGameModel->physics->setHealth(physicsHandle, newAiEntity->mMaxHealth);
+      mGameModel->physics->setMass(physicsHandle, 100.0);
+      mGameModel->physics->setDimensions(physicsHandle, v3d_v(0.75, 1.8, 0.75));
       break;
 
     case AITYPE_HOPPER:
@@ -171,9 +168,9 @@ size_t AiManager::spawnEntity(
       newAiEntity->mCurrentHealth = newAiEntity->mMaxHealth;
       newAiEntity->mWillAttackSameSpecies = true;
 
-      physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
-      physics.setMass(physicsHandle, 100.0);
-      physics.setDimensions(physicsHandle, v3d_scale(0.5 + (level * 0.3), v3d_v(0.85, 0.85, 0.85)));
+      mGameModel->physics->setHealth(physicsHandle, newAiEntity->mMaxHealth);
+      mGameModel->physics->setMass(physicsHandle, 100.0);
+      mGameModel->physics->setDimensions(physicsHandle, v3d_scale(0.5 + (level * 0.3), v3d_v(0.85, 0.85, 0.85)));
       break;
 
     case AITYPE_HUMAN:
@@ -182,23 +179,23 @@ size_t AiManager::spawnEntity(
       newAiEntity->mCurrentHealth = newAiEntity->mMaxHealth;
       newAiEntity->mWillAttackSameSpecies = false;
 
-      physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
-      physics.setMass(physicsHandle, 100.0);
-      physics.setDimensions(physicsHandle, v3d_v(0.75, 1.8, 0.75));
+      mGameModel->physics->setHealth(physicsHandle, newAiEntity->mMaxHealth);
+      mGameModel->physics->setMass(physicsHandle, 100.0);
+      mGameModel->physics->setDimensions(physicsHandle, v3d_v(0.75, 1.8, 0.75));
       break;
 
     default:
       newAiEntity->mMaxHealth = 600000.0;
       newAiEntity->mCurrentHealth = 600000.0;
 
-      physics.setHealth(physicsHandle, newAiEntity->mMaxHealth);
-      physics.setMass(physicsHandle, 10.0);
-      physics.setDimensions(physicsHandle, v3d_v(1.25, 1.25, 1.25));
+      mGameModel->physics->setHealth(physicsHandle, newAiEntity->mMaxHealth);
+      mGameModel->physics->setMass(physicsHandle, 10.0);
+      mGameModel->physics->setDimensions(physicsHandle, v3d_v(1.25, 1.25, 1.25));
       break;
   }
 
   // tell the physics who we really are
-  physics.setOwner(physicsHandle, newAiEntity->mHandle);
+  mGameModel->physics->setOwner(physicsHandle, newAiEntity->mHandle);
 
   // give it some items
   for (int i = 0; i < AiEntity::AI_INVENTORY_SIZE; i++) {
@@ -206,7 +203,7 @@ size_t AiManager::spawnEntity(
 
     if (type == AITYPE_HOPPER) {
       if (itemRandom > 7.0) {
-        newAiEntity->mInventory[i] = itemManager.generateRandomItem();
+        newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomItem();
       }
       else {
         newAiEntity->mInventory[i] = 0;
@@ -220,17 +217,17 @@ size_t AiManager::spawnEntity(
         // generate gun in first slot
         if (itemRandom > 9.6) {
           // this one could be dangerous
-          newAiEntity->mInventory[i] = itemManager.generateRandomGun(r_num(5.0, 10.0));
+          newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomGun(r_num(5.0, 10.0));
         }
         else {
           // 'weak' gun
-          newAiEntity->mInventory[i] = itemManager.generateRandomGun(r_num(1.0, 2.5));
+          newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomGun(r_num(1.0, 2.5));
         }
       }
       else {
         // maybe generate some other random item
         if (itemRandom > 9.0) {
-          newAiEntity->mInventory[i] = itemManager.generateRandomItem();
+          newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomItem();
         }
         else {
           newAiEntity->mInventory[i] = 0;
@@ -245,12 +242,9 @@ size_t AiManager::spawnEntity(
 
 
 int AiManager::update(
-  double time,
-  WorldMap& worldMap,
-  Physics& physics,
-  ItemManager& itemManager)
+  WorldMap& worldMap)
 {
-  if (physics.isPaused()) {
+  if (mGameModel->physics->isPaused()) {
     return (int)mAiEntities.size();
   }
 
@@ -266,11 +260,11 @@ int AiManager::update(
   }
 
   // check out what the physics engine has to say
-  readPhysicsMessages(time, physics, itemManager);
+  readPhysicsMessages();
 
   // FIXME: critter spawner
   if (liveCritters < mMaxCrittersHACK) {
-    v3d_t pos = physics.getCenter(mGameModel->physics->getPlayerHandle());
+    v3d_t pos = mGameModel->physics->getCenter(mGameModel->physics->getPlayerHandle());
     v2d_t offset = v2d_v(r_num (-10.0, 10.0), r_num(-10.0, 10.0));
     offset = v2d_scale(40.0, v2d_normalize(offset));
 
@@ -288,7 +282,7 @@ int AiManager::update(
 
     int type = r_numi(1, NUM_AITYPES);
 
-    spawnEntity(type, pos, time, physics, itemManager);
+    spawnEntity(type, pos);
   }
 
 //	double pre_time = (static_cast<double>(SDL_GetTicks ()) / 1000.0);
@@ -299,20 +293,20 @@ int AiManager::update(
   for (size_t i = 0; i < mAiEntities.size (); i++) {
     // ignore players and dead things
     if (mAiEntities[i]->mType == AITYPE_PLAYER) {
-      mAiEntities[i]->updatePlayer(physics);
+      mAiEntities[i]->updatePlayer(*mGameModel->physics);
     }
 
     // kill off dead physics objects
-    if (physics.getIndexFromHandle(mAiEntities[i]->mPhysicsHandle) == -1) {
+    if (mGameModel->physics->getIndexFromHandle(mAiEntities[i]->mPhysicsHandle) == -1) {
       mAiEntities[i]->mActive = false;
     }
     else if (mAiEntities[i]->mActive) {
-      mAiEntities[i]->update(time, worldMap, physics, mAiEntities, itemManager);
+      mAiEntities[i]->update(mGameModel->physics->getLastUpdateTime(), worldMap, *mGameModel->physics, mAiEntities, *mGameModel->itemManager);
     }
 
     // handle dead entities here by giving up their weapons to the physics engine
     if (mAiEntities[i]->mActive == false) {
-      releaseItems(i, physics);
+      releaseItems(i);
     }
   }
 
@@ -320,20 +314,20 @@ int AiManager::update(
 }
 
 
-void AiManager::releaseItems(int index, Physics& physics) {
+void AiManager::releaseItems(int aiIndex) {
   int items = 0;
   printf("eliminating inventory\n");
       
   // tell the ItemManager to release the inventory items
   for (int inventoryIndex = 0; inventoryIndex < AiEntity::AI_INVENTORY_SIZE; inventoryIndex++) {
-    if (mAiEntities[index]->mInventory[inventoryIndex] > 0) {
+    if (mAiEntities[aiIndex]->mInventory[inventoryIndex] > 0) {
       phys_message_t message;
       message.recipient = MAILBOX_ITEMMANAGER;
       message.type = PHYS_MESSAGE_ITEM_DESTROYED;
-      message.iValue = (int)mAiEntities[index]->mInventory[inventoryIndex];
-      physics.sendMessage(message);
+      message.iValue = (int)mAiEntities[aiIndex]->mInventory[inventoryIndex];
+      mGameModel->physics->sendMessage(message);
 
-      mAiEntities[index]->mInventory[inventoryIndex] = 0;
+      mAiEntities[aiIndex]->mInventory[inventoryIndex] = 0;
       items++;
     }
   }
@@ -361,15 +355,15 @@ void AiManager::trimEntitiesList() {
 }
 
 
-void AiManager::readPhysicsMessages(double time, Physics& physics, ItemManager& itemManager) {
+void AiManager::readPhysicsMessages() {
   phys_message_t message;
   int type;
 
-  while (physics.getNextMessage(MAILBOX_AIMANAGER, &message)) {
+  while (mGameModel->physics->getNextMessage(MAILBOX_AIMANAGER, &message)) {
     switch (message.type) {
     case PHYS_MESSAGE_SPAWN_CREATURE:
       type = r_numi(1, NUM_AITYPES);
-      spawnEntity(type, message.vec3, time, physics, itemManager);
+      spawnEntity(type, message.vec3);
       break;
 
     default:

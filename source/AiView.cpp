@@ -19,12 +19,12 @@ AiView::~AiView() {
 }
 
 
-void AiView::setAiEntities(vector<AiEntity *> *aiEntities) {
+void AiView::setAiEntities(vector<AiEntity*>* aiEntities) {
   mAiEntities = aiEntities;
 }
 
 
-void AiView::loadAssets(void) {
+void AiView::loadAssets() {
   mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_tiger.png");
   //	mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_peopleeater.bmp");
   mHeadTextureHandles[AITYPE_SHOOTER] = AssetManager::loadImg("art/32_head_shooter.bmp");
@@ -44,7 +44,7 @@ void AiView::loadAssets(void) {
 
 
 
-void AiView::freeAssets(void) {
+void AiView::freeAssets() {
   for (int i = 0; i < NUM_AITYPES; i++) {
     if (mHeadTextureHandles[i] > 0) {
       glDeleteTextures(1, &mHeadTextureHandles[i]);
@@ -62,9 +62,9 @@ void AiView::freeAssets(void) {
 
 
 void AiView::draw(
-  WorldMap &worldMap,
-  ItemManager &itemManager,
-  const LightManager &lightManager)
+  WorldMap& worldMap,
+  ItemManager& itemManager,
+  const LightManager& lightManager)
 {
   glEnable(GL_TEXTURE_2D);
   size_t numEntities = mAiEntities->size();
@@ -80,10 +80,10 @@ void AiView::draw(
 
 
 void AiView::drawEntity(
-  WorldMap &worldMap,
-  ItemManager &itemManager,
-  AiEntity &aiEntity,
-  const LightManager &lightManager)
+  WorldMap& worldMap,
+  ItemManager& itemManager,
+  AiEntity& aiEntity,
+  const LightManager& lightManager)
 {
   if (aiEntity.mType == AITYPE_PLAYER) {
     drawWeapon(aiEntity, worldMap, itemManager);
@@ -112,7 +112,7 @@ void AiView::drawEntity(
 }
 
 
-void AiView::updateHeadOrientation(AiEntity &aiEntity) const {
+void AiView::updateHeadOrientation(AiEntity& aiEntity) const {
   v3d_t targetCenter;
   if (aiEntity.mTargetPhysicsEntity == NULL) {
     v3d_zero(&targetCenter);
@@ -159,13 +159,13 @@ void AiView::updateHeadOrientation(AiEntity &aiEntity) const {
 
 
 
-void AiView::updateFacingAngle(AiEntity &aiEntity, double desiredFacingAngle) const {
+void AiView::updateFacingAngle(AiEntity& aiEntity, double desiredFacingAngle) const {
   // slow down the angle change a bit
   if (desiredFacingAngle - aiEntity.mFacingAngle > MY_PI) {
-    desiredFacingAngle += MY_PI * 2.0;
+    desiredFacingAngle += MY_2PI;
   }
   if (desiredFacingAngle - aiEntity.mFacingAngle < -MY_PI) {
-    desiredFacingAngle += MY_PI * 2.0;
+    desiredFacingAngle += MY_2PI;
   }
 
   if (desiredFacingAngle > aiEntity.mFacingAngle) {
@@ -192,7 +192,7 @@ void AiView::updateFacingAngle(AiEntity &aiEntity, double desiredFacingAngle) co
 
 
 
-void AiView::updateLookIncline(AiEntity &aiEntity, double desiredLookIncline) const {
+void AiView::updateLookIncline(AiEntity& aiEntity, double desiredLookIncline) const {
   if (desiredLookIncline >(MY_PI / 20.0)) {
     desiredLookIncline = (MY_PI / 20.0);
   }
@@ -307,9 +307,9 @@ void AiView::drawBody(
 
 
 void AiView::drawHead(
-  AiEntity &aiEntity,
-  WorldMap &worldMap,
-  const LightManager &lightManager)
+  AiEntity& aiEntity,
+  WorldMap& worldMap,
+  const LightManager& lightManager)
 {
   v3d_t headPosition;
   v3d_t headDimensions; // lol
@@ -375,11 +375,10 @@ void AiView::drawHead(
 
 
 void AiView::drawWeapon(
-  AiEntity &aiEntity,
-  WorldMap &worldMap,
-  ItemManager &itemManager)
+  AiEntity& aiEntity,
+  WorldMap& worldMap,
+  ItemManager& itemManager)
 {
-
   glDisable(GL_TEXTURE_2D);
   glPushMatrix();
 
@@ -388,13 +387,8 @@ void AiView::drawWeapon(
   double armLength = 1.0;
 
   v3d_t lookVector = v3d_getLookVector(aiEntity.mFacingAngle, aiEntity.mLookIncline);
-
   v3d_t headPosition = v3d_add(aiEntity.mWorldPosition, v3d_v(0.0, 0.7, 0.0));
-
-  glColor4d(1.0, 1.0, 1.0, 1.0);
-
   v3d_t handTranslation = v3d_v(0.7, -0.7, 0.2);
-
   double swing;
 
   if (aiEntity.mCurrentHealth > 0.0) {
@@ -417,6 +411,7 @@ void AiView::drawWeapon(
   }
 
 
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glTranslated(headPosition.x, headPosition.y, headPosition.z);
   glRotated(RAD2DEG(-handFacing), 0.0, 1.0, 0.0);
   glRotated(RAD2DEG(aiEntity.mLookIncline), 1.0, 0.0, 1.0);

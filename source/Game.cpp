@@ -20,13 +20,17 @@ game_c::game_c(GameWindow* gameWindow) :
 
   mGameWindow = gameWindow;
 
-  loadAssets();
+  printf("loading assets\n");
+  mAssetManager.loadAssets();
   printf("\n%6d: assets loaded\n", SDL_GetTicks());
 
   mGameModel = new GameModel;
 
   mPlayer = new player_c(mGameModel);
   mGameModel->player = mPlayer;
+
+  mGalaxy = new Galaxy();
+  mGameModel->galaxy = mGalaxy;
 
   mPhysics = new Physics(mGameModel);
   mGameModel->physics = mPhysics;
@@ -84,21 +88,11 @@ game_c::~game_c() {
     delete mGameModel;
   }
 
-  freeAssets();
-}
-
-void game_c::loadAssets() {
-  printf("loading assets\n");
-  mAssetManager.loadAssets();
-  printf("loading item assets\n");
-}
-
-void game_c::freeAssets() {
   printf("you must set my assets free!\n");
   mAssetManager.freeAssets();
 }
 
-void game_c::loadPlanetMenu(void) {
+void game_c::loadPlanetMenu() {
   if (mMenu != NULL) {
     delete mMenu;
     mMenu = NULL;
@@ -118,7 +112,7 @@ void game_c::loadPlanetMenu(void) {
 }
 
 
-void game_c::loadShipMenu(void) {
+void game_c::loadShipMenu() {
   if (mMenu != NULL) {
     delete mMenu;
     mMenu = NULL;
@@ -191,8 +185,6 @@ void game_c::setup_opengl() {
 // it is here where the magic begins
 int game_c::enter_game_mode(bool createNewWorld) {
   printf ("\n%6d: entered GAME mode ----------------\n", SDL_GetTicks());
-
-  mGalaxy = new Galaxy();
 
   if (createNewWorld) {
     printf("game_c::enter_game_mode(): new game\n");
@@ -313,8 +305,6 @@ void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos,
   resetForNewLocation(playerStartPosition, resetPlayer);
 }
 
-
-
 void game_c::initSpaceShip(bool resetPlayer) {
   FILE *file = fopen("save/playership.dat", "rb");
   // this decides whose map we're gonna render/interact with
@@ -334,9 +324,6 @@ void game_c::initSpaceShip(bool resetPlayer) {
 
   resetForNewLocation(playerStartPosition, resetPlayer);
 }
-
-
-
 
 void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   // we need to give it an ambient light color
@@ -385,7 +372,7 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   }
   mAiView = new AiView();
   mAiView->setAiEntities(mAiManager->getEntities());
-  mPlayerAiHandle = mAiManager->setPlayerPhysicsHandle(mPhysics->getPlayerHandle(), *mPhysics, 0.0);
+  mPlayerAiHandle = mAiManager->setPlayerPhysicsHandle();
 
 
   // reset the player
@@ -408,10 +395,9 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
 
   // TODO: handle the ItemManager:
   // some items are persistent (i.e. what the player and his posse
-  // are holding onto), the resdt should probably be destroyed
+  // are holding onto), the rest should probably be destroyed
 
 }
-
 
 void game_c::destroyItemsOwnedByPhysicsAndAi() {
   vector<size_t> itemList = mAiManager->getAllItemHandles();
@@ -421,15 +407,14 @@ void game_c::destroyItemsOwnedByPhysicsAndAi() {
   mItemManager->trimItemsList();
 }
 
-
-void game_c::gameLoop(void) {
+void game_c::gameLoop() {
   printf("game_c::gameLoop() - begin\n");
 
   unsigned int ticks = SDL_GetTicks();
   int frame = 0;
   int blocks_drawn = 0;
 
-  mLastUpdateTime = (static_cast<double>(ticks) / 1000.0);
+  mLastUpdateTime = (double)ticks / 1000.0;
 
   mGameState = GAMESTATE_PLAY;
 
@@ -442,7 +427,7 @@ void game_c::gameLoop(void) {
     escapePressed = update();
 
     // draw after updates are all completed
-    draw(mLastUpdateTime);
+    draw();
 
     // take care of the input/menu
     if (mGameState == GAMESTATE_PLAY) {
@@ -519,9 +504,9 @@ void game_c::gameLoop(void) {
 
 
 int game_c::handleMenuChoice(int menuChoice) {
-  GalaxyMap *galaxyMap;
-  PlanetMap *planetMap;
-  RogueMapViewer *rogueMapViewer;
+  GalaxyMap* galaxyMap;
+  PlanetMap* planetMap;
+  RogueMapViewer* rogueMapViewer;
   v3d_t planetPos;
 
   switch (menuChoice) {
@@ -611,7 +596,7 @@ int game_c::handleMenuChoice(int menuChoice) {
 
 
 // update the game model
-bool game_c::update(void) {
+bool game_c::update() {
   double cur_time = (static_cast<double>(SDL_GetTicks()) / 1000.0);
   bool escapePressed = false;
 
@@ -631,7 +616,7 @@ bool game_c::update(void) {
 
     mAiManager->setPlayerFacingAndIncline(mPlayer->getFacingAndIncline());
 
-    mNumAiObjects = mAiManager->update(mLastUpdateTime, *mLocation->getWorldMap(), *mPhysics, *mItemManager);
+    mNumAiObjects = mAiManager->update(*mLocation->getWorldMap());
     mNumItems = mItemManager->update();
 
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
@@ -647,7 +632,7 @@ bool game_c::update(void) {
 
 
 // draw the game world
-int game_c::draw(double &time) {
+int game_c::draw() {
   // clear the buffer before drawing to it
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

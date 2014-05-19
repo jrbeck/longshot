@@ -367,12 +367,17 @@ void AiEntity::updateBalloon(
     v3d_t velNoY = mPhysicsEntity->vel;
     velNoY.y = 0.0;
 
+    // FIXME: there needs to be a check here to see if the AI
+    // is going the 'long way' to turn towards it's target
     double angle1 = atan2(vecToTarget.x, vecToTarget.z);
     double angle2 = atan2(velNoY.x, velNoY.z);
     double angle = angle1 - angle2;
 
-    // this is for critter with 'steerage'
     if (abs(angle) > 0.1) {
+      if (abs(angle) > M_PI) {
+        angle = -angle;
+      }
+
       angle = absConstrain(angle, 0.01);
 
       v3d_t rot = v3d_rotateY(mPhysicsEntity->vel, angle);
@@ -383,9 +388,8 @@ void AiEntity::updateBalloon(
 
     if (v3d_mag(vecToTarget) < mMinDistanceToPlayer) {
       vecToTarget = v3d_scale(15.0, v3d_normalize(vecToTarget));
-
       movementForce = v3d_add(movementForce, vecToTarget);
-    }	
+    }
   
 //		physics.add_force (mPhysicsHandle, movementForce);
 //		mPhysicsEntity->force = v3d_add(mPhysicsEntity->force, movementForce);
