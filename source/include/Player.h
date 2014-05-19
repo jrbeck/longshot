@@ -12,8 +12,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Player_h_
-#define Player_h_
+#pragma once
 
 #include <cmath>
 
@@ -21,6 +20,8 @@
 #include "v2d.h"
 #include "v3d.h"
 #include "GlCamera.h"
+
+#include "GameModel.h"
 
 #include "GameInput.h"
 #include "Physics.h"
@@ -44,8 +45,8 @@
 
 
 enum {
-	EQUIP_PRIMARY,
-	EQUIP_SECONDARY
+  EQUIP_PRIMARY,
+  EQUIP_SECONDARY
 };
 
 
@@ -55,127 +56,125 @@ enum {
 
 class player_c {
 public:
-	player_c ();
-	~player_c ();
+  player_c(GameModel* gameModel);
+  ~player_c();
 
-	int reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager);
-	int soft_reset(v3d_t& startPosition, Physics& phys);
-	void setStartPosition(v3d_t& startPosition);
-	void setPhysicsHandle(size_t handle);
+  int reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager);
+  int soft_reset(v3d_t& startPosition);
+  void setStartPosition(v3d_t& startPosition);
+  void setPhysicsHandle(size_t handle);
 
-	void godMode(ItemManager& itemManager);
+  void godMode(ItemManager& itemManager);
 
-	// update the camera target
-	void update_target(void);
-	int constrain_view_angles(void);
+  // update the camera target
+  void update_target();
+  int constrain_view_angles();
 
-	v2d_t getFacingAndIncline(void);
-	bool isHeadInWater(void);
+  v2d_t getFacingAndIncline();
+  bool isHeadInWater();
 
-	int set_target(v3d_t a);
+  int set_target(v3d_t a);
 
-	void set_draw_distance(double distance);
-	void adjust_draw_distance(double amount);
+  void set_draw_distance(double distance);
+  void adjust_draw_distance(double amount);
 
-	// use the gluLookAt () to set view at render time
-	gl_camera_c gl_cam_setup(void);
+  // use the gluLookAt () to set view at render time
+  gl_camera_c gl_cam_setup();
 
-	v3d_t get_pos(void);
-	int set_pos(v3d_t a);
+  v3d_t get_pos();
+  int set_pos(v3d_t a);
 
-	bool pickUpItem(item_t item, AssetManager& assetManager);
+  bool pickUpItem(item_t item, AssetManager& assetManager);
 
-	void useEquipped(int whichEquip, double time, Physics &phys, AssetManager &assetManager, ItemManager& itemManager);
-	double fireGun(item_t item, double handedness, double time, Physics& phys, AssetManager& assetManager, ItemManager& itemManager);
-	double useMeleeWeapon(item_t item, double time, Physics& phys, ItemManager& itemManager);
+  void useEquipped(int whichEquip, AssetManager &assetManager, ItemManager& itemManager);
+  double fireGun(item_t item, double handedness, AssetManager& assetManager, ItemManager& itemManager);
+  double useMeleeWeapon(item_t item, ItemManager& itemManager);
 
-	void useBackpackItem(double time, Physics& phys, AssetManager& assetManager, ItemManager& itemManager);
+  void useBackpackItem(AssetManager& assetManager, ItemManager& itemManager);
 
-	v2d_t obtainWalkVector(v2d_t walkInput);
+  v2d_t obtainWalkVector(v2d_t walkInput);
 
-	void updateTargetBlock(WorldMap& worldMap);
-	v3di_t* getTargetBlock(int& targetBlockFace);
+  void updateTargetBlock(WorldMap& worldMap);
+  v3di_t* getTargetBlock(int& targetBlockFace);
 
-	void updateHud(ItemManager& itemManager);
-	void drawHud(void);
-	void drawWaterOverlay(void);
-	void drawEquipped(ItemManager& itemManager, BitmapModel& model);
-	void drawEquippedGun(double handedness, BitmapModel& model);
+  void updateHud(ItemManager& itemManager);
+  void drawHud();
+  void drawWaterOverlay();
+  void drawEquipped(ItemManager& itemManager, AssetManager& assetManager);
+  void drawEquippedGun(double handedness, BitmapModel& model);
 
-	void updateCharacterSheet(ItemManager& itemManager);
+  void updateCharacterSheet(ItemManager& itemManager);
 
-	bool update(double time, WorldMap& worldMap, Physics& phys, GameInput& gi, AssetManager& assetManager, ItemManager& itemManager);
+  bool update(WorldMap& worldMap, AssetManager& assetManager, ItemManager& itemManager);
 
-	void readPhysicsMessages(Physics& physics, ItemManager& itemManager, AssetManager& assetManager);
+  void readPhysicsMessages(ItemManager& itemManager, AssetManager& assetManager);
 
-	// HACK
-	void placeLight(LightManager& lightManager, WorldMap& worldMap, GameInput& gi);
-	Inventory* getInventory(void);
+  // HACK
+  void placeLight(LightManager& lightManager, WorldMap& worldMap);
+  Inventory* getInventory();
 
-	gl_camera_c cam;
+  gl_camera_c cam;
 
 private:
-	GameMenu mHud;
+  GameModel *mGameModel;
 
-	GameMenu mCharacterSheet;
-	bool mShowCharacterSheet;
+  GameMenu mHud;
 
-	v3d_t mPos;			// where the 'feet' are
+  GameMenu mCharacterSheet;
+  bool mShowCharacterSheet;
 
-	v3d_t mHeadOffset;			// where's the noggin relative to the phys position
-	v3d_t mFinalHeadOffset;		// where is it after all is considered
-	HeadBobble mHeadBobble;		// something to consider
+  v3d_t mPos;			// where the 'feet' are
 
-	v3d_t mTarget;			// where the camera is pointed
-	v3d_t up;				// the 'up' vector for the camera
-	v3d_t mLookVector;
+  v3d_t mHeadOffset;			// where's the noggin relative to the phys position
+  v3d_t mFinalHeadOffset;		// where is it after all is considered
+  HeadBobble mHeadBobble;		// something to consider
 
-	bool mIsBlockTargeted;
-	v3di_t mTargetBlock;
-	int mTargetBlockFace;
+  v3d_t mTarget;			// where the camera is pointed
+  v3d_t up;				// the 'up' vector for the camera
+  v3d_t mLookVector;
 
-	size_t mPhysicsHandle;
-	size_t mAiHandle;
+  bool mIsBlockTargeted;
+  v3di_t mTargetBlock;
+  int mTargetBlockFace;
 
-	bool mStartLocationFound;
-	v3d_t mStartPosition;
+  size_t mPhysicsHandle;
+  size_t mAiHandle;
 
-	double mMaxHealth;
-	double mCurrentHealth;
+  bool mStartLocationFound;
+  v3d_t mStartPosition;
 
-	bool deathScreamUttered;
+  double mMaxHealth;
+  double mCurrentHealth;
 
-	double mLastFootStep;
+  bool deathScreamUttered;
 
-	double mLastUpdateTime;
+  double mLastFootStep;
 
-	double mNextShotTimePrimary;
-	double mNextShotTimeSecondary;
+  double mLastUpdateTime;
 
-	Inventory mInventory;
+  double mNextShotTimePrimary;
+  double mNextShotTimeSecondary;
 
-	melee_weapon_state_t mMeleeStatePrimary;
-	melee_weapon_state_t mMeleeStateSecondary;
+  Inventory mInventory;
 
-	v2d_t mWalkInput;
+  melee_weapon_state_t mMeleeStatePrimary;
+  melee_weapon_state_t mMeleeStateSecondary;
 
-	bool mInWater;
-	bool mHeadInWater;
+  v2d_t mWalkInput;
 
-	GLfloat mVisionTint[4];
+  bool mInWater;
+  bool mHeadInWater;
 
-	double mFacing;			// the angle on the x-z plane off the positive x-axis
-	double mIncline;		// the angle on the vertical plane off the x-z plane intersection...
-	double mInclineMin;		// upper constraint for incline angle
-	double mInclineMax;		// lower constraint for incline angle
+  GLfloat mVisionTint[4];
 
-	bool mPlacedBlock;
+  double mFacing;			// the angle on the x-z plane off the positive x-axis
+  double mIncline;		// the angle on the vertical plane off the x-z plane intersection...
+  double mInclineMin;		// upper constraint for incline angle
+  double mInclineMax;		// lower constraint for incline angle
 
-	static const int LEFT_HANDED = -1;
-	static const int RIGHT_HANDED = 1;
+  bool mPlacedBlock;
+
+  static const int LEFT_HANDED = -1;
+  static const int RIGHT_HANDED = 1;
 };
 
-
-
-
-#endif // Player_h_

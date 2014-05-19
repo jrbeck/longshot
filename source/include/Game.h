@@ -33,6 +33,8 @@ using namespace std;
 // the root/code/include directory
 #include "v2d.h"
 
+#include "GameModel.h"
+
 #include "GameWindow.h"
 #include "GalaxyMap.h"
 #include "World.h"
@@ -96,27 +98,28 @@ enum {
 
 
 class game_c {
-  player_c mPlayer;	// save
-  Galaxy *mGalaxy;	// save
-  Location *mLocation;	// save
-  WorldMap *mWorldMap;
-  WorldMapView mWorldMapView;
-  AiManager mAiManager;	// save
-  AiView *mAiView;
-  Physics mPhysics;	// save
-  PhysicsView *mPhysicsView;
-  GameInput mGameInput;
+  GameModel *mGameModel;
+
+  player_c* mPlayer;
+  Galaxy* mGalaxy;
+  Location* mLocation;
+  AiManager* mAiManager;
+  Physics* mPhysics;
+  GameInput* mGameInput;
+  ItemManager* mItemManager;
+
   AssetManager mAssetManager;
-  ItemManager mItemManager;	// save
 
-  MerchantView *mMerchantView;
+  AiView* mAiView;
+  WorldMapView mWorldMapView;
+  PhysicsView* mPhysicsView;
+  MerchantView* mMerchantView;
 
-  size_t mPlayerPhysicsHandle;
   size_t mPlayerAiHandle;
 
   double mLastUpdateTime;
 
-  GameMenu *mMenu;
+  GameMenu* mMenu;
   int mGameState;
 
   int mNumPhysicsObjects;
@@ -124,17 +127,17 @@ class game_c {
   int mNumItems;
 
   int mWorldSeed;
-  Planet *mCurrentPlanet;
+  Planet* mCurrentPlanet;
 
   bool mCycleLighting;
 
-  GameWindow *mGameWindow;
+  GameWindow* mGameWindow;
 
   // HACKS
   char mPlanetNameString[100];
 
 public:
-  game_c(GameWindow *gameWindow);
+  game_c(GameWindow* gameWindow);
   ~game_c();
 
   void loadAssets();
@@ -151,6 +154,7 @@ public:
   void initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces);
   void initSpaceShip(bool resetPlayer);
   void resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer);
+  void destroyItemsOwnedByPhysicsAndAi();
 
   void gameLoop();
   int handleMenuChoice(int menuChoice);

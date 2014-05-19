@@ -74,7 +74,7 @@ AiEntity* AiManager::addEntity(int type, const v3d_t& position, Physics& physics
     return NULL;
   }
 
-  size_t physicsHandle = physics.createAiEntity(type, position, time);
+  size_t physicsHandle = physics.createAiEntity(type, position);
   if (physicsHandle == 0) {
     printf("AiManager::addEntity(): error: failed to create phys entity\n");
     return NULL;

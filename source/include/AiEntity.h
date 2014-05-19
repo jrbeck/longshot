@@ -22,7 +22,7 @@
 #include "MathUtil.h"
 
 
-#define DONT_ATTACK_PLAYER    (false)
+#define DONT_ATTACK_PLAYER    (true)
 #define PLAYER_SPECIES        (AITYPE_HUMAN)
 
 

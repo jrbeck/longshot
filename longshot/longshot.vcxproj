@@ -109,6 +109,7 @@
     <ClCompile Include="..\source\GalaxyMap.cpp" />
     <ClCompile Include="..\source\Game.cpp" />
     <ClCompile Include="..\source\GameInput.cpp" />
+    <ClCompile Include="..\source\GameModel.cpp" />
     <ClCompile Include="..\source\GameWindow.cpp" />
     <ClCompile Include="..\source\GlBitmapFont.cpp" />
     <ClCompile Include="..\source\GlCamera.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="..\source\include\GalaxyMap.h" />
     <ClInclude Include="..\source\include\Game.h" />
     <ClInclude Include="..\source\include\GameInput.h" />
+    <ClInclude Include="..\source\include\GameModel.h" />
     <ClInclude Include="..\source\include\GameWindow.h" />
     <ClInclude Include="..\source\include\GlBitmapFont.h" />
     <ClInclude Include="..\source\include\GlCamera.h" />

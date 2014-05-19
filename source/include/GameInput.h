@@ -12,67 +12,65 @@
 
 #include <SDL2/SDL.h>
 
-#include "AssetManager.h"
 #include "v2d.h"
-
 
 // FIXME: use soft key mappings. preferably a data struct for easy saving.
 
 class GameInput {
 public:
-  GameInput (void);
-  ~GameInput (void);
+  GameInput();
+  ~GameInput();
 
-  void reset (void);
+  void reset();
 
-  double getFacingDelta (void);
-  double getInclinationDelta (void);
+  double getFacingDelta();
+  double getInclinationDelta();
 
-  bool isEscapePressed (void);
-  bool isWindowClosed (void);
+  bool isEscapePressed();
+  bool isWindowClosed();
 
-  bool isWalkingForward (void);
-  bool isWalkingBackward (void);
-  bool isWalkingLeft (void);
-  bool isWalkingRight (void);
+  bool isWalkingForward();
+  bool isWalkingBackward();
+  bool isWalkingLeft();
+  bool isWalkingRight();
 
-  bool isJumping (void);
+  bool isJumping();
 
-  bool isSwimming (void);
+  bool isSwimming();
 
-  bool isPickUpItem (void);
-  bool isDroppedItem (void);
+  bool isPickUpItem();
+  bool isDroppedItem();
 
-  bool isUsingPrimary (void);
-  bool isUsingSecondary (void);
+  bool isUsingPrimary();
+  bool isUsingSecondary();
 
-  bool isClickMouse1 (void);
-  bool isClickMouse2 (void);
+  bool isClickMouse1();
+  bool isClickMouse2();
 
-  bool isNextGun (void);
-  bool isPreviousGun (void);
+  bool isNextGun();
+  bool isPreviousGun();
 
-  bool isSoftReset (void);
-  bool isTogglePhysics (void);
-  bool isAdvanceOneFrame (void);
+  bool isSoftReset();
+  bool isTogglePhysics();
+  bool isAdvanceOneFrame();
 
-  bool isIncreasingDrawDistance (void);
-  bool isDecreasingDrawDistance (void);
+  bool isIncreasingDrawDistance();
+  bool isDecreasingDrawDistance();
 
-  bool isToggleCharacterSheet (void);
-  bool isToggleGodMode (void);
+  bool isToggleCharacterSheet();
+  bool isToggleGodMode();
 
-  bool isUseBackpackItem (void);
+  bool isUseBackpackItem();
 
-  bool isToggleWorldChunkBoxes (void);
+  bool isToggleWorldChunkBoxes();
 
-  int update (void);
+  int update();
 
 private:
   int handleKeyDownEvent(int key);
   int handleKeyUpEvent(int key);
-  void handleMouseButtonDownEvent(int button, v2d_t pos);
-  void handleMouseButtonUpEvent(int button, v2d_t pos);
+  void handleMouseButtonDownEvent(int button);
+  void handleMouseButtonUpEvent(int button);
   void handleMouseWeelEvent(SDL_MouseWheelEvent wheelEvent);
 
 

@@ -81,6 +81,7 @@ public:
   BitmapModel* mGunBitmapModel;
   // END TESTING
 
+  GLuint mModelDisplayListHandles[NUM_MELEETYPES];
 
 private:
   // copy constructor guard

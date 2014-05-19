@@ -59,7 +59,7 @@ void AiEntity::update(
         else {
           v3d_t itemForce = v3d_random(20.0);
           itemForce.y = 10.0;
-          size_t itemPhysicsHandle = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, time, true);
+          size_t itemPhysicsHandle = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, true);
           physics.setItemHandleAndType(itemPhysicsHandle, mInventory[i], itemManager.getItemType(mInventory[i]));
         }
 
@@ -564,7 +564,7 @@ void AiEntity::aquireTarget(double time, WorldMap& worldMap, Physics& physics, v
       baitPosition = v3d_add(mWorldPosition, v3d_v(r_num(-25.0, 25.0), 10.0, r_num(-25.0, 25.0)));
     }
 
-    size_t baitHandle =	physics.createEntity(OBJTYPE_TIGER_BAIT, baitPosition, time, true);
+    size_t baitHandle = physics.createEntity(OBJTYPE_TIGER_BAIT, baitPosition, true);
 
     physics.setHealth(baitHandle, 1.0);
 
@@ -596,7 +596,7 @@ bool AiEntity::useWeapon(double time, Physics& physics, ItemManager& itemManager
   shotInfo.position = mWorldPosition;
   shotInfo.time = time;
 
-  mNextShotTime = itemManager.useGun(mInventory[0], shotInfo, physics);
+  mNextShotTime = itemManager.useGun(mInventory[0], shotInfo);
 
   return true;
 }

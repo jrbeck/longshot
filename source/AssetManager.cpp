@@ -28,6 +28,10 @@ AssetManager::AssetManager() :
 
   // this is default...
   setDirectionalLightPositions(v3d_v(0.0, 100.0, 0.0), v3d_v(0.0, -100.0, 0.0));
+
+  for (int i = 0; i < NUM_MELEETYPES; i++) {
+    mModelDisplayListHandles[i] = 0;
+  }
 }
 
 
@@ -65,6 +69,12 @@ int AssetManager::loadAssets() {
     drawBlock(mGlobalLightIntensities);
   glEndList();
 
+
+  // the mace and the axe ...
+  // this model type is deprecated
+  mModelDisplayListHandles[MELEETYPE_MACE] = ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
+  mModelDisplayListHandles[MELEETYPE_AXE] = ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
+
   // didn't bring down the house hopefully
   return 0;
 }
@@ -100,6 +110,13 @@ void AssetManager::freeAssets() {
     mGunTexture = 0;
   }
   // END TESTING
+
+  for (int i = 0; i < NUM_MELEETYPES; i++) {
+    if (mModelDisplayListHandles[i] != 0) {
+      glDeleteLists(mModelDisplayListHandles[i], 1);
+      mModelDisplayListHandles[i] = 0;
+    }
+  }
 
 }
 

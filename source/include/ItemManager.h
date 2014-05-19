@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include "GameModel.h"
+
 #include "Physics.h"
 #include "MathUtil.h"
 #include "ObjectLoader.h"
@@ -19,50 +21,50 @@
 
 
 typedef struct {
-	float healthMax;
-	float healthCurrent;
-	float healthRegen;
+  float healthMax;
+  float healthCurrent;
+  float healthRegen;
 
-	float energyMax;
-	float energyCurrent;
-	float energyRegen;
+  float energyMax;
+  float energyCurrent;
+  float energyRegen;
 
-	float damageRanged;
-	float damageMelee;
+  float damageRanged;
+  float damageMelee;
 
-	float forceWalk;
-	float forceSwim;
+  float forceWalk;
+  float forceSwim;
 
-	float armor;
+  float armor;
 } playerstats_t;
 
 
 typedef struct {
-	size_t ownerPhysicsHandle;
-	v3d_t position;
-	v3d_t angle;
-	double time;
+  size_t ownerPhysicsHandle;
+  v3d_t position;
+  v3d_t angle;
+  double time;
 
-	double facing;
-	double incline;
+  double facing;
+  double incline;
 
 } shot_info_t;
 
 
 typedef struct {
-	int weaponHandle;
+  int weaponHandle;
 
-	v3d_t headPosition;
-	v3d_t handPosition;
+  v3d_t headPosition;
+  v3d_t handPosition;
 
-	double facing;
-	double incline;
+  double facing;
+  double incline;
 
-	int swingMode;
-	double swingStart;
-	double swingTime;
+  int swingMode;
+  double swingStart;
+  double swingTime;
 
-	bool hasUsed;
+  bool hasUsed;
 } melee_weapon_state_t;
 
 
@@ -76,103 +78,98 @@ typedef struct {
 
 
 struct item_t {
-	bool active;
-	size_t handle;
-	int type;
+  bool active;
+  size_t handle;
+  int type;
 
-	char name[ITEM_NAME_LENGTH];
+  char name[ITEM_NAME_LENGTH];
 
-	double value1;
+  double value1;
 
-	// gun stuff
-	int gunType;
-	int ammoType;
-	int bulletType;
-	double shotDelay;
-	int bulletsPerShot;
-	double bulletDamage;
-	double bulletSpread;
-	double bulletForce;
-	double explosionForce;
-	int numParticles;
-	int shotSound;
+  // gun stuff
+  int gunType;
+  int ammoType;
+  int bulletType;
+  double shotDelay;
+  int bulletsPerShot;
+  double bulletDamage;
+  double bulletSpread;
+  double bulletForce;
+  double explosionForce;
+  int numParticles;
+  int shotSound;
 
-	int quantity;
+  int quantity;
 
-	double mass;
+  double mass;
 };
 
 
 
 class ItemManager {
 public:
-	ItemManager();
-	~ItemManager();
+  ItemManager(GameModel* gameModel);
+  ~ItemManager();
 
-	void loadAssets();
-	void freeAssets();
+  int update();
 
-	int update(Physics &physics);
+  void readPhysicsMessages();
 
-	void readPhysicsMessages(Physics &physics);
+  void clear();
 
-	void clear(void);
+  void destroyItemList(vector<size_t> itemList);
+  void destroyItem(size_t handle);
+  void trimItemsList();
 
-	void destroyItemList(vector<size_t> itemList);
-	void destroyItem(size_t handle);
-	void trimItemsList(void);
+  //	int addItem (item_t item);
+  item_t getItem(size_t itemHandle);
+  int getIndexFromHandle(size_t itemHandle);
 
-//	int addItem (item_t item);
-	item_t getItem(size_t itemHandle);
-	int getIndexFromHandle(size_t itemHandle);
+  int getItemType(size_t itemHandle);
 
-	int getItemType(size_t itemHandle);
+  size_t createItem(item_t item);
+  size_t generateRandomItem();
 
-	size_t createItem(item_t item);
-	size_t generateRandomItem(void);
-
-	size_t generateRandomMeleeWeapon(double dps);
+  size_t generateRandomMeleeWeapon(double dps);
 
 
-	void nameGun(item_t &gun);
-	size_t generateRandomGun(double dps);
+  void nameGun(item_t &gun);
+  size_t generateRandomGun(double dps);
 
-	void generateRandomPistol(item_t &newGun, double dps);
-	void generateRandomRifle(item_t &newGun, double dps);
-	void generateRandomShotgun(item_t &newGun, double dps);
-	void generateRandomMachineGun(item_t &newGun, double dps);
-	void generateRandomGrenadeLauncher(item_t &newGun, double dps);
-	void generateRandomRocketLauncher(item_t &newGun, double dps);
+  void generateRandomPistol(item_t &newGun, double dps);
+  void generateRandomRifle(item_t &newGun, double dps);
+  void generateRandomShotgun(item_t &newGun, double dps);
+  void generateRandomMachineGun(item_t &newGun, double dps);
+  void generateRandomGrenadeLauncher(item_t &newGun, double dps);
+  void generateRandomRocketLauncher(item_t &newGun, double dps);
 
-	size_t spawnPhysicsEntityGun(double value, v3d_t position, double time, Physics &physics);
+  size_t spawnPhysicsEntityGun(double value, v3d_t position);
 
-	bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle, Physics &physics);
-	void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle, Physics &physics);
+  bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
+  void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
 
-	double useGun(size_t itemHandle, shot_info_t shotInfo, size_t *ammoCounter, Physics &physics);
-	double useGun(size_t itemHandle, shot_info_t shotInfo, Physics &physics);
+  double useGun(size_t itemHandle, shot_info_t shotInfo, size_t *ammoCounter);
+  double useGun(size_t itemHandle, shot_info_t shotInfo);
 
-	double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo, Physics &physics);
+  double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo);
 
-	void drawItem(size_t itemHandle);
-	void drawMeleeWeapon(melee_weapon_state_t weaponState, BitmapModel &model);
+  void drawMeleeWeapon(melee_weapon_state_t weaponState, AssetManager &assetManager);
 
-	// REMINDER: this should really see how many items are no longer
-	// around, perhaps on load?
-	void save(FILE *file);
-	void load(FILE *file);
+  // REMINDER: this should really see how many items are no longer
+  // around, perhaps on load?
+  void save(FILE *file);
+  void load(FILE *file);
 
 private:
-	// copy constructor guard
-	ItemManager(const ItemManager& itemManager) { }
-	// assignment operator guard
-	ItemManager& operator=(const ItemManager& itemManager) { return *this; }
+  // copy constructor guard
+  ItemManager(const ItemManager& itemManager) { }
+  // assignment operator guard
+  ItemManager& operator=(const ItemManager& itemManager) { return *this; }
 
+  GameModel* mGameModel;
 
-	size_t mLastHandle;
-	vector<item_t> mItems;
+  size_t mLastHandle;
+  vector<item_t> mItems;
 
-	int mAmmoToPhysicsTable[NUM_AMMO_TYPES];
-
-	GLuint mModelDisplayListHandles[NUM_MELEETYPES];
+  int mAmmoToPhysicsTable[NUM_AMMO_TYPES];
 };

@@ -21,12 +21,45 @@ game_c::game_c(GameWindow* gameWindow) :
   mGameWindow = gameWindow;
 
   loadAssets();
-  printf ("\n%6d: assets loaded\n", SDL_GetTicks());
+  printf("\n%6d: assets loaded\n", SDL_GetTicks());
+
+  mGameModel = new GameModel;
+
+  mPlayer = new player_c(mGameModel);
+  mGameModel->player = mPlayer;
+
+  mPhysics = new Physics(mGameModel);
+  mGameModel->physics = mPhysics;
+
+  mAiManager = new AiManager;
+
+  mItemManager = new ItemManager(mGameModel);
+  mGameModel->itemManager = mItemManager;
+
+  mGameInput = new GameInput;
+  mGameModel->gameInput = mGameInput;
 }
 
 
 
 game_c::~game_c() {
+
+  if (mGameInput != NULL) {
+    delete mGameInput;
+  }
+
+  if (mAiManager != NULL) {
+    delete mAiManager;
+  }
+  if (mItemManager != NULL) {
+    delete mItemManager;
+  }
+  if (mPhysics != NULL) {
+    delete mPhysics;
+  }
+  if (mPlayer != NULL) {
+    delete mPlayer;
+  }
   if (mGalaxy != NULL) {
     delete mGalaxy;
   }
@@ -46,6 +79,10 @@ game_c::~game_c() {
     delete mMerchantView;
   }
 
+  if (mGameModel != NULL) {
+    delete mGameModel;
+  }
+
   freeAssets();
 }
 
@@ -53,13 +90,11 @@ void game_c::loadAssets() {
   printf("loading assets\n");
   mAssetManager.loadAssets();
   printf("loading item assets\n");
-  mItemManager.loadAssets();
 }
 
 void game_c::freeAssets() {
   printf("you must set my assets free!\n");
   mAssetManager.freeAssets();
-  mItemManager.freeAssets();
 }
 
 void game_c::loadPlanetMenu(void) {
@@ -138,13 +173,13 @@ void game_c::setup_opengl() {
 //	glEnable (GL_COLOR_MATERIAL);
 
   // FOG
-  glFogi(GL_FOG_MODE, GL_LINEAR); // Fog Mode
+  glFogi(GL_FOG_MODE, GL_LINEAR);
 //	glFogfv (GL_FOG_COLOR, color[skyColor]);			// Set Fog Color
-  glFogf(GL_FOG_DENSITY, 0.05f); // How Dense Will The Fog Be
-  glHint(GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
-  glFogf(GL_FOG_START, 100.0f);						// Fog Start Depth
-  glFogf(GL_FOG_END, 200.0f);						// Fog End Depth
-  glEnable(GL_FOG);									// Enables GL_FOG
+  glFogf(GL_FOG_DENSITY, 0.05f);
+  glHint(GL_FOG_HINT, GL_DONT_CARE);
+  glFogf(GL_FOG_START, 100.0f);
+  glFogf(GL_FOG_END, 200.0f);
+  glEnable(GL_FOG);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   mGameWindow->swapBuffers();
@@ -185,22 +220,17 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
   gameLoop();
 
-  // destroy all the items
-  // FIXME: this is temporary ... how temporary?
-  // how necessary is this???
-  vector<size_t> itemList = mAiManager.getAllItemHandles();
-  mItemManager.destroyItemList(itemList);
-  itemList = mPhysics.getAllItemHandles();
-  // heh?? again?
-  mItemManager.destroyItemList(itemList);
+  // FIXME: this is temporary ... since we aren't
+  // saving the AI, we need to eliminate their items
+  destroyItemsOwnedByPhysicsAndAi();
 
   // save the current game state
   save();
 
   // DONE WITH THIS ROUND FOLKS * * * * * * *
-  mAiManager.clear();
-  mItemManager.clear();
-  mPhysics.clear();
+  mAiManager->clear();
+  mItemManager->clear();
+  mPhysics->clear();
 
   mAssetManager.mSoundSystem.stopAllSounds();
 
@@ -308,8 +338,6 @@ void game_c::initSpaceShip(bool resetPlayer) {
 
 
 void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
-  // this decides whose map we're gonna render/interact with
-  mWorldMap = mLocation->getWorldMap();
   // we need to give it an ambient light color
   IntColor sunColor;
   if (mLocation->getType() == LOCATION_SHIP) {
@@ -324,21 +352,15 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
     sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
   }
-  mWorldMapView.setWorldMap(mWorldMap, sunColor);
+  mWorldMapView.setWorldMap(mLocation->getWorldMap(), sunColor);
 
 
   // let's handle the items first...
   // FIXME: this is temporary
-  vector<size_t> itemList = mAiManager.getAllItemHandles();
-  mItemManager.destroyItemList(itemList);
-  itemList = mPhysics.getAllItemHandles();
-  mItemManager.destroyItemList(itemList);
-  mItemManager.trimItemsList();
-
-
+  destroyItemsOwnedByPhysicsAndAi();
 
   // reset this to be safe
-  mPhysics.reset();
+  mPhysics->reset();
 
   // create a new PhysicsView
   if (mPhysicsView != NULL) {
@@ -348,45 +370,55 @@ void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
 
   // make a physical entity to represent the player
   // FIXME: make sure this succeeds you knucklehead!
-  mPlayerPhysicsHandle = mPhysics.createEntity(OBJTYPE_PLAYER, playerStartPosition, 0.0, false);
-  printf("player physics handle: %d\n", mPlayerPhysicsHandle);
+//  _assert(mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, 0.0, false) != 0);
+  mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, false) != 0;
+  printf("player physics handle: %d\n", mPhysics->getPlayerHandle());
 
   // load the pre-generated physics items
-  mPhysics.loadInactiveList();
+  mPhysics->loadInactiveList();
 
   // AI
-  mAiManager.clear();
+  mAiManager->clear();
   if (mAiView != NULL) {
     delete mAiView;
   }
   mAiView = new AiView();
-  mAiView->setAiEntities(mAiManager.getEntities());
-  mPlayerAiHandle = mAiManager.setPlayerPhysicsHandle(mPlayerPhysicsHandle, mPhysics, 0.0);
+  mAiView->setAiEntities(mAiManager->getEntities());
+  mPlayerAiHandle = mAiManager->setPlayerPhysicsHandle(mPhysics->getPlayerHandle(), *mPhysics, 0.0);
 
 
   // reset the player
   if (resetPlayer) {
-    mPlayer.reset(mPlayerPhysicsHandle, mPlayerAiHandle, mItemManager);
+    mPlayer->reset(mGameModel->physics->getPlayerHandle(), mPlayerAiHandle, *mItemManager);
   }
-  mPlayer.setPhysicsHandle(mPlayerPhysicsHandle);
-  mPlayer.setStartPosition(playerStartPosition);
-  mPlayer.soft_reset (playerStartPosition, mPhysics);
+  mPlayer->setPhysicsHandle(mGameModel->physics->getPlayerHandle());
+  mPlayer->setStartPosition(playerStartPosition);
+  mPlayer->soft_reset(playerStartPosition);
 
 
   // FIXME: this is really a hack...
   if (mLocation->getType() == LOCATION_SHIP) {
-    mPlayer.set_draw_distance(500.0);
-    mAiManager.setMaxCritters(0);
+    mPlayer->set_draw_distance(500.0);
+    mAiManager->setMaxCritters(0);
   }
   else {
-    mPlayer.set_draw_distance(r_num(150.0, 500.0));
-    mAiManager.setMaxCritters(10);
+    mPlayer->set_draw_distance(r_num(150.0, 500.0));
+    mAiManager->setMaxCritters(10);
   }
 
   // TODO: handle the ItemManager:
   // some items are persistent (i.e. what the player and his posse
   // are holding onto), the resdt should probably be destroyed
 
+}
+
+
+void game_c::destroyItemsOwnedByPhysicsAndAi() {
+  vector<size_t> itemList = mAiManager->getAllItemHandles();
+  mItemManager->destroyItemList(itemList);
+  itemList = mPhysics->getAllItemHandles();
+  mItemManager->destroyItemList(itemList);
+  mItemManager->trimItemsList();
 }
 
 
@@ -414,7 +446,7 @@ void game_c::gameLoop(void) {
 
     // take care of the input/menu
     if (mGameState == GAMESTATE_PLAY) {
-      mGameInput.update();
+      mGameInput->update();
 
       if (escapePressed) {
         quit = 1;
@@ -429,7 +461,7 @@ void game_c::gameLoop(void) {
       quit = handleMenuChoice(menuChoice);
     }
     else if (mGameState == GAMESTATE_MERCHANT) {
-      if (mMerchantView->update(mPlayer, mItemManager) != 0) {
+      if (mMerchantView->update(*mPlayer, *mItemManager) != 0) {
         delete mMerchantView;
         mMerchantView = NULL;
         mGameState = GAMESTATE_MENU;
@@ -448,14 +480,14 @@ void game_c::gameLoop(void) {
     // update the world
     // FIXME: this should be done in update ()
     // being done here ties it to the framerate
-    mLocation->update(mPhysics.getCenter(mPlayerPhysicsHandle));
+    mLocation->update(mPhysics->getCenter(mGameModel->physics->getPlayerHandle()));
 
     // HACK * * * * * * *
-    mPlayer.placeLight(*mLocation->getLightManager(), *mWorldMap, mGameInput);
+    mPlayer->placeLight(*mLocation->getLightManager(), *mLocation->getWorldMap());
 
     mWorldMapView.update(mAssetManager, *mLocation->getLightManager(), mCycleLighting);
 
-    if (mGameInput.isToggleWorldChunkBoxes()) {
+    if (mGameInput->isToggleWorldChunkBoxes()) {
       mWorldMapView.toggleShowWorldChunkBoxes();
     }
 
@@ -556,7 +588,7 @@ int game_c::handleMenuChoice(int menuChoice) {
 
   case GAMEMENU_MERCHANT:
     mMerchantView = new MerchantView();
-    mMerchantView->engageMerchant(mPlayer, mItemManager);
+    mMerchantView->engageMerchant(*mPlayer, *mItemManager);
     mGameState = GAMESTATE_MERCHANT;
     return 0;
 
@@ -586,10 +618,10 @@ bool game_c::update(void) {
   while (mLastUpdateTime < cur_time) {
 
     // update the physics objects
-    mNumPhysicsObjects = mPhysics.update(mLastUpdateTime, *mWorldMap, mAssetManager);
+    mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, *mLocation->getWorldMap(), mAssetManager);
 
     // apply the player physics/update with input
-    escapePressed = mPlayer.update(mLastUpdateTime, *mWorldMap, mPhysics, mGameInput, mAssetManager, mItemManager) || escapePressed;
+    escapePressed = mPlayer->update(*mLocation->getWorldMap(), mAssetManager, *mItemManager) || escapePressed;
     // FIXME: this is done like this so that the player
     // can catch an escape press (i.e. to get out of the
     // character sheet). this should be done differently
@@ -597,10 +629,10 @@ bool game_c::update(void) {
       return escapePressed;
     }
 
-    mAiManager.setPlayerFacingAndIncline(mPlayer.getFacingAndIncline());
+    mAiManager->setPlayerFacingAndIncline(mPlayer->getFacingAndIncline());
 
-    mNumAiObjects = mAiManager.update(mLastUpdateTime, *mWorldMap, mPhysics, mItemManager);
-    mNumItems = mItemManager.update(mPhysics);
+    mNumAiObjects = mAiManager->update(mLastUpdateTime, *mLocation->getWorldMap(), *mPhysics, *mItemManager);
+    mNumItems = mItemManager->update();
 
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
   }
@@ -608,7 +640,7 @@ bool game_c::update(void) {
   // this just updates colors/transparencies...
   // i.e. it doesn't have to be done with the PHYSICS_TIME_GRANULARITY
   // updates
-  mPhysicsView->update(mPhysics.getEntityVector(), mLastUpdateTime);
+  mPhysicsView->update(mPhysics->getEntityVector(), mLastUpdateTime);
 
   return escapePressed;
 }
@@ -620,7 +652,7 @@ int game_c::draw(double &time) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // get the camera from the player's perspective
-  gl_camera_c cam = mPlayer.gl_cam_setup();
+  gl_camera_c cam = mPlayer->gl_cam_setup();
 
   // we need this for the billboard sprites
   mPhysicsView->setViewPosition(cam.getPosition());
@@ -632,27 +664,27 @@ int game_c::draw(double &time) {
   mWorldMapView.drawSolidBlocks(cam, mAssetManager);
 
   // draw the solid physics objs
-  mPhysicsView->drawSolidEntities(mPhysics.getEntityVector(), *mWorldMap, mAssetManager);
+  mPhysicsView->drawSolidEntities(mPhysics->getEntityVector(), *mLocation->getWorldMap(), mAssetManager);
 
   drawPlayerTargetBlock();
 
-  mPlayer.drawEquipped(mItemManager, *mAssetManager.mGunBitmapModel);
+  mPlayer->drawEquipped(*mItemManager, mAssetManager);
 
   // draw the AI
-  mAiView->draw(*mWorldMap, mItemManager, *mLocation->getLightManager());
+  mAiView->draw(*mLocation->getWorldMap(), *mItemManager, *mLocation->getLightManager());
 
   // draw the transparent physics objs
-  bool playerHeadInWater = mPlayer.isHeadInWater();
-  mPhysicsView->drawTransparentEntities(mPhysics.getEntityVector(), mAssetManager, !playerHeadInWater);
+  bool playerHeadInWater = mPlayer->isHeadInWater();
+  mPhysicsView->drawTransparentEntities(mPhysics->getEntityVector(), mAssetManager, !playerHeadInWater);
 
   // draw the liquid/translucent blocks of the WorldMap
   mWorldMapView.drawLiquidBlocks(cam, mAssetManager);
 
   // draw the transparent physics objs
-  mPhysicsView->drawTransparentEntities(mPhysics.getEntityVector(), mAssetManager, playerHeadInWater);
+  mPhysicsView->drawTransparentEntities(mPhysics->getEntityVector(), mAssetManager, playerHeadInWater);
 
   // draw the hud
-  mPlayer.drawHud();
+  mPlayer->drawHud();
 
   if (mGameState == GAMESTATE_MENU) {
     mMenu->draw();
@@ -674,7 +706,7 @@ int game_c::draw(double &time) {
 void game_c::drawPlayerTargetBlock(void) {
   int targetFace;
 
-  v3di_t *playerTarg = mPlayer.getTargetBlock(targetFace);
+  v3di_t *playerTarg = mPlayer->getTargetBlock(targetFace);
 
   if (playerTarg == NULL) {
     return;
@@ -806,9 +838,9 @@ void game_c::save(void) {
   // ITEMS * * * * * * *
   file = fopen("save/items.dat", "wb");
   if (file != NULL) {
-    mItemManager.save(file);
+    mItemManager->save(file);
     // WARNING: this pertains to the player...
-    mPlayer.getInventory()->save(file);
+    mPlayer->getInventory()->save(file);
     fclose(file);
   }
 
@@ -872,15 +904,15 @@ int game_c::load(void) {
 
 //	physics_c mPhysics;	// save
   // PHYSICS * * * * * * *
-  mPhysics.set_pos(mPlayerPhysicsHandle, gameSaveData.physicsPos);
+  mPhysics->set_pos(mGameModel->physics->getPlayerHandle() , gameSaveData.physicsPos);
 
 //	ItemManager mItemManager;	// save
   // ITEMS * * * * * * *
   file = fopen("save/items.dat", "rb");
   if (file != NULL) {
-    mItemManager.load(file);
+    mItemManager->load(file);
     // WARNING: this pertains to the player...
-    mPlayer.getInventory()->load(file);
+    mPlayer->getInventory()->load(file);
     fclose(file);
   }
 
@@ -892,14 +924,14 @@ int game_c::saveGameData(void) {
   GameSaveData gameSaveData;
   gameSaveData.loadSucceeded = true;
 
-  gameSaveData.physicsPos = mPhysics.getNearCorner(mPlayerPhysicsHandle);
+  gameSaveData.physicsPos = mPhysics->getNearCorner(mGameModel->physics->getPlayerHandle());
   v3d_print("game_c::saveGameData(): saving playerPos, ", gameSaveData.physicsPos);
 
   gameSaveData.locationType = mLocation->getType();
   gameSaveData.planetHandle = mCurrentPlanet->mHandle;
 
   // now for the file stuff
-  FILE *file = fopen("save/game.dat", "wb");
+  FILE* file = fopen("save/game.dat", "wb");
   if (file == NULL) {
     return -1;
   }
@@ -911,7 +943,7 @@ int game_c::saveGameData(void) {
 
 GameSaveData game_c::loadGameData() {
   GameSaveData gameSaveData;
-  FILE *file = fopen("save/game.dat", "rb");
+  FILE* file = fopen("save/game.dat", "rb");
   if (file == NULL) {
     gameSaveData.loadSucceeded = false;
     return gameSaveData;
@@ -925,14 +957,14 @@ GameSaveData game_c::loadGameData() {
 void game_c::saveLocation() {
   // see if we need to save the current Location
   if (mLocation->getType() == LOCATION_SHIP) {
-    FILE *file = fopen("save/playership.dat", "wb");
+    FILE* file = fopen("save/playership.dat", "wb");
     mLocation->save(file);
-    fclose( file );
+    fclose(file);
   }
   else if (mCurrentPlanet != NULL) {
     char fileName[128];
     sprintf(fileName, "save/planet%d.dat", mCurrentPlanet->mHandle);
-    FILE *file = fopen(fileName, "wb");
+    FILE* file = fopen(fileName, "wb");
     mLocation->save(file);
     fclose(file);
   }

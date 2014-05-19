@@ -1,7 +1,8 @@
 #include "Physics.h"
 
 
-Physics::Physics() {
+Physics::Physics(GameModel* gameModel) {
+  mGameModel = gameModel;
 
   // * * * * * * * * * * * * * * * * * * *
   // lmao...this was getting a bit tedious
@@ -120,7 +121,7 @@ void Physics::manageEntitiesList() {
   }
 }
 
-size_t Physics::createEntity(int type, const v3d_t& position, double time, bool center) {
+size_t Physics::createEntity(int type, const v3d_t& position, bool center) {
   PhysicsEntity *e = NULL;
   e = new PhysicsEntity;
   if (e == NULL) {
@@ -160,7 +161,7 @@ size_t Physics::createEntity(int type, const v3d_t& position, double time, bool 
   // LIFESPAN
   e->lifespan = r_num(mEntityTypeInfo[type].lifespanLow, mEntityTypeInfo[type].lifespanHigh);
   if (e->lifespan >= 0.0) {
-    e->expirationTime = time + e->lifespan;
+    e->expirationTime = mLastUpdateTime + e->lifespan;
   }
   else {
     e->expirationTime = -1.0;
@@ -197,8 +198,8 @@ size_t Physics::createEntity(int type, const v3d_t& position, double time, bool 
   return e->handle;
 }
 
-size_t Physics::createEntity(int type, const v3d_t& position, const v3d_t& initialForce, double time, bool center) {
-  size_t handle = createEntity(type, position, time, center);
+size_t Physics::createEntity(int type, const v3d_t& position, const v3d_t& initialForce, bool center) {
+  size_t handle = createEntity(type, position, center);
   if (handle != 0) {
     int index = getIndexFromHandle(handle);
     obj[index]->force = initialForce;
@@ -206,8 +207,8 @@ size_t Physics::createEntity(int type, const v3d_t& position, const v3d_t& initi
   return handle;
 }
 
-size_t Physics::createAiEntity(int aiType, const v3d_t& position, double time) {
-  size_t handle = createEntity(OBJTYPE_AI_ENTITY, position, time, true);
+size_t Physics::createAiEntity(int aiType, const v3d_t& position) {
+  size_t handle = createEntity(OBJTYPE_AI_ENTITY, position, true);
   if (handle != 0) {
     int index = getIndexFromHandle(handle);
     obj[index]->aiType = aiType;
@@ -341,6 +342,7 @@ int Physics::update(double time, WorldMap& worldMap, AssetManager& assetManager)
   else {
     timeAdvanced = false;
   }
+  mLastUpdateTime = time;
 
   // step through the objects
   size_t numEntities = obj.size();
@@ -355,7 +357,7 @@ int Physics::update(double time, WorldMap& worldMap, AssetManager& assetManager)
 
     if (!mPaused || (mAdvanceOneFrame || obj[index]->handle == mPlayerHandle)) {
       // update that mofar
-      updateEntity(index, time, worldMap);
+      updateEntity(index, worldMap);
     }
 
     if (obj[index]->applyPhysics == false) {
@@ -387,7 +389,6 @@ int Physics::update(double time, WorldMap& worldMap, AssetManager& assetManager)
   // clean up the object list if possible
   manageEntitiesList();
   mAdvanceOneFrame = false;
-  mLastUpdateTime = time;
 
   if (timeAdvanced) {
     addQueuedEntities();
@@ -396,14 +397,14 @@ int Physics::update(double time, WorldMap& worldMap, AssetManager& assetManager)
   // play the sounds
   playSoundEvents(assetManager);
 
-  return static_cast<int>(obj.size());
+  return (int)obj.size();
 }
 
-void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
+void Physics::updateEntity(size_t index, WorldMap& worldMap) {
   PhysicsEntity *physicsEntity = obj[index];
 
-  if ((physicsEntity->expirationTime < time) && (obj[index]->expirationTime >= 0.0)) {
-    expireEntity(index, time, worldMap);
+  if ((physicsEntity->expirationTime < mLastUpdateTime) && (obj[index]->expirationTime >= 0.0)) {
+    expireEntity(index, worldMap);
     return;
   }
 
@@ -414,7 +415,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
      physicsEntity->type == OBJTYPE_FIRE ||
      physicsEntity->type == OBJTYPE_SPARK))
   {
-    expireEntity(index, time, worldMap);
+    expireEntity(index, worldMap);
     return;
   }
 
@@ -433,7 +434,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
     {
       v3di_t pos = v3di_v(physicsEntity->boundingBox.getCenterPosition());
       worldMap.clearBlock(pos);
-      expireEntity(index, time, worldMap);
+      expireEntity(index, worldMap);
       return;
     }
   }
@@ -443,7 +444,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
   if (physicsEntity->type == OBJTYPE_AI_ENTITY) {
     // check if AI is dead
     if (physicsEntity->health < -5.0) {
-      expireEntity (index, time, worldMap);
+      expireEntity (index, worldMap);
       return;
     }
   }
@@ -451,7 +452,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
   // kill it if it's fallen too far
   // FIXME: hack, really
   if (physicsEntity->type != OBJTYPE_PLAYER && physicsEntity->pos.y < SEA_FLOOR_HEIGHT - 1000.0) {
-    expireEntity(index, time, worldMap);
+    expireEntity(index, worldMap);
     return;
   }
 
@@ -459,7 +460,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
   physicsEntity->acc = calculateAcceleration (index);
 
   if (physicsEntity->applyPhysics) {
-    integrate_euler (index, time, worldMap);
+    integrate_euler (index, worldMap);
   }
 
   size_t otherHandle;
@@ -470,7 +471,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
   switch (physicsEntity->type) {
     case OBJTYPE_NAPALM:
       if (r_numi(0, 100) == 0) {
-        otherHandle = createEntity(OBJTYPE_FIRE, physicsEntity->pos, time, false);
+        otherHandle = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
         otherIndex = getIndexFromHandle(otherHandle);
         if (otherIndex >= 0) {
           obj[otherIndex]->owner = physicsEntity->owner;
@@ -486,7 +487,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
     case OBJTYPE_DEAD_BULLET:
     case OBJTYPE_LIVE_BULLET:
       if (r_numi(0, 100) == 0) {
-        otherHandle = createEntity (OBJTYPE_STEAM, physicsEntity->pos, time, false);
+        otherHandle = createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
         otherIndex = getIndexFromHandle (otherHandle);
         if (otherIndex >= 0) {
           obj[otherIndex]->color[3] = 0.2f;
@@ -496,7 +497,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
 
     case OBJTYPE_ROCKET:
       if (r_numi (0, 4) == 0) {
-        otherHandle = createEntity (OBJTYPE_FIRE, physicsEntity->pos, time, false);
+        otherHandle = createEntity (OBJTYPE_FIRE, physicsEntity->pos, false);
         otherIndex = getIndexFromHandle (otherHandle);
         if (otherIndex >= 0) {
           obj[otherIndex]->owner = physicsEntity->owner;
@@ -507,10 +508,10 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
 
     case OBJTYPE_PLASMA_BOMB:
       for (int i = 0; i < rnum; i++) {
-        otherHandle = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), time, true);
+        otherHandle = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
         setVelocity(otherHandle, v3d_random(0.5));
       }
-      createEntity(OBJTYPE_PLASMA_TRAIL, physicsEntity->boundingBox.getCenterPosition(), time, true);
+      createEntity(OBJTYPE_PLASMA_TRAIL, physicsEntity->boundingBox.getCenterPosition(), true);
       break;
 
     case OBJTYPE_AI_ENTITY:
@@ -518,7 +519,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
       break;
 
     case OBJTYPE_PLAYER:
-      physicsEntity->health += worldMap.getHealthEffects (physicsEntity->boundingBox);
+      physicsEntity->health += worldMap.getHealthEffects(physicsEntity->boundingBox);
       break;
 
     default:
@@ -526,7 +527,7 @@ void Physics::updateEntity(size_t index, double time, WorldMap& worldMap) {
   }
 }
 
-void Physics::expireEntity(size_t index, double time, WorldMap& worldMap) {
+void Physics::expireEntity(size_t index, WorldMap& worldMap) {
   PhysicsEntity *physicsEntity = obj[index];
   size_t newHandle, newIndex;
   v3d_t pos;
@@ -534,7 +535,7 @@ void Physics::expireEntity(size_t index, double time, WorldMap& worldMap) {
 
   switch (physicsEntity->type) {
     case OBJTYPE_FIRE:
-      newHandle = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, time, false);
+      newHandle = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, false);
 
       if (newHandle != 0) {
         newIndex = getIndexFromHandle(newHandle);
@@ -553,26 +554,26 @@ void Physics::expireEntity(size_t index, double time, WorldMap& worldMap) {
       v3d_t force;
       for (size_t i = 0; i < 10; i++) {
         force = v3d_v(r_num(-5., 5.0), r_num(-5.0, 5.0), r_num(-5.0, 5.0));
-        createEntity(OBJTYPE_SMOKE, pos, force, time, false);
+        createEntity(OBJTYPE_SMOKE, pos, force, false);
       }
       break;
 
     case OBJTYPE_ROCKET:
     case OBJTYPE_GRENADE:
-      grenadeExplosion(index, time, worldMap);
+      grenadeExplosion(index, worldMap);
       break;
 
     case OBJTYPE_PLASMA:
-      plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), time, 5, worldMap);
+      plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), 5, worldMap);
       break;
 
     case OBJTYPE_PLASMA_BOMB:
-      plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), time, 30, worldMap);
+      plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), 30, worldMap);
       break;
 
     case OBJTYPE_AI_ENTITY:
       if (physicsEntity->health <= 0.0) {
-        spawnMeatExplosion(physicsEntity->boundingBox.getCenterPosition(), time + PHYSICS_TIME_GRANULARITY, 15, worldMap);
+        spawnMeatExplosion(physicsEntity->boundingBox.getCenterPosition(), 100, worldMap);
       }
       break;
 
@@ -744,7 +745,7 @@ v3d_t Physics::calculateAcceleration(size_t index) {
   return acc;
 }
 
-void Physics::integrate_euler(size_t index, double time, WorldMap& worldMap) {
+void Physics::integrate_euler(size_t index, WorldMap& worldMap) {
   PhysicsEntity *physicsEntity = obj[index];
   if (physicsEntity->type == OBJTYPE_MELEE_ATTACK) {
     return;
@@ -1206,7 +1207,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index, WorldMap& worldMa
           if (r_numi(0, 5) == 3) {
             v3d_t position = v3d_add(otherPhysicsEntity->pos, v3d_scale(t0, otherPhysicsEntity->displacement));
 //						printf ("BLOOD!\n");
-            createEntity(OBJTYPE_BLOOD_SPRAY, position, mLastUpdateTime, false);
+            createEntity(OBJTYPE_BLOOD_SPRAY, position, false);
           }
 
           double damage = otherPhysicsEntity->impactDamage;
@@ -1238,7 +1239,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index, WorldMap& worldMa
       else if (otherPhysicsEntity->type == OBJTYPE_GRENADE ||
            otherPhysicsEntity->type == OBJTYPE_ROCKET) {
         if (sweepObjects (index, other, t0, t1, axis)) {
-          expireEntity (other, mLastUpdateTime, worldMap);
+          expireEntity (other, worldMap);
 
           double damage = otherPhysicsEntity->impactDamage;
           physicsEntity->health -= damage;
@@ -1259,13 +1260,13 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index, WorldMap& worldMa
       else if (otherPhysicsEntity->type == OBJTYPE_PLASMA_BOMB) {
         if (sweepObjects(index, other, t0, t1, axis)) {
           v3d_t position = v3d_add(otherPhysicsEntity->boundingBox.getCenterPosition(), v3d_scale(t0, otherPhysicsEntity->displacement));
-          plasmaBombExplode (position, mLastUpdateTime + PHYSICS_TIME_GRANULARITY, 10, worldMap);
+          plasmaBombExplode(position, 10, worldMap);
 
           physicsEntity->force = v3d_add(physicsEntity->force, v3d_scale(10.0 * physicsEntity->mass, otherPhysicsEntity->vel));
 
           for (int blood = 0; blood < 5; blood++) {
             v3d_t bloodForce = v3d_random (75.0);
-            createEntity (OBJTYPE_BLOOD_SPRAY, position, bloodForce, mLastUpdateTime, true);
+            createEntity(OBJTYPE_BLOOD_SPRAY, position, bloodForce, true);
           }
 
           double damage = otherPhysicsEntity->impactDamage;
@@ -1289,7 +1290,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index, WorldMap& worldMa
       else if (otherPhysicsEntity->type == OBJTYPE_MELEE_ATTACK) {
         if (otherPhysicsEntity->boundingBox.isIntersecting(physicsEntity->boundingBox)) {
           v3d_t otherPosition = otherPhysicsEntity->boundingBox.getCenterPosition();
-          createEntity(OBJTYPE_BLOOD_SPRAY, otherPosition, mLastUpdateTime, false);
+          createEntity(OBJTYPE_BLOOD_SPRAY, otherPosition, false);
 
           double damage = otherPhysicsEntity->impactDamage;
           physicsEntity->health -= damage;
@@ -1552,14 +1553,14 @@ void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index 
             switch (physicsEntity->type) {
               case OBJTYPE_SPARK:
                 if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, mLastUpdateTime, false);
+                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = mLastUpdateTime;
                 }
                 break;
 
               case OBJTYPE_NAPALM:
                 if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, mLastUpdateTime, false);
+                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = mLastUpdateTime;
                 }
                 else {
@@ -1571,7 +1572,7 @@ void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index 
               case OBJTYPE_LIVE_BULLET:
               case OBJTYPE_DEAD_BULLET:
                 if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, mLastUpdateTime, false);
+                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = 0.1;
                 }
                 else if (block->type == BLOCK_TYPE_DIRT ||
@@ -1584,7 +1585,7 @@ void Physics::clip_displacement_against_world( WorldMap& worldMap, size_t index 
                   block->type == BLOCK_TYPE_LEAVES ||
                   block->type == BLOCK_TYPE_SAND)
                 {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, mLastUpdateTime, false);
+                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = 0.1;
 //									physicsEntity->vel = v3d_zero ();
 //									physicsEntity->applyPhysics = false;
@@ -1654,16 +1655,16 @@ bool Physics::isHandleOnGround(size_t handle) const {
 }
 
 
-void Physics::grenadeExplosion( size_t index, double time, WorldMap& worldMap ) {
+void Physics::grenadeExplosion( size_t index, WorldMap& worldMap ) {
   PhysicsEntity *physicsEntity = obj[index];
   v3d_t centerPosition = physicsEntity->boundingBox.getCenterPosition ();
 
   addSoundEvent (SOUND_GRENADE_EXPLOSION, centerPosition);
   
   for (int i = 0; i < physicsEntity->numParticles; i++) {
-    v3d_t randomPosition = v3d_add (centerPosition, v3d_random (0.5));
-    size_t shrapnelHandle = createEntity (physicsEntity->type2, randomPosition, time, true);
-    int shrapnelIndex = getIndexFromHandle (shrapnelHandle);
+    v3d_t randomPosition = v3d_add(centerPosition, v3d_random (0.5));
+    size_t shrapnelHandle = createEntity(physicsEntity->type2, randomPosition, true);
+    int shrapnelIndex = getIndexFromHandle(shrapnelHandle);
     if (shrapnelIndex > 0) {
       obj[shrapnelIndex]->owner = physicsEntity->owner;
       obj[shrapnelIndex]->impactDamage = physicsEntity->impactDamage;
@@ -1677,7 +1678,7 @@ void Physics::grenadeExplosion( size_t index, double time, WorldMap& worldMap ) 
     worldMap.clearSphere (centerPosition, clearRadius);
   }
 
-  size_t explosionHandle = createEntity (OBJTYPE_EXPLOSION, centerPosition, time, true);
+  size_t explosionHandle = createEntity(OBJTYPE_EXPLOSION, centerPosition, true);
 
   // FIXME: hack!
   if (explosionHandle > 0) {
@@ -1691,21 +1692,21 @@ void Physics::grenadeExplosion( size_t index, double time, WorldMap& worldMap ) 
 
 
 
-void Physics::spawnExplosion(const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap) {
+void Physics::spawnExplosion(const v3d_t& pos, size_t numParticles, WorldMap& worldMap) {
   addSoundEvent (SOUND_GRENADE_EXPLOSION, pos);
 
   for (size_t i = 0; i < numParticles - 10; i++) {
-    createEntity (OBJTYPE_SPARK, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), time, true);
+    createEntity(OBJTYPE_SPARK, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
   int num_napalms = r_numi(5, 10);
   for (size_t i = 0; i < static_cast<size_t>(num_napalms); i++) {
-    createEntity(OBJTYPE_NAPALM, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), time, true);
+    createEntity(OBJTYPE_NAPALM, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
   worldMap.clearSphere(pos, 2.5);
 
-  size_t handle = createEntity(OBJTYPE_EXPLOSION, pos, time, true);
+  size_t handle = createEntity(OBJTYPE_EXPLOSION, pos, true);
   // FIXME: hack!
   if (handle != 0) {
     int index = getIndexFromHandle(handle);
@@ -1715,27 +1716,26 @@ void Physics::spawnExplosion(const v3d_t& pos, double time, size_t numParticles,
   }
 }
 
-void Physics::spawnMeatExplosion(const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap) {
+void Physics::spawnMeatExplosion(const v3d_t& pos, size_t numParticles, WorldMap& worldMap) {
   addSoundEvent(SOUND_SPLAT, pos);
 
-  for (size_t i = 0; i < numParticles - 10; i++) {
-    createEntity(OBJTYPE_BLOOD_SPRAY, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), time, true);
+  for (size_t i = 0; i < numParticles; i++) {
+    createEntity(OBJTYPE_BLOOD_SPRAY, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
-  size_t handle = createEntity(OBJTYPE_EXPLOSION, pos, time, true);
-
-  // FIXME: hack!
+  // put a minor explosion in the middle of all that meat
+  size_t handle = createEntity(OBJTYPE_EXPLOSION, pos, true);
   if (handle != 0) {
     int index = getIndexFromHandle(handle);
-    PhysicsEntity *physicsEntity = obj[index];
+    PhysicsEntity* physicsEntity = obj[index];
     physicsEntity->applyPhysics = false;
-    physicsEntity->explosionForce = 250.0;
+    physicsEntity->explosionForce = 350.0;
   }
 }
 
-void Physics::plasmaBombExplode(const v3d_t& pos, double time, size_t numParticles, WorldMap& worldMap) {
+void Physics::plasmaBombExplode(const v3d_t& pos, size_t numParticles, WorldMap& worldMap) {
   for (size_t i = 0; i < numParticles; i++) {
-    size_t handle = createEntity (OBJTYPE_PLASMA_SPARK, pos, time, true);
+    size_t handle = createEntity(OBJTYPE_PLASMA_SPARK, pos, true);
 
     if (handle != 0) {
       int index = getIndexFromHandle(handle);

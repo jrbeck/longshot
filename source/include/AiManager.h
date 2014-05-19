@@ -19,6 +19,8 @@
 
 #include "v3d.h"
 
+#include "GameModel.h"
+
 #include "World.h"
 #include "Physics.h"
 #include "ItemManager.h"

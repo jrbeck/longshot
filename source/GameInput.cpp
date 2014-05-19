@@ -1,17 +1,17 @@
 #include "GameInput.h"
 
-GameInput::GameInput (void) {
+GameInput::GameInput() {
   reset ();
 }
 
 
 
-GameInput::~GameInput (void) {
+GameInput::~GameInput() {
 }
 
 
 
-void GameInput::reset (void) {
+void GameInput::reset() {
   mMouseSensitivity = 0.004;
 
   mFacingDelta = 0.0;
@@ -312,7 +312,7 @@ bool GameInput::isToggleWorldChunkBoxes (void) {
 
 
 // handle an SDL_Event
-int GameInput::update (void) {
+int GameInput::update() {
   SDL_Event sdlEvent;
 
   int quit = 0;
@@ -347,11 +347,11 @@ int GameInput::update (void) {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDownEvent (sdlEvent.button.button, v2d_v (sdlEvent.button.x, SCREEN_H - sdlEvent.button.y));
+        handleMouseButtonDownEvent(sdlEvent.button.button);
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUpEvent (sdlEvent.button.button, v2d_v(sdlEvent.button.x, SCREEN_H - sdlEvent.button.y));
+        handleMouseButtonUpEvent(sdlEvent.button.button);
         break;
 
       case SDL_MOUSEWHEEL:
@@ -496,7 +496,7 @@ int GameInput::handleKeyUpEvent (int key) {
 
 
 // deal with a mouse button down event
-void GameInput::handleMouseButtonDownEvent (int button, v2d_t pos) {
+void GameInput::handleMouseButtonDownEvent (int button) {
   switch (button) {
     case SDL_BUTTON_LEFT:
       mUsePrimary = true;
@@ -516,7 +516,7 @@ void GameInput::handleMouseButtonDownEvent (int button, v2d_t pos) {
 
 
 // deal with a mouse button up event
-void GameInput::handleMouseButtonUpEvent (int button, v2d_t pos) {
+void GameInput::handleMouseButtonUpEvent (int button) {
   switch (button) {
     case SDL_BUTTON_LEFT:
       mUsePrimary = false;

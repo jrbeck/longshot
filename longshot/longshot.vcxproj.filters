@@ -309,6 +309,9 @@
     <ClCompile Include="..\source\GameMenu.cpp">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\GameModel.cpp">
+      <Filter>Source Files\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -547,6 +550,9 @@
     </ClInclude>
     <ClInclude Include="..\source\include\GameMenu.h">
       <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\GameModel.h">
+      <Filter>Header Files\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
