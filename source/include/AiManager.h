@@ -26,6 +26,7 @@
 #include "ItemManager.h"
 #include "AiEntity.h"
 
+class AiEntity;
 
 class AiManager {
 public:

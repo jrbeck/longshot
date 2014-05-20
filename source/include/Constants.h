@@ -178,12 +178,30 @@ enum {
 
 
 
-typedef struct {
+struct block_t {
   BYTE type;
   BYTE faceVisibility;
   BYTE faceLighting[6][3];
   BYTE uniqueLighting;
-} block_t;
+};
+
+
+
+struct melee_weapon_state_t {
+  int weaponHandle;
+
+  v3d_t headPosition;
+  v3d_t handPosition;
+
+  double facing;
+  double incline;
+
+  int swingMode;
+  double swingStart;
+  double swingTime;
+
+  bool hasUsed;
+};
 
 
 

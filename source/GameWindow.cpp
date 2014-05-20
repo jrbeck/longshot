@@ -26,11 +26,11 @@ GameWindow::GameWindow(const char* windowTitle) :
     mDesktopMode.fullscreen = true;
   }
 
-  mWindowedMode.screen_w = 320;
-  mWindowedMode.screen_h = 240;
+//  mWindowedMode.screen_w = 320;
+//  mWindowedMode.screen_h = 240;
 
-//  mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
-//  mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
+  mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
+  mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
   mWindowedMode.fullscreen = false;
 
   if (setVideoMode(mWindowedMode)) {

@@ -5,7 +5,8 @@ WorldMap::WorldMap() :
   mZWidth(0),
   mNumColumns(0),
   mColumns(NULL),
-  mPeriodics(NULL)
+  mPeriodics(NULL),
+  mUpdateLightingContinuously(false)
 {
   mWorldLightingFloor = LIGHT_LEVEL_MIN; // + 8;
   mWorldLightingCeiling = LIGHT_LEVEL_MAX - 8;

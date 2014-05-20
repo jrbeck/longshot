@@ -52,7 +52,9 @@ enum {
 
 #define DEFAULT_BACKPACK_SIZE	(15)
 
-
+class ItemManager;
+struct item_t;
+class Inventory;
 
 class player_c {
 public:

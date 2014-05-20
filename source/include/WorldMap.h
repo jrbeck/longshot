@@ -26,14 +26,12 @@
 #include "InactiveColumnManager.h"
 #include "OverdrawManager.h"
 
-
-
 class WorldMap {
 private:
   // copy constructor guard
-  WorldMap(const WorldMap &worldMap) : mInactiveColumnManager(WORLD_CHUNK_SIDE) { }
+  WorldMap(const WorldMap& worldMap) : mInactiveColumnManager(WORLD_CHUNK_SIDE) { }
   // assignment operator guard
-  WorldMap &operator=(const WorldMap &worldMap) { return *this; }
+  WorldMap &operator=(const WorldMap& worldMap) { return *this; }
 
 public:
   WorldMap();
@@ -72,8 +70,7 @@ public:
   double getViscosity(const BoundingBox& boundingBox) const;
   double getHealthEffects(const BoundingBox& boundingBox) const;
 
-  // this method swaps values, so does not take references
-  void fillVolume(v3di_t a, v3di_t b, int blockType);
+  void fillVolume(v3di_t a, v3di_t b, int blockType); // this method swaps values, so does not take references
   int fillSphere(const v3d_t& pos, double radius, int blockType, BYTE uniqueLighting);
   int clearSphere(const v3d_t& pos, double radius);
 
@@ -94,15 +91,15 @@ public:
   int countLiquidNeighbors(int blockType, const v3di_t& worldPosition) const;
 
   // TODO: should this be merged with the InactiveColumnManager?
-  int save(FILE *file);
-  int load(FILE *file);
+  int save(FILE* file);
+  int load(FILE* file);
   void swapOutToInactive();
   void saveToInactive();
 
   // these are really utility functions...I imagine they should
   // be moved out of this class?
   bool lineOfSight(const v3d_t& a, const v3d_t& b) const;
-  bool rayCastSolidBlock(const v3d_t &a, const v3d_t &b, v3di_t &hitPosition, int &face) const;
+  bool rayCastSolidBlock(const v3d_t& a, const v3d_t& b, v3di_t& hitPosition, int& face) const;
 
 
 // MEMBERS * * * * * * * * * * *
@@ -111,11 +108,15 @@ public:
   int mZWidth;
 
   int mNumColumns;
-
   WorldColumn* mColumns;
 
   BYTE mWorldLightingFloor;
   BYTE mWorldLightingCeiling;
+
+  // i feel like this should really be in Location, but since
+  // WorldMapView is what uses it, and WorldMapView doesn't have
+  // logical access to a Location, i'm leaving this here for now
+  bool mUpdateLightingContinuously;
 
   // this is used to track which columns have changed
   // so that the fluid sim can be updated...yuck!

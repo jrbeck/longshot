@@ -10,12 +10,15 @@
 
 #pragma once
 
+#include <vector>
+
 #include "GameModel.h"
 
 #include "Physics.h"
 #include "MathUtil.h"
 #include "ObjectLoader.h"
 
+#include "Constants.h"
 
 #define ITEM_NAME_LENGTH	64
 
@@ -49,24 +52,6 @@ typedef struct {
   double incline;
 
 } shot_info_t;
-
-
-typedef struct {
-  int weaponHandle;
-
-  v3d_t headPosition;
-  v3d_t handPosition;
-
-  double facing;
-  double incline;
-
-  int swingMode;
-  double swingStart;
-  double swingTime;
-
-  bool hasUsed;
-} melee_weapon_state_t;
-
 
 
 //enum {
@@ -104,6 +89,10 @@ struct item_t {
   double mass;
 };
 
+
+
+class GameModel;
+class AssetManager;
 
 
 class ItemManager {

@@ -8,10 +8,8 @@
 
 game_c::game_c(GameWindow* gameWindow) :
   mGalaxy(NULL),
-  mLocation(NULL),
   mAiView(NULL),
   mPhysicsView(NULL),
-  mCurrentPlanet(NULL),
   mMenu(NULL),
   mMerchantView(NULL)
 {
@@ -52,7 +50,6 @@ game_c::~game_c() {
   if (mGameInput != NULL) {
     delete mGameInput;
   }
-
   if (mAiManager != NULL) {
     delete mAiManager;
   }
@@ -68,9 +65,6 @@ game_c::~game_c() {
   if (mGalaxy != NULL) {
     delete mGalaxy;
   }
-  if (mLocation != NULL) {
-    delete mLocation;
-  }
   if (mAiView != NULL) {
     delete mAiView;
   }
@@ -83,7 +77,6 @@ game_c::~game_c() {
   if (mMerchantView != NULL) {
     delete mMerchantView;
   }
-
   if (mGameModel != NULL) {
     delete mGameModel;
   }
@@ -127,8 +120,8 @@ void game_c::loadShipMenu() {
   mMenu->addButton(v2d_v(0.80, 0.15), v2d_v(0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
   mMenu->addButton(v2d_v(0.80, 0.3), v2d_v(0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
 
-  if (mCurrentPlanet != NULL) {
-    sprintf(mPlanetNameString, "orbiting planet: %d", mCurrentPlanet->mHandle);
+  if (mGameModel->currentPlanet != NULL) {
+    sprintf(mPlanetNameString, "orbiting planet: %d", mGameModel->currentPlanet->mHandle);
   }
   else {
     sprintf(mPlanetNameString, "orbiting planet: NULL");
@@ -190,16 +183,18 @@ int game_c::enter_game_mode(bool createNewWorld) {
     printf("game_c::enter_game_mode(): new game\n");
     deleteAllFilesInFolder(TEXT("save"));
 
-    mCurrentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
-
-    mLocation = new StarShip();
-    initSpaceShip(true);
+    mGameModel->currentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
+    mGameModel->initializeSpaceShip(true);
+    // load the appropriate menu
+    loadShipMenu();
   }
   else {
     printf("game_c::enter_game_mode(): loading game\n");
-    load();
+    mGameModel->load(mGameWindow);
+    loadPlanetMenu();
   }
 
+  initializeWorldViews();
 
   // grab the cursor
   SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -215,10 +210,10 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
   // FIXME: this is temporary ... since we aren't
   // saving the AI, we need to eliminate their items
-  destroyItemsOwnedByPhysicsAndAi();
+  mGameModel->destroyItemsOwnedByPhysicsAndAi();
 
   // save the current game state
-  save();
+  mGameModel->save();
 
   // DONE WITH THIS ROUND FOLKS * * * * * * *
   mAiManager->clear();
@@ -228,184 +223,50 @@ int game_c::enter_game_mode(bool createNewWorld) {
   mAssetManager.mSoundSystem.stopAllSounds();
 
   printf("%6d: exiting GAME mode ----------------\n\n", SDL_GetTicks());
-  printf("world seed: %d\n", mWorldSeed);
+  printf("world seed: %d\n", mGameModel->worldSeed);
 
   return 0;
 }
 
 
-void game_c::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces) {
-  printf("game_c::initializePlanet()\n");
 
-  FILE *file = NULL;
-  mCurrentPlanet = planet;
-  v3d_t playerStartPosition;
 
-  // gotta do some kinda loading thingie
-  LoadScreen* loadScreen = new LoadScreen(mGameWindow);
-  loadScreen->setCompletedColor(LOAD_SCREEN_LIGHT_PURPLE);
-  loadScreen->setIncompletedColor(LOAD_SCREEN_DARK_PURPLE);
-  loadScreen->show();
+void game_c::initializeWorldViews() {
+  // worldmap
 
-  // this is just a generic planet
-  if (planet == NULL) {
-    mWorldSeed = SDL_GetTicks();
-    printf("world seed: %d\n", mWorldSeed);
-  }
-  else {
-    // try to open the file for this planet
-    printf("game_c::initializePlanet(): loading planet\n");
-    char fileName[48];
-    sprintf(fileName, "save/planet%d.dat", planet->mHandle);
-    printf("game_c::initializePlanet(): trying to load file: %s\n", fileName);
-    file = fopen(fileName, "rb");
-    mWorldSeed = planet->mSeed;
-  }
-
-  if (startPos != NULL) {
-    v3d_print("game_c::initializePlanet(): setting startPos, ", *startPos);
-    static_cast<World*>(mLocation)->setStartPosition(*startPos);
-    playerStartPosition.x = startPos->x;
-    playerStartPosition.y = startPos->y;
-    playerStartPosition.z = startPos->z;
-  }
-
-  printf("game_c::initializePlanet(): initializing location\n");
-  mLocation->initialize(file, mGalaxy, planet->mHandle);
-  if (file != NULL) {
-    fclose(file);
-  }
-
-  if (startPos == NULL) {
-    playerStartPosition = mLocation->getStartPosition();
-  }
-  else if (createSetPieces) {
-    printf("game_c::initializePlanet(): creating set pieces\n");
-    v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
-    FeatureGenerator::createSetPieces(
-      worldIndex.x,
-      worldIndex.z,
-      *static_cast<World*>(mLocation),
-      loadScreen);
-  }
-
-  loadScreen->setCompletedColor(LOAD_SCREEN_LIGHT_GREEN);
-  loadScreen->setIncompletedColor(LOAD_SCREEN_DARK_GREEN);
-  // this needs to be done after the lighting info has been set
-  static_cast<World*>(mLocation)->preloadColumns(NUM_PRELOADED_COLUMNS, playerStartPosition, loadScreen);
-
-  loadScreen->hide();
-  delete loadScreen;
-
-  // load the appropriate menu
-  loadPlanetMenu();
-
-  mCycleLighting = true;
-
-  resetForNewLocation(playerStartPosition, resetPlayer);
-}
-
-void game_c::initSpaceShip(bool resetPlayer) {
-  FILE *file = fopen("save/playership.dat", "rb");
-  // this decides whose map we're gonna render/interact with
-
-  mLocation->initialize(file, mGalaxy, mCurrentPlanet->mHandle);
-  if (file != NULL) {
-    fclose(file);
-  }
-
-  // make a physical entity to represent the player
-  v3d_t playerStartPosition = { 12.5, 1.1, 50.0 };
-
-  // load the appropriate menu
-  loadShipMenu();
-
-  mCycleLighting = false;
-
-  resetForNewLocation(playerStartPosition, resetPlayer);
-}
-
-void game_c::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
   // we need to give it an ambient light color
   IntColor sunColor;
-  if (mLocation->getType() == LOCATION_SHIP) {
+  if (mGameModel->location->getType() == LOCATION_SHIP) {
     sunColor.r = LIGHT_LEVEL_MAX;
     sunColor.g = LIGHT_LEVEL_MAX;
     sunColor.b = LIGHT_LEVEL_MAX;
   }
   else {
-    GLfloat* starColor = mGalaxy->getStarSystemByHandle(mCurrentPlanet->mHandle)->mStarColor;
+    GLfloat* starColor = mGameModel->galaxy->getStarSystemByHandle(mGameModel->currentPlanet->mHandle)->mStarColor;
     sunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
   }
-  mWorldMapView.setWorldMap(mLocation->getWorldMap(), sunColor);
 
+  mWorldMapView.setWorldMap(mGameModel->location->getWorldMap(), sunColor);
 
-  // let's handle the items first...
-  // FIXME: this is temporary
-  destroyItemsOwnedByPhysicsAndAi();
-
-  // reset this to be safe
-  mPhysics->reset();
-
-  // create a new PhysicsView
+  // physics
   if (mPhysicsView != NULL) {
     delete mPhysicsView;
   }
   mPhysicsView = new PhysicsView();
 
-  // make a physical entity to represent the player
-  // FIXME: make sure this succeeds you knucklehead!
-//  _assert(mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, 0.0, false) != 0);
-  mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, false) != 0;
-  printf("player physics handle: %d\n", mPhysics->getPlayerHandle());
-
-  // load the pre-generated physics items
-  mPhysics->loadInactiveList();
-
-  // AI
-  mAiManager->clear();
+  // ai
   if (mAiView != NULL) {
     delete mAiView;
   }
   mAiView = new AiView();
-  mAiView->setAiEntities(mAiManager->getEntities());
-  mPlayerAiHandle = mAiManager->setPlayerPhysicsHandle();
-
-
-  // reset the player
-  if (resetPlayer) {
-    mPlayer->reset(mGameModel->physics->getPlayerHandle(), mPlayerAiHandle, *mItemManager);
-  }
-  mPlayer->setStartPosition(playerStartPosition);
-  mPlayer->soft_reset(playerStartPosition);
-
-
-  // FIXME: this is really a hack...
-  if (mLocation->getType() == LOCATION_SHIP) {
-    mPlayer->set_draw_distance(500.0);
-    mAiManager->setMaxCritters(0);
-  }
-  else {
-    mPlayer->set_draw_distance(r_num(150.0, 500.0));
-    mAiManager->setMaxCritters(10);
-  }
-
-  // TODO: handle the ItemManager:
-  // some items are persistent (i.e. what the player and his posse
-  // are holding onto), the rest should probably be destroyed
-
+  mAiView->setAiEntities(mGameModel->aiManager->getEntities());
 }
 
-void game_c::destroyItemsOwnedByPhysicsAndAi() {
-  vector<size_t> itemList = mAiManager->getAllItemHandles();
-  mItemManager->destroyItemList(itemList);
-  itemList = mPhysics->getAllItemHandles();
-  mItemManager->destroyItemList(itemList);
-  mItemManager->trimItemsList();
-}
+
+
 
 void game_c::gameLoop() {
   printf("game_c::gameLoop() - begin\n");
@@ -465,12 +326,12 @@ void game_c::gameLoop() {
     // update the world
     // FIXME: this should be done in update ()
     // being done here ties it to the framerate
-    mLocation->update(mPhysics->getCenter(mGameModel->physics->getPlayerHandle()));
+    mGameModel->location->update(mPhysics->getCenter(mGameModel->physics->getPlayerHandle()));
 
     // HACK * * * * * * *
-    mPlayer->placeLight(*mLocation->getLightManager(), *mLocation->getWorldMap());
+    mPlayer->placeLight(*mGameModel->location->getLightManager(), *mGameModel->location->getWorldMap());
 
-    mWorldMapView.update(mAssetManager, *mLocation->getLightManager(), mCycleLighting);
+    mWorldMapView.update(mAssetManager, *mGameModel->location->getLightManager());
 
     if (mGameInput->isToggleWorldChunkBoxes()) {
       mWorldMapView.toggleShowWorldChunkBoxes();
@@ -518,28 +379,28 @@ int game_c::handleMenuChoice(int menuChoice) {
 
   case GAMEMENU_SHIP:
     // ignore if we're already on the ship
-    if (mLocation->getType() != LOCATION_SHIP) {
-      saveLocation();
-      delete mLocation;
-
-      mLocation = new StarShip();
-      initSpaceShip(false);
+    if (mGameModel->location->getType() != LOCATION_SHIP) {
+      mGameModel->saveLocation();
+      mGameModel->initializeSpaceShip(false);
+      initializeWorldViews();
+      // load the appropriate menu
+      loadShipMenu();
     }
     break;
 
   case GAMEMENU_GALAXY_MAP:
     galaxyMap = new GalaxyMap(mGameWindow);
-    galaxyMap->enterViewMode(mGalaxy, mCurrentPlanet);
+    galaxyMap->enterViewMode(mGalaxy, mGameModel->currentPlanet);
 
     if (galaxyMap->mResult.action == ACTION_WARP) {
-      mCurrentPlanet = galaxyMap->mResult.planet;
-      printf("-----------\nwarp to world: %d\n", mCurrentPlanet->mHandle);
+      mGameModel->currentPlanet = galaxyMap->mResult.planet;
+      printf("-----------\nwarp to world: %d\n", mGameModel->currentPlanet->mHandle);
 
       // need to reload this to reflect the change in orbit
       loadShipMenu();
 
       // change our orbit location
-      static_cast<StarShip*>(mLocation)->mOrbitSky->setOrbit(*mGalaxy, mCurrentPlanet->mHandle);
+      static_cast<StarShip*>(mGameModel->location)->mOrbitSky->setOrbit(*mGalaxy, mGameModel->currentPlanet->mHandle);
     }
     delete galaxyMap;
 
@@ -549,16 +410,17 @@ int game_c::handleMenuChoice(int menuChoice) {
     // make a planet map for the player to choose a location
     planetMap = new PlanetMap(mGameWindow);
 
-    if (planetMap->chooseLocation(*mCurrentPlanet, planetPos)) {
-      saveLocation();
-      delete mLocation;
+    if (planetMap->chooseLocation(*mGameModel->currentPlanet, planetPos)) {
+      mGameModel->saveLocation();
 
       // now deal with the new planet
-      mLocation = new World();
-      initializePlanet(false, mCurrentPlanet, &planetPos, true);
+      mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
+      initializeWorldViews();
+      // load the appropriate menu
+      loadPlanetMenu();
 
       // HACK - need better timekeeping
-      mLastUpdateTime = (static_cast<double>(SDL_GetTicks()) / 1000.0);
+      mLastUpdateTime = (double)SDL_GetTicks() / 1000.0;
     }
     delete planetMap;
 
@@ -597,16 +459,15 @@ int game_c::handleMenuChoice(int menuChoice) {
 
 // update the game model
 bool game_c::update() {
-  double cur_time = (static_cast<double>(SDL_GetTicks()) / 1000.0);
+  double cur_time = (double)SDL_GetTicks() / 1000.0;
   bool escapePressed = false;
 
   while (mLastUpdateTime < cur_time) {
-
     // update the physics objects
-    mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, *mLocation->getWorldMap(), mAssetManager);
+    mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, *mGameModel->location->getWorldMap(), mAssetManager);
 
     // apply the player physics/update with input
-    escapePressed = mPlayer->update(*mLocation->getWorldMap(), mAssetManager, *mItemManager) || escapePressed;
+    escapePressed = mPlayer->update(*mGameModel->location->getWorldMap(), mAssetManager, *mItemManager) || escapePressed;
     // FIXME: this is done like this so that the player
     // can catch an escape press (i.e. to get out of the
     // character sheet). this should be done differently
@@ -616,15 +477,13 @@ bool game_c::update() {
 
     mAiManager->setPlayerFacingAndIncline(mPlayer->getFacingAndIncline());
 
-    mNumAiObjects = mAiManager->update(*mLocation->getWorldMap());
+    mNumAiObjects = mAiManager->update(*mGameModel->location->getWorldMap());
     mNumItems = mItemManager->update();
 
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
   }
 
-  // this just updates colors/transparencies...
-  // i.e. it doesn't have to be done with the PHYSICS_TIME_GRANULARITY
-  // updates
+  // this updates colors/transparencies...
   mPhysicsView->update(mPhysics->getEntityVector(), mLastUpdateTime);
 
   return escapePressed;
@@ -643,20 +502,20 @@ int game_c::draw() {
   mPhysicsView->setViewPosition(cam.getPosition());
 
   // draw the stars and stuff
-  mLocation->draw(cam);
+  mGameModel->location->draw(cam);
 
   // draw the solid blocks of the WorldMap
   mWorldMapView.drawSolidBlocks(cam, mAssetManager);
 
   // draw the solid physics objs
-  mPhysicsView->drawSolidEntities(mPhysics->getEntityVector(), *mLocation->getWorldMap(), mAssetManager);
+  mPhysicsView->drawSolidEntities(mPhysics->getEntityVector(), *mGameModel->location->getWorldMap(), mAssetManager);
 
   drawPlayerTargetBlock();
 
   mPlayer->drawEquipped(*mItemManager, mAssetManager);
 
   // draw the AI
-  mAiView->draw(*mLocation->getWorldMap(), *mItemManager, *mLocation->getLightManager());
+  mAiView->draw(*mGameModel->location->getWorldMap(), *mItemManager, *mGameModel->location->getLightManager());
 
   // draw the transparent physics objs
   bool playerHeadInWater = mPlayer->isHeadInWater();
@@ -786,172 +645,4 @@ void game_c::deleteAllFilesInFolder(LPWSTR folderPath) {
 
   FindClose(hp);
 }
-
-
-
-void game_c::save(void) {
-//	player_c player;	// save
-  // PLAYER * * * * * * *
-  saveGameData();
-
-
-  //	Galaxy *mGalaxy;	// save
-  // GALAXY * * * * * *
-  FILE *file;
-  file = fopen("save/galaxy.dat", "wb");
-  if (file != NULL) {
-    mGalaxy->save(file);
-    fclose(file);
-  }
-
-
-//	Location *mLocation;	// save
-  // LOCATION * * * * * * *
-  saveLocation();
-
-
-//	AiManager mAiManager;	// save
-  // AI STUFF * * * * * * *
-  // TODO
-
-//	physics_c mPhysics;	// save
-  // PHYSICS * * * * * * *
-  // TODO
-
-//	ItemManager mItemManager;	// save
-  // ITEMS * * * * * * *
-  file = fopen("save/items.dat", "wb");
-  if (file != NULL) {
-    mItemManager->save(file);
-    // WARNING: this pertains to the player...
-    mPlayer->getInventory()->save(file);
-    fclose(file);
-  }
-
-}
-
-
-int game_c::load(void) {
-
-//	player_c player;	// save
-  // PLAYER * * * * * * *
-  GameSaveData gameSaveData = loadGameData();
-  if (!gameSaveData.loadSucceeded) {
-    printf(" game_c::load(): UNSUCCESSFUL 1\n");
-    return LOAD_UNSUCCESSFUL;
-  }
-
-//	Galaxy *mGalaxy;	// save
-  // GALAXY * * * * * *
-  FILE *file;
-  file = fopen("save/galaxy.dat", "rb");
-  if (file != NULL) {
-    mGalaxy->load(file);
-    fclose(file);
-  }
-  else {
-    printf(" game_c::load(): UNSUCCESSFUL 2\n");
-    return LOAD_UNSUCCESSFUL;
-  }
-
-
-  mCurrentPlanet = mGalaxy->getPlanetByHandle(gameSaveData.planetHandle);
-
-
-
-//	Location *mLocation;	// save
-  // LOCATION * * * * * * *
-  if (mLocation != NULL) {
-    delete mLocation;
-    mLocation = NULL;
-  }
-  switch(gameSaveData.locationType) {
-  case LOCATION_SHIP:
-    printf("game_c::load(): loading ship\n");
-    mLocation = new StarShip();
-    initSpaceShip(true);
-    break;
-  case LOCATION_WORLD:
-    printf("game_c::load(): loading planet\n");
-    mLocation = new World();
-    initializePlanet(true, mGalaxy->getPlanetByHandle( gameSaveData.planetHandle ), &gameSaveData.physicsPos, false);
-    break;
-  default:
-    printf("game_c::load(): error, default location\n");
-    return LOAD_UNSUCCESSFUL;
-  }
-
-
-
-//	AiManager mAiManager;	// save
-  // AI STUFF * * * * * * *
-
-//	physics_c mPhysics;	// save
-  // PHYSICS * * * * * * *
-  mPhysics->set_pos(mGameModel->physics->getPlayerHandle() , gameSaveData.physicsPos);
-
-//	ItemManager mItemManager;	// save
-  // ITEMS * * * * * * *
-  file = fopen("save/items.dat", "rb");
-  if (file != NULL) {
-    mItemManager->load(file);
-    // WARNING: this pertains to the player...
-    mPlayer->getInventory()->load(file);
-    fclose(file);
-  }
-
-  return LOAD_SUCCESSFUL;
-}
-
-
-int game_c::saveGameData(void) {
-  GameSaveData gameSaveData;
-  gameSaveData.loadSucceeded = true;
-
-  gameSaveData.physicsPos = mPhysics->getNearCorner(mGameModel->physics->getPlayerHandle());
-  v3d_print("game_c::saveGameData(): saving playerPos, ", gameSaveData.physicsPos);
-
-  gameSaveData.locationType = mLocation->getType();
-  gameSaveData.planetHandle = mCurrentPlanet->mHandle;
-
-  // now for the file stuff
-  FILE* file = fopen("save/game.dat", "wb");
-  if (file == NULL) {
-    return -1;
-  }
-  fwrite(&gameSaveData, sizeof GameSaveData, 1, file);	// physics position
-  fclose (file);
-  return 0;
-}
-
-
-GameSaveData game_c::loadGameData() {
-  GameSaveData gameSaveData;
-  FILE* file = fopen("save/game.dat", "rb");
-  if (file == NULL) {
-    gameSaveData.loadSucceeded = false;
-    return gameSaveData;
-  }
-  fread(&gameSaveData, sizeof GameSaveData, 1, file);
-  fclose(file);
-  return gameSaveData;
-}
-
-
-void game_c::saveLocation() {
-  // see if we need to save the current Location
-  if (mLocation->getType() == LOCATION_SHIP) {
-    FILE* file = fopen("save/playership.dat", "wb");
-    mLocation->save(file);
-    fclose(file);
-  }
-  else if (mCurrentPlanet != NULL) {
-    char fileName[128];
-    sprintf(fileName, "save/planet%d.dat", mCurrentPlanet->mHandle);
-    FILE* file = fopen(fileName, "wb");
-    mLocation->save(file);
-    fclose(file);
-  }
-}
-
 
