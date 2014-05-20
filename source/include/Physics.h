@@ -166,10 +166,9 @@ public:
   void addQueuedEntities();
   void manageEntitiesList();
 
-  size_t createEntity(int type, const v3d_t& position, bool center);
-  size_t createEntity(int type, const v3d_t& position, const v3d_t& initialForce, bool center);
-
-  size_t createAiEntity(int aiType, const v3d_t& position);
+  PhysicsEntity* createEntity(int type, const v3d_t& position, bool center);
+  PhysicsEntity* createEntity(int type, const v3d_t& position, const v3d_t& initialForce, bool center);
+  PhysicsEntity* createAiEntity(int aiType, const v3d_t& position);
 
   void removeEntity(size_t handle);
 

@@ -56,7 +56,7 @@ vector <PhysicsEntity*>* Physics::getEntityVector() {
 
 
 void Physics::loadInactiveList() {
-//	mInactiveList.load( "save/inactive.list" );
+//	mInactiveList.load("save/inactive.list");
 }
 
 
@@ -121,17 +121,17 @@ void Physics::manageEntitiesList() {
   }
 }
 
-size_t Physics::createEntity(int type, const v3d_t& position, bool center) {
-  PhysicsEntity *e = NULL;
+PhysicsEntity* Physics::createEntity(int type, const v3d_t& position, bool center) {
+  PhysicsEntity* e = NULL;
   e = new PhysicsEntity;
   if (e == NULL) {
-    return 0;
+    return NULL;
   }
   size_t size_before = obj.size();
   obj.push_back(e);
   if (obj.size() == size_before) {
     delete e;
-    return 0;
+    return NULL;
   }
 
   e->handle = ++mLastEntityHandle;
@@ -144,7 +144,7 @@ size_t Physics::createEntity(int type, const v3d_t& position, bool center) {
     e->aiType = AITYPE_PLAYER;
     mPlayerHandle = e->handle;
   }
-  
+
   e->force = v3d_zero();
   e->vel = v3d_zero();
   e->displacement = v3d_zero();
@@ -195,25 +195,23 @@ size_t Physics::createEntity(int type, const v3d_t& position, bool center) {
   e->explosionForce = 0.0;
 
   mEntityAdded = true;
-  return e->handle;
+  return e;
 }
 
-size_t Physics::createEntity(int type, const v3d_t& position, const v3d_t& initialForce, bool center) {
-  size_t handle = createEntity(type, position, center);
-  if (handle != 0) {
-    int index = getIndexFromHandle(handle);
-    obj[index]->force = initialForce;
+PhysicsEntity* Physics::createEntity(int type, const v3d_t& position, const v3d_t& initialForce, bool center) {
+  PhysicsEntity* entity = createEntity(type, position, center);
+  if (entity != NULL) {
+    entity->force = initialForce;
   }
-  return handle;
+  return entity;
 }
 
-size_t Physics::createAiEntity(int aiType, const v3d_t& position) {
-  size_t handle = createEntity(OBJTYPE_AI_ENTITY, position, true);
-  if (handle != 0) {
-    int index = getIndexFromHandle(handle);
-    obj[index]->aiType = aiType;
+PhysicsEntity* Physics::createAiEntity(int aiType, const v3d_t& position) {
+  PhysicsEntity* entity = createEntity(OBJTYPE_AI_ENTITY, position, true);
+  if (entity != NULL) {
+    entity->aiType = aiType;
   }
-  return handle;
+  return entity;
 }
 
 void Physics::removeEntity(size_t handle) {
@@ -488,7 +486,7 @@ void Physics::updateEntity(size_t index) {
     case OBJTYPE_LIVE_BULLET:
       if (r_numi(0, 100) == 0) {
         otherHandle = createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
-        otherIndex = getIndexFromHandle (otherHandle);
+        otherIndex = getIndexFromHandle(otherHandle);
         if (otherIndex >= 0) {
           obj[otherIndex]->color[3] = 0.2f;
         }
@@ -498,7 +496,7 @@ void Physics::updateEntity(size_t index) {
     case OBJTYPE_ROCKET:
       if (r_numi (0, 4) == 0) {
         otherHandle = createEntity (OBJTYPE_FIRE, physicsEntity->pos, false);
-        otherIndex = getIndexFromHandle (otherHandle);
+        otherIndex = getIndexFromHandle(otherHandle);
         if (otherIndex >= 0) {
           obj[otherIndex]->owner = physicsEntity->owner;
           obj[otherIndex]->impactDamage = physicsEntity->impactDamage;
@@ -834,7 +832,7 @@ void Physics::integrate_euler(size_t index) {
 
 
 void Physics::displaceObject(size_t index) {
-  PhysicsEntity *physicsEntity = obj[index];
+  PhysicsEntity* physicsEntity = obj[index];
   // move the object
   physicsEntity->pos = v3d_add(physicsEntity->pos, physicsEntity->displacement);
 
@@ -858,6 +856,7 @@ void Physics::displaceObject(size_t index) {
   if (physicsEntity->type != OBJTYPE_AI_ENTITY &&
     physicsEntity->type != OBJTYPE_PLAYER &&
     physicsEntity->on_ground &&
+    v3d_mag(physicsEntity->force) < EPSILON &&
     v3d_mag(physicsEntity->vel) < EPSILON)
   {
     physicsEntity->applyPhysics = false;
@@ -1054,7 +1053,8 @@ bool Physics::sweepObjects(size_t indexA, size_t indexB, double& t0, double& t1,
 }
 
 int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
-  PhysicsEntity *physicsEntity = obj[index];
+  PhysicsEntity* physicsEntity = obj[index];
+  PhysicsEntity* otherPhysicsEntity;
 
   int numCollisions = 0;
   bool collision = false;
@@ -1063,7 +1063,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
 
   if (physicsEntity->type == OBJTYPE_AI_ENTITY || physicsEntity->type == OBJTYPE_PLAYER) {
     for (size_t other = 0; other < obj.size (); other++) {
-      PhysicsEntity *otherPhysicsEntity = obj[other];
+      otherPhysicsEntity = obj[other];
       
       if (!otherPhysicsEntity->active ||
         otherPhysicsEntity->queued ||
@@ -1329,28 +1329,29 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
     }
   }
   else if (physicsEntity->type == OBJTYPE_EXPLOSION) {
-    for (size_t other = 0; other < obj.size (); other++) {
-      PhysicsEntity *otherPhysicsEntity = obj[other];
+    for (size_t other = 0; other < obj.size(); other++) {
+      otherPhysicsEntity = obj[other];
       if (otherPhysicsEntity->active == false ||
         physicsEntity->queued ||
-        other == index) continue;
+        other == index ||
+        otherPhysicsEntity->type == OBJTYPE_EXPLOSION ||
+        !otherPhysicsEntity->boundingBox.isIntersecting(physicsEntity->boundingBox)) continue;
 
-      if (otherPhysicsEntity->type != OBJTYPE_EXPLOSION) {
-        if (otherPhysicsEntity->boundingBox.isIntersecting(physicsEntity->boundingBox)) {
-          if (otherPhysicsEntity->type == OBJTYPE_SMOKE || otherPhysicsEntity->type == OBJTYPE_STEAM) {
-            removeEntity(otherPhysicsEntity->handle);
-          }
-          else {
-            v3d_t dim = otherPhysicsEntity->boundingBox.getDimensions();
-            
-            double strength = (dim.x * dim.x) + (dim.y * dim.y) + (dim.y * dim.y);
-            add_force(otherPhysicsEntity->handle, getRadialForce(otherPhysicsEntity->boundingBox.getCenterPosition(),
-              physicsEntity->boundingBox.getCenterPosition(), physicsEntity->explosionForce * strength, 10.0));
-          }
-
-          numCollisions++;
-        }
+      if (otherPhysicsEntity->type == OBJTYPE_SMOKE || otherPhysicsEntity->type == OBJTYPE_STEAM) {
+        removeEntity(otherPhysicsEntity->handle);
       }
+      else {
+        v3d_t dim = otherPhysicsEntity->boundingBox.getDimensions();
+        v3d_t radialForce = getRadialForce(
+          otherPhysicsEntity->boundingBox.getCenterPosition(),
+          physicsEntity->boundingBox.getCenterPosition(),
+          physicsEntity->explosionForce * ((dim.x * dim.x) + (dim.y * dim.y) + (dim.z * dim.z)),
+          10.0);
+
+        add_force(otherPhysicsEntity->handle, radialForce);
+      }
+
+      numCollisions++;
     }
   }
   
@@ -1364,16 +1365,16 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
 void Physics::add_force(size_t handle, const v3d_t& force) {
   int index = getIndexFromHandle(handle);
   if (index != -1) {
-    PhysicsEntity *physicsEntity = obj[index];
-    physicsEntity->force = v3d_add (physicsEntity->force, force);
+    PhysicsEntity* physicsEntity = obj[index];
+    physicsEntity->force = v3d_add(physicsEntity->force, force);
     physicsEntity->applyPhysics = true;
   }
 }
 
 
 void Physics::clip_displacement_against_world(size_t index) {
-  PhysicsEntity *physicsEntity = obj[index];
-  if (v3d_mag( physicsEntity->displacement ) == 0.0) {
+  PhysicsEntity* physicsEntity = obj[index];
+  if (v3d_mag(physicsEntity->displacement) == 0.0) {
     return;
   }
 
@@ -1383,35 +1384,35 @@ void Physics::clip_displacement_against_world(size_t index) {
   v3d_t fc = physicsEntity->boundingBox.getFarCorner();
 
   // bounding box for the world block we'll be clipping against
-  BoundingBox bb2( v3d_v( 1.0, 1.0, 1.0 ) );
+  BoundingBox bb2(v3d_v(1.0, 1.0, 1.0));
 
   v3di_t i;
   v3d_t time0;
+  bool test_x;
+  bool test_y;
+  bool test_z;
 
   int y_start;
-
-  if (physicsEntity->on_ground) y_start = static_cast<int>(floor( nc.y ));
-  else y_start = static_cast<int>(floor( nc.y - 1.0 ));
-
-  if (physicsEntity->type == OBJTYPE_PLAYER) {
-//		printf ("y_start: %d\n", y_start);
+  if (physicsEntity->on_ground) {
+    y_start = (int)floor(nc.y);
+  }
+  else {
+    y_start = (int)floor(nc.y - 1.0);
   }
 
   // FIXME: this is a horribly inefficient way of doing this
   // it also fails if the velocity is too high
   // your mom
   WorldMap& worldMap = *mGameModel->location->getWorldMap();
-  for (i.z = static_cast<int>(floor( nc.z - 1.0 )); i.z <= static_cast<int>(floor( fc.z + 1.0 )); i.z++) {
-    for (i.y = y_start; i.y <= static_cast<int>(floor( fc.y + 1.0 )); i.y++) {
-      for (i.x = static_cast<int>(floor( nc.x - 1.0 )); i.x <= static_cast<int>(floor( fc.x + 1.0 )); i.x++) {
-        block_t *block = worldMap.getBlock( i );
+  for (i.z = (int)floor( nc.z - 1.0 ); i.z <= (int)floor( fc.z + 1.0 ); i.z++) {
+    for (i.y = y_start; i.y <= (int)floor(fc.y + 1.0); i.y++) {
+      for (i.x = (int)floor(nc.x - 1.0); i.x <= (int)floor(fc.x + 1.0); i.x++) {
+        block_t* block = worldMap.getBlock(i);
         if (block == NULL) {
           continue;
         }
 
         solidityType = gBlockData.get(block->type)->solidityType;
-
-        // check if solid
         if (solidityType == BLOCK_SOLIDITY_TYPE_AIR ||
           solidityType == BLOCK_SOLIDITY_TYPE_LIQUID ||
           solidityType == BLOCK_SOLIDITY_TYPE_PLANT) continue;
@@ -1422,14 +1423,10 @@ void Physics::clip_displacement_against_world(size_t index) {
 
         // FIXME: sort this mess out!
         {
-          bb2.setPosition (v3d_v (i));
+          bb2.setPosition(v3d_v(i));
 
-          bool test_x;
-          bool test_y;
-          bool test_z;
-
-
-          if (physicsEntity->boundingBox.isIntersecting (bb2)) {
+          // handle 'touching'
+          if (physicsEntity->boundingBox.isIntersecting(bb2)) {
             if (nc.x == bb2.mFarCorner.x && physicsEntity->displacement.x < 0.0) {
               physicsEntity->displacement.x = 0.0;
             }
@@ -1454,16 +1451,23 @@ void Physics::clip_displacement_against_world(size_t index) {
           // x-axis
           if (physicsEntity->displacement.x < 0.0) {
             if (block->faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_RIG]) {
-              test_x = true; }
+              test_x = true;
+            }
             else {
-              test_x = false; } }
+              test_x = false;
+            }
+          }
           else if (physicsEntity->displacement.x > 0.0) {
             if (block->faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_LEF]) {
-              test_x = true; }
+              test_x = true;
+            }
             else {
-              test_x = false; } }
+              test_x = false;
+            }
+          }
           else {
-            test_x = false; }
+            test_x = false;
+          }
 
           // y-axis
           if (physicsEntity->displacement.y < 0.0) {
@@ -1503,11 +1507,8 @@ void Physics::clip_displacement_against_world(size_t index) {
 //													test_y, test_z, displacement, bb2)) {
 
 
-          if ((test_x || test_y || test_z) &&
-            physicsEntity->boundingBox.sweepTest (bb2, physicsEntity->displacement, time0))
-          {
+          if ((test_x || test_y || test_z) && physicsEntity->boundingBox.sweepTest(bb2, physicsEntity->displacement, time0)) {
             double t0 = 0.0;
-
             int axis = -1;
 
             // figure out when the collision occurred
@@ -1524,19 +1525,11 @@ void Physics::clip_displacement_against_world(size_t index) {
               axis = 2;
             }
 
-
-//						if (physicsEntity->type == OBJTYPE_SLIME) {
-//							printf ("test %d, %d, %d\n", test_x, test_y, test_z);
-//							printf ("time %f, %f, %f\n", time0.x, time0.y, time0.z);
-//							printf ("axis: %d\n", axis);
-    //				}
-
-
             // no sliding
             if (physicsEntity->type == OBJTYPE_PLASMA_BOMB ||
               physicsEntity->type == OBJTYPE_NAPALM)
             {
-              physicsEntity->displacement = v3d_scale (t0, physicsEntity->displacement);
+              physicsEntity->displacement = v3d_scale(t0, physicsEntity->displacement);
             }
             // sliding
             else {
@@ -1551,22 +1544,21 @@ void Physics::clip_displacement_against_world(size_t index) {
               }
             }
 
-
             switch (physicsEntity->type) {
               case OBJTYPE_SPARK:
                 if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
+                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = mLastUpdateTime;
                 }
                 break;
 
               case OBJTYPE_NAPALM:
                 if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
+                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = mLastUpdateTime;
                 }
                 else {
-                  physicsEntity->vel = v3d_zero ();
+                  physicsEntity->vel = v3d_zero();
                   physicsEntity->applyPhysics = false;
                 }
                 break;
@@ -1574,7 +1566,7 @@ void Physics::clip_displacement_against_world(size_t index) {
               case OBJTYPE_LIVE_BULLET:
               case OBJTYPE_DEAD_BULLET:
                 if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
+                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = 0.1;
                 }
                 else if (block->type == BLOCK_TYPE_DIRT ||
@@ -1587,9 +1579,9 @@ void Physics::clip_displacement_against_world(size_t index) {
                   block->type == BLOCK_TYPE_LEAVES ||
                   block->type == BLOCK_TYPE_SAND)
                 {
-                  createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
+                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
                   physicsEntity->expirationTime = 0.1;
-//									physicsEntity->vel = v3d_zero ();
+//									physicsEntity->vel = v3d_zero();
 //									physicsEntity->applyPhysics = false;
                 }
                 break;
@@ -1602,13 +1594,13 @@ void Physics::clip_displacement_against_world(size_t index) {
 
               case OBJTYPE_SLIME:
               case OBJTYPE_BLOOD_SPRAY:
-//								physicsEntity->vel = v3d_zero ();
+//								physicsEntity->vel = v3d_zero();
 //								physicsEntity->applyPhysics = false;
                 break;
 
               case OBJTYPE_CREATE:
 //								if (i.y > 0) {
-//									v3di_t bleh = v3di_v (physicsEntity->pos);
+//									v3di_t bleh = v3di_v(physicsEntity->pos);
 //									block_t b;
 //									b.type = 1;
 //								}
@@ -1631,7 +1623,7 @@ void Physics::clip_displacement_against_world(size_t index) {
 
 
 bool Physics::isIntersectingPlant(size_t index) const {
-  block_t *block = mGameModel->location->getWorldMap()->getBlock(obj[index]->boundingBox.getCenterPosition());
+  block_t* block = mGameModel->location->getWorldMap()->getBlock(obj[index]->boundingBox.getCenterPosition());
   if (block == NULL) return false;
   if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
     return true;
@@ -1676,15 +1668,13 @@ void Physics::grenadeExplosion(size_t index) {
 
   if (physicsEntity->explosionForce > 2500.0) {
     double clearRadius = (physicsEntity->explosionForce - 2500.0) * 0.001;
-
     mGameModel->location->getWorldMap()->clearSphere(centerPosition, clearRadius);
   }
 
   size_t explosionHandle = createEntity(OBJTYPE_EXPLOSION, centerPosition, true);
-
   // FIXME: hack!
   if (explosionHandle > 0) {
-    int explosionIndex = getIndexFromHandle (explosionHandle);
+    int explosionIndex = getIndexFromHandle(explosionHandle);
     obj[explosionIndex]->owner = physicsEntity->owner;
     obj[explosionIndex]->applyPhysics = false;
     obj[explosionIndex]->explosionForce = physicsEntity->explosionForce;
@@ -1781,9 +1771,8 @@ v3d_t Physics::getRadialForce(const v3d_t& pos, const v3d_t& center, double forc
   else if (dist < 0.1) {
     dist = 0.1;
   }
-
   double magnitude = force / (dist * dist);
-  return v3d_scale (magnitude, v3d_normalize(diff));
+  return v3d_scale(magnitude, v3d_normalize(diff));
 }
 
 
@@ -1793,7 +1782,7 @@ int Physics::addSoundEvent(int type, const v3d_t& position) {
   if (mNumSoundEvents < MAX_SOUND_EVENTS) {
     int volume;
     if (distanceToPlayer >= 8.0) {
-      volume = static_cast<int>(floor(96.0 * (1.0 / (distanceToPlayer - 7.0))));
+      volume = (int)floor(96.0 * (1.0 / (distanceToPlayer - 7.0)));
     }
     else {
       volume = 96;
@@ -1804,7 +1793,6 @@ int Physics::addSoundEvent(int type, const v3d_t& position) {
       mSoundVolumes[mNumSoundEvents] = volume;
       mNumSoundEvents++;
     }
-
     return 0;
   }
 
@@ -1819,11 +1807,9 @@ void Physics::playSoundEvents(AssetManager& assetManager) {
   mNumSoundEvents = 0;
 }
 
-
 size_t Physics::getPlayerHandle() const {
   return mPlayerHandle;
 }
-
 
 void Physics::readMail() {
   phys_message_t message;
@@ -1831,24 +1817,24 @@ void Physics::readMail() {
 
   while (getNextMessage(MAILBOX_PHYSICS, &message)) {
     switch (message.type) {
-      case PHYS_MESSAGE_PLAYERPICKUPITEMS:
-        mGotPickupMessage = true;
-        break;
+    case PHYS_MESSAGE_PLAYERPICKUPITEMS:
+      mGotPickupMessage = true;
+      break;
 
-      case PHYS_MESSAGE_ITEMGRABBED:
-        removeEntity(message.iValue2);
-        break;
+    case PHYS_MESSAGE_ITEMGRABBED:
+      removeEntity(message.iValue2);
+      break;
 
-      case PHYS_MESSAGE_ADJUSTHEALTH:
-        index = getIndexFromHandle(message.iValue);
+    case PHYS_MESSAGE_ADJUSTHEALTH:
+      index = getIndexFromHandle(message.iValue);
 
-        if (index >= 0) {
-          obj[index]->health += message.dValue;
-        }
-        break;
+      if (index >= 0) {
+        obj[index]->health += message.dValue;
+      }
+      break;
 
-      default:
-        break;
+    default:
+      break;
     }
   }
 }
