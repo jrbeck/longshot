@@ -14,8 +14,6 @@
 #include "Galaxy.h"
 #include "LightManager.h"
 
-
-
 enum {
   LOCATION_DEFAULT,
   LOCATION_WORLD,

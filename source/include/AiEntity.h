@@ -30,45 +30,27 @@ class PhysicsEntity;
 
 class AiEntity {
 public:
-  AiEntity(void);
+  AiEntity(GameModel* gameModel);
 
-  void update(
-    double time,
-    WorldMap& worldMap,
-    Physics& physics,
-    vector<AiEntity*>& aiEntities,
-    ItemManager& itemManager);
+  void update();
   // this is called only if the entity is a AITYPE_PLAYUH
-  void updatePlayer(Physics &physics);
+  void updatePlayer();
 
-  void updateState(
-    double time,
-    WorldMap& worldMap,
-    Physics& physics,
-    vector<AiEntity*>& aiEntities,
-    ItemManager& itemManager);
+  void updateState();
+  bool testCondition(int condition);
 
-  bool testCondition(
-    int condition,
-    double time,
-    WorldMap& worldMap,
-    Physics& physics,
-    vector<AiEntity*>& aiEntities,
-    ItemManager& itemManager);
-
-  void readMail(Physics& physics);
-
+  void readMail();
 
   // this is mostly slated to be paramaterized and moved out of here.
   // good riddance!
-  void updateBalloon(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
-  void updateHopper(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities, ItemManager& itemManager);
-  void updateDummy(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
+  void updateBalloon();
+  void updateHopper();
+  void updateDummy();
 
-  void updateTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
-  void aquireTarget(double time, WorldMap& worldMap, Physics& physics, vector<AiEntity*>& aiEntities);
+  void updateTarget();
+  void aquireTarget();
 
-  bool useWeapon(double time, Physics& physics, ItemManager& itemManager);
+  bool useWeapon();
   bool isTargetInRange(int gunType, double distanceToTarget);
 
   // members * * * * * * * * * * * * * * * * *
@@ -76,14 +58,16 @@ public:
 
   int mType;
 
+  GameModel* mGameModel;
+
   v3d_t mWorldPosition;
 
   size_t mHandle;
   size_t mPhysicsHandle;
   size_t mTargetPhysicsHandle;
 
-  PhysicsEntity *mPhysicsEntity;
-  PhysicsEntity *mTargetPhysicsEntity;
+  PhysicsEntity* mPhysicsEntity;
+  PhysicsEntity* mTargetPhysicsEntity;
 
   float mMaxHealth;
   float mCurrentHealth;

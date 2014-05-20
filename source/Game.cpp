@@ -329,7 +329,7 @@ void game_c::gameLoop() {
     mGameModel->location->update(mPhysics->getCenter(mGameModel->physics->getPlayerHandle()));
 
     // HACK * * * * * * *
-    mPlayer->placeLight(*mGameModel->location->getLightManager(), *mGameModel->location->getWorldMap());
+    mPlayer->placeLight();
 
     mWorldMapView.update(mAssetManager, *mGameModel->location->getLightManager());
 
@@ -464,10 +464,10 @@ bool game_c::update() {
 
   while (mLastUpdateTime < cur_time) {
     // update the physics objects
-    mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, *mGameModel->location->getWorldMap(), mAssetManager);
+    mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, mAssetManager);
 
     // apply the player physics/update with input
-    escapePressed = mPlayer->update(*mGameModel->location->getWorldMap(), mAssetManager, *mItemManager) || escapePressed;
+    escapePressed = mPlayer->update(mAssetManager) || escapePressed;
     // FIXME: this is done like this so that the player
     // can catch an escape press (i.e. to get out of the
     // character sheet). this should be done differently
@@ -477,7 +477,7 @@ bool game_c::update() {
 
     mAiManager->setPlayerFacingAndIncline(mPlayer->getFacingAndIncline());
 
-    mNumAiObjects = mAiManager->update(*mGameModel->location->getWorldMap());
+    mNumAiObjects = mAiManager->update();
     mNumItems = mItemManager->update();
 
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
@@ -512,7 +512,7 @@ int game_c::draw() {
 
   drawPlayerTargetBlock();
 
-  mPlayer->drawEquipped(*mItemManager, mAssetManager);
+  mPlayer->drawEquipped(mAssetManager);
 
   // draw the AI
   mAiView->draw(*mGameModel->location->getWorldMap(), *mItemManager, *mGameModel->location->getLightManager());

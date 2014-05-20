@@ -294,7 +294,7 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
 
   // reset the player
   if (resetPlayer) {
-    player->reset(physics->getPlayerHandle(), playerAiHandle, *itemManager);
+    player->reset(physics->getPlayerHandle(), playerAiHandle);
   }
   player->setStartPosition(playerStartPosition);
   player->soft_reset(playerStartPosition);

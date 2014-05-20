@@ -66,7 +66,7 @@ void AiManager::setPlayerFacingAndIncline(v2d_t facingAndElevation) {
 
 
 AiEntity* AiManager::addEntity(int type, const v3d_t& position) {
-  AiEntity* e = new AiEntity();
+  AiEntity* e = new AiEntity(mGameModel);
   if (e == NULL) {
     printf("AiManager::addEntity(): error: out of mem\n");
     return NULL;
@@ -241,9 +241,7 @@ size_t AiManager::spawnEntity(
 
 
 
-int AiManager::update(
-  WorldMap& worldMap)
-{
+int AiManager::update() {
   if (mGameModel->physics->isPaused()) {
     return (int)mAiEntities.size();
   }
@@ -271,8 +269,8 @@ int AiManager::update(
     pos.x += offset.x;
     pos.z += offset.y;
 
-    int columnIndex = worldMap.getColumnIndex(pos);
-    double height = worldMap.mColumns[columnIndex].getHighestBlockHeight();
+    int columnIndex = mGameModel->location->getWorldMap()->getColumnIndex(pos);
+    double height = mGameModel->location->getWorldMap()->mColumns[columnIndex].getHighestBlockHeight();
 
     if (height < WATER_LEVEL + 1) {
       height = WATER_LEVEL + 3;
@@ -293,7 +291,7 @@ int AiManager::update(
   for (size_t i = 0; i < mAiEntities.size (); i++) {
     // ignore players and dead things
     if (mAiEntities[i]->mType == AITYPE_PLAYER) {
-      mAiEntities[i]->updatePlayer(*mGameModel->physics);
+      mAiEntities[i]->updatePlayer();
     }
 
     // kill off dead physics objects
@@ -301,7 +299,7 @@ int AiManager::update(
       mAiEntities[i]->mActive = false;
     }
     else if (mAiEntities[i]->mActive) {
-      mAiEntities[i]->update(mGameModel->physics->getLastUpdateTime(), worldMap, *mGameModel->physics, mAiEntities, *mGameModel->itemManager);
+      mAiEntities[i]->update();
     }
 
     // handle dead entities here by giving up their weapons to the physics engine

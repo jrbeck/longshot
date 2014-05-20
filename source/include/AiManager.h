@@ -45,7 +45,7 @@ public:
 
   size_t spawnEntity(int type, v3d_t position);
 
-  int update(WorldMap& worldMap);
+  int update();
 
   void releaseItems(int aiIndex);
   void trimEntitiesList();
@@ -65,7 +65,6 @@ private:
   GameModel* mGameModel;
 
   size_t mNextHandle;
-
   size_t mPlayerAiHandle;
 
   vector<AiEntity*> mAiEntities;

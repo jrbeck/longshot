@@ -61,11 +61,11 @@ public:
   player_c(GameModel* gameModel);
   ~player_c();
 
-  int reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager);
+  int reset(size_t physicsHandle, size_t aiHandle);
   int soft_reset(v3d_t& startPosition);
   void setStartPosition(v3d_t& startPosition);
 
-  void godMode(ItemManager& itemManager);
+  void godMode();
 
   // update the camera target
   void update_target();
@@ -87,31 +87,31 @@ public:
 
   bool pickUpItem(item_t item, AssetManager& assetManager);
 
-  void useEquipped(int whichEquip, AssetManager &assetManager, ItemManager& itemManager);
-  double fireGun(item_t item, double handedness, AssetManager& assetManager, ItemManager& itemManager);
-  double useMeleeWeapon(item_t item, ItemManager& itemManager);
+  void useEquipped(int whichEquip);
+  double fireGun(item_t item, double handedness);
+  double useMeleeWeapon(item_t item);
 
-  void useBackpackItem(AssetManager& assetManager, ItemManager& itemManager);
+  void useBackpackItem();
 
   v2d_t obtainWalkVector(v2d_t walkInput);
 
-  void updateTargetBlock(WorldMap& worldMap);
+  void updateTargetBlock();
   v3di_t* getTargetBlock(int& targetBlockFace);
 
-  void updateHud(ItemManager& itemManager);
+  void updateHud();
   void drawHud();
   void drawWaterOverlay();
-  void drawEquipped(ItemManager& itemManager, AssetManager& assetManager);
+  void drawEquipped(AssetManager& assetManager);
   void drawEquippedGun(double handedness, BitmapModel& model);
 
-  void updateCharacterSheet(ItemManager& itemManager);
+  void updateCharacterSheet();
 
-  bool update(WorldMap& worldMap, AssetManager& assetManager, ItemManager& itemManager);
+  bool update(AssetManager& assetManager);
 
-  void readPhysicsMessages(ItemManager& itemManager, AssetManager& assetManager);
+  void readPhysicsMessages(AssetManager& assetManager);
 
   // HACK
-  void placeLight(LightManager& lightManager, WorldMap& worldMap);
+  void placeLight();
   Inventory* getInventory();
 
   gl_camera_c cam;

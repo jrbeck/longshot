@@ -97,8 +97,8 @@ int WorldMap::getColumnIndex(const v3di_t& worldPosition) const {
 //	int zIndex = worldPosition.z / WORLD_CHUNK_SIDE;
 
   // this is really the region index, and should probably be calling WorldUtil::getRegionIndex()
-  int xIndex = static_cast<int>(floor(static_cast<double>(worldPosition.x) / static_cast<double>(WORLD_CHUNK_SIDE)));
-  int zIndex = static_cast<int>(floor(static_cast<double>(worldPosition.z) / static_cast<double>(WORLD_CHUNK_SIDE)));
+  int xIndex = (int)floor((double)worldPosition.x / (double)WORLD_CHUNK_SIDE);
+  int zIndex = (int)floor((double)worldPosition.z / (double)WORLD_CHUNK_SIDE);
 
   return getColumnIndexByRegionCoords(xIndex, zIndex);
 }
@@ -106,8 +106,8 @@ int WorldMap::getColumnIndex(const v3di_t& worldPosition) const {
 
 int WorldMap::getColumnIndex(const v3d_t& worldPosition) const {
   // this is really the region index, and should probably be calling WorldUtil::getRegionIndex()
-  int xIndex = static_cast<int>(floor(worldPosition.x / static_cast<double>(WORLD_CHUNK_SIDE)));
-  int zIndex = static_cast<int>(floor(worldPosition.z / static_cast<double>(WORLD_CHUNK_SIDE)));
+  int xIndex = (int)floor(worldPosition.x / (double)WORLD_CHUNK_SIDE);
+  int zIndex = (int)floor(worldPosition.z / (double)WORLD_CHUNK_SIDE);
 
   return getColumnIndexByRegionCoords(xIndex, zIndex);
 }

@@ -15,7 +15,7 @@ player_c::~player_c () {
 }
 
 
-int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemManager) {
+int player_c::reset(size_t physicsHandle, size_t aiHandle) {
   mStartLocationFound = false;
   mStartPosition = v3d_zero();
 
@@ -48,13 +48,13 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemMana
   // give the man a pointy stick
   int inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
-    mInventory.mBackpack[inventoryHandle] = itemManager.generateRandomGun(1.0);
+    mInventory.mBackpack[inventoryHandle] = mGameModel->itemManager->generateRandomGun(1.0);
   }
 
   // melee weapon
   inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
-    mInventory.mBackpack[inventoryHandle] = itemManager.generateRandomMeleeWeapon(3.0);
+    mInventory.mBackpack[inventoryHandle] = mGameModel->itemManager->generateRandomMeleeWeapon(3.0);
   }
 
   // block
@@ -67,7 +67,7 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle, ItemManager& itemMana
     blockItem.type = ITEMTYPE_WORLD_BLOCK;
     strcpy(blockItem.name, "blocker");
 
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(blockItem);
+    mInventory.mBackpack[inventoryHandle] = mGameModel->itemManager->createItem(blockItem);
   }
 
   mVisionTint[0] = 0.0;
@@ -124,7 +124,7 @@ void player_c::setStartPosition(v3d_t& startPosition) {
 }
 
 
-void player_c::godMode(ItemManager& itemManager) {
+void player_c::godMode() {
   printf ("you naughty little stinker you...\n");
 
   // some ammo?
@@ -137,20 +137,20 @@ void player_c::godMode(ItemManager& itemManager) {
 
   int inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
-    itemManager.generateRandomRocketLauncher(gun, 1.5);
+    mGameModel->itemManager->generateRandomRocketLauncher(gun, 1.5);
     gun.type = ITEMTYPE_GUN_ONE_HANDED;
     gun.bulletType = OBJTYPE_LIVE_BULLET;
     gun.ammoType = AMMO_BULLET;
     gun.explosionForce = 5000.0; // * 0.2;
-    itemManager.nameGun(gun);
+    mGameModel->itemManager->nameGun(gun);
 
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(gun);
+    mInventory.mBackpack[inventoryHandle] = mGameModel->itemManager->createItem(gun);
   }
 
   // okay one more...
   inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
-    itemManager.generateRandomRocketLauncher(gun, 3.0);
+    mGameModel->itemManager->generateRandomRocketLauncher(gun, 3.0);
 //		gun.bulletType = OBJTYPE_NAPALM;
 //		gun.ammoType = AMMO_NAPALM;
 
@@ -158,9 +158,9 @@ void player_c::godMode(ItemManager& itemManager) {
     gun.ammoType = AMMO_SLIME;
 
     gun.explosionForce = 5000.0 * 0.2;
-    itemManager.nameGun(gun);
+    mGameModel->itemManager->nameGun(gun);
 
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(gun);
+    mInventory.mBackpack[inventoryHandle] = mGameModel->itemManager->createItem(gun);
   }
 
   // and the rocket pack
@@ -169,7 +169,7 @@ void player_c::godMode(ItemManager& itemManager) {
     gun.type = ITEMTYPE_ROCKET_PACK;
     gun.value1 = 2000.0;
     sprintf(gun.name, "rocket pack");
-    mInventory.mBackpack[inventoryHandle] = itemManager.createItem(gun);
+    mInventory.mBackpack[inventoryHandle] = mGameModel->itemManager->createItem(gun);
   }
 }
 
@@ -269,11 +269,7 @@ bool player_c::pickUpItem(item_t item, AssetManager& assetManager) {
   return true;
 }
 
-void player_c::useEquipped(
-  int whichEquip,
-  AssetManager& assetManager,
-  ItemManager& itemManager)
-{
+void player_c::useEquipped(int whichEquip) {
   item_t item;
   double time = mGameModel->physics->getLastUpdateTime();
 
@@ -281,12 +277,12 @@ void player_c::useEquipped(
     case EQUIP_PRIMARY:
       // can't use a non-item	
       if (mInventory.mPrimaryItem <= 0) return;
-      item = itemManager.getItem(mInventory.mPrimaryItem);
+      item = mGameModel->itemManager->getItem(mInventory.mPrimaryItem);
       break;
 
     case EQUIP_SECONDARY:
       if (mInventory.mSecondaryItem <= 0) return;
-      item = itemManager.getItem(mInventory.mSecondaryItem);
+      item = mGameModel->itemManager->getItem(mInventory.mSecondaryItem);
       break;
 
     default:
@@ -297,23 +293,23 @@ void player_c::useEquipped(
   if (item.type == ITEMTYPE_GUN_ONE_HANDED || item.type == ITEMTYPE_GUN_TWO_HANDED) {
     if (whichEquip == EQUIP_PRIMARY) {
       if (mNextShotTimePrimary > time) return;
-      mNextShotTimePrimary = fireGun(item, LEFT_HANDED, assetManager, itemManager);
+      mNextShotTimePrimary = fireGun(item, LEFT_HANDED);
     }
     else {
       if (mNextShotTimeSecondary > time) return;
-      mNextShotTimeSecondary = fireGun(item, RIGHT_HANDED, assetManager, itemManager);
+      mNextShotTimeSecondary = fireGun(item, RIGHT_HANDED);
     }
   }
   else if (item.type == ITEMTYPE_MELEE_ONE_HANDED) {
     if (whichEquip == EQUIP_PRIMARY) {
       if (mNextShotTimePrimary > time) return;
-      mNextShotTimePrimary = useMeleeWeapon(item, itemManager);
+      mNextShotTimePrimary = useMeleeWeapon(item);
       mMeleeStatePrimary.swingStart = time;
       mMeleeStatePrimary.hasUsed = true;
     }
     else {
       if (mNextShotTimeSecondary > time) return;
-      mNextShotTimeSecondary = useMeleeWeapon(item, itemManager);
+      mNextShotTimeSecondary = useMeleeWeapon(item);
       mMeleeStateSecondary.swingStart = time;
       mMeleeStateSecondary.hasUsed = true;
     }
@@ -322,7 +318,7 @@ void player_c::useEquipped(
     mPlacedBlock = true;
   }
   else {
-    if (itemManager.useItem(obtainWalkVector(mWalkInput), item.handle, mGameModel->physics->getPlayerHandle())) {
+    if (mGameModel->itemManager->useItem(obtainWalkVector(mWalkInput), item.handle, mGameModel->physics->getPlayerHandle())) {
       if (whichEquip == EQUIP_PRIMARY) {
         mInventory.mPrimaryItem = 0;
       }
@@ -333,7 +329,7 @@ void player_c::useEquipped(
   }
 }
 
-double player_c::fireGun(item_t item, double handedness, AssetManager& assetManager, ItemManager& itemManager) {
+double player_c::fireGun(item_t item, double handedness) {
   v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
 
   double shoulderOffset = handedness * 0.5;
@@ -354,10 +350,10 @@ double player_c::fireGun(item_t item, double handedness, AssetManager& assetMana
   shotInfo.position = pos;
   shotInfo.time = mGameModel->physics->getLastUpdateTime();
 
-  return itemManager.useGun(item.handle, shotInfo, mInventory.mAmmoCounter);
+  return mGameModel->itemManager->useGun(item.handle, shotInfo, mInventory.mAmmoCounter);
 }
 
-double player_c::useMeleeWeapon(item_t item, ItemManager& itemManager) {
+double player_c::useMeleeWeapon(item_t item) {
   v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
   
   v3d_t targAngle = v3d_normalize(v3d_sub(mTarget, world_head_pos));
@@ -370,14 +366,14 @@ double player_c::useMeleeWeapon(item_t item, ItemManager& itemManager) {
   shotInfo.position = pos;
   shotInfo.time = mGameModel->physics->getLastUpdateTime();
 
-  return itemManager.useMeleeWeapon(item.handle, shotInfo);
+  return mGameModel->itemManager->useMeleeWeapon(item.handle, shotInfo);
 }
 
-void player_c::useBackpackItem(AssetManager& assetManager, ItemManager& itemManager) {
+void player_c::useBackpackItem() {
   // can't use a non-item
   if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
 
-  item_t item = itemManager.getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
+  item_t item = mGameModel->itemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
   
   switch (item.type) {
   case ITEMTYPE_UNDEFINED:
@@ -388,7 +384,7 @@ void player_c::useBackpackItem(AssetManager& assetManager, ItemManager& itemMana
     break;
   default:
     printf("player using item\n");
-    if (itemManager.useItem(obtainWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mGameModel->physics->getPlayerHandle())) {
+    if (mGameModel->itemManager->useItem(obtainWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mGameModel->physics->getPlayerHandle())) {
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
     break;
@@ -415,14 +411,14 @@ v2d_t player_c::obtainWalkVector(v2d_t walkInput) {
   return t1;
 }
 
-void player_c::updateTargetBlock(WorldMap& worldMap) {
+void player_c::updateTargetBlock() {
   v3d_t eye = v3d_add(mPos, mFinalHeadOffset);
 
   double rayLength = 2.75;
 
   v3d_t finalTarget = v3d_add(eye, v3d_scale(rayLength, v3d_normalize(v3d_sub(mTarget, eye))));
 
-  if (worldMap.rayCastSolidBlock(eye, finalTarget, mTargetBlock, mTargetBlockFace)) {
+  if (mGameModel->location->getWorldMap()->rayCastSolidBlock(eye, finalTarget, mTargetBlock, mTargetBlockFace)) {
     mIsBlockTargeted = true;
   }
   else {
@@ -438,7 +434,7 @@ v3di_t *player_c::getTargetBlock(int& targetBlockFace) {
   return NULL;
 }
 
-void player_c::updateHud(ItemManager& itemManager) {
+void player_c::updateHud() {
   mHud.clear();
 
   GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -453,7 +449,7 @@ void player_c::updateHud(ItemManager& itemManager) {
 
   // display the primary equip
   if (mInventory.mPrimaryItem != 0) {
-    item_t currentEquip = itemManager.getItem (mInventory.mPrimaryItem);
+    item_t currentEquip = mGameModel->itemManager->getItem(mInventory.mPrimaryItem);
     sprintf(text, "%s\0", currentEquip.name);
     mHud.addText(v2d_v(0.0, 0.0), v2d_v(0.2, 0.05), fontSize, text, TEXT_JUSTIFICATION_LEFT, color, NULL);
 
@@ -473,7 +469,7 @@ void player_c::updateHud(ItemManager& itemManager) {
 
   // display the secondary equip
   if (mInventory.mSecondaryItem != 0) {
-    item_t currentEquip = itemManager.getItem (mInventory.mSecondaryItem);
+    item_t currentEquip = mGameModel->itemManager->getItem(mInventory.mSecondaryItem);
     sprintf (text, "%s\0", currentEquip.name);
     mHud.addText (v2d_v (0.8, 0.0), v2d_v (0.2, 0.05), fontSize,
       text, TEXT_JUSTIFICATION_RIGHT, color, NULL);
@@ -559,7 +555,7 @@ void player_c::drawWaterOverlay(void) {
   glPopMatrix();
 }
 
-void player_c::drawEquipped(ItemManager& itemManager, AssetManager& assetManager) {
+void player_c::drawEquipped(AssetManager& assetManager) {
   mMeleeStatePrimary.facing = mFacing;
   mMeleeStatePrimary.incline = mIncline;
 
@@ -575,7 +571,7 @@ void player_c::drawEquipped(ItemManager& itemManager, AssetManager& assetManager
   mMeleeStateSecondary.handPosition = mMeleeStatePrimary.handPosition;
 
   // primary
-  item_t primaryItem = itemManager.getItem(mInventory.mPrimaryItem);
+  item_t primaryItem = mGameModel->itemManager->getItem(mInventory.mPrimaryItem);
   mMeleeStatePrimary.weaponHandle = primaryItem.handle;
   mMeleeStatePrimary.swingMode = 2; // OMG
   mMeleeStatePrimary.swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
@@ -584,14 +580,14 @@ void player_c::drawEquipped(ItemManager& itemManager, AssetManager& assetManager
     mMeleeStatePrimary.swingTime >= 0.0 &&
     mMeleeStatePrimary.swingTime <= 0.4)
   {
-    itemManager.drawMeleeWeapon(mMeleeStatePrimary, assetManager);
+    mGameModel->itemManager->drawMeleeWeapon(mMeleeStatePrimary, assetManager);
   }
   else if (primaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
     drawEquippedGun(LEFT_HANDED, *assetManager.mGunBitmapModel);
   }
 
   // secondary
-  item_t secondaryItem = itemManager.getItem(mInventory.mSecondaryItem);
+  item_t secondaryItem = mGameModel->itemManager->getItem(mInventory.mSecondaryItem);
   mMeleeStateSecondary.weaponHandle = secondaryItem.handle;
   mMeleeStateSecondary.swingMode = 2; // OMG
   mMeleeStateSecondary.swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
@@ -600,7 +596,7 @@ void player_c::drawEquipped(ItemManager& itemManager, AssetManager& assetManager
     mMeleeStateSecondary.swingTime >= 0.0 &&
     mMeleeStateSecondary.swingTime <= 0.4)
   {
-    itemManager.drawMeleeWeapon(mMeleeStateSecondary, assetManager);
+    mGameModel->itemManager->drawMeleeWeapon(mMeleeStateSecondary, assetManager);
   }
   else if (secondaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
     drawEquippedGun(RIGHT_HANDED, *assetManager.mGunBitmapModel);
@@ -633,7 +629,7 @@ void player_c::drawEquippedGun(double handedness, BitmapModel& model) {
   glDisable(GL_ALPHA_TEST);
 }
 
-void player_c::updateCharacterSheet(ItemManager& itemManager) {
+void player_c::updateCharacterSheet() {
   mCharacterSheet.clear();
 
   static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -646,7 +642,7 @@ void player_c::updateCharacterSheet(ItemManager& itemManager) {
   // equipped
   mCharacterSheet.addText(v2d_v(0.1, 0.2), v2d_v(0.3, 0.05), fontSize, "primary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
   if (mInventory.mPrimaryItem != 0) {
-    item_t item = itemManager.getItem(mInventory.mPrimaryItem);
+    item_t item = mGameModel->itemManager->getItem(mInventory.mPrimaryItem);
     if (item.type != ITEMTYPE_UNDEFINED) {
       mCharacterSheet.addText(v2d_v(0.1, 0.25), v2d_v(0.3, 0.05), fontSize, item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
     }
@@ -657,7 +653,7 @@ void player_c::updateCharacterSheet(ItemManager& itemManager) {
 
   mCharacterSheet.addText(v2d_v(0.1, 0.3), v2d_v(0.3, 0.05), fontSize, "secondary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
   if (mInventory.mSecondaryItem != 0) {
-    item_t item = itemManager.getItem(mInventory.mSecondaryItem);
+    item_t item = mGameModel->itemManager->getItem(mInventory.mSecondaryItem);
     if (item.type != ITEMTYPE_UNDEFINED) {
       mCharacterSheet.addText(v2d_v(0.1, 0.35), v2d_v(0.3, 0.05), fontSize, item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
     }
@@ -720,7 +716,7 @@ void player_c::updateCharacterSheet(ItemManager& itemManager) {
     }
 
     if (mInventory.mBackpack[i] != 0) {
-      item_t item = itemManager.getItem(mInventory.mBackpack[i]);
+      item_t item = mGameModel->itemManager->getItem(mInventory.mBackpack[i]);
       if (item.type != ITEMTYPE_UNDEFINED) {
         mCharacterSheet.addText(tl, dimensions, fontSize, item.name, TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
       }
@@ -740,11 +736,7 @@ void player_c::updateCharacterSheet(ItemManager& itemManager) {
   mCharacterSheet.addText(v2d_v(0.1, 0.6), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
 }
 
-bool player_c::update(
-  WorldMap& worldMap,
-  AssetManager& assetManager,
-  ItemManager& itemManager)
-{
+bool player_c::update(AssetManager& assetManager) {
   mLastUpdateTime = mGameModel->physics->getLastUpdateTime();
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
@@ -756,7 +748,7 @@ bool player_c::update(
 
   // FIXME: this isn't quite right, perhaps the near clip plane needs to be compensated
   // for (vertically) to head pos
-  block_t *block = worldMap.getBlock(v3d_add (mFinalHeadOffset, mPos));
+  block_t *block = mGameModel->location->getWorldMap()->getBlock(v3d_add(mFinalHeadOffset, mPos));
   int blockType;
   if (block == NULL) {
     // default to BLOCK_TYPE_AIR
@@ -789,7 +781,7 @@ bool player_c::update(
     mHeadInWater = false;
   }
 
-  readPhysicsMessages(itemManager, assetManager);
+  readPhysicsMessages(assetManager);
 
   // deal with the health
   mCurrentHealth = physicsEntity->health;
@@ -827,7 +819,7 @@ bool player_c::update(
   update_target();
 
   // check if there's a block that the player is looking at and close to
-  updateTargetBlock(worldMap);
+  updateTargetBlock();
 
 
   // * * * * * * begin dead section * * * * * * * * * * *
@@ -891,10 +883,10 @@ bool player_c::update(
     }
 
     if (gi.isUseBackpackItem()) {
-      item_t item = itemManager.getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
+      item_t item = mGameModel->itemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
 
       if (item.type == ITEMTYPE_HEALTHPACK) {
-        useBackpackItem(assetManager, itemManager);
+        useBackpackItem();
       }
     }
 
@@ -910,16 +902,16 @@ bool player_c::update(
     // FIXME: destroys item!
     // this needs to create a physics item...
     if (gi.isDroppedItem() && mInventory.mBackpack[mInventory.mSelectedBackpackItem] != 0) {
-      itemManager.destroyItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
+      mGameModel->itemManager->destroyItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
   } // end mShowCharacterSheet == true
   else { // if (!mShowCharacterSheet) {
     if (gi.isUsingPrimary()) {
-      useEquipped(EQUIP_PRIMARY, assetManager, itemManager);
+      useEquipped(EQUIP_PRIMARY);
     }
     if (gi.isUsingSecondary()) {
-      useEquipped(EQUIP_SECONDARY, assetManager, itemManager);
+      useEquipped(EQUIP_SECONDARY);
     }
   }
 
@@ -951,13 +943,13 @@ bool player_c::update(
   // snap to it!
   if (mMeleeStatePrimary.hasUsed) {
     if (mIsBlockTargeted) {
-      worldMap.clearBlock(mTargetBlock);
+      mGameModel->location->getWorldMap()->clearBlock(mTargetBlock);
     }
     mMeleeStatePrimary.hasUsed = false;
   }
   if (mMeleeStateSecondary.hasUsed) {
     if (mIsBlockTargeted) {
-      worldMap.clearBlock(mTargetBlock);
+      mGameModel->location->getWorldMap()->clearBlock(mTargetBlock);
     }
     mMeleeStateSecondary.hasUsed = false;
   }
@@ -983,17 +975,17 @@ bool player_c::update(
     physicsEntity = mGameModel->physics->getEntityByHandle(mGameModel->physics->getPlayerHandle());
   }
 
-  updateHud(itemManager);
+  updateHud();
 
   // toggle the character sheet on/off according to the user input
   if (gi.isToggleCharacterSheet()) {
     mShowCharacterSheet = !mShowCharacterSheet;
   }
   
-  updateCharacterSheet(itemManager);
+  updateCharacterSheet();
 
   if (gi.isToggleGodMode()) {
-    godMode(itemManager);
+    godMode();
   }
 
   if (gi.isTogglePhysics()) mGameModel->physics->togglePause();
@@ -1188,10 +1180,7 @@ bool player_c::update(
 }
 
 
-void player_c::readPhysicsMessages(
-  ItemManager& itemManager,
-  AssetManager& assetManager)
-{
+void player_c::readPhysicsMessages(AssetManager& assetManager) {
   phys_message_t message;
 
   size_t itemHandle;
@@ -1210,7 +1199,7 @@ void player_c::readPhysicsMessages(
       case PHYS_MESSAGE_ITEMGRAB:
         itemHandle = message.iValue;
 
-        gotItem = pickUpItem(itemManager.getItem(itemHandle), assetManager);
+        gotItem = pickUpItem(mGameModel->itemManager->getItem(itemHandle), assetManager);
 
         if (gotItem) {
           message.sender = mGameModel->physics->getPlayerHandle();
@@ -1232,7 +1221,7 @@ void player_c::readPhysicsMessages(
 
 
 
-void player_c::placeLight(LightManager& lightManager, WorldMap& worldMap) {
+void player_c::placeLight() {
   if (mPlacedBlock) {
     mPlacedBlock = false;
 
@@ -1250,7 +1239,7 @@ void player_c::placeLight(LightManager& lightManager, WorldMap& worldMap) {
         LIGHT_LEVEL_MAX,
         LIGHT_LEVEL_MAX
       };
-      lightManager.addLight(pos, 10.0, color, worldMap);
+      mGameModel->location->getLightManager()->addLight(pos, 10.0, color, *mGameModel->location->getWorldMap());
     }
   }
 }

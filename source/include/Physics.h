@@ -193,33 +193,33 @@ public:
   void setItemHandleAndType(size_t handle, size_t itemHandle, int itemType);
 
   // * * * * * * * * UPDATE
-  int update(double time, WorldMap& worldMap, AssetManager& assetManager);
-  void updateEntity(size_t index, WorldMap& worldMap);
-  void expireEntity(size_t index, WorldMap& worldMap);
+  int update(double time, AssetManager& assetManager);
+  void updateEntity(size_t index);
+  void expireEntity(size_t index);
 
-  void integrate_euler(size_t index, WorldMap& worldMap);
-  void displaceObject(size_t index, WorldMap& worldMap);
+  void integrate_euler(size_t index);
+  void displaceObject(size_t index);
   v3d_t calculateAcceleration(size_t handle);
 
-  bool updateOnGroundStatus(size_t index, WorldMap& worldMap);
+  bool updateOnGroundStatus(size_t index);
 
   double getLastUpdateTime() const;
 
   bool sweepObjects(size_t indexA, size_t indexB, double& t0, double& t1, int& axis) const;
-  int clipDisplacementAgainstOtherObjects(size_t index, WorldMap& worldMap);
+  int clipDisplacementAgainstOtherObjects(size_t index);
 
   void add_force(size_t handle, const v3d_t& force);
 
-  void clip_displacement_against_world(WorldMap& worldMap, size_t index);
-  bool isIntersectingPlant(size_t index, const WorldMap& worldMap) const;
+  void clip_displacement_against_world(size_t index);
+  bool isIntersectingPlant(size_t index) const;
 
   bool isIndexOnGround(size_t index) const;
   bool isHandleOnGround(size_t handle) const;
 
-  void grenadeExplosion(size_t index, WorldMap& worldMap);
-  void spawnExplosion(const v3d_t& pos, size_t numParticles, WorldMap& worldMap);
-  void spawnMeatExplosion(const v3d_t& pos, size_t numParticles, WorldMap& worldMap);
-  void plasmaBombExplode(const v3d_t& pos, size_t numParticles, WorldMap& worldMap);
+  void grenadeExplosion(size_t index);
+  void spawnExplosion(const v3d_t& pos, size_t numParticles);
+  void spawnMeatExplosion(const v3d_t& pos, size_t numParticles);
+  void plasmaBombExplode(const v3d_t& pos, size_t numParticles);
   v3d_t getRadialForce(const v3d_t& pos, const v3d_t& center, double force, double radius) const;
 
   int addSoundEvent(int type, const v3d_t& position);
