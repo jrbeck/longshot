@@ -37,9 +37,7 @@ using namespace std;
 
 #include "GameWindow.h"
 #include "GalaxyMap.h"
-#include "World.h"
 #include "WorldUtil.h"
-#include "StarShip.h"
 #include "WorldMapView.h"
 #include "player.h"
 #include "AiManager.h"
@@ -55,25 +53,7 @@ using namespace std;
 // let's try to get rid of stuff below here...
 #include "RogueMapViewer.h"
 
-
-
-
 #define OUTPUT_FRAME_STATS		false
-
-
-typedef struct {
-  bool loadSucceeded;
-  v3d_t physicsPos;
-  int locationType;
-  int planetHandle;
-} GameSaveData;
-
-
-enum {
-  LOAD_SUCCESSFUL,
-  LOAD_UNSUCCESSFUL
-
-};
 
 
 enum {
@@ -102,7 +82,7 @@ class game_c {
 
   player_c* mPlayer;
   Galaxy* mGalaxy;
-  Location* mLocation;
+//  Location* mLocation;
   AiManager* mAiManager;
   Physics* mPhysics;
   GameInput* mGameInput;
@@ -126,9 +106,6 @@ class game_c {
   int mNumAiObjects;
   int mNumItems;
 
-  int mWorldSeed;
-  Planet* mCurrentPlanet;
-
   bool mCycleLighting;
 
   GameWindow* mGameWindow;
@@ -148,9 +125,6 @@ public:
 
   int enter_game_mode(bool createNewWorld);
 
-  void initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces);
-  void initSpaceShip(bool resetPlayer);
-  void resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer);
   void destroyItemsOwnedByPhysicsAndAi();
 
   void gameLoop();
@@ -165,10 +139,4 @@ public:
 
   // currently Windows specific
   void deleteAllFilesInFolder(LPWSTR folderPath);
-
-  void save();
-  int load();
-  int saveGameData();
-  GameSaveData loadGameData();
-  void saveLocation();
 };
