@@ -89,24 +89,13 @@ int GameModel::load(GameWindow* gameWindow) {
 
   currentPlanet = galaxy->getPlanetByHandle(gameSaveData.planetHandle);
 
-
-
-  //	Location *location;	// save
-  // LOCATION * * * * * * *
-  if (location != NULL) {
-    delete location;
-    location = NULL;
-  }
-
   switch (gameSaveData.locationType) {
   case LOCATION_SHIP:
     printf("game_c::load(): loading ship\n");
-    location = new StarShip();
     initializeSpaceShip(true);
     break;
   case LOCATION_WORLD:
     printf("game_c::load(): loading planet\n");
-    location = new World();
     currentPlanet = galaxy->getPlanetByHandle(gameSaveData.planetHandle);
     initializePlanet(true, &gameSaveData.physicsPos, false, gameWindow);
     break;
@@ -193,6 +182,10 @@ void GameModel::saveLocation() {
 
 void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createFeatures, GameWindow* gameWindow) {
   printf("game_c::initializePlanet()\n");
+  if (location != 0) {
+    delete location;
+  }
+  location = new World();
 
   FILE *file = NULL;
   currentPlanet = currentPlanet;
@@ -258,6 +251,11 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
 }
 
 void GameModel::initializeSpaceShip(bool resetPlayer) {
+  if (location != 0) {
+    delete location;
+  }
+  location = new StarShip();
+
   FILE *file = fopen("save/playership.dat", "rb");
   // this decides whose map we're gonna render/interact with
 

@@ -184,11 +184,9 @@ int game_c::enter_game_mode(bool createNewWorld) {
     deleteAllFilesInFolder(TEXT("save"));
 
     mGameModel->currentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
-    mGameModel->location = new StarShip();
     mGameModel->initializeSpaceShip(true);
     // load the appropriate menu
     loadShipMenu();
-    mCycleLighting = false;
   }
   else {
     printf("game_c::enter_game_mode(): loading game\n");
@@ -196,15 +194,7 @@ int game_c::enter_game_mode(bool createNewWorld) {
     loadPlanetMenu();
   }
 
-
   initializeWorldViews();
-
-
-
-
-
-
-
 
   // grab the cursor
   SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -341,7 +331,7 @@ void game_c::gameLoop() {
     // HACK * * * * * * *
     mPlayer->placeLight(*mGameModel->location->getLightManager(), *mGameModel->location->getWorldMap());
 
-    mWorldMapView.update(mAssetManager, *mGameModel->location->getLightManager(), mCycleLighting);
+    mWorldMapView.update(mAssetManager, *mGameModel->location->getLightManager());
 
     if (mGameInput->isToggleWorldChunkBoxes()) {
       mWorldMapView.toggleShowWorldChunkBoxes();
@@ -391,14 +381,10 @@ int game_c::handleMenuChoice(int menuChoice) {
     // ignore if we're already on the ship
     if (mGameModel->location->getType() != LOCATION_SHIP) {
       mGameModel->saveLocation();
-      delete mGameModel->location;
-
-      mGameModel->location = new StarShip();
       mGameModel->initializeSpaceShip(false);
       initializeWorldViews();
       // load the appropriate menu
       loadShipMenu();
-      mCycleLighting = false;
     }
     break;
 
@@ -426,18 +412,15 @@ int game_c::handleMenuChoice(int menuChoice) {
 
     if (planetMap->chooseLocation(*mGameModel->currentPlanet, planetPos)) {
       mGameModel->saveLocation();
-      delete mGameModel->location;
 
       // now deal with the new planet
-      mGameModel->location = new World();
       mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
       initializeWorldViews();
       // load the appropriate menu
       loadPlanetMenu();
-      mCycleLighting = true;
 
       // HACK - need better timekeeping
-      mLastUpdateTime = (static_cast<double>(SDL_GetTicks()) / 1000.0);
+      mLastUpdateTime = (double)SDL_GetTicks() / 1000.0;
     }
     delete planetMap;
 
@@ -480,7 +463,6 @@ bool game_c::update() {
   bool escapePressed = false;
 
   while (mLastUpdateTime < cur_time) {
-
     // update the physics objects
     mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, *mGameModel->location->getWorldMap(), mAssetManager);
 
@@ -501,6 +483,9 @@ bool game_c::update() {
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
   }
 
+  // this updates colors/transparencies...
+  mPhysicsView->update(mPhysics->getEntityVector(), mLastUpdateTime);
+
   return escapePressed;
 }
 
@@ -513,8 +498,6 @@ int game_c::draw() {
   // get the camera from the player's perspective
   gl_camera_c cam = mPlayer->gl_cam_setup();
 
-  // this updates colors/transparencies...
-  mPhysicsView->update(mPhysics->getEntityVector(), mLastUpdateTime);
   // we need this for the billboard sprites
   mPhysicsView->setViewPosition(cam.getPosition());
 

@@ -46,6 +46,7 @@ int World::initialize(FILE *file, Galaxy *galaxy, int planetHandle) {
   }
   mWorldMap = new WorldMap();
   mWorldMap->resize(WORLD_MAP_SIDE, WORLD_MAP_SIDE);
+  mWorldMap->mUpdateLightingContinuously = true;
 
   if (mLightManager != NULL) {
     delete mLightManager;
@@ -524,8 +525,8 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
   return 1;
 }
 
-void World::applyOverdrawBlocks(WorldColumn &wc) {
-  vector<OverdrawBlock*> *overdrawBlocks = mWorldMap->mOverdrawManager.getBlocks(wc.mWorldIndex.x, wc.mWorldIndex.z);
+void World::applyOverdrawBlocks(WorldColumn& wc) {
+  vector<OverdrawBlock*>* overdrawBlocks = mWorldMap->mOverdrawManager.getBlocks(wc.mWorldIndex.x, wc.mWorldIndex.z);
   if (overdrawBlocks == NULL) {
     return;
   }

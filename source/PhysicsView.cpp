@@ -57,7 +57,7 @@ void PhysicsView::setViewPosition(v3d_t pos) {
 }
 
 
-void PhysicsView::update(vector<PhysicsEntity*> *physicsEntities, double time) {
+void PhysicsView::update(vector<PhysicsEntity*>* physicsEntities, double time) {
   size_t numEntities = physicsEntities->size();
   for (size_t i = 0; i < numEntities; i++) {
     setEntityColor(*(*physicsEntities)[i], time);
@@ -67,7 +67,7 @@ void PhysicsView::update(vector<PhysicsEntity*> *physicsEntities, double time) {
 
 
 void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
-  float age = 1.0f - static_cast<GLfloat>((entity.expirationTime - time) / entity.lifespan);
+  float age = 1.0f - (GLfloat)((entity.expirationTime - time) / entity.lifespan);
   if (age > 1.0f) {
     age = 1.0f;
   }

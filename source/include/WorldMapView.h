@@ -55,14 +55,13 @@ public:
   WorldMapView();
   ~WorldMapView();
 
-
   // this will reset everything and prepare it for a new map
   void setWorldMap(WorldMap *worldMap, IntColor &sunColor);
   void toggleShowWorldChunkBoxes(void);
 
   // this will destroy the inactive display lists and
   // generate the new display lists
-  void update(AssetManager &assetManager, const LightManager &lightManager, bool cycleLightingUpdate);
+  void update(AssetManager &assetManager, const LightManager &lightManager);
 
   void generateDisplayLists(int columnIndex, const AssetManager &assetManager);
   void deleteDisplayLists(int columnIndex);

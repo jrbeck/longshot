@@ -106,8 +106,6 @@ class game_c {
   int mNumAiObjects;
   int mNumItems;
 
-  bool mCycleLighting;
-
   GameWindow* mGameWindow;
 
   // HACKS

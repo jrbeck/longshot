@@ -61,7 +61,7 @@ void WorldMapView::toggleShowWorldChunkBoxes() {
 
 
 
-void WorldMapView::update(AssetManager &assetManager, const LightManager &lightManager, bool cycleLightingUpdate) {
+void WorldMapView::update(AssetManager& assetManager, const LightManager& lightManager) {
   // FIXME: do we really need to do this every update?
   // actually this is dangerous unless we reset
   // mNumColumns since the size may have changed
@@ -86,7 +86,7 @@ void WorldMapView::update(AssetManager &assetManager, const LightManager &lightM
 
   // update the lighting in a gradual fashion
   // skip if it needs updating anyhow
-  if (cycleLightingUpdate) {
+  if (mWorldMap->mUpdateLightingContinuously) {
     int num = 0;
     while (mWorldMap->mColumns[lastColumn].mNeedDisplayList ||
       mWorldMap->mColumns[lastColumn].mNeedVisibility ||

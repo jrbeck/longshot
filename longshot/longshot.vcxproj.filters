@@ -67,6 +67,12 @@
     <Filter Include="Source Files\world\feature">
       <UniqueIdentifier>{20efa704-779a-4e49-8c85-17290e52e95e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\world\location">
+      <UniqueIdentifier>{2a7a8589-5a97-4715-85d3-837517833dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\world\location">
+      <UniqueIdentifier>{35fed918-98a6-4919-b76f-c5bbfae0cf1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\AiEntity.cpp">
@@ -80,9 +86,6 @@
     </ClCompile>
     <ClCompile Include="..\source\AiStateMachine.cpp">
       <Filter>Source Files\ai</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\StarShip.cpp">
-      <Filter>Source Files\galaxy</Filter>
     </ClCompile>
     <ClCompile Include="..\source\StarSystem.cpp">
       <Filter>Source Files\galaxy</Filter>
@@ -124,9 +127,6 @@
       <Filter>Source Files\game</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ItemManager.cpp">
-      <Filter>Source Files\game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Location.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
     <ClCompile Include="..\source\Longshot.cpp">
@@ -261,9 +261,6 @@
     <ClCompile Include="..\source\Terrain.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\World.cpp">
-      <Filter>Source Files\world</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\WorldChunk.cpp">
       <Filter>Source Files\world</Filter>
     </ClCompile>
@@ -312,6 +309,15 @@
     <ClCompile Include="..\source\GameModel.cpp">
       <Filter>Source Files\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\World.cpp">
+      <Filter>Source Files\world\location</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Location.cpp">
+      <Filter>Source Files\world\location</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\StarShip.cpp">
+      <Filter>Source Files\world\location</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -336,9 +342,6 @@
       <Filter>Header Files\galaxy</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\Planet.h">
-      <Filter>Header Files\galaxy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\include\StarShip.h">
       <Filter>Header Files\galaxy</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\RogueViewer.h">
@@ -366,9 +369,6 @@
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\ItemManager.h">
-      <Filter>Header Files\game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\include\Location.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
     <ClInclude Include="..\source\include\Longshot.h">
@@ -512,9 +512,6 @@
     <ClInclude Include="..\source\include\Terrain.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\include\World.h">
-      <Filter>Header Files\world</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\include\WorldChunk.h">
       <Filter>Header Files\world</Filter>
     </ClInclude>
@@ -553,6 +550,15 @@
     </ClInclude>
     <ClInclude Include="..\source\include\GameModel.h">
       <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\Location.h">
+      <Filter>Header Files\world\location</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\World.h">
+      <Filter>Header Files\world\location</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\StarShip.h">
+      <Filter>Header Files\world\location</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
