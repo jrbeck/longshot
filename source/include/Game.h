@@ -95,7 +95,7 @@ class game_c {
   PhysicsView* mPhysicsView;
   MerchantView* mMerchantView;
 
-  size_t mPlayerAiHandle;
+//  size_t mPlayerAiHandle;
 
   double mLastUpdateTime;
 
@@ -125,7 +125,7 @@ public:
 
   int enter_game_mode(bool createNewWorld);
 
-  void destroyItemsOwnedByPhysicsAndAi();
+  void initializeWorldViews();
 
   void gameLoop();
   int handleMenuChoice(int menuChoice);

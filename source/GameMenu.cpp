@@ -169,10 +169,8 @@ int GameMenu::GameMenuhoice(bool waitForInput) {
 
     case SDL_MOUSEBUTTONUP:
       if (sdlevent.button.button == SDL_BUTTON_LEFT) {
-//				click = mouse_up (sdlevent.button.x / (double)SCREEN_W,
-//								((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
-        click = mouse_up ((double)sdlevent.button.x / (double)SCREEN_W,
-          (double)sdlevent.button.y / (double)SCREEN_H);
+//				click = mouse_up(sdlevent.button.x / (double)SCREEN_W, ((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
+        click = mouse_up((double)sdlevent.button.x / (double)SCREEN_W, (double)sdlevent.button.y / (double)SCREEN_H);
       }
 
       break;

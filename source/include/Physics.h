@@ -142,6 +142,7 @@ typedef struct {
 } phys_message_t;
 
 
+class GameModel;
 
 // Physics * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 class Physics {

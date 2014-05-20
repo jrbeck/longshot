@@ -14,6 +14,9 @@ GameModel::GameModel() :
 
 
 GameModel::~GameModel() {
+  if (location != NULL) {
+    delete location;
+  }
 
 }
 
@@ -60,7 +63,7 @@ void GameModel::save() {
 }
 
 
-int GameModel::load() {
+int GameModel::load(GameWindow* gameWindow) {
 
   //	player_c player;	// save
   // PLAYER * * * * * * *
@@ -99,12 +102,13 @@ int GameModel::load() {
   case LOCATION_SHIP:
     printf("game_c::load(): loading ship\n");
     location = new StarShip();
-    initSpaceShip(true);
+    initializeSpaceShip(true);
     break;
   case LOCATION_WORLD:
     printf("game_c::load(): loading planet\n");
     location = new World();
-    initializePlanet(true, galaxy->getPlanetByHandle(gameSaveData.planetHandle), &gameSaveData.physicsPos, false);
+    currentPlanet = galaxy->getPlanetByHandle(gameSaveData.planetHandle);
+    initializePlanet(true, &gameSaveData.physicsPos, false, gameWindow);
     break;
   default:
     printf("game_c::load(): error, default location\n");
@@ -187,21 +191,21 @@ void GameModel::saveLocation() {
 
 
 
-void GameModel::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startPos, bool createSetPieces) {
+void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createFeatures, GameWindow* gameWindow) {
   printf("game_c::initializePlanet()\n");
 
   FILE *file = NULL;
-  currentPlanet = planet;
+  currentPlanet = currentPlanet;
   v3d_t playerStartPosition;
 
   // gotta do some kinda loading thingie
-  LoadScreen* loadScreen = new LoadScreen(mGameWindow);
+  LoadScreen* loadScreen = new LoadScreen(gameWindow);
   loadScreen->setCompletedColor(LOAD_SCREEN_LIGHT_PURPLE);
   loadScreen->setIncompletedColor(LOAD_SCREEN_DARK_PURPLE);
   loadScreen->show();
 
   // this is just a generic planet
-  if (planet == NULL) {
+  if (currentPlanet == NULL) {
     worldSeed = SDL_GetTicks();
     printf("world seed: %d\n", worldSeed);
   }
@@ -209,10 +213,10 @@ void GameModel::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startP
     // try to open the file for this planet
     printf("game_c::initializePlanet(): loading planet\n");
     char fileName[48];
-    sprintf(fileName, "save/planet%d.dat", planet->mHandle);
+    sprintf(fileName, "save/planet%d.dat", currentPlanet->mHandle);
     printf("game_c::initializePlanet(): trying to load file: %s\n", fileName);
     file = fopen(fileName, "rb");
-    worldSeed = planet->mSeed;
+    worldSeed = currentPlanet->mSeed;
   }
 
   if (startPos != NULL) {
@@ -224,7 +228,7 @@ void GameModel::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startP
   }
 
   printf("game_c::initializePlanet(): initializing location\n");
-  location->initialize(file, galaxy, planet->mHandle);
+  location->initialize(file, galaxy, currentPlanet->mHandle);
   if (file != NULL) {
     fclose(file);
   }
@@ -232,7 +236,7 @@ void GameModel::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startP
   if (startPos == NULL) {
     playerStartPosition = location->getStartPosition();
   }
-  else if (createSetPieces) {
+  else if (createFeatures) {
     printf("game_c::initializePlanet(): creating features\n");
     v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
     FeatureGenerator::createSetPieces(
@@ -250,15 +254,10 @@ void GameModel::initializePlanet(bool resetPlayer, Planet* planet, v3d_t* startP
   loadScreen->hide();
   delete loadScreen;
 
-  // load the appropriate menu
-  loadPlanetMenu();
-
-  mCycleLighting = true;
-
   resetForNewLocation(playerStartPosition, resetPlayer);
 }
 
-void GameModel::initSpaceShip(bool resetPlayer) {
+void GameModel::initializeSpaceShip(bool resetPlayer) {
   FILE *file = fopen("save/playership.dat", "rb");
   // this decides whose map we're gonna render/interact with
 
@@ -270,67 +269,34 @@ void GameModel::initSpaceShip(bool resetPlayer) {
   // make a physical entity to represent the player
   v3d_t playerStartPosition = { 12.5, 1.1, 50.0 };
 
-  // load the appropriate menu
-  loadShipMenu();
-
-  mCycleLighting = false;
-
   resetForNewLocation(playerStartPosition, resetPlayer);
 }
 
 void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer) {
-  // we need to give it an ambient light color
-  IntColor sunColor;
-  if (location->getType() == LOCATION_SHIP) {
-    sunColor.r = LIGHT_LEVEL_MAX;
-    sunColor.g = LIGHT_LEVEL_MAX;
-    sunColor.b = LIGHT_LEVEL_MAX;
-  }
-  else {
-    GLfloat* starColor = galaxy->getStarSystemByHandle(currentPlanet->mHandle)->mStarColor;
-    sunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
-    sunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
-    sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
-    sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
-  }
-  mWorldMapView.setWorldMap(location->getWorldMap(), sunColor);
-
-
   // let's handle the items first...
   // FIXME: this is temporary
   destroyItemsOwnedByPhysicsAndAi();
 
   // reset this to be safe
-  mPhysics->reset();
+  physics->reset();
 
-  // create a new PhysicsView
-  if (mPhysicsView != NULL) {
-    delete mPhysicsView;
-  }
-  mPhysicsView = new PhysicsView();
 
   // make a physical entity to represent the player
   // FIXME: make sure this succeeds you knucklehead!
   //  _assert(mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, 0.0, false) != 0);
-  mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, false);
-  printf("player physics handle: %d\n", mPhysics->getPlayerHandle());
+  physics->createEntity(OBJTYPE_PLAYER, playerStartPosition, false);
+  printf("player physics handle: %d\n", physics->getPlayerHandle());
 
   // load the pre-generated physics items
-  mPhysics->loadInactiveList();
+  physics->loadInactiveList();
 
   // AI
   aiManager->clear();
-  if (mAiView != NULL) {
-    delete mAiView;
-  }
-  mAiView = new AiView();
-  mAiView->setAiEntities(aiManager->getEntities());
-  playerAiHandle = aiManager->setPlayerPhysicsHandle();
-
+  size_t playerAiHandle = aiManager->setPlayerPhysicsHandle();
 
   // reset the player
   if (resetPlayer) {
-    player->reset(mGameModel->physics->getPlayerHandle(), playerAiHandle, *mItemManager);
+    player->reset(physics->getPlayerHandle(), playerAiHandle, *itemManager);
   }
   player->setStartPosition(playerStartPosition);
   player->soft_reset(playerStartPosition);
@@ -350,5 +316,14 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
   // some items are persistent (i.e. what the player and his posse
   // are holding onto), the rest should probably be destroyed
 
+}
+
+
+void GameModel::destroyItemsOwnedByPhysicsAndAi() {
+  vector<size_t> itemList = aiManager->getAllItemHandles();
+  itemManager->destroyItemList(itemList);
+  itemList = physics->getAllItemHandles();
+  itemManager->destroyItemList(itemList);
+  itemManager->trimItemsList();
 }
 

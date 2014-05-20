@@ -12,44 +12,43 @@
 
 #include <vector>
 
-#include "AssetManager.h"
-
+#include "Constants.h"
 
 class Inventory {
 public:
-	Inventory();
-	~Inventory();
+  Inventory();
+  ~Inventory();
 
-	void clear(void);
+  void clear();
 
-	void resizeBackpack(int newSize);
+  void resizeBackpack(int newSize);
 
-	int getNextFreeBackpackSlot(void);
+  int getNextFreeBackpackSlot();
 
-	bool swapBackPackItemIntoPrimary(void);
-	bool swapBackPackItemIntoSecondary(void);
+  bool swapBackPackItemIntoPrimary();
+  bool swapBackPackItemIntoSecondary();
 
-	void nextBackPackItem(void);
-	void previousBackPackItem(void);
+  void nextBackPackItem();
+  void previousBackPackItem();
 
-	void save(FILE *file);
-	void load(FILE *file);
+  void save(FILE* file);
+  void load(FILE* file);
 
 
-// MEMBERS * * * * * * * * * * * *
-	size_t mCredits;
+  // MEMBERS * * * * * * * * * * * *
+  size_t mCredits;
 
-	vector<size_t> mBackpack;
-	
-	size_t mPrimaryItem;
-	size_t mSecondaryItem;
+  std::vector<size_t> mBackpack;
 
-	size_t mHeadGear;
-	size_t mFootGear;
-	size_t mLegGear;
-	size_t mTorsoGear;
+  size_t mPrimaryItem;
+  size_t mSecondaryItem;
 
-	size_t mAmmoCounter[NUM_AMMO_TYPES];
+  size_t mHeadGear;
+  size_t mFootGear;
+  size_t mLegGear;
+  size_t mTorsoGear;
 
-	size_t mSelectedBackpackItem;
+  size_t mAmmoCounter[NUM_AMMO_TYPES];
+
+  size_t mSelectedBackpackItem;
 };
