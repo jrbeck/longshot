@@ -9,7 +9,9 @@ GameWindow::GameWindow(const char* windowTitle) :
   strncpy(mWindowTitle, windowTitle, MAX_WINDOW_TITLE_LENGTH);
   mWindowTitle[MAX_WINDOW_TITLE_LENGTH - 1] = '\0';
 
-  initSdl();
+  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    printf("Unable to initialize SDL: %s\n", SDL_GetError());
+  }
 
   SDL_DisplayMode current;
   // TODO: this defaults to display 0 ... there could be more than just the one
@@ -31,6 +33,7 @@ GameWindow::GameWindow(const char* windowTitle) :
 
   mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
   mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
+
   mWindowedMode.fullscreen = false;
 
   if (setVideoMode(mWindowedMode)) {
@@ -46,26 +49,12 @@ GameWindow::~GameWindow() {
   if (mSdlWindow != NULL) {
     SDL_DestroyWindow(mSdlWindow);
   }
-  quitSdl();
+  SDL_Quit();
 }
 
 void GameWindow::setIcon(const char *path) {
   SDL_SetWindowIcon(mSdlWindow, IMG_Load(path));
 }
-
-int GameWindow::initSdl() {
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-    printf("Unable to initialize SDL: %s\n", SDL_GetError());
-    return 1;
-  }
-
-  return 0;
-}
-
-void GameWindow::quitSdl() {
-  SDL_Quit();
-}
-
 
 int GameWindow::setVideoMode(sdl_mode_info_t mode) {
   if(mSdlWindow != NULL) {

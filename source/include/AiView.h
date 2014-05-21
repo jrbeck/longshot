@@ -8,84 +8,63 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef AiView_h_
-#define AiView_h_
-
+#pragma once
 
 #include "AiEntity.h"
 #include "AssetManager.h"
 #include "MathUtil.h"
 #include "LightManager.h"
 
-
 enum {
-	AISKIN_DUMMY,
-	AISKIN_BALLOON,
-	AISKIN_BALLOON_DEAD,
-	AISKIN_SHOOTER,
-	AISKIN_SHOOTER_DEAD,
-	AISKIN_HOPPER,
-	AISKIN_HOPPER_DEAD,
-	AISKIN_HUMAN,
-	AISKIN_HUMAN_DEAD,
+  AISKIN_DUMMY,
+  AISKIN_BALLOON,
+  AISKIN_BALLOON_DEAD,
+  AISKIN_SHOOTER,
+  AISKIN_SHOOTER_DEAD,
+  AISKIN_HOPPER,
+  AISKIN_HOPPER_DEAD,
+  AISKIN_HUMAN,
+  AISKIN_HUMAN_DEAD,
 
-	NUM_AISKINS
+  NUM_AISKINS
 };
-
-
 
 class AiView {
 public:
-	AiView();
-	~AiView();
+  AiView();
+  ~AiView();
 
-	void setAiEntities(vector<AiEntity *> *aiEntities);
+  void loadAssets();
+  void freeAssets();
 
-	void loadAssets(void);
-	void freeAssets(void);
+  void draw(GameModel* gameModel);
 
-	void draw(
-		WorldMap &worldMap,
-		ItemManager &itemManager,
-		const LightManager &lightManager);
+  void drawEntity(AiEntity& aiEntity);
 
-	void drawEntity(
-		WorldMap &worldMap,
-		ItemManager &itemManager,
-		AiEntity &aiEntity,
-		const LightManager &lightManager);
+  void updateHeadOrientation(AiEntity& aiEntity) const;
+  void updateFacingAngle(AiEntity& aiEntity, double desiredLookIncline) const;
+  void updateLookIncline(AiEntity& aiEntity, double desiredLookIncline) const;
 
-	void updateHeadOrientation(AiEntity &aiEntity) const;
-	void updateFacingAngle(AiEntity &aiEntity, double desiredLookIncline) const;
-	void updateLookIncline(AiEntity &aiEntity, double desiredLookIncline) const;
-
-	void drawBody(AiEntity &aiEntity, WorldMap &worldMap, const LightManager &lightManager);
-	void drawHead(AiEntity &aiEntity, WorldMap &worldMap, const LightManager &lightManager);
-	void drawWeapon(AiEntity &aiEntity, WorldMap &worldMap, ItemManager &itemManager);
+  void drawBody(AiEntity& aiEntity);
+  void drawHead(AiEntity& aiEntity);
+  void drawWeapon(AiEntity& aiEntity);
 
 
-	void drawBodyBlock(IntColor color) const;
-	void drawBlockWithFace (IntColor color) const;
+  void drawBodyBlock(IntColor color) const;
+  void drawBlockWithFace(IntColor color) const;
 
-	IntColor getLightValue(v3d_t position, WorldMap &worldMap, const LightManager &lightManager) const;
+  IntColor getLightValue(v3d_t position) const;
 
 private:
-// members * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  // members * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  WorldMap* mWorldMap;
+  LightManager *mLightManager;
 
-	// this points to the critter we'll be drawing
-	vector<AiEntity *> *mAiEntities;
-
-	// these hold the texture handles for the skins
-	// FIXME: how about atlas textures? already basically doing it
-	// * * * heads
-	GLuint mHeadTextureHandles[NUM_AITYPES];
-	// * * * bodies
-	GLuint mTextureHandles[NUM_AISKINS];
+  // these hold the texture handles for the skins
+  // FIXME: how about atlas textures? already basically doing it
+  // * * * heads
+  GLuint mHeadTextureHandles[NUM_AITYPES];
+  // * * * bodies
+  GLuint mTextureHandles[NUM_AISKINS];
 
 };
-
-
-
-
-
-#endif // AiView_h_

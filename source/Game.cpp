@@ -228,15 +228,12 @@ int game_c::enter_game_mode(bool createNewWorld) {
   return 0;
 }
 
-
-
-
 void game_c::initializeWorldViews() {
-  // worldmap
-
   // we need to give it an ambient light color
+  printf("PLANET: %d\n", mGameModel->currentPlanet->mHandle);
+
   IntColor sunColor;
-  if (mGameModel->location->getType() == LOCATION_SHIP) {
+  if (mGameModel->location->getType() == LOCATION_SHIP && false) {
     sunColor.r = LIGHT_LEVEL_MAX;
     sunColor.g = LIGHT_LEVEL_MAX;
     sunColor.b = LIGHT_LEVEL_MAX;
@@ -262,11 +259,7 @@ void game_c::initializeWorldViews() {
     delete mAiView;
   }
   mAiView = new AiView();
-  mAiView->setAiEntities(mGameModel->aiManager->getEntities());
 }
-
-
-
 
 void game_c::gameLoop() {
   printf("game_c::gameLoop() - begin\n");
@@ -368,7 +361,7 @@ int game_c::handleMenuChoice(int menuChoice) {
   GalaxyMap* galaxyMap;
   PlanetMap* planetMap;
   RogueMapViewer* rogueMapViewer;
-  v3d_t planetPos;
+  v3d_t planetPos = v3d_zero();
 
   switch (menuChoice) {
   case GAMEMENU_BACKTOGAME:
@@ -515,7 +508,7 @@ int game_c::draw() {
   mPlayer->drawEquipped(mAssetManager);
 
   // draw the AI
-  mAiView->draw(*mGameModel->location->getWorldMap(), *mItemManager, *mGameModel->location->getLightManager());
+  mAiView->draw(mGameModel);
 
   // draw the transparent physics objs
   bool playerHeadInWater = mPlayer->isHeadInWater();

@@ -72,15 +72,18 @@ AiEntity* AiManager::addEntity(int type, const v3d_t& position) {
     return NULL;
   }
 
-  size_t physicsHandle = mGameModel->physics->createAiEntity(type, position);
-  if (physicsHandle == 0) {
+  PhysicsEntity* physicsEntity = mGameModel->physics->createAiEntity(type, position);
+  if (physicsEntity == NULL) {
     printf("AiManager::addEntity(): error: failed to create phys entity\n");
+    delete e;
     return NULL;
   }
 
   e->mActive = true;
   e->mHandle = mNextHandle++;
-  e->mPhysicsHandle = physicsHandle;
+  e->mPhysicsEntity = physicsEntity;
+  e->mPhysicsHandle = physicsEntity->handle;
+  e->mTargetPhysicsEntity = NULL;
   e->mTargetPhysicsHandle = 0;
   e->mType = type;
   e->mWorldPosition = position;

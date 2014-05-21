@@ -1,7 +1,6 @@
 #include "AiView.h"
 
 
-
 AiView::AiView() {
   for (int i = 0; i < NUM_AITYPES; i++) {
     mHeadTextureHandles[i] = 0;
@@ -13,16 +12,9 @@ AiView::AiView() {
   loadAssets();
 }
 
-
 AiView::~AiView() {
   freeAssets();
 }
-
-
-void AiView::setAiEntities(vector<AiEntity*>* aiEntities) {
-  mAiEntities = aiEntities;
-}
-
 
 void AiView::loadAssets() {
   mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_tiger.png");
@@ -42,8 +34,6 @@ void AiView::loadAssets() {
   mTextureHandles[AISKIN_HUMAN_DEAD] = AssetManager::loadImg("art/32_ai_human_dead.bmp");
 }
 
-
-
 void AiView::freeAssets() {
   for (int i = 0; i < NUM_AITYPES; i++) {
     if (mHeadTextureHandles[i] > 0) {
@@ -59,34 +49,23 @@ void AiView::freeAssets() {
   }
 }
 
+void AiView::draw(GameModel* gameModel) {
+  mWorldMap = gameModel->location->getWorldMap();
+  mLightManager = gameModel->location->getLightManager();
 
-
-void AiView::draw(
-  WorldMap& worldMap,
-  ItemManager& itemManager,
-  const LightManager& lightManager)
-{
   glEnable(GL_TEXTURE_2D);
-  size_t numEntities = mAiEntities->size();
+
+  vector<AiEntity *>* aiEntities = gameModel->aiManager->getEntities();
+
+  size_t numEntities = aiEntities->size();
   for (size_t i = 0; i < numEntities; i++) {
-    drawEntity(
-      worldMap,
-      itemManager,
-      *(*mAiEntities)[i],
-      lightManager);
+    drawEntity(*(*aiEntities)[i]);
   }
 }
 
-
-
-void AiView::drawEntity(
-  WorldMap& worldMap,
-  ItemManager& itemManager,
-  AiEntity& aiEntity,
-  const LightManager& lightManager)
-{
+void AiView::drawEntity(AiEntity& aiEntity) {
   if (aiEntity.mType == AITYPE_PLAYER) {
-    drawWeapon(aiEntity, worldMap, itemManager);
+    drawWeapon(aiEntity);
     // WARNING: this will not draw players!
     return;
   }
@@ -98,17 +77,17 @@ void AiView::drawEntity(
   }
 
   if (aiEntity.mType == AITYPE_SHOOTER) {
-    drawWeapon(aiEntity, worldMap, itemManager);
+    drawWeapon(aiEntity);
   }
 
   // draw the critter's body
-  drawBody(aiEntity, worldMap, lightManager);
+  drawBody(aiEntity);
 
   // move the head around
   updateHeadOrientation(aiEntity);
 
   // draw the head
-  drawHead(aiEntity, worldMap, lightManager);
+  drawHead(aiEntity);
 }
 
 
@@ -215,14 +194,8 @@ void AiView::updateLookIncline(AiEntity& aiEntity, double desiredLookIncline) co
   }
 }
 
-
-
-void AiView::drawBody(
-  AiEntity &aiEntity,
-  WorldMap &worldMap,
-  const LightManager &lightManager)
-{
-  PhysicsEntity &pe = *aiEntity.mPhysicsEntity;
+void AiView::drawBody(AiEntity& aiEntity) {
+  PhysicsEntity& pe = *aiEntity.mPhysicsEntity;
 
   // FIXME: this isn't all necessary...
   // it's leftover from the first lighting style
@@ -292,7 +265,7 @@ void AiView::drawBody(
   }
 
   // figure out the color
-  IntColor color = getLightValue(pe.boundingBox.getCenterPosition(), worldMap, lightManager);
+  IntColor color = getLightValue(pe.boundingBox.getCenterPosition());
 
   // draw the box
   glBegin(GL_QUADS);
@@ -303,14 +276,7 @@ void AiView::drawBody(
 
 }
 
-
-
-
-void AiView::drawHead(
-  AiEntity& aiEntity,
-  WorldMap& worldMap,
-  const LightManager& lightManager)
-{
+void AiView::drawHead(AiEntity& aiEntity) {
   v3d_t headPosition;
   v3d_t headDimensions; // lol
   IntColor color;
@@ -332,7 +298,7 @@ void AiView::drawHead(
     glBindTexture(GL_TEXTURE_2D, mHeadTextureHandles[aiEntity.mType]);
 
     // get the color
-    color = getLightValue(headPosition, worldMap, lightManager);
+    color = getLightValue(headPosition);
     // draw it
     glBegin(GL_QUADS);
     drawBlockWithFace(color);
@@ -356,7 +322,7 @@ void AiView::drawHead(
     glBindTexture(GL_TEXTURE_2D, mHeadTextureHandles[aiEntity.mType]);
 
     // get the color
-    color = getLightValue(headPosition, worldMap, lightManager);
+    color = getLightValue(headPosition);
     // draw it
     glBegin(GL_QUADS);
     drawBlockWithFace(color);
@@ -371,14 +337,7 @@ void AiView::drawHead(
   glPopMatrix();
 }
 
-
-
-
-void AiView::drawWeapon(
-  AiEntity& aiEntity,
-  WorldMap& worldMap,
-  ItemManager& itemManager)
-{
+void AiView::drawWeapon(AiEntity& aiEntity) {
   glDisable(GL_TEXTURE_2D);
   glPushMatrix();
 
@@ -541,10 +500,10 @@ void AiView::drawBlockWithFace(IntColor color) const {
 
 
 
-IntColor AiView::getLightValue(v3d_t position, WorldMap &worldMap, const LightManager &lightManager) const {
+IntColor AiView::getLightValue(v3d_t position) const {
   IntColor color = { 0, 0, 0 };
 
-  block_t *block = worldMap.getBlock(position);
+  block_t* block = mWorldMap->getBlock(position);
   if (block != NULL) {
     color.r += block->uniqueLighting;
     color.g += block->uniqueLighting;
@@ -553,12 +512,12 @@ IntColor AiView::getLightValue(v3d_t position, WorldMap &worldMap, const LightMa
   else {
     // THIS MAKES IT FULL BRIGHT WHEN NOT IN A REAL
     // CHUNK...
-    color.r += worldMap.mWorldLightingCeiling;
-    color.b += worldMap.mWorldLightingCeiling;
-    color.g += worldMap.mWorldLightingCeiling;
+    color.r += mWorldMap->mWorldLightingCeiling;
+    color.b += mWorldMap->mWorldLightingCeiling;
+    color.g += mWorldMap->mWorldLightingCeiling;
   }
 
-  IntColor light = lightManager.getLightLevel(v3di_v(position));
+  IntColor light = mLightManager->getLightLevel(v3di_v(position));
   color.r += light.r;
   color.g += light.g;
   color.b += light.b;

@@ -56,8 +56,11 @@ void AiEntity::update() {
         else {
           v3d_t itemForce = v3d_random(20.0);
           itemForce.y = 10.0;
-          size_t itemPhysicsHandle = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, true);
-          physics.setItemHandleAndType(itemPhysicsHandle, mInventory[i], mGameModel->itemManager->getItemType(mInventory[i]));
+          PhysicsEntity* itemPhysicsEntity = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, true);
+          if (itemPhysicsEntity != NULL) {
+            physics.setItemHandleAndType(itemPhysicsEntity->handle, mInventory[i], mGameModel->itemManager->getItemType(mInventory[i]));
+          }
+          
         }
 
         mInventory[i] = 0;
@@ -545,12 +548,12 @@ void AiEntity::aquireTarget() {
       baitPosition = v3d_add(mWorldPosition, v3d_v(r_num(-25.0, 25.0), 10.0, r_num(-25.0, 25.0)));
     }
 
-    size_t baitHandle = physics.createEntity(OBJTYPE_TIGER_BAIT, baitPosition, true);
-
-    physics.setHealth(baitHandle, 1.0);
-
-    mTargetPhysicsHandle = baitHandle;
-    mTargetPhysicsEntity = physics.getEntityByHandle(mTargetPhysicsHandle);
+    PhysicsEntity *baitPhysicsEntity = physics.createEntity(OBJTYPE_TIGER_BAIT, baitPosition, true);
+    if (baitPhysicsEntity != NULL) {
+      physics.setHealth(baitPhysicsEntity->handle, 1.0);
+      mTargetPhysicsHandle = baitPhysicsEntity->handle;
+      mTargetPhysicsEntity = baitPhysicsEntity;
+    }
     return;
   }
 }

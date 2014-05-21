@@ -187,8 +187,7 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
   }
   location = new World();
 
-  FILE *file = NULL;
-  currentPlanet = currentPlanet;
+  FILE* file = NULL;
   v3d_t playerStartPosition;
 
   // gotta do some kinda loading thingie
@@ -215,9 +214,7 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
   if (startPos != NULL) {
     v3d_print("game_c::initializePlanet(): setting startPos, ", *startPos);
     static_cast<World*>(location)->setStartPosition(*startPos);
-    playerStartPosition.x = startPos->x;
-    playerStartPosition.y = startPos->y;
-    playerStartPosition.z = startPos->z;
+    playerStartPosition = *startPos;
   }
 
   printf("game_c::initializePlanet(): initializing location\n");
@@ -233,8 +230,7 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
     printf("game_c::initializePlanet(): creating features\n");
     v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
     FeatureGenerator::createSetPieces(
-      worldIndex.x,
-      worldIndex.z,
+      worldIndex.x, worldIndex.z,
       *static_cast<World*>(location),
       loadScreen);
   }
@@ -256,7 +252,7 @@ void GameModel::initializeSpaceShip(bool resetPlayer) {
   }
   location = new StarShip();
 
-  FILE *file = fopen("save/playership.dat", "rb");
+  FILE* file = fopen("save/playership.dat", "rb");
   // this decides whose map we're gonna render/interact with
 
   location->initialize(file, galaxy, currentPlanet->mHandle);
@@ -278,7 +274,6 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
   // reset this to be safe
   physics->reset();
 
-
   // make a physical entity to represent the player
   // FIXME: make sure this succeeds you knucklehead!
   //  _assert(mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, 0.0, false) != 0);
@@ -298,7 +293,6 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
   }
   player->setStartPosition(playerStartPosition);
   player->soft_reset(playerStartPosition);
-
 
   // FIXME: this is really a hack...
   if (location->getType() == LOCATION_SHIP) {

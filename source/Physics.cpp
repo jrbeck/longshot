@@ -469,11 +469,10 @@ void Physics::updateEntity(size_t index) {
   switch (physicsEntity->type) {
     case OBJTYPE_NAPALM:
       if (r_numi(0, 100) == 0) {
-        otherHandle = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
-        otherIndex = getIndexFromHandle(otherHandle);
-        if (otherIndex >= 0) {
-          obj[otherIndex]->owner = physicsEntity->owner;
-          obj[otherIndex]->impactDamage = physicsEntity->impactDamage;
+        PhysicsEntity *otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
+        if (otherEntity != NULL) {
+          otherEntity->owner = physicsEntity->owner;
+          otherEntity->impactDamage = physicsEntity->impactDamage;
         }
       }
       break;
@@ -485,29 +484,29 @@ void Physics::updateEntity(size_t index) {
     case OBJTYPE_DEAD_BULLET:
     case OBJTYPE_LIVE_BULLET:
       if (r_numi(0, 100) == 0) {
-        otherHandle = createEntity (OBJTYPE_STEAM, physicsEntity->pos, false);
-        otherIndex = getIndexFromHandle(otherHandle);
-        if (otherIndex >= 0) {
-          obj[otherIndex]->color[3] = 0.2f;
+        PhysicsEntity *otherEntity = createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+        if (otherEntity != NULL) {
+          otherEntity->color[3] = 0.2f;
         }
       }
       break;
 
     case OBJTYPE_ROCKET:
       if (r_numi (0, 4) == 0) {
-        otherHandle = createEntity (OBJTYPE_FIRE, physicsEntity->pos, false);
-        otherIndex = getIndexFromHandle(otherHandle);
-        if (otherIndex >= 0) {
-          obj[otherIndex]->owner = physicsEntity->owner;
-          obj[otherIndex]->impactDamage = physicsEntity->impactDamage;
+        PhysicsEntity *otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
+        if (otherEntity != NULL) {
+          otherEntity->owner = physicsEntity->owner;
+          otherEntity->impactDamage = physicsEntity->impactDamage;
         }
       }
       break;
 
     case OBJTYPE_PLASMA_BOMB:
       for (int i = 0; i < rnum; i++) {
-        otherHandle = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
-        setVelocity(otherHandle, v3d_random(0.5));
+        PhysicsEntity *otherEntity = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
+        if (otherEntity != NULL) {
+          setVelocity(otherEntity->handle, v3d_random(0.5));
+        }
       }
       createEntity(OBJTYPE_PLASMA_TRAIL, physicsEntity->boundingBox.getCenterPosition(), true);
       break;
@@ -527,19 +526,16 @@ void Physics::updateEntity(size_t index) {
 
 void Physics::expireEntity(size_t index) {
   PhysicsEntity *physicsEntity = obj[index];
+  PhysicsEntity *newPhysicsEntity;
   size_t newHandle, newIndex;
   v3d_t pos;
   bool removeEntity = true;
 
   switch (physicsEntity->type) {
     case OBJTYPE_FIRE:
-      newHandle = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, false);
-
-      if (newHandle != 0) {
-        newIndex = getIndexFromHandle(newHandle);
-        PhysicsEntity *newPhysicsEntity = obj[newIndex];
+      newPhysicsEntity = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, false);
+      if (newPhysicsEntity != NULL) {
         newPhysicsEntity->boundingBox.setDimensions(physicsEntity->boundingBox.getDimensions());
-
         newPhysicsEntity->vel.x = r_num(-0.2, 0.2);
         newPhysicsEntity->vel.y = physicsEntity->vel.y * 0.6;
         newPhysicsEntity->vel.z = r_num(-0.2, 0.2);
@@ -1650,18 +1646,19 @@ bool Physics::isHandleOnGround(size_t handle) const {
 
 
 void Physics::grenadeExplosion(size_t index) {
-  PhysicsEntity *physicsEntity = obj[index];
+  PhysicsEntity* physicsEntity = obj[index];
+  PhysicsEntity* newPhysicsEntity = NULL;
   v3d_t centerPosition = physicsEntity->boundingBox.getCenterPosition ();
 
   addSoundEvent (SOUND_GRENADE_EXPLOSION, centerPosition);
   
+
   for (int i = 0; i < physicsEntity->numParticles; i++) {
     v3d_t randomPosition = v3d_add(centerPosition, v3d_random (0.5));
-    size_t shrapnelHandle = createEntity(physicsEntity->type2, randomPosition, true);
-    int shrapnelIndex = getIndexFromHandle(shrapnelHandle);
-    if (shrapnelIndex > 0) {
-      obj[shrapnelIndex]->owner = physicsEntity->owner;
-      obj[shrapnelIndex]->impactDamage = physicsEntity->impactDamage;
+    newPhysicsEntity = createEntity(physicsEntity->type2, randomPosition, true);
+    if (newPhysicsEntity != NULL) {
+      newPhysicsEntity->owner = physicsEntity->owner;
+      newPhysicsEntity->impactDamage = physicsEntity->impactDamage;
     }
   }
 
@@ -1671,13 +1668,12 @@ void Physics::grenadeExplosion(size_t index) {
     mGameModel->location->getWorldMap()->clearSphere(centerPosition, clearRadius);
   }
 
-  size_t explosionHandle = createEntity(OBJTYPE_EXPLOSION, centerPosition, true);
+  newPhysicsEntity = createEntity(OBJTYPE_EXPLOSION, centerPosition, true);
   // FIXME: hack!
-  if (explosionHandle > 0) {
-    int explosionIndex = getIndexFromHandle(explosionHandle);
-    obj[explosionIndex]->owner = physicsEntity->owner;
-    obj[explosionIndex]->applyPhysics = false;
-    obj[explosionIndex]->explosionForce = physicsEntity->explosionForce;
+  if (newPhysicsEntity != NULL) {
+    newPhysicsEntity->owner = physicsEntity->owner;
+    newPhysicsEntity->applyPhysics = false;
+    newPhysicsEntity->explosionForce = physicsEntity->explosionForce;
   }
 }
 
@@ -1698,13 +1694,11 @@ void Physics::spawnExplosion(const v3d_t& pos, size_t numParticles) {
 
   mGameModel->location->getWorldMap()->clearSphere(pos, 2.5);
 
-  size_t handle = createEntity(OBJTYPE_EXPLOSION, pos, true);
+  PhysicsEntity* newPhysicsEntity = createEntity(OBJTYPE_EXPLOSION, pos, true);
   // FIXME: hack!
-  if (handle != 0) {
-    int index = getIndexFromHandle(handle);
-    PhysicsEntity *physicsEntity = obj[index];
-    physicsEntity->applyPhysics = false;
-    physicsEntity->explosionForce = 5000.0;
+  if (newPhysicsEntity != NULL) {
+    newPhysicsEntity->applyPhysics = false;
+    newPhysicsEntity->explosionForce = 5000.0;
   }
 }
 
@@ -1716,34 +1710,31 @@ void Physics::spawnMeatExplosion(const v3d_t& pos, size_t numParticles) {
   }
 
   // put a minor explosion in the middle of all that meat
-  size_t handle = createEntity(OBJTYPE_EXPLOSION, pos, true);
-  if (handle != 0) {
-    int index = getIndexFromHandle(handle);
-    PhysicsEntity* physicsEntity = obj[index];
-    physicsEntity->applyPhysics = false;
-    physicsEntity->explosionForce = 350.0;
+  PhysicsEntity* newPhysicsEntity = createEntity(OBJTYPE_EXPLOSION, pos, true);
+  if (newPhysicsEntity != NULL) {
+    newPhysicsEntity->applyPhysics = false;
+    newPhysicsEntity->explosionForce = 350.0;
   }
 }
 
 void Physics::plasmaBombExplode(const v3d_t& pos, size_t numParticles) {
+  PhysicsEntity* newPhysicsEntity;
   for (size_t i = 0; i < numParticles; i++) {
-    size_t handle = createEntity(OBJTYPE_PLASMA_SPARK, pos, true);
+    newPhysicsEntity = createEntity(OBJTYPE_PLASMA_SPARK, pos, true);
 
-    if (handle != 0) {
-      int index = getIndexFromHandle(handle);
-      PhysicsEntity *physicsEntity = obj[index];
-      if (!mGameModel->location->getWorldMap()->isBoundingBoxEmpty(physicsEntity->boundingBox)) {
-        physicsEntity->active = false;
+    if (newPhysicsEntity != NULL) {
+      if (!mGameModel->location->getWorldMap()->isBoundingBoxEmpty(newPhysicsEntity->boundingBox)) {
+        newPhysicsEntity->active = false;
       }
       else {
-        physicsEntity->boundingBox.setDimensions(v3d_scale(r_num(2.0, 5.0), physicsEntity->boundingBox.getDimensions()));
+        newPhysicsEntity->boundingBox.setDimensions(v3d_scale(r_num(2.0, 5.0), newPhysicsEntity->boundingBox.getDimensions()));
 
         // FIXME: is this safe?
         // (is that the sort of question to ask in a method
         // named: plasmaBombExplode()?
-        physicsEntity->expirationTime += r_num(0.2, 0.4);
+        newPhysicsEntity->expirationTime += r_num(0.2, 0.4);
         v3d_t randomVel = v3d_random(r_num(0.2, 1.0));
-        physicsEntity->vel = randomVel;
+        newPhysicsEntity->vel = randomVel;
       }
     }
   }

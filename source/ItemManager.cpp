@@ -491,11 +491,8 @@ void ItemManager::generateRandomRocketLauncher(item_t& newGun, double dps) {
 
 size_t ItemManager::spawnPhysicsEntityGun(double value, v3d_t position) {
   size_t itemHandle = generateRandomGun(value);
-  size_t physicsHandle = mGameModel->physics->createEntity(OBJTYPE_ITEM, position, false);
-
-  // WARNING: no checking to see if generateRandomGun() and physics.createEntity()
-  // were successful
-  mGameModel->physics->setItemHandleAndType(physicsHandle, itemHandle, getItemType(itemHandle));
+  PhysicsEntity* physicsEntity = mGameModel->physics->createEntity(OBJTYPE_ITEM, position, false);
+  mGameModel->physics->setItemHandleAndType(physicsEntity->handle, itemHandle, getItemType(itemHandle));
   return itemHandle;
 }
 
@@ -639,9 +636,7 @@ double ItemManager::useGun(size_t itemHandle, shot_info_t shotInfo) {
       bulletType = mItems[itemIndex].bulletType;
     }
 
-    size_t physicsHandle = mGameModel->physics->createEntity(bulletType, shotInfo.position, shotForce, true);
-
-    PhysicsEntity *projectileEntity = mGameModel->physics->getEntityByHandle(physicsHandle);
+    PhysicsEntity* projectileEntity = mGameModel->physics->createEntity(bulletType, shotInfo.position, shotForce, true);
     projectileEntity->owner = shotInfo.ownerPhysicsHandle;
     projectileEntity->impactDamage = mItems[itemIndex].bulletDamage;
     projectileEntity->explosionForce = mItems[itemIndex].explosionForce;
@@ -669,9 +664,7 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo) {
   for (int i = 0; i < 1; i++) {
     v3d_t finalAngle = shotInfo.angle;
     int bulletType = OBJTYPE_MELEE_ATTACK;
-    size_t physicsHandle = mGameModel->physics->createEntity(bulletType, shotInfo.position, true);
-
-    PhysicsEntity *projectileEntity = mGameModel->physics->getEntityByHandle(physicsHandle);
+    PhysicsEntity* projectileEntity = mGameModel->physics->createEntity(bulletType, shotInfo.position, true);
     projectileEntity->owner = shotInfo.ownerPhysicsHandle;
     projectileEntity->impactDamage = mItems[itemIndex].bulletDamage;
     projectileEntity->acc = v3d_scale(shotInfo.angle, mItems[itemIndex].explosionForce);

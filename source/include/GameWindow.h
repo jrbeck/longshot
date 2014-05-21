@@ -28,13 +28,11 @@ struct sdl_mode_info_t {
   bool fullscreen;
 };
 
-
 struct rgb_float_t {
   GLfloat r;
   GLfloat g;
   GLfloat b;
 };
-
 
 class GameWindow {
 public:
@@ -43,11 +41,9 @@ public:
 
   void setIcon(const char *path);
 
-  int initSdl();
-  void quitSdl();
-
   int setVideoMode(sdl_mode_info_t mode);
   void toggleFullscreen();
+
   void swapBuffers();
 
 private:

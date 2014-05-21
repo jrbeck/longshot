@@ -9,18 +9,14 @@ PhysicsView::PhysicsView() {
   loadAssets();
 }
 
-
 PhysicsView::~PhysicsView() {
   freeAssets ();
 }
 
-
-
-
-void PhysicsView::loadAssets (void) {
+void PhysicsView::loadAssets() {
   // load up the default, untextured block
   mBlankBlockCallListHandle = glGenLists(1);
-  glNewList (mBlankBlockCallListHandle, GL_COMPILE);
+  glNewList(mBlankBlockCallListHandle, GL_COMPILE);
     AssetManager::drawBlankBlock();
   glEndList();
 
@@ -34,10 +30,7 @@ void PhysicsView::loadAssets (void) {
   mTextureHandles[OBJSKIN_GRENADE] = AssetManager::loadImg("art/32_obj_grenade.bmp");
 }
 
-
-
-
-void PhysicsView::freeAssets (void) {
+void PhysicsView::freeAssets() {
   if (mBlankBlockCallListHandle != 0) {
     glDeleteLists (mBlankBlockCallListHandle, 1);
     mBlankBlockCallListHandle = 0;
@@ -51,11 +44,9 @@ void PhysicsView::freeAssets (void) {
   }
 }
 
-
 void PhysicsView::setViewPosition(v3d_t pos) {
   mViewPosition = pos;
 }
-
 
 void PhysicsView::update(vector<PhysicsEntity*>* physicsEntities, double time) {
   size_t numEntities = physicsEntities->size();
@@ -63,8 +54,6 @@ void PhysicsView::update(vector<PhysicsEntity*>* physicsEntities, double time) {
     setEntityColor(*(*physicsEntities)[i], time);
   }
 }
-
-
 
 void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
   float age = 1.0f - (GLfloat)((entity.expirationTime - time) / entity.lifespan);

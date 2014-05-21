@@ -39,15 +39,11 @@ using namespace std;
 #include "GalaxyMap.h"
 #include "WorldUtil.h"
 #include "WorldMapView.h"
-#include "player.h"
-#include "AiManager.h"
 #include "AiView.h"
 #include "physics.h"
 #include "PhysicsView.h"
 #include "GameInput.h"
 #include "AssetManager.h"
-#include "ItemManager.h"
-#include "feature/FeatureGenerator.h"
 #include "MerchantView.h"
 
 // let's try to get rid of stuff below here...

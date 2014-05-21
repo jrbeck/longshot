@@ -33,10 +33,9 @@ public:
   LightManager* getLightManager() { return mLightManager; }
   virtual v3d_t getStartPosition() = 0;
 
-  int mHandle;
-
 protected:
   int mType;
   WorldMap* mWorldMap;
   LightManager* mLightManager;
+//  IntColor mSunColor;
 };
