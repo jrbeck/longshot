@@ -44,10 +44,7 @@ enum {
   NUM_BIOME_TYPES
 };
 
-
-
-extern BiomeType gBiomeTypes[];
-
+BiomeType gBiomeTypes[];
 
 class BiomeMap {
 public:
@@ -64,6 +61,8 @@ private:
 
   int mTypesW;
   int mTypesH;
+
+  BiomeType* mBiomeTypes;
 
   double mInterval1;
   double mInterval2;

@@ -108,7 +108,7 @@ int Periodics::getTerrainHeight (int x, int z) const {
     height = SEA_FLOOR_HEIGHT;
   }
 
-  return static_cast<int>(floor (height));
+  return (int)floor (height);
 }
 
 
@@ -117,13 +117,13 @@ BiomeInfo Periodics::getBiomeInfo(int x, int z) const {
 }
 
 
-double Periodics::getPrecipitationLevel (double worldX, double worldZ) const {
+double Periodics::getPrecipitationLevel(double worldX, double worldZ) const {
   return mRandomMap.getValueBilerp (worldX * 0.03257, worldZ * 0.03257);
 }
 
 
 
-BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition) {
+BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition) {
   int terrainHeight = getTerrainHeight (worldPosition.x, worldPosition.z);
 
   return generateBlockAtWorldPosition (worldPosition, terrainHeight);
@@ -132,14 +132,20 @@ BYTE Periodics::generateBlockAtWorldPosition (v3di_t worldPosition) {
 
 
 BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight) {
-  double x = static_cast<double>(worldPosition.x);
-  double y = static_cast<double>(worldPosition.y);
-  double z = static_cast<double>(worldPosition.z);
+  double x = (double)worldPosition.x;
+  double y = (double)worldPosition.y;
+  double z = (double)worldPosition.z;
 
   BiomeInfo biomeInfo = mBiomeMap.getBiomeInfo(x, z);
   return generateBlockAtWorldPosition(worldPosition, terrainHeight, biomeInfo);
   // yeah .. so everything else is useless...
   // yeah .. so everything else is useless...
+  // this was done when biomes were first implemented ... the following is reserved for
+  // posterity or something ...prolly till i read this a couple more times actually
+
+
+
+
 
 
 

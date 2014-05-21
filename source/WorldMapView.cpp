@@ -404,8 +404,6 @@ void WorldMapView::drawChunkBoxes(const gl_camera_c &camera, const AssetManager 
 }
 
 void WorldMapView::drawPlantBlock(v3di_t worldPosition, BYTE *lighting) const {
-  //	glBegin(GL_QUADS);
-
   glColor4f(
     (GLfloat)lighting[0] * ONE_OVER_LIGHT_LEVEL_MAX,
     (GLfloat)lighting[1] * ONE_OVER_LIGHT_LEVEL_MAX,
@@ -445,6 +443,4 @@ void WorldMapView::drawPlantBlock(v3di_t worldPosition, BYTE *lighting) const {
   glTexCoord2f(texRight, texBottom); glVertex3f(vertXLow, vertYLow, vertZHigh);
   glTexCoord2f(texLeft, texBottom); glVertex3f(vertXHigh, vertYLow, vertZLow);
   glTexCoord2f(texLeft, texTop); glVertex3f(vertXHigh, vertYHigh, vertZLow);
-
-  //	glEnd();
 }

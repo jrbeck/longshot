@@ -82,23 +82,69 @@ BiomeType gBiomeTypes[] = {
     0, //  int treeScheme;
     { 0.0, 0.0, 0.0 }, // float planetMapColor[4];
   },
+  { // BIOME_TYPE_DARK_PURPLE
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_DARK_PURPLE, //  int groundType;
+    BLOCK_TYPE_METAL_TILE_GREY, //  int blockTypeSubterran;
+    BLOCK_TYPE_WATER, //  int blockTypeLiquid;
+    0, //  int treeScheme;
+    { 0.32, 0.25, 0.37 }, // float planetMapColor[4];
+  },
+  { // BIOME_TYPE_TYPE_LIGHT_BLUE
+    0.0, //  double terrainHeightOffset;
+    0.0, //  double terrainHeightMultiplier;
+    0, //  int noise3dType;
+    0.0, //  double noise3dValue;
+    BLOCK_TYPE_LIGHT_BLUE, //  int groundType;
+    BLOCK_TYPE_CONSOLE,  //  int blockTypeSubterran;
+    BLOCK_TYPE_WATER, //  int blockTypeLiquid;
+    0, //  int treeScheme;
+    { 0.6, 0.6, 0.95 }, // float planetMapColor[4];
+  },
 };
 
 
 
 
-BiomeMap::BiomeMap() {
+BiomeMap::BiomeMap() :
+  mBiomeTypes(NULL)
+{
 }
 
 BiomeMap::~BiomeMap() {
+  if (mBiomeTypes != NULL) {
+    delete mBiomeTypes;
+  }
 }
 
 void BiomeMap::randomize(PseudoRandom prng, int typesW, int typesH) {
   mTypesW = typesW;
   mTypesH = typesH;
-  mInterval1 = 1.0 / typesW;
-  mInterval2 = 1.0 / typesH;
 
+  // TAKE THAT CLIENT!
+  mTypesW = 3;
+  mTypesH = 3;
+
+  mInterval1 = 1.0 / mTypesW;
+  mInterval2 = 1.0 / mTypesH;
+
+  if (mBiomeTypes != NULL) {
+    delete mBiomeTypes;
+  }
+  mBiomeTypes = new BiomeType[mTypesW * mTypesH];
+  // HACK: this is meant to be populated randomly per-planet
+  // fix this ok?
+  for (int j = 0; j < mTypesH; j++) {
+    for (int i = 0; i < mTypesW; i++) {
+      // this is a terrible thing to do
+      // TODO... parameterize biomes!
+      int index = i + (j * mTypesW);
+      mBiomeTypes[index] = gBiomeTypes[index];
+    }
+  }
 
   mTerrain1.resize(1024);
   mTerrain1.generateTilable(64.0, prng);

@@ -114,6 +114,7 @@ int Longshot::loop() {
 
   // bail immediately if constructor failed at some point
   if (constructor_successful == false) {
+    printf("Longshot::loop(): constructor failed!\n");
     return -1;
   }
 
