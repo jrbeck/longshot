@@ -1,118 +1,95 @@
 #include "BoundingBox.h"
 
-
-// default constructor: unit cube, pos at origin
 BoundingBox::BoundingBox() {
   setDimensions(v3d_v(1.0, 1.0, 1.0));
   setPosition(v3d_zero());
 }
 
-
-
-// constructor: dimensions specified, pos at origin
 BoundingBox::BoundingBox(v3d_t dimensions) {
   setDimensions(dimensions);
   setPosition(v3d_zero());
 }
 
-
-
-// constructor: dimensions specified, pos specifed
 BoundingBox::BoundingBox(v3d_t dimensions, v3d_t position) {
   setDimensions(dimensions);
   setPosition(position);
 }
 
-
-
-// set_dimensions: resizes the bb
 void BoundingBox::setDimensions(v3d_t dimensions) {
   v3d_t delta = v3d_scale(-0.5, v3d_sub(dimensions, mDimensions));
   mNearCorner = v3d_add(mNearCorner, delta);
   mDimensions = dimensions;
   mFarCorner = v3d_add(mNearCorner, mDimensions);
+
+  computeVolume();
 }
 
-
-
-// set_pos: sets the position of the bb
 void BoundingBox::setPosition(v3d_t position) {
   mNearCorner = position;
   mFarCorner = v3d_add(mNearCorner, mDimensions);
 }
 
-
-
 void BoundingBox::setCenterPosition(v3d_t position) {
   v3d_t halfDimensions = v3d_scale(0.5, mDimensions);
-
   mNearCorner = v3d_sub(position, halfDimensions);
   mFarCorner = v3d_add(mNearCorner, mDimensions);
 }
 
-
-
-v3d_t BoundingBox::getCenterPosition(void) const {
+v3d_t BoundingBox::getCenterPosition() const {
   return v3d_add(mNearCorner, v3d_scale(0.5, mDimensions));
 }
 
-
-
-
-v3d_t BoundingBox::getNearCorner(void) const {
+v3d_t BoundingBox::getNearCorner() const {
   return mNearCorner;
 }
 
-
-
-v3d_t BoundingBox::getFarCorner(void) const {
+v3d_t BoundingBox::getFarCorner() const {
   return mFarCorner;
 }
 
-
-
-v3d_t BoundingBox::getDimensions(void) const {
+v3d_t BoundingBox::getDimensions() const {
   return mDimensions;
 }
 
+double BoundingBox::computeVolume() {
+  mVolume = mDimensions.x * mDimensions.y * mDimensions.z;
+  return mVolume;
+}
 
+double BoundingBox::getVolume() const {
+  return mVolume;
+}
 
 void BoundingBox::scale(double scalar) {
   setDimensions(v3d_scale(scalar, mDimensions));
 }
 
-
-
-// translate: changes the position relative to the current position
 void BoundingBox::translate(v3d_t vector) {
   v3d_t new_position = v3d_add(mNearCorner, vector);
-
   setPosition(new_position);
 }
 
-
-
-// intersects: test for collision against another bb using stored position
-// assumes other bb has pos set appropriately
-bool BoundingBox::isIntersecting(const BoundingBox &other) const {
-  // test the x values
-  if (mNearCorner.x > other.mFarCorner.x) return false;
-  if (mFarCorner.x < other.mNearCorner.x) return false;
-
-  // test the y values
-  if (mNearCorner.y > other.mFarCorner.y) return false;
-  if (mFarCorner.y < other.mNearCorner.y) return false;
-
-  // test the z values
-  if (mNearCorner.z > other.mFarCorner.z) return false;
-  if (mFarCorner.z < other.mNearCorner.z) return false;
-
+bool BoundingBox::isPointInside(v3d_t point) const {
+  if (point.x <= mNearCorner.x) return false;
+  if (point.x >= mFarCorner.x) return false;
+  if (point.y <= mNearCorner.y) return false;
+  if (point.y >= mFarCorner.y) return false;
+  if (point.z <= mNearCorner.z) return false;
+  if (point.z >= mFarCorner.z) return false;
   return true;
 }
 
+bool BoundingBox::isIntersecting(const BoundingBox &other) const {
+  if (mNearCorner.x > other.mFarCorner.x) return false;
+  if (mFarCorner.x < other.mNearCorner.x) return false;
+  if (mNearCorner.y > other.mFarCorner.y) return false;
+  if (mFarCorner.y < other.mNearCorner.y) return false;
+  if (mNearCorner.z > other.mFarCorner.z) return false;
+  if (mFarCorner.z < other.mNearCorner.z) return false;
+  return true;
+}
 
-
-bool BoundingBox::sweepTest(const BoundingBox &other, v3d_t displacement, v3d_t &time0) const {
+bool BoundingBox::sweepTest(const BoundingBox& other, v3d_t displacement, v3d_t& time0) const {
   double t0, t1;
 
   // if they are intersecting before the translation, return true
@@ -123,15 +100,13 @@ bool BoundingBox::sweepTest(const BoundingBox &other, v3d_t displacement, v3d_t 
   //	}
 
   displacement = v3d_neg(displacement);
-
   time0 = v3d_v(0.0, 0.0, 0.0);
   v3d_t time1 = v3d_v(1.0, 1.0, 1.0);
 
   // x-axis * * * *
   if (mFarCorner.x < other.mNearCorner.x) {
     if (displacement.x < 0.0) {
-      time0.x = (mFarCorner.x - other.mNearCorner.x) /
-        displacement.x;
+      time0.x = (mFarCorner.x - other.mNearCorner.x) / displacement.x;
     }
     else {
       return false;
@@ -139,30 +114,24 @@ bool BoundingBox::sweepTest(const BoundingBox &other, v3d_t displacement, v3d_t 
   }
   else if (other.mFarCorner.x < mNearCorner.x) {
     if (displacement.x > 0.0) {
-      time0.x = (mNearCorner.x - other.mFarCorner.x) /
-        displacement.x;
+      time0.x = (mNearCorner.x - other.mFarCorner.x) / displacement.x;
     }
     else {
       return false;
     }
   }
 
-  if (other.mFarCorner.x > mNearCorner.x &&
-    displacement.x < 0.0) {
-    time1.x = (mNearCorner.x - other.mFarCorner.x) /
-      displacement.x;
+  if (other.mFarCorner.x > mNearCorner.x && displacement.x < 0.0) {
+    time1.x = (mNearCorner.x - other.mFarCorner.x) / displacement.x;
   }
-  else if (mFarCorner.x > other.mNearCorner.x &&
-    displacement.x > 0.0) {
-    time1.x = (mFarCorner.x - other.mNearCorner.x) /
-      displacement.x;
+  else if (mFarCorner.x > other.mNearCorner.x && displacement.x > 0.0) {
+    time1.x = (mFarCorner.x - other.mNearCorner.x) / displacement.x;
   }
 
   // y-axis * * * *
   if (mFarCorner.y < other.mNearCorner.y) {
     if (displacement.y < 0.0) {
-      time0.y = (mFarCorner.y - other.mNearCorner.y) /
-        displacement.y;
+      time0.y = (mFarCorner.y - other.mNearCorner.y) / displacement.y;
     }
     else {
       return false;
@@ -170,30 +139,25 @@ bool BoundingBox::sweepTest(const BoundingBox &other, v3d_t displacement, v3d_t 
   }
   else if (other.mFarCorner.y < mNearCorner.y) {
     if (displacement.y > 0.0) {
-      time0.y = (mNearCorner.y - other.mFarCorner.y) /
-        displacement.y;
+      time0.y = (mNearCorner.y - other.mFarCorner.y) / displacement.y;
     }
     else {
       return false;
     }
   }
 
-  if (other.mFarCorner.y > mNearCorner.y &&
-    displacement.y < 0.0) {
-    time1.y = (mNearCorner.y - other.mFarCorner.y) /
-      displacement.y;
+  if (other.mFarCorner.y > mNearCorner.y && displacement.y < 0.0) {
+    time1.y = (mNearCorner.y - other.mFarCorner.y) / displacement.y;
   }
   else if (mFarCorner.y > other.mNearCorner.y &&
     displacement.y > 0.0) {
-    time1.y = (mFarCorner.y - other.mNearCorner.y) /
-      displacement.y;
+    time1.y = (mFarCorner.y - other.mNearCorner.y) / displacement.y;
   }
 
   // z-axis * * * *
   if (mFarCorner.z < other.mNearCorner.z) {
     if (displacement.z < 0.0) {
-      time0.z = (mFarCorner.z - other.mNearCorner.z) /
-        displacement.z;
+      time0.z = (mFarCorner.z - other.mNearCorner.z) / displacement.z;
     }
     else {
       return false;
@@ -202,23 +166,18 @@ bool BoundingBox::sweepTest(const BoundingBox &other, v3d_t displacement, v3d_t 
 
   else if (other.mFarCorner.z < mNearCorner.z) {
     if (displacement.z > 0.0) {
-      time0.z = (mNearCorner.z - other.mFarCorner.z) /
-        displacement.z;
+      time0.z = (mNearCorner.z - other.mFarCorner.z) / displacement.z;
     }
     else {
       return false;
     }
   }
 
-  if (other.mFarCorner.z > mNearCorner.z &&
-    displacement.z < 0.0) {
-    time1.z = (mNearCorner.z - other.mFarCorner.z) /
-      displacement.z;
+  if (other.mFarCorner.z > mNearCorner.z && displacement.z < 0.0) {
+    time1.z = (mNearCorner.z - other.mFarCorner.z) / displacement.z;
   }
-  else if (mFarCorner.z > other.mNearCorner.z &&
-    displacement.z > 0.0) {
-    time1.z = (mFarCorner.z - other.mNearCorner.z) /
-      displacement.z;
+  else if (mFarCorner.z > other.mNearCorner.z && displacement.z > 0.0) {
+    time1.z = (mFarCorner.z - other.mNearCorner.z) / displacement.z;
   }
 
   // determine which axis hit first
@@ -256,12 +215,8 @@ bool BoundingBox::sweepTest(const BoundingBox &other, v3d_t displacement, v3d_t 
   return t0 <= t1;
 }
 
-
-
 bool BoundingBox::clipDisplacement(
-  bool test_x,
-  bool test_y,
-  bool test_z,
+  bool test_x, bool test_y, bool test_z,
   v3d_t &displacement,
   const BoundingBox &other) const
 {
@@ -325,11 +280,8 @@ bool BoundingBox::clipDisplacement(
     v3d_t nc_moved = v3d_add(mNearCorner, disp_scaled);
     v3d_t fc_moved = v3d_add(mFarCorner, disp_scaled);
 
-    Rectangle2d a(v2d_v(nc_moved.y, nc_moved.z),
-      v2d_v(fc_moved.y, fc_moved.z));
-
-    Rectangle2d b(v2d_v(o_near.y, o_near.z),
-      v2d_v(o_far.y, o_far.z));
+    Rectangle2d a(v2d_v(nc_moved.y, nc_moved.z), v2d_v(fc_moved.y, fc_moved.z));
+    Rectangle2d b(v2d_v(o_near.y, o_near.z), v2d_v(o_far.y, o_far.z));
 
     // if not intersecting, don't run tests on this one
     if (!a.isIntersecting(b)) {
@@ -343,7 +295,8 @@ bool BoundingBox::clipDisplacement(
     percent.y = 1.0;
   }
   else if (((nearest.y < leading.y) && (nearest.y < translated.y)) ||
-    ((nearest.y > leading.y) && (nearest.y > translated.y))) {
+    ((nearest.y > leading.y) && (nearest.y > translated.y)))
+  {
     // no possibility for collision
     percent.y = 1.0;
   }
@@ -355,11 +308,8 @@ bool BoundingBox::clipDisplacement(
     v3d_t nc_moved = v3d_add(mNearCorner, disp_scaled);
     v3d_t fc_moved = v3d_add(mFarCorner, disp_scaled);
 
-    Rectangle2d a(v2d_v(nc_moved.x, nc_moved.z),
-      v2d_v(fc_moved.x, fc_moved.z));
-
-    Rectangle2d b(v2d_v(o_near.x, o_near.z),
-      v2d_v(o_far.x, o_far.z));
+    Rectangle2d a(v2d_v(nc_moved.x, nc_moved.z), v2d_v(fc_moved.x, fc_moved.z));
+    Rectangle2d b(v2d_v(o_near.x, o_near.z), v2d_v(o_far.x, o_far.z));
 
     // if not intersecting, don't run tests on this one
     if (!a.isIntersecting(b)) {
@@ -373,7 +323,8 @@ bool BoundingBox::clipDisplacement(
     percent.z = 1.0;
   }
   else if (((nearest.z < leading.z) && (nearest.z < translated.z)) ||
-    ((nearest.z > leading.z) && (nearest.z > translated.z))) {
+    ((nearest.z > leading.z) && (nearest.z > translated.z)))
+  {
     // no possibility for collision
     percent.z = 1.0;
   }
@@ -385,11 +336,8 @@ bool BoundingBox::clipDisplacement(
     v3d_t nc_moved = v3d_add(mNearCorner, disp_scaled);
     v3d_t fc_moved = v3d_add(mFarCorner, disp_scaled);
 
-    Rectangle2d a(v2d_v(nc_moved.x, nc_moved.y),
-      v2d_v(fc_moved.x, fc_moved.y));
-
-    Rectangle2d b(v2d_v(o_near.x, o_near.y),
-      v2d_v(o_far.x, o_far.y));
+    Rectangle2d a(v2d_v(nc_moved.x, nc_moved.y), v2d_v(fc_moved.x, fc_moved.y));
+    Rectangle2d b(v2d_v(o_near.x, o_near.y), v2d_v(o_far.x, o_far.y));
 
     // if not intersecting, don't run tests on this one
     if (!a.isIntersecting(b)) {
@@ -397,46 +345,27 @@ bool BoundingBox::clipDisplacement(
     }
   }
 
-  if (percent.x == 1.0 &&
-    percent.y == 1.0 &&
-    percent.z == 1.0) {
+  if (percent.x == 1.0 && percent.y == 1.0 && percent.z == 1.0) {
     return false;
   }
 
   // one of these must work
   if (test_x &&
     percent.x < percent.y &&
-    percent.x < percent.z) {
+    percent.x < percent.z)
+  {
     displacement.x *= percent.x;
-
     return true;
   }
-  else if (test_y &&
-    percent.y < percent.z) {
+  else if (test_y && percent.y < percent.z) {
     displacement.y *= percent.y;
-
     return true;
   }
   else if (test_z) {
     displacement.z *= percent.z;
-
     return true;
   }
 
   return false;
-}
-
-
-
-// point_inside: tests to see if a point is inside the bb
-bool BoundingBox::isPointInside(v3d_t point) const {
-  if (point.x <= mNearCorner.x) return false;
-  if (point.x >= mFarCorner.x) return false;
-  if (point.y <= mNearCorner.y) return false;
-  if (point.y >= mFarCorner.y) return false;
-  if (point.z <= mNearCorner.z) return false;
-  if (point.z >= mFarCorner.z) return false;
-
-  return true;
 }
 

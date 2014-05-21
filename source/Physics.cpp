@@ -175,12 +175,12 @@ PhysicsEntity* Physics::createEntity(int type, const v3d_t& position, bool cente
 
   // DIMENSIONS
   v3d_t dimensions;
-
   dimensions.x = r_num(mEntityTypeInfo[type].dimensionXLow, mEntityTypeInfo[type].dimensionXHigh);
   dimensions.y = r_num(mEntityTypeInfo[type].dimensionYLow, mEntityTypeInfo[type].dimensionYHigh);
   dimensions.z = r_num(mEntityTypeInfo[type].dimensionZLow, mEntityTypeInfo[type].dimensionZHigh);
-
   e->boundingBox.setDimensions(dimensions);
+
+  setDensity(e);
 
   // do we want the given position to be the center of the box?
   if (center) {
@@ -239,9 +239,24 @@ void Physics::setHealth(size_t handle, double health) {
 void Physics::setDimensions(size_t handle, const v3d_t& dimensions) {
   int index = getIndexFromHandle(handle);
   if (index != -1) {
-    obj[index]->boundingBox.setDimensions(dimensions);
+    PhysicsEntity* entity = obj[index];
+    entity->boundingBox.setDimensions(dimensions);
+    setDensity(entity);
   }
 }
+
+// should this be here? or should it be a method on PhysicsEntity?
+double Physics::setDensity(PhysicsEntity* entity) {
+  double volume = entity->boundingBox.getVolume();
+  if (volume > 0) {
+    entity->density = entity->mass / volume;
+  }
+  else {
+    entity->density = 0.0;
+  }
+  return entity->density;
+}
+
 
 PhysicsEntity* Physics::getEntityByHandle(size_t handle) {
   int index = getIndexFromHandle(handle);
@@ -437,10 +452,7 @@ void Physics::updateEntity(size_t index) {
     }
   }
 
-
-  // deal with AI
   if (physicsEntity->type == OBJTYPE_AI_ENTITY) {
-    // check if AI is dead
     if (physicsEntity->health < -5.0) {
       expireEntity(index);
       return;
@@ -461,15 +473,13 @@ void Physics::updateEntity(size_t index) {
     integrate_euler(index);
   }
 
-  size_t otherHandle;
-  int otherIndex;
-  int rnum = r_numi (2, 3);
+  int rnum = r_numi(2, 3);
 
   // FIXME: this is a stupid place for this...
   switch (physicsEntity->type) {
     case OBJTYPE_NAPALM:
-      if (r_numi(0, 100) == 0) {
-        PhysicsEntity *otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
+      if (r_numi(0, 50) == 0) {
+        PhysicsEntity* otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
         if (otherEntity != NULL) {
           otherEntity->owner = physicsEntity->owner;
           otherEntity->impactDamage = physicsEntity->impactDamage;
@@ -483,8 +493,8 @@ void Physics::updateEntity(size_t index) {
 
     case OBJTYPE_DEAD_BULLET:
     case OBJTYPE_LIVE_BULLET:
-      if (r_numi(0, 100) == 0) {
-        PhysicsEntity *otherEntity = createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+      if (r_numi(0, 50) == 0) {
+        PhysicsEntity* otherEntity = createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
         if (otherEntity != NULL) {
           otherEntity->color[3] = 0.2f;
         }
@@ -493,7 +503,7 @@ void Physics::updateEntity(size_t index) {
 
     case OBJTYPE_ROCKET:
       if (r_numi (0, 4) == 0) {
-        PhysicsEntity *otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
+        PhysicsEntity* otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
         if (otherEntity != NULL) {
           otherEntity->owner = physicsEntity->owner;
           otherEntity->impactDamage = physicsEntity->impactDamage;
@@ -503,7 +513,7 @@ void Physics::updateEntity(size_t index) {
 
     case OBJTYPE_PLASMA_BOMB:
       for (int i = 0; i < rnum; i++) {
-        PhysicsEntity *otherEntity = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
+        PhysicsEntity* otherEntity = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
         if (otherEntity != NULL) {
           setVelocity(otherEntity->handle, v3d_random(0.5));
         }
@@ -536,11 +546,11 @@ void Physics::expireEntity(size_t index) {
       newPhysicsEntity = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, false);
       if (newPhysicsEntity != NULL) {
         newPhysicsEntity->boundingBox.setDimensions(physicsEntity->boundingBox.getDimensions());
+        setDensity(newPhysicsEntity);
         newPhysicsEntity->vel.x = r_num(-0.2, 0.2);
         newPhysicsEntity->vel.y = physicsEntity->vel.y * 0.6;
         newPhysicsEntity->vel.z = r_num(-0.2, 0.2);
       }
-
       break;
 
     case OBJTYPE_EXPLOSION:
@@ -575,7 +585,7 @@ void Physics::expireEntity(size_t index) {
       phys_message_t message;
       message.recipient = MAILBOX_ITEMMANAGER;
       message.type = PHYS_MESSAGE_ITEM_DESTROYED;
-      message.iValue = static_cast<int>(physicsEntity->itemHandle);
+      message.iValue = (int)physicsEntity->itemHandle;
       sendMessage(message);
       break;
 
@@ -610,7 +620,7 @@ void Physics::expireEntity(size_t index) {
 }
 
 v3d_t Physics::calculateAcceleration(size_t index) {
-  PhysicsEntity *physicsEntity = obj[index];
+  PhysicsEntity* physicsEntity = obj[index];
   if (physicsEntity->type == OBJTYPE_MELEE_ATTACK) {
     return physicsEntity->acc;
   }
@@ -628,29 +638,6 @@ v3d_t Physics::calculateAcceleration(size_t index) {
   double speed;
 
   switch (physicsEntity->type) {
-    case OBJTYPE_PLAYER:
-    case OBJTYPE_AI_ENTITY:
-      acc.y += mGravity;
-      frictionCoeff = mFriction;
-      
-      speed = v3d_mag(physicsEntity->vel);
-      if (speed > 0.0 && physicsEntity->worldViscosity > 0.0) {
-        drag = v3d_scale (speed * physicsEntity->worldViscosity, v3d_normalize(v3d_neg(physicsEntity->vel)));
-        acc = v3d_add(acc, drag);
-      }
-      break;
-
-/*		case OBJTYPE_LIVE_BULLET:
-      acc.y = -1.0;
-      frictionCoeff = 0.98;
-      break;
-*/
-
-    case OBJTYPE_GRENADE:
-      acc.y += mGravity;
-      frictionCoeff = 0.98;
-      break;
-
     case OBJTYPE_FIRE:
       acc.y = 20.0;
       frictionCoeff = 0.98;
@@ -685,6 +672,22 @@ v3d_t Physics::calculateAcceleration(size_t index) {
     default:
       acc.y += mGravity;
       frictionCoeff = mFriction;
+
+      speed = v3d_mag(physicsEntity->vel);
+      if (physicsEntity->worldViscosity > 0.0) {
+        if (speed > 0.0) {
+          frictionCoeff = mFriction;
+          drag = v3d_scale(speed * physicsEntity->worldViscosity, v3d_normalize(v3d_neg(physicsEntity->vel)));
+          acc = v3d_add(acc, drag);
+        }
+
+        // FLOAT??? this isn't gonna work if we end up using world viscosity
+        // to mean resistant plant life, etc... but that'll break elsewhere too
+        // water density: 1000 (kg / m^3)
+        //    v3d_t floatForce = v3d_scale(v3d_v(0.0, 1.0, 0.0), 0.001 * (1000.0 - physicsEntity->density) * physicsEntity->one_over_mass);
+        //    acc = v3d_add(acc, floatForce);
+      }
+
       break;
   }
 
@@ -1396,9 +1399,9 @@ void Physics::clip_displacement_against_world(size_t index) {
     y_start = (int)floor(nc.y - 1.0);
   }
 
-  // FIXME: this is a horribly inefficient way of doing this
-  // it also fails if the velocity is too high
-  // your mom
+  // FIXME: this is a horribly inefficient way of doing this.
+  // it also fails if the velocity is too high.
+  // your mom.
   WorldMap& worldMap = *mGameModel->location->getWorldMap();
   for (i.z = (int)floor( nc.z - 1.0 ); i.z <= (int)floor( fc.z + 1.0 ); i.z++) {
     for (i.y = y_start; i.y <= (int)floor(fc.y + 1.0); i.y++) {
@@ -1442,7 +1445,6 @@ void Physics::clip_displacement_against_world(size_t index) {
               physicsEntity->displacement.z = 0.0;
             }
           }
-
 
           // x-axis
           if (physicsEntity->displacement.x < 0.0) {
@@ -1728,6 +1730,7 @@ void Physics::plasmaBombExplode(const v3d_t& pos, size_t numParticles) {
       }
       else {
         newPhysicsEntity->boundingBox.setDimensions(v3d_scale(r_num(2.0, 5.0), newPhysicsEntity->boundingBox.getDimensions()));
+        setDensity(newPhysicsEntity);
 
         // FIXME: is this safe?
         // (is that the sort of question to ask in a method
@@ -1738,19 +1741,6 @@ void Physics::plasmaBombExplode(const v3d_t& pos, size_t numParticles) {
       }
     }
   }
-/*
-//	clearSphere (pos, 0.5, world);
-
-  size_t handle = createEntity (OBJTYPE_EXPLOSION, pos, time, true);
-  // FIXME: hack!
-  if (handle != 0) {
-    int index = getIndexFromHandle (handle);
-
-    obj[index].applyPhysics = false;
-    obj[index].explosionForce = 200.0;
-    obj[index].boundingBox.setDimensions (v3d_v (1.0, 1.0, 1.0));
-  }
-  */
 }
 
 v3d_t Physics::getRadialForce(const v3d_t& pos, const v3d_t& center, double force, double radius) const {

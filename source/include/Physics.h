@@ -88,6 +88,7 @@ struct PhysicsEntity {
 
   double mass;
   double one_over_mass;
+  double density;
 
   v3d_t force;
   v3d_t acc;
@@ -175,6 +176,7 @@ public:
   void setMass(size_t handle, double mass);
   void setHealth(size_t handle, double health);
   void setDimensions(size_t handle, const v3d_t& dimensions);
+  double setDensity(PhysicsEntity* entity); // should this be here? or should it be a method on PhysicsEntity?
 
   PhysicsEntity* getEntityByHandle(size_t handle);
   void setEntity(PhysicsEntity* entity);

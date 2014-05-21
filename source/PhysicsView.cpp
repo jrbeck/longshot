@@ -79,7 +79,7 @@ void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
     case OBJTYPE_PLASMA_BOMB:
     case OBJTYPE_PLASMA_SPARK:
     case OBJTYPE_BLOOD_SPRAY:
-      entity.color[3] = 1.0f - age;
+      entity.color[3] = 1.0f - (age * age);
       break;
 
     case OBJTYPE_SMOKE:
@@ -113,10 +113,6 @@ void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
   }
 }
 
-
-
-
-
 void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager& assetManager) {
 //	glDisable (GL_TEXTURE_2D);
 //	glEnable (GL_COLOR_MATERIAL);
@@ -124,7 +120,7 @@ void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, Wor
   glEnable (GL_TEXTURE_2D);
 
   int type;
-  PhysicsEntity *physicsEntity;
+  PhysicsEntity* physicsEntity;
   size_t numEntities = physicsEntities->size();
   for (size_t index = 0; index < numEntities; index++) {
     physicsEntity = (*physicsEntities)[index];
@@ -176,7 +172,7 @@ void PhysicsView::drawTransparentEntities(vector<PhysicsEntity*>* physicsEntitie
   glEnable(GL_BLEND);
   glDepthMask(GL_FALSE);
 
-  PhysicsEntity *physicsEntity;
+  PhysicsEntity* physicsEntity;
   size_t numEntities = physicsEntities->size();
   for (size_t index = 0; index < numEntities; index++) {
     physicsEntity = (*physicsEntities)[index];
@@ -195,7 +191,7 @@ void PhysicsView::drawTransparentEntities(vector<PhysicsEntity*>* physicsEntitie
 
 
 
-void PhysicsView::drawEntity (const PhysicsEntity &entity) {
+void PhysicsView::drawEntity(const PhysicsEntity& entity) {
   // FIXME: this seems like a wasteful way of doing this
   // it used to be that the box drawn was 0,0,0 -> 1,1,1, now
   // its a unit cube centered at 0,0,0. i was lazy when i
@@ -204,12 +200,10 @@ void PhysicsView::drawEntity (const PhysicsEntity &entity) {
   v3d_t fc = entity.boundingBox.mFarCorner;
   v3d_t dim = entity.boundingBox.mDimensions;
 
-
-
-  glPushMatrix ();
-    glTranslated (nc.x, nc.y, nc.z);
-    glScaled (dim.x, dim.y, dim.z);
-    glColor4fv (entity.color);
+  glPushMatrix();
+    glTranslated(nc.x, nc.y, nc.z);
+    glScaled(dim.x, dim.y, dim.z);
+    glColor4fv(entity.color);
 
     glBegin (GL_QUADS);
       glCallList(mBlankBlockCallListHandle);
@@ -233,8 +227,7 @@ void PhysicsView::drawEntity (const PhysicsEntity &entity) {
 
 
 
-void PhysicsView::drawTextured (const PhysicsEntity &entity, WorldMap &worldMap, AssetManager &assetManager) {
-
+void PhysicsView::drawTextured(const PhysicsEntity &entity, WorldMap &worldMap, AssetManager &assetManager) {
   if (entity.type == OBJTYPE_AI_ENTITY ||
     entity.type == OBJTYPE_PLAYER)
   {
@@ -330,9 +323,7 @@ void PhysicsView::drawTextured (const PhysicsEntity &entity, WorldMap &worldMap,
   glPopMatrix ();
 }
 
-
-
-void PhysicsView::drawLitBox (v3d_t nearCorner, v3d_t farCorner, WorldMap &worldMap, AssetManager &assetManager) {
+void PhysicsView::drawLitBox(v3d_t nearCorner, v3d_t farCorner, WorldMap& worldMap, AssetManager& assetManager) {
   nearCorner.x += 0.001;
   nearCorner.y += 0.001;
   nearCorner.z += 0.001;
@@ -354,7 +345,7 @@ void PhysicsView::drawLitBox (v3d_t nearCorner, v3d_t farCorner, WorldMap &world
   BYTE blockType;
   BYTE blockUniqueLighting;
 
-  block_t *block = worldMap.getBlock (vertexPos);
+  block_t* block = worldMap.getBlock(vertexPos);
   if (block == NULL) {
     blockType = BLOCK_TYPE_INVALID;
     blockUniqueLighting = 0;
@@ -573,9 +564,7 @@ void PhysicsView::drawLitBox (v3d_t nearCorner, v3d_t farCorner, WorldMap &world
 
 
   // BOX_CORNER_RTF
-  vertexPos.x = farCorner.x;
-  vertexPos.y = farCorner.y;
-  vertexPos.z = farCorner.z;
+  vertexPos = farCorner;
 
   block = worldMap.getBlock (vertexPos);
   if (block == NULL) {
