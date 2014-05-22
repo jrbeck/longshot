@@ -73,8 +73,6 @@ public:
   void drawLiquidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const;
   void drawChunkBoxes(const gl_camera_c &camera, const AssetManager &assetManager) const;
 
-  void drawPlantBlock(v3di_t worldPosition, BYTE *lighting) const;
-
 private:
   WorldMap *mWorldMap;
   ColumnViewInfo *mColumnInfo;

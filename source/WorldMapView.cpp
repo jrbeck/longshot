@@ -202,11 +202,9 @@ void WorldMapView::drawSolidForDisplayList(const WorldChunk &chunk, const AssetM
           gBlockData.get(block.type)->solidityType != BLOCK_SOLIDITY_TYPE_LIQUID)
         {
           if (gBlockData.get(block.type)->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
-            // plant
-            drawPlantBlock(worldPosition, block.faceLighting[0]);
+            assetManager.drawPlantBlock(worldPosition, block);
           }
           else {
-            // regular block
             assetManager.drawBlock(1.0f, worldPosition, block);
           }
         }
@@ -401,46 +399,4 @@ void WorldMapView::drawChunkBoxes(const gl_camera_c &camera, const AssetManager 
   }
 
   glEnable(GL_TEXTURE_2D);
-}
-
-void WorldMapView::drawPlantBlock(v3di_t worldPosition, BYTE *lighting) const {
-  glColor4f(
-    (GLfloat)lighting[0] * ONE_OVER_LIGHT_LEVEL_MAX,
-    (GLfloat)lighting[1] * ONE_OVER_LIGHT_LEVEL_MAX,
-    (GLfloat)lighting[2] * ONE_OVER_LIGHT_LEVEL_MAX,
-    1.0f);
-
-  static GLfloat texTop = 0.1875f;
-  static GLfloat texBottom = 0.21875f;
-  static GLfloat texLeft = 0.0f;
-  static GLfloat texRight = 0.03125f;
-
-  GLfloat vertXLow = (GLfloat)worldPosition.x + 0.0f;
-  GLfloat vertXHigh = (GLfloat)worldPosition.x + 1.0f;
-  GLfloat vertYLow = (GLfloat)worldPosition.y;
-  GLfloat vertYHigh = (GLfloat)worldPosition.y + 1.0f;
-  GLfloat vertZLow = (GLfloat)worldPosition.z + 0.0f;
-  GLfloat vertZHigh = (GLfloat)worldPosition.z + 1.0f;
-
-  // front and back of first quad
-  glTexCoord2f(texLeft, texTop); glVertex3f(vertXLow, vertYHigh, vertZLow);
-  glTexCoord2f(texRight, texTop); glVertex3f(vertXHigh, vertYHigh, vertZHigh);
-  glTexCoord2f(texRight, texBottom); glVertex3f(vertXHigh, vertYLow, vertZHigh);
-  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXLow, vertYLow, vertZLow);
-
-  glTexCoord2f(texLeft, texTop); glVertex3f(vertXLow, vertYHigh, vertZLow);
-  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXLow, vertYLow, vertZLow);
-  glTexCoord2f(texRight, texBottom); glVertex3f(vertXHigh, vertYLow, vertZHigh);
-  glTexCoord2f(texRight, texTop); glVertex3f(vertXHigh, vertYHigh, vertZHigh);
-
-  // front and back of the second quad
-  glTexCoord2f(texRight, texTop); glVertex3f(vertXLow, vertYHigh, vertZHigh);
-  glTexCoord2f(texLeft, texTop); glVertex3f(vertXHigh, vertYHigh, vertZLow);
-  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXHigh, vertYLow, vertZLow);
-  glTexCoord2f(texRight, texBottom); glVertex3f(vertXLow, vertYLow, vertZHigh);
-
-  glTexCoord2f(texRight, texTop); glVertex3f(vertXLow, vertYHigh, vertZHigh);
-  glTexCoord2f(texRight, texBottom); glVertex3f(vertXLow, vertYLow, vertZHigh);
-  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXHigh, vertYLow, vertZLow);
-  glTexCoord2f(texLeft, texTop); glVertex3f(vertXHigh, vertYHigh, vertZLow);
 }

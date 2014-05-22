@@ -26,6 +26,13 @@
 #include "BitmapModel.h"
 
 
+// FIXME: this is hard coded for 32x32x4 textures (64x64 pixels per side) in
+// a 1024x1024 (i.e. 16 textures per side)
+// TODO: try a half-pixel hack to fix the bleeding issues
+//	#define HALF_PIXEL		(1.0f / 2048.0f);
+#define TEX_MULT       (0.0625f)
+#define TEX_MULT_HALF  (0.03125f)
+
 
 
 class AssetManager {
@@ -53,6 +60,8 @@ public:
 
   GLuint getTerrainTextureHandle() const;
 
+  void getBlockTextureCoords(int blockType, GLfloat& textureX, GLfloat& y) const;
+
   void drawBlock(GLfloat height, v3di_t pos, const block_t& block) const;
 /*	void drawWorldBlockFace (
     BYTE face,
@@ -62,6 +71,9 @@ public:
     GLfloat *intensities,
     const GLfloat *faceLighting) const;
 */
+
+  void drawPlantBlock(v3di_t worldPosition, const block_t& block) const;
+
 
   static void drawBlankBlock();
 

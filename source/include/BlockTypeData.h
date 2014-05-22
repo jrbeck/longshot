@@ -63,6 +63,10 @@ enum {
   BLOCK_TYPE_CONSOLE,
   BLOCK_TYPE_METAL_TILE_GREY,
   BLOCK_TYPE_METAL_TILE_GREEN,
+
+  BLOCK_TYPE_PLANT_1,
+  BLOCK_TYPE_PLANT_2,
+
   BLOCK_TYPE_FLOWER,
 
   NUM_BLOCK_TYPES,
@@ -76,17 +80,15 @@ enum {
 extern int gWaterBlockType;
 
 
-
-
 enum {
-  BLOCK_SOLIDITY_TYPE_ROCK,	// holds together, pick best
-  BLOCK_SOLIDITY_TYPE_DIRT,	// holds together, shovel best
-  BLOCK_SOLIDITY_TYPE_LIQUID, // doesn't hold together, bucket best
-  BLOCK_SOLIDITY_TYPE_SAND,	// doesn't hold together, shovel/bucket best
-  BLOCK_SOLIDITY_TYPE_VINES,	// holds together, machete best
-  BLOCK_SOLIDITY_TYPE_WOOD,	// holds together, axe best
-  BLOCK_SOLIDITY_TYPE_AIR,	// nothing there
-  BLOCK_SOLIDITY_TYPE_PLANT,	// groundcover, etc...
+  BLOCK_SOLIDITY_TYPE_ROCK,    // holds together, pick best
+  BLOCK_SOLIDITY_TYPE_DIRT,    // holds together, shovel best
+  BLOCK_SOLIDITY_TYPE_LIQUID,  // doesn't hold together, bucket best
+  BLOCK_SOLIDITY_TYPE_SAND,    // doesn't hold together, shovel/bucket best
+  BLOCK_SOLIDITY_TYPE_VINES,   // holds together, machete best
+  BLOCK_SOLIDITY_TYPE_WOOD,    // holds together, axe best
+  BLOCK_SOLIDITY_TYPE_AIR,     // nothing there
+  BLOCK_SOLIDITY_TYPE_PLANT,   // groundcover, etc...
   BLOCK_SOLIDITY_TYPE_GLASS,
 
   NUM_BLOCK_SOLIDITY_TYPES
@@ -138,12 +140,12 @@ class BlockTypeDataContainer {
 private:
   BlockTypeData mData[NUM_BLOCK_TYPES];
 
-  void loadBlockTypeData(void);
+  void loadBlockTypeData();
 
 public:
   BlockTypeDataContainer();
 
-  BlockTypeData *get(int type);
+  BlockTypeData* get(int type);
 
 };
 

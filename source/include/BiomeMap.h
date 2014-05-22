@@ -30,6 +30,10 @@ struct BiomeType {
   int blockTypeLiquid;
   int treeScheme;
 
+  int groundCoverType;
+  int groundCoverMaxHeight;
+  double groundCoverHighPass; // [0, 1.0) must get above this number to have ground cover
+
   v3d_t planetMapColor;
 };
 

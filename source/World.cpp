@@ -414,10 +414,7 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
       int positiveNoiseHeight = 1;
 
       if (doOutCroppings) {
-        positiveNoiseHeight += static_cast<int>(floor (
-          25.0 * mPeriodics.mRandomMap.getValueBilerp (
-          static_cast<double>(worldPosition.x) * 0.00321,
-          static_cast<double>(worldPosition.z) * 0.00321)));
+        positiveNoiseHeight += (int)floor(25.0 * mPeriodics.mRandomMap.getValueBilerp((double)worldPosition.x * 0.00321, (double)worldPosition.z * 0.00321));
       }
 
       if (worldY < WATER_LEVEL) {  // deal with the water
@@ -425,9 +422,9 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
         for (worldPosition.y = worldY; worldPosition.y < WATER_LEVEL; worldPosition.y++) {
           // this is where the actual block is figured out
           // this will generate the ground block and all the water above
-          block.type = mPeriodics.generateBlockAtWorldPosition (worldPosition);
+          block.type = mPeriodics.generateBlockAtWorldPosition(worldPosition);
           if (block.type > BLOCK_TYPE_AIR) {
-            wc.setBlockAtWorldPosition (worldPosition, block);
+            wc.setBlockAtWorldPosition(worldPosition, block);
 
             if (gBlockData.get(block.type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
               wc.mNumUnderWater++;
@@ -454,21 +451,14 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
 
         if (doOutCroppings) {
           // this is the wrong place for this!!!!
-          if (treePossible) {
+          if (treePossible && r_numi(0, 10) >= 5) {
             // reset this to the ground level
             worldPosition.y = worldY;
-
-            if (r_numi (0, 10) >= 5) {
-              growTree(worldPosition, floorBlockType, wc.mNumUnderWater);
-            }
-            else {
-              worldPosition.y = worldY + 1;
-              growGrass(worldPosition);
-            }
+            growTree(worldPosition, floorBlockType, wc.mNumUnderWater);
           }
           else {
-            worldPosition.y = worldY + 1;
-            growGrass(worldPosition);
+            worldPosition.y = worldY;
+            growGroundCover(worldPosition);
           }
         }
       }
@@ -513,10 +503,8 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
         else {
           block.type = mPeriodics.generateBlockAtWorldPosition(worldPosition, terrainHeight);
         }
-        
         wc.setBlockAtWorldPosition(worldPosition, block);
       }
-
     }
   }
 
@@ -976,45 +964,26 @@ void World::growPalmTree(v3di_t position) {
   }
 }
 
+void World::growGroundCover(v3di_t position) {
+  BYTE groundType = mWorldMap->getBlockType(position);
+  GroundCoverInfo gci = mPeriodics.getGroundCoverInfo(position, groundType);
 
-
-void World::growGrass(v3di_t position) {
-  v3di_t neighborPos = position;
-  neighborPos.y--;
-  BYTE neighborType = mWorldMap->getBlockType(neighborPos);
-
-  double rVal = mPeriodics.mRandomMap.getValueBilerp(position.x + 2724, position.z - 1482);
-
-  if (neighborType == BLOCK_TYPE_GRASS && rVal > 0.45) {
-    block_t block;
-    block.type = BLOCK_TYPE_FLOWER;
-    mWorldMap->setBlock(position, block);
-
-    if (rVal > 0.55) {
-      position.y++;
-      mWorldMap->setBlock(position, block);
-      if (rVal > 0.65) {
-        position.y++;
-        mWorldMap->setBlock(position, block);
-        if (rVal > 0.75) {
-          position.y++;
-          mWorldMap->setBlock(position, block);
-        }
-      }
-    }
+  if (gci.height <= 0) {
+    return;
   }
 
-/*	else if (neighborType == BLOCK_TYPE_SAND && rVal < 0.2) {
-    block_t block;
-    block.type = BLOCK_TYPE_FLOWER;
+  block_t block;
+  block.type = gci.blockType;
+  for (int y = 0; y < gci.height; y++) {
+    position.y++;
     mWorldMap->setBlock(position, block);
-  }*/
+  }
 }
 
 
 
-int World::getTerrainHeight (int x, int z) {
-  return mPeriodics.getTerrainHeight (x, z);
+int World::getTerrainHeight(int x, int z) {
+  return mPeriodics.getTerrainHeight(x, z);
 }
 
 

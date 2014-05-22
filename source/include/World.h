@@ -66,7 +66,7 @@ public:
   void growSpiralTree(v3di_t position);
   void growCactusTree(v3di_t position);
   void growPalmTree(v3di_t position);
-  void growGrass(v3di_t position);
+  void growGroundCover(v3di_t position);
 
   int getTerrainHeight(int x, int z);
 

@@ -108,7 +108,7 @@ int Periodics::getTerrainHeight (int x, int z) const {
     height = SEA_FLOOR_HEIGHT;
   }
 
-  return (int)floor (height);
+  return (int)floor(height);
 }
 
 
@@ -116,20 +116,41 @@ BiomeInfo Periodics::getBiomeInfo(int x, int z) const {
   return mBiomeMap.getBiomeInfo(x, z);
 }
 
+GroundCoverInfo Periodics::getGroundCoverInfo(v3di_t worldPosition, BYTE groundType) {
+  GroundCoverInfo groundCoverInfo;
+  groundCoverInfo.height = 0;
+
+  BiomeInfo biomeInfo = getBiomeInfo(worldPosition.x, worldPosition.z);
+  BiomeType &biomeType = gBiomeTypes[biomeInfo.type];
+  groundCoverInfo.blockType = biomeType.groundCoverType;
+  if (biomeType.groundCoverType == BLOCK_TYPE_AIR || biomeType.groundCoverMaxHeight < 1) {
+    return groundCoverInfo;
+  }
+
+  double rVal = biomeInfo.value * mRandomMap.getValueBilerp(worldPosition.x + 2724, worldPosition.z - 1482);
+  if (rVal < biomeType.groundCoverHighPass) {
+    return groundCoverInfo;
+  }
+
+  groundCoverInfo.height = (int)ceil((double)biomeType.groundCoverMaxHeight * (rVal - biomeType.groundCoverHighPass) / (1.0 - biomeType.groundCoverHighPass));
+
+  /*	else if (neighborType == BLOCK_TYPE_SAND && rVal < 0.2) {
+  block_t block;
+  block.type = BLOCK_TYPE_FLOWER;
+  mWorldMap->setBlock(position, block);
+  }*/
+
+    return groundCoverInfo;
+}
 
 double Periodics::getPrecipitationLevel(double worldX, double worldZ) const {
-  return mRandomMap.getValueBilerp (worldX * 0.03257, worldZ * 0.03257);
+  return mRandomMap.getValueBilerp(worldX * 0.03257, worldZ * 0.03257);
 }
-
-
 
 BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition) {
-  int terrainHeight = getTerrainHeight (worldPosition.x, worldPosition.z);
-
-  return generateBlockAtWorldPosition (worldPosition, terrainHeight);
+  int terrainHeight = getTerrainHeight(worldPosition.x, worldPosition.z);
+  return generateBlockAtWorldPosition(worldPosition, terrainHeight);
 }
-
-
 
 BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight) {
   double x = (double)worldPosition.x;

@@ -12,6 +12,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_SAND, //  int blockTypeSubterran;
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_AIR, // int groundCoverType;
+    0, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
     { 0.9, 0.8, 0.5 }, // float planetMapColor[4];
   },
 
@@ -24,6 +27,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_DIRT, //  int blockTypeSubterran;
     BLOCK_TYPE_SLUDGE, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_PLANT_2, // int groundCoverType;
+    4, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
     { 0.1, 0.6, 0.2 }, // float planetMapColor[4];
   },
 
@@ -36,6 +42,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_DIRT, //  int blockTypeSubterran;
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_AIR, // int groundCoverType;
+    0, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
     { 0.9, 0.8, 0.9 }, // float planetMapColor[4];
   },
   { // BIOME_TYPE_MARS
@@ -47,6 +56,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_MARS, //  int blockTypeSubterran;
     BLOCK_TYPE_BLOOD, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_PLANT_1, // int groundCoverType;
+    2, // int groundCoverMaxHeight;
+    0.65, //double groundCoverHighPass
     { 0.6, 0.3, 0.2 }, // float planetMapColor[4];
   },
   { // BIOME_TYPE_METAL
@@ -58,6 +70,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_METAL_TILE_GREY, //  int blockTypeSubterran;
     BLOCK_TYPE_LAVA, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_AIR, // int groundCoverType;
+    0, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
     { 0.7, 0.7, 0.7 }, // float planetMapColor[4];
   },
   { // BIOME_TYPE_LIGHT_PURPLE
@@ -69,6 +84,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_METAL_TILE_GREY, //  int blockTypeSubterran;
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_AIR, // int groundCoverType;
+    0, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
     { 0.42, 0.35, 0.47 }, // float planetMapColor[4];
   },
   { // BIOME_TYPE_GLASS
@@ -80,6 +98,9 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_GLASS,  //  int blockTypeSubterran;
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0, //  int treeScheme;
+    BLOCK_TYPE_AIR, // int groundCoverType;
+    0, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
     { 0.0, 0.0, 0.0 }, // float planetMapColor[4];
   },
   { // BIOME_TYPE_DARK_PURPLE
@@ -91,7 +112,10 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_METAL_TILE_GREY, //  int blockTypeSubterran;
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0, //  int treeScheme;
-    { 0.32, 0.25, 0.37 }, // float planetMapColor[4];
+    BLOCK_TYPE_FLOWER, // int groundCoverType;
+    1, // int groundCoverMaxHeight;
+    0.75, //double groundCoverHighPass
+    { 0.30, 0.20, 0.30 }, // float planetMapColor[4];
   },
   { // BIOME_TYPE_TYPE_LIGHT_BLUE
     0.0, //  double terrainHeightOffset;
@@ -102,7 +126,10 @@ BiomeType gBiomeTypes[] = {
     BLOCK_TYPE_CONSOLE,  //  int blockTypeSubterran;
     BLOCK_TYPE_WATER, //  int blockTypeLiquid;
     0, //  int treeScheme;
-    { 0.6, 0.6, 0.95 }, // float planetMapColor[4];
+    BLOCK_TYPE_FLOWER, // int groundCoverType;
+    1, // int groundCoverMaxHeight;
+    0.45, //double groundCoverHighPass
+    { 0.4, 0.4, 0.95 }, // float planetMapColor[4];
   },
 };
 

@@ -870,6 +870,11 @@ GLuint AssetManager::getTerrainTextureHandle() const {
 }
 
 
+void AssetManager::getBlockTextureCoords(int blockType, GLfloat& textureX, GLfloat& textureY) const {
+  textureX = ((GLfloat)(blockType % 16) * TEX_MULT);
+  textureY = ((GLfloat)(blockType / 16) * TEX_MULT);
+}
+
 void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) const {
   GLfloat blockAlpha = gBlockData.get(block.type)->alpha;
 
@@ -898,17 +903,9 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
   fpos[1] = npos[1] + height;
   fpos[2] = npos[2] + 1.0f;
 
+  GLfloat textureX, textureY;
+  getBlockTextureCoords(block.type, textureX, textureY);
 
-
-  // FIXME: this is hard coded for 32x32x4 textures (64x64 pixels per side) in
-  // a 1024x1024 (i.e. 16 textures per side)
-  // TODO: try a half-pixel hack to fix the bleeding issues
-//	#define HALF_PIXEL		(1.0f / 2048.0f);
-  #define TEX_MULT		(0.0625f)
-  #define TEX_MULT_HALF	(0.03125f)
-
-  GLfloat textureX = (static_cast<GLfloat>(block.type % 16) * TEX_MULT);
-  GLfloat textureY = (static_cast<GLfloat>(block.type / 16) * TEX_MULT);
 
   // left
   if (block.faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_LEF]) {
@@ -1079,6 +1076,55 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
     glVertex3f(fpos[0], fpos[1], npos[2]);	// RTB
   }
 }
+
+
+
+
+void AssetManager::drawPlantBlock(v3di_t worldPosition, const block_t& block) const {
+
+  glColor4f(
+    (GLfloat)block.faceLighting[0][0] * ONE_OVER_LIGHT_LEVEL_MAX,
+    (GLfloat)block.faceLighting[0][1] * ONE_OVER_LIGHT_LEVEL_MAX,
+    (GLfloat)block.faceLighting[0][2] * ONE_OVER_LIGHT_LEVEL_MAX,
+    1.0f);
+
+  GLfloat texTop;
+  GLfloat texLeft;
+  getBlockTextureCoords(block.type, texLeft, texTop);
+
+  GLfloat texBottom = texTop + TEX_MULT_HALF;
+  GLfloat texRight = texLeft + TEX_MULT_HALF;
+
+  GLfloat vertXLow = (GLfloat)worldPosition.x;
+  GLfloat vertXHigh = (GLfloat)worldPosition.x + 1.0f;
+  GLfloat vertYLow = (GLfloat)worldPosition.y;
+  GLfloat vertYHigh = (GLfloat)worldPosition.y + 1.0f;
+  GLfloat vertZLow = (GLfloat)worldPosition.z;
+  GLfloat vertZHigh = (GLfloat)worldPosition.z + 1.0f;
+
+  // front and back of first quad
+  glTexCoord2f(texLeft, texTop); glVertex3f(vertXLow, vertYHigh, vertZLow);
+  glTexCoord2f(texRight, texTop); glVertex3f(vertXHigh, vertYHigh, vertZHigh);
+  glTexCoord2f(texRight, texBottom); glVertex3f(vertXHigh, vertYLow, vertZHigh);
+  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXLow, vertYLow, vertZLow);
+
+  glTexCoord2f(texLeft, texTop); glVertex3f(vertXLow, vertYHigh, vertZLow);
+  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXLow, vertYLow, vertZLow);
+  glTexCoord2f(texRight, texBottom); glVertex3f(vertXHigh, vertYLow, vertZHigh);
+  glTexCoord2f(texRight, texTop); glVertex3f(vertXHigh, vertYHigh, vertZHigh);
+
+  // front and back of the second quad
+  glTexCoord2f(texRight, texTop); glVertex3f(vertXLow, vertYHigh, vertZHigh);
+  glTexCoord2f(texLeft, texTop); glVertex3f(vertXHigh, vertYHigh, vertZLow);
+  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXHigh, vertYLow, vertZLow);
+  glTexCoord2f(texRight, texBottom); glVertex3f(vertXLow, vertYLow, vertZHigh);
+
+  glTexCoord2f(texRight, texTop); glVertex3f(vertXLow, vertYHigh, vertZHigh);
+  glTexCoord2f(texRight, texBottom); glVertex3f(vertXLow, vertYLow, vertZHigh);
+  glTexCoord2f(texLeft, texBottom); glVertex3f(vertXHigh, vertYLow, vertZLow);
+  glTexCoord2f(texLeft, texTop); glVertex3f(vertXHigh, vertYHigh, vertZLow);
+}
+
 
 
 /*
