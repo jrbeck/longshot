@@ -507,7 +507,7 @@ void player_c::updateHud() {
 //		text, TEXT_JUSTIFICATION_CENTER, color, NULL);
 }
 
-void player_c::drawHud(void) {
+void player_c::drawHud() {
   if (mHeadInWater && mVisionTint[3] > 0.0) {
     drawWaterOverlay ();
   }
@@ -520,7 +520,7 @@ void player_c::drawHud(void) {
   }
 }
 
-void player_c::drawWaterOverlay(void) {
+void player_c::drawWaterOverlay() {
   // need to set up the opengl viewport
   glPushMatrix();
 

@@ -78,7 +78,6 @@ class game_c {
 
   player_c* mPlayer;
   Galaxy* mGalaxy;
-//  Location* mLocation;
   AiManager* mAiManager;
   Physics* mPhysics;
   GameInput* mGameInput;
@@ -90,8 +89,6 @@ class game_c {
   WorldMapView mWorldMapView;
   PhysicsView* mPhysicsView;
   MerchantView* mMerchantView;
-
-//  size_t mPlayerAiHandle;
 
   double mLastUpdateTime;
 
@@ -126,10 +123,6 @@ public:
   bool update();
   int draw();
 
-  // this really shouldn't be here...
-  // it draws the 'touched' block in front of the player
-  // put it in PlayerView
-  void drawPlayerTargetBlock();
 
   // currently Windows specific
   void deleteAllFilesInFolder(LPWSTR folderPath);

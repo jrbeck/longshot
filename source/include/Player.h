@@ -117,7 +117,7 @@ public:
   gl_camera_c cam;
 
 private:
-  GameModel *mGameModel;
+  GameModel* mGameModel;
 
   GameMenu mHud;
 
