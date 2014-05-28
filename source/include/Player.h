@@ -49,6 +49,10 @@ enum {
   EQUIP_SECONDARY
 };
 
+#define LEFT_HANDED  (-1.0)
+#define RIGHT_HANDED  (1.0)
+
+
 
 #define DEFAULT_BACKPACK_SIZE	(15)
 
@@ -91,6 +95,8 @@ public:
   double fireGun(item_t item, double handedness);
   double useMeleeWeapon(item_t item);
 
+  melee_weapon_state_t *getMeleeWeaponState(int hand);
+
   void useBackpackItem();
 
   v2d_t obtainWalkVector(v2d_t walkInput);
@@ -101,8 +107,6 @@ public:
   void updateHud();
   void drawHud();
   void drawWaterOverlay();
-  void drawEquipped(AssetManager& assetManager);
-  void drawEquippedGun(double handedness, BitmapModel& model);
 
   void updateCharacterSheet();
 
@@ -117,7 +121,7 @@ public:
   gl_camera_c cam;
 
 private:
-  GameModel *mGameModel;
+  GameModel* mGameModel;
 
   GameMenu mHud;
 
@@ -171,8 +175,5 @@ private:
   double mInclineMax;		// lower constraint for incline angle
 
   bool mPlacedBlock;
-
-  static const int LEFT_HANDED = -1;
-  static const int RIGHT_HANDED = 1;
 };
 
