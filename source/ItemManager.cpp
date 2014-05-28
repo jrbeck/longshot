@@ -677,47 +677,6 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo) {
   return shotInfo.time + mItems[itemIndex].shotDelay;
 }
 
-void ItemManager::drawMeleeWeapon(melee_weapon_state_t weaponState, AssetManager& assetManager) {
-  double handFacing = weaponState.facing + (MY_PI / 4.0);
-
-  v3d_t headPosition = weaponState.headPosition;
-  v3d_t handPosition = weaponState.handPosition; //v3d_v (0.7, -0.7, 0.2);
-
-  double swing;
-
-  if (weaponState.swingMode == 0) {
-    swing = 7.0 * (MY_PI / 8.0);
-    // or (0.225 * sin (9.0 * MY_PI / 8.0));
-  }
-  else if (weaponState.swingMode == 1) {
-    swing = (0.10 * sin(weaponState.swingTime * 5.0) - (MY_PI / 6.0));
-
-  }
-  else {
-    swing = (0.45 * sin(((weaponState.swingTime) * 8.0) + (MY_PI / 2.0)));
-    if (swing < 0.0)  {
-      swing *= 5.0;
-    }
-  }
-
-  glDisable(GL_TEXTURE_2D);
-  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-  glPushMatrix();
-    glTranslated(headPosition.x, headPosition.y, headPosition.z);
-    glRotated(RAD2DEG(-handFacing), 0.0, 1.0, 0.0);
-    glRotated(RAD2DEG(weaponState.incline), 1.0, 0.0, 1.0);
-//		glScaled (-1.0, 1.0, 1.0);
-    glTranslated(handPosition.x, handPosition.y, handPosition.z);
-    glRotated(RAD2DEG(swing), 1.0, 0.0, 0.0);
-
-    glBegin(GL_QUADS);
-      glCallList(assetManager.mModelDisplayListHandles[getItem(weaponState.weaponHandle).gunType]);
-    glEnd();
-
-  glPopMatrix();
-}
-
 void ItemManager::save(FILE *file) {
   // keep track of the last handle
   // WARNING: this could be intelligently reset between loads,

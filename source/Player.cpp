@@ -369,6 +369,31 @@ double player_c::useMeleeWeapon(item_t item) {
   return mGameModel->itemManager->useMeleeWeapon(item.handle, shotInfo);
 }
 
+void player_c::getMeleeWeaponStates(melee_weapon_state_t* leftHand, melee_weapon_state_t* rightHand) {
+  // primary
+  mMeleeStatePrimary.weaponHandle = mInventory.mPrimaryItem;
+  mMeleeStatePrimary.swingMode = 2; // OMG
+  mMeleeStatePrimary.swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
+
+  mMeleeStatePrimary.facing = mFacing;
+  mMeleeStatePrimary.incline = mIncline;
+  mMeleeStatePrimary.headPosition = v3d_add(mPos, mFinalHeadOffset);
+  mMeleeStatePrimary.handPosition = v3d_v(0.7, -0.7, 0.2);
+
+  // secondary
+  mMeleeStateSecondary.weaponHandle = mInventory.mSecondaryItem;
+  mMeleeStateSecondary.swingMode = 2; // OMG
+  mMeleeStateSecondary.swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
+
+  mMeleeStateSecondary.facing = mMeleeStatePrimary.facing;
+  mMeleeStateSecondary.incline = mMeleeStatePrimary.incline;
+  mMeleeStateSecondary.headPosition = mMeleeStatePrimary.headPosition;
+  mMeleeStateSecondary.handPosition = mMeleeStatePrimary.handPosition;
+
+  rightHand = &mMeleeStatePrimary;
+  leftHand = &mMeleeStateSecondary;
+}
+
 void player_c::useBackpackItem() {
   // can't use a non-item
   if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
@@ -426,7 +451,7 @@ void player_c::updateTargetBlock() {
   }
 }
 
-v3di_t *player_c::getTargetBlock(int& targetBlockFace) {
+v3di_t* player_c::getTargetBlock(int& targetBlockFace) {
   if (mIsBlockTargeted) {
     targetBlockFace = mTargetBlockFace;
     return &mTargetBlock;
@@ -553,80 +578,6 @@ void player_c::drawWaterOverlay() {
   glEnable(GL_TEXTURE_2D);
 
   glPopMatrix();
-}
-
-void player_c::drawEquipped(AssetManager& assetManager) {
-  mMeleeStatePrimary.facing = mFacing;
-  mMeleeStatePrimary.incline = mIncline;
-
-  mMeleeStatePrimary.headPosition = v3d_add(mPos, mFinalHeadOffset);
-  mMeleeStatePrimary.handPosition = v3d_v(0.7, -0.7, 0.2);
-
-  //	mMeleeState.handPosition = v3d_v(0.7, -0.7, -0.2);
-
-  // copy that over
-  mMeleeStateSecondary.facing = mMeleeStatePrimary.facing;
-  mMeleeStateSecondary.incline = mMeleeStatePrimary.incline;
-  mMeleeStateSecondary.headPosition = mMeleeStatePrimary.headPosition;
-  mMeleeStateSecondary.handPosition = mMeleeStatePrimary.handPosition;
-
-  // primary
-  item_t primaryItem = mGameModel->itemManager->getItem(mInventory.mPrimaryItem);
-  mMeleeStatePrimary.weaponHandle = primaryItem.handle;
-  mMeleeStatePrimary.swingMode = 2; // OMG
-  mMeleeStatePrimary.swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
-
-  if (primaryItem.type == ITEMTYPE_MELEE_ONE_HANDED &&
-    mMeleeStatePrimary.swingTime >= 0.0 &&
-    mMeleeStatePrimary.swingTime <= 0.4)
-  {
-    mGameModel->itemManager->drawMeleeWeapon(mMeleeStatePrimary, assetManager);
-  }
-  else if (primaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
-    drawEquippedGun(LEFT_HANDED, *assetManager.mGunBitmapModel);
-  }
-
-  // secondary
-  item_t secondaryItem = mGameModel->itemManager->getItem(mInventory.mSecondaryItem);
-  mMeleeStateSecondary.weaponHandle = secondaryItem.handle;
-  mMeleeStateSecondary.swingMode = 2; // OMG
-  mMeleeStateSecondary.swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
-
-  if (secondaryItem.type == ITEMTYPE_MELEE_ONE_HANDED &&
-    mMeleeStateSecondary.swingTime >= 0.0 &&
-    mMeleeStateSecondary.swingTime <= 0.4)
-  {
-    mGameModel->itemManager->drawMeleeWeapon(mMeleeStateSecondary, assetManager);
-  }
-  else if (secondaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
-    drawEquippedGun(RIGHT_HANDED, *assetManager.mGunBitmapModel);
-  }
-}
-
-void player_c::drawEquippedGun(double handedness, BitmapModel& model) {
-  v3d_t handPosition = v3d_v(0.0, -0.1, 0.0);
-  v3d_t offset = v3d_v(0.2, 0.0, 0.2);
-  glEnable(GL_TEXTURE_2D);
-  model.bindTexture();
-  glColor4d(1.0, 1.0, 1.0, 1.0);
-
-  glEnable(GL_BLEND);
-  glAlphaFunc(GL_GREATER, 0.9f);
-  glEnable(GL_ALPHA_TEST);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-  glPushMatrix();
-    glTranslated(mMeleeStateSecondary.headPosition.x, mMeleeStateSecondary.headPosition.y, mMeleeStateSecondary.headPosition.z);
-    glTranslated(handPosition.x, handPosition.y, handPosition.z);
-    glRotated(RAD2DEG(-mFacing), 0.0, 1.0, 0.0);
-    glRotated(RAD2DEG(mIncline), 0.0, 0.0, 1.0);
-    glTranslated(offset.x, offset.y, handedness * offset.z);
-    glScaled(1.0, 1.0, 1.0);
-
-    model.draw();
-  glPopMatrix();
-
-  glDisable(GL_ALPHA_TEST);
 }
 
 void player_c::updateCharacterSheet() {

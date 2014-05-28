@@ -503,9 +503,9 @@ int game_c::draw() {
   // draw the solid physics objs
   mPhysicsView->drawSolidEntities(mPhysics->getEntityVector(), *mGameModel->location->getWorldMap(), mAssetManager);
 
-  drawPlayerTargetBlock();
+  PlayerView::drawPlayerTargetBlock(mPlayer);
 
-  mPlayer->drawEquipped(mAssetManager);
+  PlayerView::drawEquipped(mGameModel, mAssetManager);
 
   // draw the AI
   mAiView->draw(mGameModel);

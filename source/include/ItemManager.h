@@ -142,8 +142,6 @@ public:
 
   double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo);
 
-  void drawMeleeWeapon(melee_weapon_state_t weaponState, AssetManager &assetManager);
-
   // REMINDER: this should really see how many items are no longer
   // around, perhaps on load?
   void save(FILE* file);

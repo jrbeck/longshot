@@ -318,6 +318,9 @@
     <ClCompile Include="..\source\StarShip.cpp">
       <Filter>Source Files\world\location</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\PlayerView.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -559,6 +562,9 @@
     </ClInclude>
     <ClInclude Include="..\source\include\StarShip.h">
       <Filter>Header Files\world\location</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\PlayerView.h">
+      <Filter>Header Files\view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

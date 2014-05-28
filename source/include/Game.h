@@ -38,6 +38,7 @@ using namespace std;
 #include "GameWindow.h"
 #include "GalaxyMap.h"
 #include "WorldUtil.h"
+#include "PlayerView.h"
 #include "WorldMapView.h"
 #include "AiView.h"
 #include "physics.h"

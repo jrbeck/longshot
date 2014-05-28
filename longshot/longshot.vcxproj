@@ -137,6 +137,7 @@
     <ClCompile Include="..\source\Planet.cpp" />
     <ClCompile Include="..\source\PlanetMap.cpp" />
     <ClCompile Include="..\source\Player.cpp" />
+    <ClCompile Include="..\source\PlayerView.cpp" />
     <ClCompile Include="..\source\PseudoRandom.cpp" />
     <ClCompile Include="..\source\Rectangle2d.cpp" />
     <ClCompile Include="..\source\RogueMap.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="..\source\include\Planet.h" />
     <ClInclude Include="..\source\include\PlanetMap.h" />
     <ClInclude Include="..\source\include\Player.h" />
+    <ClInclude Include="..\source\include\PlayerView.h" />
     <ClInclude Include="..\source\include\PseudoRandom.h" />
     <ClInclude Include="..\source\include\Rectangle2d.h" />
     <ClInclude Include="..\source\include\RogueMap.h" />
