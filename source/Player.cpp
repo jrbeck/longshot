@@ -369,29 +369,28 @@ double player_c::useMeleeWeapon(item_t item) {
   return mGameModel->itemManager->useMeleeWeapon(item.handle, shotInfo);
 }
 
-void player_c::getMeleeWeaponStates(melee_weapon_state_t* leftHand, melee_weapon_state_t* rightHand) {
-  // primary
-  mMeleeStatePrimary.weaponHandle = mInventory.mPrimaryItem;
-  mMeleeStatePrimary.swingMode = 2; // OMG
-  mMeleeStatePrimary.swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
+melee_weapon_state_t* player_c::getMeleeWeaponState(int hand) {
+  melee_weapon_state_t* weaponState;
 
-  mMeleeStatePrimary.facing = mFacing;
-  mMeleeStatePrimary.incline = mIncline;
-  mMeleeStatePrimary.headPosition = v3d_add(mPos, mFinalHeadOffset);
-  mMeleeStatePrimary.handPosition = v3d_v(0.7, -0.7, 0.2);
+  if (hand == EQUIP_PRIMARY) {
+    weaponState = &mMeleeStatePrimary;
+    weaponState->weaponHandle = mInventory.mPrimaryItem;
+    weaponState->swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
+  }
+  else {
+    weaponState = &mMeleeStateSecondary;
+    weaponState->weaponHandle = mInventory.mSecondaryItem;
+    weaponState->swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
+  }
 
-  // secondary
-  mMeleeStateSecondary.weaponHandle = mInventory.mSecondaryItem;
-  mMeleeStateSecondary.swingMode = 2; // OMG
-  mMeleeStateSecondary.swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
+  weaponState->swingMode = 2; // OMG
 
-  mMeleeStateSecondary.facing = mMeleeStatePrimary.facing;
-  mMeleeStateSecondary.incline = mMeleeStatePrimary.incline;
-  mMeleeStateSecondary.headPosition = mMeleeStatePrimary.headPosition;
-  mMeleeStateSecondary.handPosition = mMeleeStatePrimary.handPosition;
+  weaponState->facing = mFacing;
+  weaponState->incline = mIncline;
+  weaponState->headPosition = v3d_add(mPos, mFinalHeadOffset);
+  weaponState->handPosition = v3d_v(0.7, -0.7, 0.2);
 
-  rightHand = &mMeleeStatePrimary;
-  leftHand = &mMeleeStateSecondary;
+  return weaponState;
 }
 
 void player_c::useBackpackItem() {

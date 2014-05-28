@@ -6,14 +6,14 @@
 
 
 void PlayerView::drawEquipped(GameModel* gameModel, AssetManager& assetManager) {
-  melee_weapon_state_t* leftHand;
-  melee_weapon_state_t* rightHand;
-  gameModel->player->getMeleeWeaponStates(leftHand, rightHand);
-  drawEquipped(leftHand, gameModel, assetManager);
-  drawEquipped(rightHand, gameModel, assetManager);
+  melee_weapon_state_t* leftHand = gameModel->player->getMeleeWeaponState(EQUIP_PRIMARY);
+  melee_weapon_state_t* rightHand = gameModel->player->getMeleeWeaponState(EQUIP_SECONDARY);
+
+  drawEquipped(leftHand, RIGHT_HANDED, gameModel, assetManager);
+  drawEquipped(rightHand, LEFT_HANDED, gameModel, assetManager);
 }
 
-void PlayerView::drawEquipped(const melee_weapon_state_t* weaponState, GameModel* gameModel, AssetManager& assetManager) {
+void PlayerView::drawEquipped(const melee_weapon_state_t* weaponState, double handedness, GameModel* gameModel, AssetManager& assetManager) {
   item_t item = gameModel->itemManager->getItem(weaponState->weaponHandle);
 
   if (item.type == ITEMTYPE_MELEE_ONE_HANDED &&
@@ -24,16 +24,16 @@ void PlayerView::drawEquipped(const melee_weapon_state_t* weaponState, GameModel
     drawMeleeWeapon(weaponState, modelDisplayListHandle);
   }
   else if (item.type == ITEMTYPE_GUN_ONE_HANDED) {
-    drawEquippedGun(weaponState, RIGHT_HANDED, *assetManager.mGunBitmapModel);
+    drawEquippedGun(weaponState, handedness, assetManager.mGunBitmapModel);
   }
 }
 
-void PlayerView::drawEquippedGun(const melee_weapon_state_t* weaponState, double handedness, BitmapModel& model) {
+void PlayerView::drawEquippedGun(const melee_weapon_state_t* weaponState, double handedness, BitmapModel* model) {
   v3d_t handPosition = v3d_v(0.0, -0.1, 0.0);
-  v3d_t offset = v3d_v(0.2, 0.0, 0.2);
+  v3d_t offset = v3d_v(0.2, 0.0, handedness * 0.2);
 
   glEnable(GL_TEXTURE_2D);
-  model.bindTexture();
+  model->bindTexture();
   glColor4d(1.0, 1.0, 1.0, 1.0);
 
   glEnable(GL_BLEND);
@@ -47,9 +47,9 @@ void PlayerView::drawEquippedGun(const melee_weapon_state_t* weaponState, double
   glTranslated(handPosition.x, handPosition.y, handPosition.z);
   glRotated(RAD2DEG(-weaponState->facing), 0.0, 1.0, 0.0);
   glRotated(RAD2DEG(weaponState->incline), 0.0, 0.0, 1.0);
-  glTranslated(offset.x, offset.y, handedness * offset.z);
-  glScaled(1.0, 1.0, 1.0);
-  model.draw();
+  glTranslated(offset.x, offset.y, offset.z);
+//  glScaled(1.0, 1.0, 1.0);
+  model->draw();
 
   glPopMatrix();
 
