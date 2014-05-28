@@ -5,38 +5,30 @@
 
 
 
-void PlayerView::drawEquipped(GameModel *gameModel, AssetManager& assetManager) {
+void PlayerView::drawEquipped(GameModel* gameModel, AssetManager& assetManager) {
   melee_weapon_state_t* leftHand;
   melee_weapon_state_t* rightHand;
   gameModel->player->getMeleeWeaponStates(leftHand, rightHand);
+  drawEquipped(leftHand, gameModel, assetManager);
+  drawEquipped(rightHand, gameModel, assetManager);
+}
 
-  item_t primaryItem = gameModel->itemManager->getItem(rightHand->weaponHandle);
-  item_t secondaryItem = gameModel->itemManager->getItem(leftHand->weaponHandle);
+void PlayerView::drawEquipped(const melee_weapon_state_t* weaponState, GameModel* gameModel, AssetManager& assetManager) {
+  item_t item = gameModel->itemManager->getItem(weaponState->weaponHandle);
 
-  if (primaryItem.type == ITEMTYPE_MELEE_ONE_HANDED &&
-    rightHand->swingTime >= 0.0 &&
-    rightHand->swingTime <= 0.4)
+  if (item.type == ITEMTYPE_MELEE_ONE_HANDED &&
+    weaponState->swingTime >= 0.0 &&
+    weaponState->swingTime <= 0.4)
   {
-    GLuint modelDisplayListHandle = assetManager.mModelDisplayListHandles[gameModel->itemManager->getItem(rightHand->weaponHandle).gunType];
-    drawMeleeWeapon(rightHand, modelDisplayListHandle);
+    GLuint modelDisplayListHandle = assetManager.mModelDisplayListHandles[gameModel->itemManager->getItem(weaponState->weaponHandle).gunType];
+    drawMeleeWeapon(weaponState, modelDisplayListHandle);
   }
-  else if (primaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
-    drawEquippedGun(rightHand, LEFT_HANDED, *assetManager.mGunBitmapModel);
-  }
-
-  if (secondaryItem.type == ITEMTYPE_MELEE_ONE_HANDED &&
-    leftHand->swingTime >= 0.0 &&
-    leftHand->swingTime <= 0.4)
-  {
-    GLuint modelDisplayListHandle = assetManager.mModelDisplayListHandles[gameModel->itemManager->getItem(leftHand->weaponHandle).gunType];
-    drawMeleeWeapon(leftHand, modelDisplayListHandle);
-  }
-  else if (secondaryItem.type == ITEMTYPE_GUN_ONE_HANDED) {
-    drawEquippedGun(leftHand, RIGHT_HANDED, *assetManager.mGunBitmapModel);
+  else if (item.type == ITEMTYPE_GUN_ONE_HANDED) {
+    drawEquippedGun(weaponState, RIGHT_HANDED, *assetManager.mGunBitmapModel);
   }
 }
 
-void PlayerView::drawEquippedGun(melee_weapon_state_t* weaponState, double handedness, BitmapModel& model) {
+void PlayerView::drawEquippedGun(const melee_weapon_state_t* weaponState, double handedness, BitmapModel& model) {
   v3d_t handPosition = v3d_v(0.0, -0.1, 0.0);
   v3d_t offset = v3d_v(0.2, 0.0, 0.2);
 
@@ -67,7 +59,7 @@ void PlayerView::drawEquippedGun(melee_weapon_state_t* weaponState, double hande
 
 
 
-void PlayerView::drawMeleeWeapon(melee_weapon_state_t* weaponState, GLuint modelDisplayListHandle) {
+void PlayerView::drawMeleeWeapon(const melee_weapon_state_t* weaponState, GLuint modelDisplayListHandle) {
   double handFacing = weaponState->facing + (MY_PI / 4.0);
 
   v3d_t headPosition = weaponState->headPosition;
