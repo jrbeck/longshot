@@ -95,7 +95,7 @@ public:
   double fireGun(item_t item, double handedness);
   double useMeleeWeapon(item_t item);
 
-  melee_weapon_state_t *getMeleeWeaponState(int hand);
+  melee_weapon_state_t* getMeleeWeaponState(int hand);
 
   void useBackpackItem();
 

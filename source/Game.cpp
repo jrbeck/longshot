@@ -179,18 +179,24 @@ void game_c::setup_opengl() {
 int game_c::enter_game_mode(bool createNewWorld) {
   printf ("\n%6d: entered GAME mode ----------------\n", SDL_GetTicks());
 
+  // create a new game or load an old one
   if (createNewWorld) {
     printf("game_c::enter_game_mode(): new game\n");
     deleteAllFilesInFolder(TEXT("save"));
 
     mGameModel->currentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
     mGameModel->initializeSpaceShip(true);
-    // load the appropriate menu
-    loadShipMenu();
   }
   else {
     printf("game_c::enter_game_mode(): loading game\n");
     mGameModel->load(mGameWindow);
+  }
+
+  // load the appropriate menu for the location
+  if (mGameModel->location->getType() == LOCATION_SHIP) {
+    loadShipMenu();
+  }
+  else {
     loadPlanetMenu();
   }
 
@@ -497,17 +503,10 @@ int game_c::draw() {
   // draw the stars and stuff
   mGameModel->location->draw(cam);
 
-  // draw the solid blocks of the WorldMap
   mWorldMapView.drawSolidBlocks(cam, mAssetManager);
-
-  // draw the solid physics objs
   mPhysicsView->drawSolidEntities(mPhysics->getEntityVector(), *mGameModel->location->getWorldMap(), mAssetManager);
-
   PlayerView::drawPlayerTargetBlock(mPlayer);
-
   PlayerView::drawEquipped(mGameModel, mAssetManager);
-
-  // draw the AI
   mAiView->draw(mGameModel);
 
   // draw the transparent physics objs

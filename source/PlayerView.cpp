@@ -9,8 +9,8 @@ void PlayerView::drawEquipped(GameModel* gameModel, AssetManager& assetManager) 
   melee_weapon_state_t* leftHand = gameModel->player->getMeleeWeaponState(EQUIP_PRIMARY);
   melee_weapon_state_t* rightHand = gameModel->player->getMeleeWeaponState(EQUIP_SECONDARY);
 
-  drawEquipped(leftHand, RIGHT_HANDED, gameModel, assetManager);
-  drawEquipped(rightHand, LEFT_HANDED, gameModel, assetManager);
+  drawEquipped(leftHand, LEFT_HANDED, gameModel, assetManager);
+  drawEquipped(rightHand, RIGHT_HANDED, gameModel, assetManager);
 }
 
 void PlayerView::drawEquipped(const melee_weapon_state_t* weaponState, double handedness, GameModel* gameModel, AssetManager& assetManager) {

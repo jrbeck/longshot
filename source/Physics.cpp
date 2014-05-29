@@ -477,60 +477,60 @@ void Physics::updateEntity(size_t index) {
 
   // FIXME: this is a stupid place for this...
   switch (physicsEntity->type) {
-    case OBJTYPE_NAPALM:
-      if (r_numi(0, 50) == 0) {
-        PhysicsEntity* otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
-        if (otherEntity != NULL) {
-          otherEntity->owner = physicsEntity->owner;
-          otherEntity->impactDamage = physicsEntity->impactDamage;
-        }
+  case OBJTYPE_NAPALM:
+    if (r_numi(0, 50) == 0) {
+      PhysicsEntity* otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
+      if (otherEntity != NULL) {
+        otherEntity->owner = physicsEntity->owner;
+        otherEntity->impactDamage = physicsEntity->impactDamage;
       }
-      break;
+    }
+    break;
 
-    case OBJTYPE_SMOKE:
-      physicsEntity->boundingBox.scale(1.009);
-      break;
+  case OBJTYPE_SMOKE:
+    physicsEntity->boundingBox.scale(1.009);
+    break;
 
-    case OBJTYPE_DEAD_BULLET:
-    case OBJTYPE_LIVE_BULLET:
-      if (r_numi(0, 50) == 0) {
-        PhysicsEntity* otherEntity = createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
-        if (otherEntity != NULL) {
-          otherEntity->color[3] = 0.2f;
-        }
+  case OBJTYPE_DEAD_BULLET:
+  case OBJTYPE_LIVE_BULLET:
+    if (r_numi(0, 50) == 0) {
+      PhysicsEntity* otherEntity = createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+      if (otherEntity != NULL) {
+        otherEntity->color[3] = 0.2f;
       }
-      break;
+    }
+    break;
 
-    case OBJTYPE_ROCKET:
-      if (r_numi (0, 4) == 0) {
-        PhysicsEntity* otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
-        if (otherEntity != NULL) {
-          otherEntity->owner = physicsEntity->owner;
-          otherEntity->impactDamage = physicsEntity->impactDamage;
-        }
+  case OBJTYPE_ROCKET:
+    if (r_numi (0, 4) == 0) {
+      PhysicsEntity* otherEntity = createEntity(OBJTYPE_FIRE, physicsEntity->pos, false);
+      if (otherEntity != NULL) {
+        otherEntity->owner = physicsEntity->owner;
+        otherEntity->impactDamage = physicsEntity->impactDamage;
       }
-      break;
+    }
+    break;
 
-    case OBJTYPE_PLASMA_BOMB:
-      for (int i = 0; i < rnum; i++) {
-        PhysicsEntity* otherEntity = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
-        if (otherEntity != NULL) {
-          setVelocity(otherEntity->handle, v3d_random(0.5));
-        }
+  case OBJTYPE_PLASMA_BOMB:
+    for (int i = 0; i < rnum; i++) {
+      PhysicsEntity* otherEntity = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
+      if (otherEntity != NULL) {
+        setVelocity(otherEntity->handle, v3d_random(0.5));
       }
-      createEntity(OBJTYPE_PLASMA_TRAIL, physicsEntity->boundingBox.getCenterPosition(), true);
-      break;
+    }
+    createEntity(OBJTYPE_PLASMA_TRAIL, physicsEntity->boundingBox.getCenterPosition(), true);
+    break;
 
-    case OBJTYPE_AI_ENTITY:
-      physicsEntity->health += mGameModel->location->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
-      break;
+  case OBJTYPE_AI_ENTITY:
+    physicsEntity->health += mGameModel->location->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
+    break;
 
-    case OBJTYPE_PLAYER:
-      physicsEntity->health += mGameModel->location->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
-      break;
+  case OBJTYPE_PLAYER:
+    physicsEntity->health += mGameModel->location->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 }
 
@@ -542,75 +542,75 @@ void Physics::expireEntity(size_t index) {
   bool removeEntity = true;
 
   switch (physicsEntity->type) {
-    case OBJTYPE_FIRE:
-      newPhysicsEntity = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, false);
-      if (newPhysicsEntity != NULL) {
-        newPhysicsEntity->boundingBox.setDimensions(physicsEntity->boundingBox.getDimensions());
-        setDensity(newPhysicsEntity);
-        newPhysicsEntity->vel.x = r_num(-0.2, 0.2);
-        newPhysicsEntity->vel.y = physicsEntity->vel.y * 0.6;
-        newPhysicsEntity->vel.z = r_num(-0.2, 0.2);
-      }
-      break;
+  case OBJTYPE_FIRE:
+    newPhysicsEntity = createEntity(OBJTYPE_SMOKE, physicsEntity->pos, false);
+    if (newPhysicsEntity != NULL) {
+      newPhysicsEntity->boundingBox.setDimensions(physicsEntity->boundingBox.getDimensions());
+      setDensity(newPhysicsEntity);
+      newPhysicsEntity->vel.x = r_num(-0.2, 0.2);
+      newPhysicsEntity->vel.y = physicsEntity->vel.y * 0.6;
+      newPhysicsEntity->vel.z = r_num(-0.2, 0.2);
+    }
+    break;
 
-    case OBJTYPE_EXPLOSION:
-      pos = physicsEntity->boundingBox.getCenterPosition();
-      v3d_t force;
-      for (size_t i = 0; i < 10; i++) {
-        force = v3d_v(r_num(-5., 5.0), r_num(-5.0, 5.0), r_num(-5.0, 5.0));
-        createEntity(OBJTYPE_SMOKE, pos, force, false);
-      }
-      break;
+  case OBJTYPE_EXPLOSION:
+    pos = physicsEntity->boundingBox.getCenterPosition();
+    v3d_t force;
+    for (size_t i = 0; i < 10; i++) {
+      force = v3d_v(r_num(-5., 5.0), r_num(-5.0, 5.0), r_num(-5.0, 5.0));
+      createEntity(OBJTYPE_SMOKE, pos, force, false);
+    }
+    break;
 
-    case OBJTYPE_ROCKET:
-    case OBJTYPE_GRENADE:
-      grenadeExplosion(index);
-      break;
+  case OBJTYPE_ROCKET:
+  case OBJTYPE_GRENADE:
+    grenadeExplosion(index);
+    break;
 
-    case OBJTYPE_PLASMA:
-      plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), 5);
-      break;
+  case OBJTYPE_PLASMA:
+    plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), 5);
+    break;
 
-    case OBJTYPE_PLASMA_BOMB:
-      plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), 30);
-      break;
+  case OBJTYPE_PLASMA_BOMB:
+    plasmaBombExplode (physicsEntity->boundingBox.getCenterPosition(), 30);
+    break;
 
-    case OBJTYPE_AI_ENTITY:
-      if (physicsEntity->health <= 0.0) {
-        spawnMeatExplosion(physicsEntity->boundingBox.getCenterPosition(), 100);
-      }
-      break;
+  case OBJTYPE_AI_ENTITY:
+    if (physicsEntity->health <= 0.0) {
+      spawnMeatExplosion(physicsEntity->boundingBox.getCenterPosition(), 100);
+    }
+    break;
 
-    case OBJTYPE_ITEM:
+  case OBJTYPE_ITEM:
+    phys_message_t message;
+    message.recipient = MAILBOX_ITEMMANAGER;
+    message.type = PHYS_MESSAGE_ITEM_DESTROYED;
+    message.iValue = (int)physicsEntity->itemHandle;
+    sendMessage(message);
+    break;
+
+  case OBJTYPE_MONSTER_SPAWNER: // what a hack!
+    pos = physicsEntity->boundingBox.getCenterPosition();
+
+    // check if close enough to player
+    if (v3d_dist(pos, getEntityByHandle(mPlayerHandle)->pos) < 100.0 &&
+      !mGameModel->location->getWorldMap()->lineOfSight(pos, getEntityByHandle(mPlayerHandle)->boundingBox.getCenterPosition()))
+    {
       phys_message_t message;
-      message.recipient = MAILBOX_ITEMMANAGER;
-      message.type = PHYS_MESSAGE_ITEM_DESTROYED;
-      message.iValue = (int)physicsEntity->itemHandle;
+      message.sender = MAILBOX_PHYSICS;
+      message.recipient = MAILBOX_AIMANAGER;
+      message.type = PHYS_MESSAGE_SPAWN_CREATURE;
+      pos.y += 1.5;
+      message.vec3 = pos;
       sendMessage(message);
-      break;
+    }
 
-    case OBJTYPE_MONSTER_SPAWNER: // what a hack!
-      pos = physicsEntity->boundingBox.getCenterPosition();
+    physicsEntity->expirationTime += physicsEntity->lifespan;
+    removeEntity = false;
+    break;
 
-      // check if close enough to player
-      if (v3d_dist(pos, getEntityByHandle(mPlayerHandle)->pos) < 100.0 &&
-        !mGameModel->location->getWorldMap()->lineOfSight(pos, getEntityByHandle(mPlayerHandle)->boundingBox.getCenterPosition()))
-      {
-        phys_message_t message;
-        message.sender = MAILBOX_PHYSICS;
-        message.recipient = MAILBOX_AIMANAGER;
-        message.type = PHYS_MESSAGE_SPAWN_CREATURE;
-        pos.y += 1.5;
-        message.vec3 = pos;
-        sendMessage(message);
-      }
-
-      physicsEntity->expirationTime += physicsEntity->lifespan;
-      removeEntity = false;
-      break;
-
-    default:
-      break;
+  default:
+    break;
   }
 
   // mark the object for destruction
@@ -638,57 +638,57 @@ v3d_t Physics::calculateAcceleration(size_t index) {
   double speed;
 
   switch (physicsEntity->type) {
-    case OBJTYPE_FIRE:
-      acc.y = 20.0;
-      frictionCoeff = 0.98;
-      break;
+  case OBJTYPE_FIRE:
+    acc.y = 20.0;
+    frictionCoeff = 0.98;
+    break;
 
-    case OBJTYPE_ROCKET:
-      // FIXME: c'mon bro! fo real?
-      // that is to say: no physics for rockets?
+  case OBJTYPE_ROCKET:
+    // FIXME: c'mon bro! fo real?
+    // that is to say: no physics for rockets?
 
-    case OBJTYPE_PLASMA:
-    case OBJTYPE_PLASMA_TRAIL:
-    case OBJTYPE_PLASMA_BOMB:
-    case OBJTYPE_TIGER_BAIT:
-    case OBJTYPE_MELEE_ATTACK:
-      break;
+  case OBJTYPE_PLASMA:
+  case OBJTYPE_PLASMA_TRAIL:
+  case OBJTYPE_PLASMA_BOMB:
+  case OBJTYPE_TIGER_BAIT:
+  case OBJTYPE_MELEE_ATTACK:
+    break;
 
-    case OBJTYPE_STEAM:
-    case OBJTYPE_SMOKE:
-      if (physicsEntity->vel.y > 0.8) {
-        acc.y = -4.25;
-      }
-      else {
-        acc.y = 0.5;
-      }
+  case OBJTYPE_STEAM:
+  case OBJTYPE_SMOKE:
+    if (physicsEntity->vel.y > 0.8) {
+      acc.y = -4.25;
+    }
+    else {
+      acc.y = 0.5;
+    }
 
 //			drag = v3d_scale (150.0, v3d_neg (v3d_normalize (obj[handle].vel)));
 //			acc = v3d_add (acc, drag);
       
-      frictionCoeff = 0.98;
-      break;
+    frictionCoeff = 0.98;
+    break;
 
-    default:
-      acc.y += mGravity;
-      frictionCoeff = mFriction;
+  default:
+    acc.y += mGravity;
+    frictionCoeff = mFriction;
 
-      speed = v3d_mag(physicsEntity->vel);
-      if (physicsEntity->worldViscosity > 0.0) {
-        if (speed > 0.0) {
-          frictionCoeff = mFriction;
-          drag = v3d_scale(speed * physicsEntity->worldViscosity, v3d_normalize(v3d_neg(physicsEntity->vel)));
-          acc = v3d_add(acc, drag);
-        }
-
-        // FLOAT??? this isn't gonna work if we end up using world viscosity
-        // to mean resistant plant life, etc... but that'll break elsewhere too
-        // water density: 1000 (kg / m^3)
-        //    v3d_t floatForce = v3d_scale(v3d_v(0.0, 1.0, 0.0), 0.001 * (1000.0 - physicsEntity->density) * physicsEntity->one_over_mass);
-        //    acc = v3d_add(acc, floatForce);
+    speed = v3d_mag(physicsEntity->vel);
+    if (physicsEntity->worldViscosity > 0.0) {
+      if (speed > 0.0) {
+        frictionCoeff = mFriction;
+        drag = v3d_scale(speed * physicsEntity->worldViscosity, v3d_normalize(v3d_neg(physicsEntity->vel)));
+        acc = v3d_add(acc, drag);
       }
 
-      break;
+      // FLOAT??? this isn't gonna work if we end up using world viscosity
+      // to mean resistant plant life, etc... but that'll break elsewhere too
+      // water density: 1000 (kg / m^3)
+      //    v3d_t floatForce = v3d_scale(v3d_v(0.0, 1.0, 0.0), 0.001 * (1000.0 - physicsEntity->density) * physicsEntity->one_over_mass);
+      //    acc = v3d_add(acc, floatForce);
+    }
+
+    break;
   }
 
   if (!physicsEntity->applyPhysics) {
@@ -796,33 +796,33 @@ void Physics::integrate_euler(size_t index) {
     double coeff_elasticity;
 
     switch (physicsEntity->type) {
-      case OBJTYPE_PLAYER:
-        coeff_elasticity = 3000.0;
-        break;
+    case OBJTYPE_PLAYER:
+      coeff_elasticity = 3000.0;
+      break;
 
-      case OBJTYPE_GRENADE:
-        coeff_elasticity = 50.0;
-        break;
+    case OBJTYPE_GRENADE:
+      coeff_elasticity = 50.0;
+      break;
 
-      case OBJTYPE_FIRE:
-      case OBJTYPE_SMOKE:
-        if (r_numi (0, 12) == 0) {
-          coeff_elasticity = 500.0;
-        }
-        else {
-          coeff_elasticity = 100.0;
-        }
+    case OBJTYPE_FIRE:
+    case OBJTYPE_SMOKE:
+      if (r_numi (0, 12) == 0) {
+        coeff_elasticity = 500.0;
+      }
+      else {
+        coeff_elasticity = 100.0;
+      }
 
-        break;
+      break;
 
-      case OBJTYPE_SLIME:
-        coeff_elasticity = r_num (600.0, 1000.0);
+    case OBJTYPE_SLIME:
+      coeff_elasticity = r_num (600.0, 1000.0);
 
-        break;
+      break;
 
-      default:
-        coeff_elasticity = 3000.0;
-        break;
+    default:
+      coeff_elasticity = 3000.0;
+      break;
     }
 
     physicsEntity->force = v3d_add(physicsEntity->force, v3d_scale(coeff_elasticity, clip));
@@ -1543,74 +1543,74 @@ void Physics::clip_displacement_against_world(size_t index) {
             }
 
             switch (physicsEntity->type) {
-              case OBJTYPE_SPARK:
-                if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
-                  physicsEntity->expirationTime = mLastUpdateTime;
-                }
-                break;
+            case OBJTYPE_SPARK:
+              if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
+                createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+                physicsEntity->expirationTime = mLastUpdateTime;
+              }
+              break;
 
-              case OBJTYPE_NAPALM:
-                if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
-                  physicsEntity->expirationTime = mLastUpdateTime;
-                }
-                else {
-                  physicsEntity->vel = v3d_zero();
-                  physicsEntity->applyPhysics = false;
-                }
-                break;
+            case OBJTYPE_NAPALM:
+              if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
+                createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+                physicsEntity->expirationTime = mLastUpdateTime;
+              }
+              else {
+                physicsEntity->vel = v3d_zero();
+                physicsEntity->applyPhysics = false;
+              }
+              break;
 
-              case OBJTYPE_LIVE_BULLET:
-              case OBJTYPE_DEAD_BULLET:
-                if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
-                  physicsEntity->expirationTime = 0.1;
-                }
-                else if (block->type == BLOCK_TYPE_DIRT ||
-                  block->type == BLOCK_TYPE_DIRT_GRASS ||
-                  block->type == BLOCK_TYPE_DIRT_SNOW ||
-                  block->type == BLOCK_TYPE_GRASS ||
-                  block->type == BLOCK_TYPE_SNOW ||
-                  block->type == BLOCK_TYPE_CACTUS ||
-                  block->type == BLOCK_TYPE_TRUNK ||
-                  block->type == BLOCK_TYPE_LEAVES ||
-                  block->type == BLOCK_TYPE_SAND)
-                {
-                  createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
-                  physicsEntity->expirationTime = 0.1;
+            case OBJTYPE_LIVE_BULLET:
+            case OBJTYPE_DEAD_BULLET:
+              if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
+                createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+                physicsEntity->expirationTime = 0.1;
+              }
+              else if (block->type == BLOCK_TYPE_DIRT ||
+                block->type == BLOCK_TYPE_DIRT_GRASS ||
+                block->type == BLOCK_TYPE_DIRT_SNOW ||
+                block->type == BLOCK_TYPE_GRASS ||
+                block->type == BLOCK_TYPE_SNOW ||
+                block->type == BLOCK_TYPE_CACTUS ||
+                block->type == BLOCK_TYPE_TRUNK ||
+                block->type == BLOCK_TYPE_LEAVES ||
+                block->type == BLOCK_TYPE_SAND)
+              {
+                createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
+                physicsEntity->expirationTime = 0.1;
 //									physicsEntity->vel = v3d_zero();
 //									physicsEntity->applyPhysics = false;
-                }
-                break;
+              }
+              break;
 
-              case OBJTYPE_ROCKET:
-              case OBJTYPE_PLASMA:
-              case OBJTYPE_PLASMA_BOMB:
-                physicsEntity->expirationTime = 0.1;
-                break;
+            case OBJTYPE_ROCKET:
+            case OBJTYPE_PLASMA:
+            case OBJTYPE_PLASMA_BOMB:
+              physicsEntity->expirationTime = 0.1;
+              break;
 
-              case OBJTYPE_SLIME:
-              case OBJTYPE_BLOOD_SPRAY:
+            case OBJTYPE_SLIME:
+            case OBJTYPE_BLOOD_SPRAY:
 //								physicsEntity->vel = v3d_zero();
 //								physicsEntity->applyPhysics = false;
-                break;
+              break;
 
-              case OBJTYPE_CREATE:
+            case OBJTYPE_CREATE:
 //								if (i.y > 0) {
 //									v3di_t bleh = v3di_v(physicsEntity->pos);
 //									block_t b;
 //									b.type = 1;
 //								}
-                break;
+              break;
 
-              case OBJTYPE_DESTROY:
-                worldMap.clearBlock(i);
-                physicsEntity->expirationTime = mLastUpdateTime;
-                break;
+            case OBJTYPE_DESTROY:
+              worldMap.clearBlock(i);
+              physicsEntity->expirationTime = mLastUpdateTime;
+              break;
 
-              default:
-                break;
+            default:
+              break;
             } // switch
           } // collision
         } // block_type air/water

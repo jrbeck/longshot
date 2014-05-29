@@ -29,7 +29,7 @@ void GameModel::save() {
 
   //	Galaxy *galaxy;	// save
   // GALAXY * * * * * *
-  FILE *file;
+  FILE* file;
   file = fopen("save/galaxy.dat", "wb");
   if (file != NULL) {
     galaxy->save(file);
@@ -75,7 +75,7 @@ int GameModel::load(GameWindow* gameWindow) {
 
   //	Galaxy *galaxy;	// save
   // GALAXY * * * * * *
-  FILE *file;
+  FILE* file;
   file = fopen("save/galaxy.dat", "rb");
   if (file != NULL) {
     galaxy->load(file);
@@ -229,10 +229,7 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
   else if (createFeatures) {
     printf("game_c::initializePlanet(): creating features\n");
     v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
-    FeatureGenerator::createSetPieces(
-      worldIndex.x, worldIndex.z,
-      *static_cast<World*>(location),
-      loadScreen);
+    FeatureGenerator::createSetPieces(worldIndex.x, worldIndex.z, *static_cast<World*>(location), loadScreen);
   }
 
   loadScreen->setCompletedColor(LOAD_SCREEN_LIGHT_GREEN);

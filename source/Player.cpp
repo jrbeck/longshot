@@ -533,14 +533,14 @@ void player_c::updateHud() {
 
 void player_c::drawHud() {
   if (mHeadInWater && mVisionTint[3] > 0.0) {
-    drawWaterOverlay ();
+    drawWaterOverlay();
   }
 
   if (mShowCharacterSheet) {
-    mCharacterSheet.draw ();
+    mCharacterSheet.draw();
   }
   else {
-    mHud.draw ();
+    mHud.draw();
   }
 }
 
