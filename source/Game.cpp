@@ -512,11 +512,7 @@ int game_c::draw() {
   // draw the transparent physics objs
   bool playerHeadInWater = mPlayer->isHeadInWater();
   mPhysicsView->drawTransparentEntities(mPhysics->getEntityVector(), mAssetManager, !playerHeadInWater);
-
-  // draw the liquid/translucent blocks of the WorldMap
   mWorldMapView.drawLiquidBlocks(cam, mAssetManager);
-
-  // draw the transparent physics objs
   mPhysicsView->drawTransparentEntities(mPhysics->getEntityVector(), mAssetManager, playerHeadInWater);
 
   // draw the hud
