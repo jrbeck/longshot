@@ -14,6 +14,7 @@
 #include "Terrain.h"
 #include "BlockTypeData.h"
 
+
 struct BiomeInfo {
   int type;
   float value;
@@ -37,6 +38,7 @@ struct BiomeType {
   v3d_t planetMapColor;
 };
 
+
 enum {
   BIOME_TYPE_DESERT,
   BIOME_TYPE_FIELD,
@@ -48,7 +50,9 @@ enum {
   NUM_BIOME_TYPES
 };
 
-BiomeType gBiomeTypes[];
+
+BiomeType* gBiomeTypes;
+
 
 class BiomeMap {
 public:

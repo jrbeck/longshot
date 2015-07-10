@@ -168,9 +168,9 @@ void LightManager::update(WorldMap& worldMap) {
       i--;
     }
   }
-  //	if (count != 0) {
-  //		printf("turned on %d lights\n", count);
-  //	}
+  //  if (count != 0) {
+  //    printf("turned on %d lights\n", count);
+  //  }
 }
 
 
@@ -226,7 +226,7 @@ void LightManager::load(FILE* file) {
   // active lights
   size_t numLights = mLights.size();
   fread(&numLights, sizeof(size_t), 1, file);
-  //	printf("LightManager::load(): loading %d lights\n", numLights);
+  //  printf("LightManager::load(): loading %d lights\n", numLights);
   for (size_t i = 0; i < numLights; i++) {
     WorldLight *light = new WorldLight;
     light->load(file);

@@ -15,7 +15,7 @@
 
 class MoleculeDungeon {
 public:
-	static void createDungeon( DungeonUtil& dungeon, v2di_t& startPosition );
+  static void createDungeon(DungeonUtil& dungeon, const v2di_t& startPosition);
 
 };
 

@@ -21,85 +21,85 @@
 
 
 struct Pixel32 {
-	BYTE a;
-	BYTE b;
-	BYTE g;
-	BYTE r;
+  BYTE a;
+  BYTE b;
+  BYTE g;
+  BYTE r;
 };
 
 
-#define VOXEL_SCALE_X		(0.01f)
-#define VOXEL_SCALE_Y		(-0.01f)
-#define VOXEL_SCALE_Z		(0.02f)
+#define VOXEL_SCALE_X    (0.01f)
+#define VOXEL_SCALE_Y    (-0.01f)
+#define VOXEL_SCALE_Z    (0.02f)
 
 
 class BitmapModel {
 public:
-	BitmapModel(TextureRegion* region);
-	~BitmapModel();
+  BitmapModel(TextureRegion* region);
+  ~BitmapModel();
 
-	void bindTexture();
+  void bindTexture();
 
-	void draw();
+  void draw();
 
-	int mWidth;
-	int mHeight;
+  int mWidth;
+  int mHeight;
 
 private:
-	BYTE getFaceVisibility(GLuint s, GLuint t, Pixel32* pixelData, TextureRegion* region) const;
-	void drawVoxel(
-		BYTE faceVisibility,
-		GLuint s, GLuint t,
-		GLfloat u, GLfloat v,
-		GLfloat pixelW, GLfloat pixelH) const;
+  BYTE getFaceVisibility(GLuint s, GLuint t, Pixel32* pixelData, TextureRegion* region) const;
+  void drawVoxel(
+    BYTE faceVisibility,
+    GLuint s, GLuint t,
+    GLfloat u, GLfloat v,
+    GLfloat pixelW, GLfloat pixelH) const;
 
-	void drawFront(
-		GLfloat s1, GLfloat t1,
-		GLfloat s2, GLfloat t2,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawFront(
+    GLfloat s1, GLfloat t1,
+    GLfloat s2, GLfloat t2,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBack(
-		GLfloat s1, GLfloat t1,
-		GLfloat s2, GLfloat t2,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBack(
+    GLfloat s1, GLfloat t1,
+    GLfloat s2, GLfloat t2,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBlockFaceFront(
-		GLfloat s, GLfloat t,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBlockFaceFront(
+    GLfloat s, GLfloat t,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBlockFaceBack(
-		GLfloat s, GLfloat t,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBlockFaceBack(
+    GLfloat s, GLfloat t,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBlockFaceLeft(
-		GLfloat s, GLfloat t,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBlockFaceLeft(
+    GLfloat s, GLfloat t,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBlockFaceRight(
-		GLfloat s, GLfloat t,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBlockFaceRight(
+    GLfloat s, GLfloat t,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBlockFaceTop(
-		GLfloat s, GLfloat t,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBlockFaceTop(
+    GLfloat s, GLfloat t,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
-	void drawBlockFaceBottom(
-		GLfloat s, GLfloat t,
-		GLfloat u1, GLfloat v1,
-		GLfloat u2, GLfloat v2) const;
+  void drawBlockFaceBottom(
+    GLfloat s, GLfloat t,
+    GLfloat u1, GLfloat v1,
+    GLfloat u2, GLfloat v2) const;
 
 
 
 // MEMBERS * * * * * * * * * * * * *
-	Texture* mTexture;
-	GLuint mDisplayListHandle;
+  Texture* mTexture;
+  GLuint mDisplayListHandle;
 };
 
 

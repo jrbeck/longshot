@@ -18,15 +18,15 @@
 
 class Texture {
 public:
-	Texture(std::string fileName);
-	~Texture();
+  Texture(std::string fileName);
+  ~Texture();
 
-	int loadTexture();
+  int loadTexture();
 
-	void bind();
+  void bind();
 
-	std::string mFileName;
-	GLuint mWidth;
-	GLuint mHeight;
-	GLuint mGlHandle;
+  std::string mFileName;
+  GLuint mWidth;
+  GLuint mHeight;
+  GLuint mGlHandle;
 };

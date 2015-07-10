@@ -72,7 +72,7 @@ void SoundSystem::playSoundByHandle(int handle, int volume) {
 
 int SoundSystem::loadSound(char* fileName) {
   printf("SoundSystem::loadSound(): loading sounds (%d)\n", NUM_SOUNDS);
-  //	mWav[SOUND_AMBIENT] = Mix_LoadWAV ("sounds/not by john/ambient.ogg");
+  //  mWav[SOUND_AMBIENT] = Mix_LoadWAV ("sounds/not by john/ambient.ogg");
   mWav[SOUND_PISTOL] = Mix_LoadWAV("sounds/tgc/gun_pistol.ogg");
   mWav[SOUND_MACHINE_GUN] = Mix_LoadWAV("sounds/jb/machine_gun.ogg");
   mWav[SOUND_SHOTGUN] = Mix_LoadWAV("sounds/jb/shotgun.ogg");

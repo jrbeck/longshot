@@ -19,7 +19,12 @@
 #include <cstdio>
 #include <vector>
 
-#include <Windows.h>
+#ifdef _WIN32
+  #include <Windows.h>
+#else
+  typedef unsigned char BYTE;
+  typedef unsigned int UINT;
+#endif
 
 #include "v3d.h"
 #include "WorldColumn.h"
@@ -29,41 +34,41 @@ using namespace std;
 
 class ChunkDatum {
 public:
-	ChunkDatum() : blockData(NULL) { }
-	~ChunkDatum() {
-		if (blockData != NULL) {
-			printf ("#");
-			delete [] blockData;
-		}
-	}
+  ChunkDatum() : blockData(NULL) { }
+  ~ChunkDatum() {
+    if (blockData != NULL) {
+      printf ("#");
+      delete [] blockData;
+    }
+  }
 
-	v3di_t worldIndex;
-	v3di_t worldPosition;
+  v3di_t worldIndex;
+  v3di_t worldPosition;
 
-	int numBlocks;
-	int numWaterBlocks;
+  int numBlocks;
+  int numWaterBlocks;
 
-//	bool needsToBeSaved;
+//  bool needsToBeSaved;
 
-	BYTE *blockData;
+  BYTE *blockData;
 };
 
 
 class ColumnDatum {
 public:
-	~ColumnDatum () {
-//		printf ("COLUMN DATUM DESTROYER!\n");
-		size_t numChunks = chunkData.size();
-		for (size_t i = 0; i < numChunks; i++) {
-			delete chunkData[i];
-		}
-		chunkData.clear();
-	}
+  ~ColumnDatum () {
+//    printf ("COLUMN DATUM DESTROYER!\n");
+    size_t numChunks = chunkData.size();
+    for (size_t i = 0; i < numChunks; i++) {
+      delete chunkData[i];
+    }
+    chunkData.clear();
+  }
 
-	v3di_t worldIndex;
-	v3di_t worldPosition;
+  v3di_t worldIndex;
+  v3di_t worldPosition;
 
-	vector <ChunkDatum *>chunkData;
+  vector <ChunkDatum *>chunkData;
 };
 
 
@@ -72,31 +77,31 @@ class InactiveColumnManager {
 private:
 
 public:
-	InactiveColumnManager ();
-	InactiveColumnManager (int WorldChunkSide);
-	~InactiveColumnManager ();
+  InactiveColumnManager ();
+  InactiveColumnManager (int WorldChunkSide);
+  ~InactiveColumnManager ();
 
-	int saveToInactiveColumns (WorldColumn &worldColumn);
-	void saveChunkDatum (size_t chunkIndex, ColumnDatum &column, const WorldChunk &chunk) const;
-	int loadFromInactiveColumns (int x, int z, WorldColumn &worldColumn);
-	void loadChunkDatum (const ChunkDatum &chunk, WorldColumn &worldColumn);
+  int saveToInactiveColumns (WorldColumn &worldColumn);
+  void saveChunkDatum (size_t chunkIndex, ColumnDatum &column, const WorldChunk &chunk) const;
+  int loadFromInactiveColumns (int x, int z, WorldColumn &worldColumn);
+  void loadChunkDatum (const ChunkDatum &chunk, WorldColumn &worldColumn);
 
-	void clearColumn (size_t columnIndex);
-	void clear (void);
+  void clearColumn (size_t columnIndex);
+  void clear (void);
 
-	int getColumnIndex (int x, int z);
+  int getColumnIndex (int x, int z);
 
-	ColumnDatum *getColumnDatumForSaving (v3di_t worldIndex);
-	void saveColumn (const ColumnDatum &column);
-	ColumnDatum *readColumn (int x, int z);
+  ColumnDatum *getColumnDatumForSaving (v3di_t worldIndex);
+  void saveColumn (const ColumnDatum &column);
+  ColumnDatum *readColumn (int x, int z);
 
-	int saveToDisk (FILE *file);
-	int loadFromDisk (FILE *file);
+  int saveToDisk (FILE *file);
+  int loadFromDisk (FILE *file);
 
-	size_t getNumColumns (void) const;
+  size_t getNumColumns (void) const;
 
 private:
-	vector <ColumnDatum*> mColumnData;
+  vector <ColumnDatum*> mColumnData;
 };
 
 

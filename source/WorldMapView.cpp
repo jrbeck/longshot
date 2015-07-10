@@ -58,9 +58,9 @@ void WorldMapView::update(AssetManager& assetManager, const LightManager& lightM
   // FIXME: do we really need to do this every update?
   // actually this is dangerous unless we reset
   // mNumColumns since the size may have changed
-  //	worldMapSideX = mWorldMap->mXWidth;
-  //	worldMapSideZ = mWorldMap->mZWidth;
-  //	mNumColumns = worldMapSideX * worldMapSideZ;
+  //  worldMapSideX = mWorldMap->mXWidth;
+  //  worldMapSideZ = mWorldMap->mZWidth;
+  //  mNumColumns = worldMapSideX * worldMapSideZ;
 
   // delete any display lists that pertain to columns that are no longer
   // visible. this fixes the problem of a new column being loaded, but
@@ -134,7 +134,7 @@ void WorldMapView::update(AssetManager& assetManager, const LightManager& lightM
 void WorldMapView::generateDisplayLists(int columnIndex, const AssetManager &assetManager) {
   int numChunks = mWorldMap->mColumns[columnIndex].mWorldChunks.size();
   if (numChunks == 0) {
-    //		printf("WorldMapView::generateDisplayLists(): error: no chunks in this column\n");
+    //    printf("WorldMapView::generateDisplayLists(): error: no chunks in this column\n");
 
     // delete any display lists that are associated with this column
     deleteDisplayLists(columnIndex);
@@ -142,11 +142,11 @@ void WorldMapView::generateDisplayLists(int columnIndex, const AssetManager &ass
     return;
   }
 
-  //	if (mColumnInfo[columnIndex].numChunks != numChunks) {
+  //  if (mColumnInfo[columnIndex].numChunks != numChunks) {
   deleteDisplayLists(columnIndex);
   mColumnInfo[columnIndex].numChunks = numChunks;
   mColumnInfo[columnIndex].mDisplayListHandle = glGenLists(numChunks * NUM_LIST_TYPES);
-  //	}
+  //  }
 
   GLuint handle;
   for (int chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) {
@@ -270,8 +270,8 @@ void WorldMapView::drawChunkBoxForDisplayList(v3di_t worldPosition) const {
   farWorldPosition.y = worldPosition.y + WORLD_CHUNK_SIDE;
   farWorldPosition.z = worldPosition.z + WORLD_CHUNK_SIDE;
 
-  //	glEnable (GL_TEXTURE_2D);
-  //	glBindTexture (GL_TEXTURE_2D, 0);
+  //  glEnable (GL_TEXTURE_2D);
+  //  glBindTexture (GL_TEXTURE_2D, 0);
 
   glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 
@@ -316,7 +316,7 @@ void WorldMapView::drawChunkBoxForDisplayList(v3di_t worldPosition) const {
 
 // this actually renders the display lists
 void WorldMapView::drawSolidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const {
-  //	glDisable (GL_TEXTURE_2D);
+  //  glDisable (GL_TEXTURE_2D);
   glEnable(GL_BLEND);
   glAlphaFunc(GL_GREATER, 0.9f);
   glEnable(GL_ALPHA_TEST);
@@ -330,8 +330,8 @@ void WorldMapView::drawSolidBlocks(const gl_camera_c &camera, const AssetManager
     }
     for (int chunkIndex = 0; chunkIndex < mColumnInfo[columnIndex].numChunks; chunkIndex++) {
       // check if the chunk is visible
-      //			if (camera.bounding_sphere_test (
-      //				mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]->mBoundingSphere) != FRUSTUM_OUTSIDE)
+      //      if (camera.bounding_sphere_test (
+      //        mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]->mBoundingSphere) != FRUSTUM_OUTSIDE)
         {
           handle = mColumnInfo[columnIndex].mDisplayListHandle + (chunkIndex * NUM_LIST_TYPES) + DISPLAY_LIST_SOLID;
           glCallList(handle);
@@ -345,13 +345,11 @@ void WorldMapView::drawSolidBlocks(const gl_camera_c &camera, const AssetManager
 
   glDisable(GL_ALPHA_TEST);
 
-  //	glEnable (GL_TEXTURE_2D);
+  //  glEnable (GL_TEXTURE_2D);
 }
 
 void WorldMapView::drawLiquidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const {
-  int blocksDrawn = 0;
-
-  //	glDisable (GL_TEXTURE_2D);
+  //  glDisable (GL_TEXTURE_2D);
   glDepthMask(GL_FALSE);
   glEnable(GL_BLEND);
 
@@ -364,8 +362,8 @@ void WorldMapView::drawLiquidBlocks(const gl_camera_c &camera, const AssetManage
     }
     for (int chunkIndex = 0; chunkIndex < mColumnInfo[columnIndex].numChunks; chunkIndex++) {
       // check if the chunk is visible
-      //			if (camera.bounding_sphere_test (
-      //				mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]->mBoundingSphere) != FRUSTUM_OUTSIDE)
+      //      if (camera.bounding_sphere_test (
+      //        mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]->mBoundingSphere) != FRUSTUM_OUTSIDE)
         {
           handle = mColumnInfo[columnIndex].mDisplayListHandle + (chunkIndex * NUM_LIST_TYPES) + DISPLAY_LIST_LIQUID;
           glCallList(handle);
@@ -376,7 +374,7 @@ void WorldMapView::drawLiquidBlocks(const gl_camera_c &camera, const AssetManage
 
   glDisable(GL_BLEND);
   glDepthMask(GL_TRUE);
-  //	glEnable (GL_TEXTURE_2D);
+  //  glEnable (GL_TEXTURE_2D);
 }
 
 void WorldMapView::drawChunkBoxes(const gl_camera_c &camera, const AssetManager &assetManager) const {
@@ -389,8 +387,8 @@ void WorldMapView::drawChunkBoxes(const gl_camera_c &camera, const AssetManager 
     }
     for (int chunkIndex = 0; chunkIndex < mColumnInfo[columnIndex].numChunks; chunkIndex++) {
       // check if the chunk is visible
-      //			if (camera.bounding_sphere_test (
-      //				mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]->mBoundingSphere) != FRUSTUM_OUTSIDE)
+      //      if (camera.bounding_sphere_test (
+      //        mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]->mBoundingSphere) != FRUSTUM_OUTSIDE)
         {
           handle = mColumnInfo[columnIndex].mDisplayListHandle + (chunkIndex * NUM_LIST_TYPES) + DISPLAY_LIST_CHUNK_BOX;
           glCallList(handle);

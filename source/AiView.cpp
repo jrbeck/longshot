@@ -18,7 +18,7 @@ AiView::~AiView() {
 
 void AiView::loadAssets() {
   mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_tiger.png");
-  //	mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_peopleeater.bmp");
+  //  mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_peopleeater.bmp");
   mHeadTextureHandles[AITYPE_SHOOTER] = AssetManager::loadImg("art/32_head_shooter.bmp");
   mHeadTextureHandles[AITYPE_HUMAN] = AssetManager::loadImg("art/32_head_human.bmp");
 
@@ -28,7 +28,7 @@ void AiView::loadAssets() {
   mTextureHandles[AISKIN_SHOOTER] = AssetManager::loadImg("art/32_ai_shooter.bmp");
   mTextureHandles[AISKIN_SHOOTER_DEAD] = AssetManager::loadImg("art/32_ai_shooter_dead.bmp");
   mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_tiger.bmp");
-  //	mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_peopleeater.bmp");
+  //  mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_peopleeater.bmp");
   mTextureHandles[AISKIN_HOPPER_DEAD] = AssetManager::loadImg("art/32_ai_tiger_dead.bmp");
   mTextureHandles[AISKIN_HUMAN] = AssetManager::loadImg("art/32_ai_human.bmp");
   mTextureHandles[AISKIN_HUMAN_DEAD] = AssetManager::loadImg("art/32_ai_human_dead.bmp");
@@ -358,12 +358,12 @@ void AiView::drawWeapon(AiEntity& aiEntity) {
     // to this:
     swing = (0.10 * sin(((double)SDL_GetTicks() / 1000.0) * 5.0) - (MY_PI / 6.0));
 
-    //		swing = (0.45 * sin (physics.getLastUpdateTime () * 10.0));
+    //    swing = (0.45 * sin (physics.getLastUpdateTime () * 10.0));
 
-    //		if (swing < 0.0)  {
-    //			swing *= 5.0;
-    //		}
-    //	}
+    //    if (swing < 0.0)  {
+    //      swing *= 5.0;
+    //    }
+    //  }
   }
   else {
     swing = 7.0 * (MY_PI / 8.0);
@@ -378,7 +378,7 @@ void AiView::drawWeapon(AiEntity& aiEntity) {
   glRotated(RAD2DEG(swing), 1.0, 0.0, 0.0);
 
   // FIXME: this is where the melee item used to be drawn
-  //	itemManager.drawItem(0);
+  //  itemManager.drawItem(0);
 
   glPopMatrix();
   glEnable(GL_TEXTURE_2D);
@@ -399,45 +399,45 @@ void AiView::drawBodyBlock(IntColor color) const {
 
   // left
   glNormal3d(-1.0, 0.0, 0.0);
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);	// LBB
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);	// LBF
-  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);	// LTF
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);	// LTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
 
   // right
   glNormal3d(1.0, 0.0, 0.0);
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);	// RBB
-  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);	// RTB
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);	// RTF
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);	// RBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
 
   // top
   glNormal3d(0.0, 1.0, 0.0);
-  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);	// LTB
-  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);	// LTF
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);	// RTF
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);	// RTB
+  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 
   // bottom
   glNormal3d(0.0, -1.0, 0.0);
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);	// LBB
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);	// RBB
-  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);	// RBF
-  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);	// LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
 
   // front
   glNormal3d(0.0, 0.0, 1.0);
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);	// LBF
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);	// RBF
-  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);	// RTF
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);	// LTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
 
   // back
   glNormal3d(0.0, 0.0, -1.0);
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);	// RBB
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);	// LBB
-  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);	// LTB
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);	// RTB	
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
 
 
@@ -457,45 +457,45 @@ void AiView::drawBlockWithFace(IntColor color) const {
 
   // left - BACK
   glNormal3d(-1.0, 0.0, 0.0);
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);	// LBB
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);	// LBF
-  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);	// LTF
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);	// LTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
 
   // right - FACE
   glNormal3d(1.0, 0.0, 0.0);
-  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);	// RBB
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);	// RTB
-  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);	// RTF
-  glTexCoord2f(0.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);	// RBF
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
 
   // top
   glNormal3d(0.0, 1.0, 0.0);
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);	// LTB
-  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);	// LTF
-  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);	// RTF
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);	// RTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 
   // bottom
   glNormal3d(0.0, -1.0, 0.0);
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);	// LBB
-  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);	// RBB
-  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);	// RBF
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);	// LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
 
   // front - right
   glNormal3d(0.0, 0.0, 1.0);
-  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);	// LBF
-  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);	// RBF
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);	// RTF
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);	// LTF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
 
   // back - left
   glNormal3d(0.0, 0.0, -1.0);
-  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);	// RBB
-  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);	// LBB
-  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);	// LTB
-  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);	// RTB	
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
 
 

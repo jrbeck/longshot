@@ -58,9 +58,9 @@ BitmapModel::~BitmapModel() {
 }
 
 void BitmapModel::bindTexture() {
-//	if (mTexture) {
+//  if (mTexture) {
     mTexture->bind();
-//	}
+//  }
 }
 
 void BitmapModel::draw() {
@@ -91,7 +91,7 @@ BYTE BitmapModel::getFaceVisibility(
     visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_TOP];
   }
 
-  if (t == (region->mY + region->mH - 1) ||	pixelData[s + ((t + 1) * mTexture->mWidth)].a == 0)	{
+  if (t == (region->mY + region->mH - 1) ||  pixelData[s + ((t + 1) * mTexture->mWidth)].a == 0)  {
     visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_BOT];
   }
 
@@ -99,7 +99,7 @@ BYTE BitmapModel::getFaceVisibility(
     visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_LEF];
   }
 
-  if (s == (region->mX + region->mW - 1) || pixelData[(s + 1) + (t * mTexture->mWidth)].a == 0)	{
+  if (s == (region->mX + region->mW - 1) || pixelData[(s + 1) + (t * mTexture->mWidth)].a == 0)  {
     visibility |= gBlockSideBitmaskLookup[BLOCK_SIDE_RIG];
   }
 
@@ -113,10 +113,10 @@ void BitmapModel::drawVoxel(
   GLfloat pixelW, GLfloat pixelH) const
 {
   if (faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_FRO]) {
-//		drawBlockFaceFront(s, t, u, v, u + pixelW, v + pixelH);
+//    drawBlockFaceFront(s, t, u, v, u + pixelW, v + pixelH);
   }
   if (faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_BAC]) {
-//		drawBlockFaceBack(s, t, u, v, u + pixelW, v + pixelH);
+//    drawBlockFaceBack(s, t, u, v, u + pixelW, v + pixelH);
   }
   if (faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_LEF]) {
     drawBlockFaceLeft(s, t, u, v, u + pixelW, v + pixelH);
@@ -138,7 +138,7 @@ void BitmapModel::drawFront(
   GLfloat u1, GLfloat v1,
   GLfloat u2, GLfloat v2) const
 {
-//	glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
+//  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
 
   glTexCoord2f(u2, v2);
   glVertex3f(
@@ -157,7 +157,7 @@ void BitmapModel::drawFront(
     s1 * VOXEL_SCALE_X,
     t1 * VOXEL_SCALE_Y,
     -0.5f * VOXEL_SCALE_Z);
-  
+
   glTexCoord2f(u2, v1);
   glVertex3f(
     s2 * VOXEL_SCALE_X,
@@ -171,7 +171,7 @@ void BitmapModel::drawBack(
   GLfloat u1, GLfloat v1,
   GLfloat u2, GLfloat v2) const
 {
-//	glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
+//  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
 
   glTexCoord2f(u2, v2);
   glVertex3f(
@@ -190,7 +190,7 @@ void BitmapModel::drawBack(
     s1 * VOXEL_SCALE_X,
     t1 * VOXEL_SCALE_Y,
     0.5f * VOXEL_SCALE_Z);
-  
+
   glTexCoord2f(u1, v2);
   glVertex3f(
     s1 * VOXEL_SCALE_X,
@@ -204,7 +204,7 @@ void BitmapModel::drawBlockFaceFront (
   GLfloat u1, GLfloat v1,
   GLfloat u2, GLfloat v2) const
 {
-//	glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
+//  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
 
   glTexCoord2f(u2, v2);
   glVertex3f(
@@ -223,7 +223,7 @@ void BitmapModel::drawBlockFaceFront (
     s * VOXEL_SCALE_X,
     t * VOXEL_SCALE_Y,
     -0.5f * VOXEL_SCALE_Z);
-  
+
   glTexCoord2f(u2, v1);
   glVertex3f(
     (s + 1) * VOXEL_SCALE_X,
@@ -237,7 +237,7 @@ void BitmapModel::drawBlockFaceBack(
   GLfloat u1, GLfloat v1,
   GLfloat u2, GLfloat v2) const
 {
-//	glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
+//  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
 
   glTexCoord2f(u2, v2);
   glVertex3f(
@@ -256,7 +256,7 @@ void BitmapModel::drawBlockFaceBack(
     s * VOXEL_SCALE_X,
     t * VOXEL_SCALE_Y,
     0.5f * VOXEL_SCALE_Z);
-  
+
   glTexCoord2f(u1, v2);
   glVertex3f(
     s * VOXEL_SCALE_X,

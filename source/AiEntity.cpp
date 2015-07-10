@@ -11,7 +11,7 @@ AiEntity::AiEntity(GameModel* gameModel) {
   mMaxHealth = 1.0;
   mCurrentHealth = 0.0;
   mCurrentState = AISTATE_STOP;
-  
+
   mFacingAngle = 0.0;
   mLookIncline = 0.0;
   v3d_zero(&mHeadOrientation);
@@ -33,7 +33,7 @@ void AiEntity::update() {
     mActive = false;
     return;
   }
-  
+
   mWorldPosition = physics.getCenter(mPhysicsHandle);
 
   // won't know this until we read the mail
@@ -60,7 +60,7 @@ void AiEntity::update() {
           if (itemPhysicsEntity != NULL) {
             physics.setItemHandleAndType(itemPhysicsEntity->handle, mInventory[i], mGameModel->itemManager->getItemType(mInventory[i]));
           }
-          
+
         }
 
         mInventory[i] = 0;
@@ -76,8 +76,8 @@ void AiEntity::update() {
   if (mNextUpdateTime < time) {
     updateTarget();
 
-//		updateState(time, worldMap, physics, aiEntities, itemManager);
-  
+//    updateState(time, worldMap, physics, aiEntities, itemManager);
+
     mNextUpdateTime = time + 0.3;
   }
 
@@ -228,7 +228,7 @@ void AiEntity::readMail() {
 
   Physics& physics = *mGameModel->physics;
   while (physics.getNextMessage (static_cast<int>(mPhysicsHandle), &message)) {
-//		printf ("message: to: %d, from: %d\n", message.recipient, message.sender);
+//    printf ("message: to: %d, from: %d\n", message.recipient, message.sender);
 
     switch (message.type) {
     case PHYS_MESSAGE_DAMAGE:
@@ -250,7 +250,7 @@ void AiEntity::readMail() {
             mTargetPhysicsHandle = message.sender;
           }
         }
-          
+
       }
       else {
         printf ("AiEntity::readMail(): hurt myself!\n");
@@ -319,7 +319,7 @@ void AiEntity::updateBalloon() {
     double delta = mWorldPosition.y - desiredHeight;
 
     if (delta > 0.0) {
-  //		delta += 0.2 * mPhysicsEntity.vel.y;
+  //    delta += 0.2 * mPhysicsEntity.vel.y;
       delta = 0.0;
     }
     else if (delta < 0.0) {
@@ -370,9 +370,9 @@ void AiEntity::updateBalloon() {
       vecToTarget = v3d_scale(15.0, v3d_normalize(vecToTarget));
       movementForce = v3d_add(movementForce, vecToTarget);
     }
-  
-//		physics.add_force (mPhysicsHandle, movementForce);
-//		mPhysicsEntity->force = v3d_add(mPhysicsEntity->force, movementForce);
+
+//    physics.add_force (mPhysicsHandle, movementForce);
+//    mPhysicsEntity->force = v3d_add(mPhysicsEntity->force, movementForce);
 
     mPhysicsEntity->force.x += movementForce.x;
     mPhysicsEntity->force.y += movementForce.y;
@@ -437,11 +437,11 @@ void AiEntity::updateHopper() {
 
       if (v3d_mag(vecToTarget) < mMinDistanceToPlayer) {
         vecToTarget = v3d_scale(5.0, v3d_normalize(vecToTarget));
-  //			vecToPlayer.y = 20.0;
+  //      vecToPlayer.y = 20.0;
         movementForce = v3d_add(movementForce, vecToTarget);
       }
     }
-      
+
     physics.add_force(mPhysicsHandle, movementForce);
   }
 }
@@ -450,9 +450,9 @@ void AiEntity::updateHopper() {
 
 void AiEntity::updateDummy() {
   // check for line of sight
-/*	v3d_t playerPos = v3d_add (physics.getCenter (1), v3d_v (0.0, 1.6 - 0.9, 0.0));
+/*  v3d_t playerPos = v3d_add (physics.getCenter (1), v3d_v (0.0, 1.6 - 0.9, 0.0));
 
-  bool lineOfSight = 
+  bool lineOfSight =
     worldMap.lineOfSight (physics.getCenter (mPhysicsHandle), playerPos) ||
     worldMap.lineOfSight (physics.getFarCorner (mPhysicsHandle), playerPos) ||
     worldMap.lineOfSight (physics.getNearCorner (mPhysicsHandle), playerPos);

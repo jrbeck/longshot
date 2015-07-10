@@ -14,25 +14,21 @@
 
 
 // typedefs * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-typedef struct {
-	union {
-		struct {
-			double x;
-			double y;
-		};
-		double vec[2];
-	};
-} v2d_t;
+union v2d_t {
+  struct {
+    double x;
+    double y;
+  };
+  double vec[2];
+};
 
-typedef struct {
-	union {
-		struct {
-			int x;
-			int y;
-		};
-		int vec[2];
-	};
-} v2di_t;
+union v2di_t {
+  struct {
+    int x;
+    int y;
+  };
+  int vec[2];
+};
 
 
 // prototypes * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

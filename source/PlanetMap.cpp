@@ -51,8 +51,8 @@ void PlanetMap::setUpOpenGl() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDisable(GL_TEXTURE_2D);
 
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	SDL_GL_SwapBuffers();
+//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//  SDL_GL_SwapBuffers();
 }
 
 
@@ -64,7 +64,7 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
     printf("PlanetMap::chooseLocation(): error: out of memory 1\n");
     return false;
   }
-//	mMenu->setFont(gDefaultFontTextureHandle);
+//  mMenu->setFont(gDefaultFontTextureHandle);
 
   mTerrain = new Terrain(PLANET_MAP_SIDE);
   if (mTerrain == NULL) {
@@ -112,7 +112,7 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
       planetPos.y = mPeriodics->getTerrainHeight(planetPos.x, planetPos.z) + 30.0;
 
 
-//			v2d_print("mouse", mMousePos);
+//      v2d_print("mouse", mMousePos);
       printf("planetMap: %.0f, %.0f\n", planetPos.x, planetPos.z);
 
       mLeftMouseButtonClicked = false;
@@ -272,14 +272,14 @@ int PlanetMap::handleInput (void) {
 
     md.x = -md.x;
 
-//		mRtsCam.translate (md);
+//    mRtsCam.translate (md);
   }
   if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.002);
 
     md.x = -md.x;
 
-//		mRtsCam.pan (md);
+//    mRtsCam.pan (md);
   }
 
   return quit;
@@ -289,11 +289,11 @@ int PlanetMap::handleInput (void) {
 
 int PlanetMap::handleKeystroke (void) {
   switch (sdlevent.key.keysym.sym) {
-    case SDLK_ESCAPE:	// quit
+    case SDLK_ESCAPE:  // quit
       return 1;
 
     case SDLK_n:
-//			buildFromPeriodics();
+//      buildFromPeriodics();
       break;
 
     case SDLK_z:
@@ -307,7 +307,7 @@ int PlanetMap::handleKeystroke (void) {
 
 
 int PlanetMap::handleKeyup (void) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
         break;

@@ -48,7 +48,7 @@
 // let's try to get rid of stuff below here...
 #include "RogueMapViewer.h"
 
-#define OUTPUT_FRAME_STATS		false
+#define OUTPUT_FRAME_STATS    false
 
 
 enum {

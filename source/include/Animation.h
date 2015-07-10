@@ -18,21 +18,21 @@
 
 
 enum {
-	ANIMATION_LOOPING,
-	ANIMATION_NONLOOPING
+  ANIMATION_LOOPING,
+  ANIMATION_NONLOOPING
 };
 
 
 class Animation {
 public:
-	Animation(float frameDuration);
-	~Animation();
+  Animation(float frameDuration);
+  ~Animation();
 
-	// this class takes control of these pointers
-	void addFrame(TextureRegion* textureRegion);
-	TextureRegion *getFrame(float stateTime, int mode);
+  // this class takes control of these pointers
+  void addFrame(TextureRegion* textureRegion);
+  TextureRegion *getFrame(float stateTime, int mode);
 
 private:
-	std::vector<TextureRegion*> mFrames;
-	float mFrameDuration;
+  std::vector<TextureRegion*> mFrames;
+  float mFrameDuration;
 };

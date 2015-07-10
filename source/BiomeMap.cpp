@@ -188,8 +188,8 @@ BiomeInfo BiomeMap::getBiomeInfo(int i, int j) const {
   double iScale = 0.075;
   double jScale = 0.075;
 
-//	double a = mTerrain1.get_value(i, j);
-//	double b = mTerrain2.get_value(i, j);
+//  double a = mTerrain1.get_value(i, j);
+//  double b = mTerrain2.get_value(i, j);
   double a = mTerrain1.getValueBilerp((double)i * iScale, (double)j * jScale);
   double b = mTerrain2.getValueBilerp((double)i * iScale, (double)j * jScale);
 
@@ -207,7 +207,7 @@ BiomeInfo BiomeMap::getBiomeInfo(int i, int j) const {
 
   if (x < cutoff) {
     x = x / cutoff;
-//		x = 0.0;
+//    x = 0.0;
   }
   else {
     x = 1.0;
@@ -223,7 +223,7 @@ BiomeInfo BiomeMap::getBiomeInfo(int i, int j) const {
 
   if (y < cutoff) {
     y = y / cutoff;
-//		y = 0.0;
+//    y = 0.0;
   }
   else {
     y = 1.0;

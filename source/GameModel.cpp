@@ -1,7 +1,7 @@
 #include "GameModel.h"
 
 
-GameModel::GameModel() : 
+GameModel::GameModel() :
   player(0),
   galaxy(0),
   physics(0),
@@ -22,12 +22,12 @@ GameModel::~GameModel() {
 
 
 void GameModel::save() {
-  //	player_c player;	// save
+  //  player_c player;  // save
   // PLAYER * * * * * * *
   saveGameData();
 
 
-  //	Galaxy *galaxy;	// save
+  //  Galaxy *galaxy;  // save
   // GALAXY * * * * * *
   FILE* file;
   file = fopen("save/galaxy.dat", "wb");
@@ -37,20 +37,20 @@ void GameModel::save() {
   }
 
 
-  //	Location *location;	// save
+  //  Location *location;  // save
   // LOCATION * * * * * * *
   saveLocation();
 
 
-  //	AiManager aiManager;	// save
+  //  AiManager aiManager;  // save
   // AI STUFF * * * * * * *
   // TODO
 
-  //	physics_c physics;	// save
+  //  physics_c physics;  // save
   // PHYSICS * * * * * * *
   // TODO
 
-  //	ItemManager itemManager;	// save
+  //  ItemManager itemManager;  // save
   // ITEMS * * * * * * *
   file = fopen("save/items.dat", "wb");
   if (file != NULL) {
@@ -65,7 +65,7 @@ void GameModel::save() {
 
 int GameModel::load(GameWindow* gameWindow) {
 
-  //	player_c player;	// save
+  //  player_c player;  // save
   // PLAYER * * * * * * *
   GameSaveData gameSaveData = loadGameData();
   if (!gameSaveData.loadSucceeded) {
@@ -73,7 +73,7 @@ int GameModel::load(GameWindow* gameWindow) {
     return LOAD_UNSUCCESSFUL;
   }
 
-  //	Galaxy *galaxy;	// save
+  //  Galaxy *galaxy;  // save
   // GALAXY * * * * * *
   FILE* file;
   file = fopen("save/galaxy.dat", "rb");
@@ -106,14 +106,14 @@ int GameModel::load(GameWindow* gameWindow) {
 
 
 
-  //	AiManager aiManager;	// save
+  //  AiManager aiManager;  // save
   // AI STUFF * * * * * * *
 
-  //	physics_c physics;	// save
+  //  physics_c physics;  // save
   // PHYSICS * * * * * * *
   physics->set_pos(physics->getPlayerHandle(), gameSaveData.physicsPos);
 
-  //	ItemManager itemManager;	// save
+  //  ItemManager itemManager;  // save
   // ITEMS * * * * * * *
   file = fopen("save/items.dat", "rb");
   if (file != NULL) {
@@ -142,7 +142,7 @@ int GameModel::saveGameData(void) {
   if (file == NULL) {
     return -1;
   }
-  fwrite(&gameSaveData, sizeof GameSaveData, 1, file);	// physics position
+  fwrite(&gameSaveData, sizeof GameSaveData, 1, file);  // physics position
   fclose(file);
   return 0;
 }

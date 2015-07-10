@@ -27,10 +27,10 @@ void RogueViewer::setupOpenGl (void) {
   glViewport (0, 0, SCREEN_W, SCREEN_H);
 
   // enable various things
-  glEnable (GL_TEXTURE_2D);								// Enable 2D Texture Mapping
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);		// Select The Type Of Blending
-//	glEnable (GL_BLEND);
-  glShadeModel (GL_SMOOTH);								// Enables Smooth Color Shading
+  glEnable (GL_TEXTURE_2D);                // Enable 2D Texture Mapping
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    // Select The Type Of Blending
+//  glEnable (GL_BLEND);
+  glShadeModel (GL_SMOOTH);                // Enables Smooth Color Shading
   glEnable (GL_DEPTH_TEST);
   glClearDepth (1.0f);
   glDepthFunc (GL_LEQUAL);
@@ -41,24 +41,24 @@ void RogueViewer::setupOpenGl (void) {
   glColorMaterial (GL_FRONT_AND_BACK, GL_EMISSION);
   glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-//	glEnable (GL_COLOR_MATERIAL);
+//  glEnable (GL_COLOR_MATERIAL);
   glColor4f (1.0f, 1.0f, 1.0f, 1.0f);
 
 
   // FOG
-  glFogi (GL_FOG_MODE, GL_LINEAR);					// Fog Mode
-  glFogfv (GL_FOG_COLOR, color);						// Set Fog Color
-  glFogf (GL_FOG_DENSITY, 0.15f);						// How Dense Will The Fog Be
-  glHint (GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
-  glFogf (GL_FOG_START, 200.0f);						// Fog Start Depth
-  glFogf (GL_FOG_END, 300.0f);						// Fog End Depth
-  glEnable (GL_FOG);									// Enables GL_FOG
+  glFogi (GL_FOG_MODE, GL_LINEAR);          // Fog Mode
+  glFogfv (GL_FOG_COLOR, color);            // Set Fog Color
+  glFogf (GL_FOG_DENSITY, 0.15f);            // How Dense Will The Fog Be
+  glHint (GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+  glFogf (GL_FOG_START, 200.0f);            // Fog Start Depth
+  glFogf (GL_FOG_END, 300.0f);            // Fog End Depth
+  glEnable (GL_FOG);                  // Enables GL_FOG
 
   // go ahead and clear the buffer
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   mGameWindow->swapBuffers();
 
-  printf ("\n%6d: opengl_setup done ----------------\n", SDL_GetTicks ());	
+  printf ("\n%6d: opengl_setup done ----------------\n", SDL_GetTicks ());
 }
 
 
@@ -67,20 +67,20 @@ int RogueViewer::start (void) {
   printf ("%6d: entered rogue_viz ----------------\n", SDL_GetTicks ());
 
   // really? here?
-//	GameMenu menu;
-//	menu.clear ();
-//	float color[] = {0.55f, 0.075f, 0.075f, 1.0f};
-//	menu.add_text (v2d_v (0.3, 0.95), v2d_v (0.5, 0.8), "longshot", color);
+//  GameMenu menu;
+//  menu.clear ();
+//  float color[] = {0.55f, 0.075f, 0.075f, 1.0f};
+//  menu.add_text (v2d_v (0.3, 0.95), v2d_v (0.5, 0.8), "longshot", color);
 
   mRogueMap.resize (64, 64);
 
   mAssetManager.loadAssets ();
-//	mWorld.randomizePeriodics(0);
-//	mWorld.initialize(0, NULL);
+//  mWorld.randomizePeriodics(0);
+//  mWorld.initialize(0, NULL);
 
-//	mWorld.loadFeaturesAroundPlayer (v3d_v (0.0, 0.0, 0.0)); //mRtsCam.getTarget ());
-//	mWorld.loadAllColumns (mRtsCam.getTarget (), mAssetManager);
-//	mWorld.generateClouds (mRtsCam.getTarget ());
+//  mWorld.loadFeaturesAroundPlayer (v3d_v (0.0, 0.0, 0.0)); //mRtsCam.getTarget ());
+//  mWorld.loadAllColumns (mRtsCam.getTarget (), mAssetManager);
+//  mWorld.generateClouds (mRtsCam.getTarget ());
 
   // set up a map for each mode
   for (int i = 0; i < NUM_VIZ_MODES; i++) {
@@ -93,8 +93,8 @@ int RogueViewer::start (void) {
   int frame = 0, quit = 0, blocks_drawn = 0;
 
   // change the mouse mode
-//	SDL_WM_GrabInput (SDL_GRAB_OFF);
-//	SDL_ShowCursor (1);
+//  SDL_WM_GrabInput (SDL_GRAB_OFF);
+//  SDL_ShowCursor (1);
 
   gl_camera_c* cam;
 
@@ -120,12 +120,12 @@ int RogueViewer::start (void) {
         mRogueMap.draw();
         break;
 
-//			case VIZ_MODE_WORLD:
-//			mWorld.update (mRtsCam.getTarget (), mAssetManager);
+//      case VIZ_MODE_WORLD:
+//      mWorld.update (mRtsCam.getTarget (), mAssetManager);
 
       // draw the world
-//			mWorld.drawLand (cam2, mAssetManager);
-//			mWorld.drawWater (cam2, mAssetManager);
+//      mWorld.drawLand (cam2, mAssetManager);
+//      mWorld.drawWater (cam2, mAssetManager);
 
         break;
 
@@ -176,7 +176,7 @@ v3d_t RogueViewer::findStartPosition (WorldMap &worldMap) {
 
     // FIXME: this was changed (to: pos.y = 0.0) when Periodics were being removed from
     // WorldMap... i.e. 0.0 is jus a random number!!
-//		pos.y = worldMap.getTerrainHeight (static_cast<int>(pos.x), static_cast<int>(pos.z)) + 2.0;
+//    pos.y = worldMap.getTerrainHeight (static_cast<int>(pos.x), static_cast<int>(pos.z)) + 2.0;
     pos.y = 0.0;
 
     if (pos.y > 1.0 && pos.y < 20.0) break;
@@ -270,7 +270,7 @@ int RogueViewer::handleInput (void) {
 
 int RogueViewer::handleKeystroke (void) {
   switch (sdlevent.key.keysym.sym) {
-    case SDLK_ESCAPE:	// quit
+    case SDLK_ESCAPE:  // quit
       return 1;
 
     case SDLK_a:
@@ -293,11 +293,11 @@ int RogueViewer::handleKeystroke (void) {
 
       break;
 
-    case SDLK_p:		// pause
-//			paused = (paused + 1) % 2;
+    case SDLK_p:    // pause
+//      paused = (paused + 1) % 2;
       break;
 
-    case SDLK_r:		// generate a random number
+    case SDLK_r:    // generate a random number
       rand ();
       break;
   }
@@ -308,7 +308,7 @@ int RogueViewer::handleKeystroke (void) {
 
 
 int RogueViewer::handleKeyup (void) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
         break;
@@ -335,7 +335,7 @@ void RogueViewer::handleMouseButtonDown (int button, v2d_t pos) {
 
 
 void RogueViewer::handleMouseButtonUp (int button, v2d_t pos) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (button) {
       case SDL_BUTTON_RIGHT:
         player->add_input_event (INPUT_TYPE_ROCKET_UP, 1.0);
@@ -384,23 +384,23 @@ void RogueViewer::generateNewMap (void) {
 
     // FIXME: this was commented out when Periodics was removed from WorldMap
     // it will generate NOTHING without this
-//		FeatureGenerator::createForViewer (startLocation, 0, mWorldMap);
+//    FeatureGenerator::createForViewer (startLocation, 0, mWorldMap);
 
     // prepare for viewing
     for (int i = 0; i < mWorldMap.mNumColumns; i++) {
       // FIXME: this was commented out when createShadowVolume
       // got an option for a cloud cover...
-//			WorldLighting::createShadowVolume (i, mWorldMap);
+//      WorldLighting::createShadowVolume (i, mWorldMap);
     }
     for (int i = 0; i < mWorldMap.mNumColumns; i++) {
       mWorldMap.updateBlockVisibility (i);
       // FIXME: this was commented out when LightmManager was required
       // it will generate NOTHING without this
-//			WorldLighting::applyLighting (i, mWorldMap);
+//      WorldLighting::applyLighting (i, mWorldMap);
     }
     // FIXME: this was commented out when LightmManager was required
     // it will generate NOTHING without this
-//		mWorldMapView.update(mAssetManager, false);
+//    mWorldMapView.update(mAssetManager, false);
 
 
     // we'll just re-use this variable
@@ -416,12 +416,12 @@ void RogueViewer::generateNewMap (void) {
 
     mRogueMap.random_room (500, 6, 6);
     mRogueMap.random_room (501, 6, 6);
-//		mRogueMap.random_room (502, 6, 6);
-//		mRogueMap.random_room (503, 6, 6);
-//		mRogueMap.random_room (504, 6, 6);
+//    mRogueMap.random_room (502, 6, 6);
+//    mRogueMap.random_room (503, 6, 6);
+//    mRogueMap.random_room (504, 6, 6);
 
     mRogueMap.randomize (false, 6);
-//		mRogueMap.grow_paths ();
+//    mRogueMap.grow_paths ();
 
     v3d_t rogueTarget = {
       (double)mRogueMap.getWidth () * 0.5,

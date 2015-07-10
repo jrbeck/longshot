@@ -257,8 +257,8 @@ void GalaxyMap::setUpOpenGl() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-//	glViewport(0, 0, SCREEN_W, SCREEN_H);
-//	glOrtho (0, SCREEN_W, SCREEN_H, 0, -1, 1);
+//  glViewport(0, 0, SCREEN_W, SCREEN_H);
+//  glOrtho (0, SCREEN_W, SCREEN_H, 0, -1, 1);
   glOrtho(0.0, GALACTIC_WIDTH, GALACTIC_HEIGHT, 0.0, -1.0, 1.0);
 
   glMatrixMode(GL_MODELVIEW);
@@ -267,8 +267,8 @@ void GalaxyMap::setUpOpenGl() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDisable(GL_TEXTURE_2D);
 
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	SDL_GL_SwapBuffers();
+//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//  SDL_GL_SwapBuffers();
 }
 
 
@@ -297,7 +297,7 @@ void GalaxyMap::drawRing(float radius, v2d_t center, const GLfloat color[4]) {
   glBegin (GL_LINE_STRIP);
     // initial vertex
     glVertex2d (center.x + radius, center.y);
-    
+
     // other vertices
     for (int i = 5; i < 360; i += 5) {
       degInRad = DEG2RAD((double)i);
@@ -375,14 +375,14 @@ int GalaxyMap::handleInput (void) {
 
     md.x = -md.x;
 
-//		mRtsCam.translate (md);
+//    mRtsCam.translate (md);
   }
   if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.002);
 
     md.x = -md.x;
 
-//		mRtsCam.pan (md);
+//    mRtsCam.pan (md);
   }
 
   return quit;
@@ -392,7 +392,7 @@ int GalaxyMap::handleInput (void) {
 
 int GalaxyMap::handleKeystroke (void) {
   switch (sdlevent.key.keysym.sym) {
-    case SDLK_ESCAPE:	// quit
+    case SDLK_ESCAPE:  // quit
       return 1;
 
     case SDLK_a:
@@ -409,7 +409,7 @@ int GalaxyMap::handleKeystroke (void) {
 
 
 int GalaxyMap::handleKeyup (void) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
         break;
@@ -428,7 +428,7 @@ int GalaxyMap::handleKeyup (void) {
 
 void GalaxyMap::handleMouseButtonDown (int button, v2d_t pos) {
   switch (button) {
- 
+
     case SDL_BUTTON_RIGHT:
       break;
   }

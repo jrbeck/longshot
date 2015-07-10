@@ -23,41 +23,41 @@ using namespace std;
 
 
 enum {
-	INACTIVETYPE_NULL = -1,
-	INACTIVETYPE_AI,
-	INACTIVETYPE_ITEM,
-	NUM_INACTIVETYPES
+  INACTIVETYPE_NULL = -1,
+  INACTIVETYPE_AI,
+  INACTIVETYPE_ITEM,
+  NUM_INACTIVETYPES
 };
 
 
 struct inactive_item_t {
-	int type;
-	int type2;
+  int type;
+  int type2;
 
-	v3d_t pos;
+  v3d_t pos;
 };
 
 
 
 class InactiveList {
 public:
-	InactiveList();
-	~InactiveList();
+  InactiveList();
+  ~InactiveList();
 
-	void clear( void );
+  void clear( void );
 
-	void addItem( inactive_item_t item );
+  void addItem( inactive_item_t item );
 
-	inactive_item_t popNextItemInColumn( v2di_t index );
+  inactive_item_t popNextItemInColumn( v2di_t index );
 
-	bool isInColumn( v2di_t index, v3d_t position );
+  bool isInColumn( v2di_t index, v3d_t position );
 
-	int save( FILE* file );
-	int load( FILE* file );
+  int save( FILE* file );
+  int load( FILE* file );
 
 
 private:
-	vector <inactive_item_t> mItems;
+  vector <inactive_item_t> mItems;
 };
 
 

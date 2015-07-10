@@ -14,11 +14,11 @@
 #include "Galaxy.h"
 #include "PlanetMap.h"
 
-#define ZOOM_GALAXY			0
-#define ZOOM_SYSTEM			1
+#define ZOOM_GALAXY      0
+#define ZOOM_SYSTEM      1
 
-#define ACTION_NONE			0
-#define ACTION_WARP			1
+#define ACTION_NONE      0
+#define ACTION_WARP      1
 
 
 struct GalaxyMapResult {

@@ -3,7 +3,7 @@
 RogueMapViewer::RogueMapViewer(GameWindow* gameWindow) :
   mMenu(NULL),
   mRogueMap(NULL),
-  dungeon( 0 )
+  dungeon(0)
 {
   mGameWindow = gameWindow;
   mLeftMouseButtonClicked = false;
@@ -17,7 +17,7 @@ RogueMapViewer::~RogueMapViewer() {
   if (mRogueMap != NULL) {
     delete mRogueMap;
   }
-  if( dungeon != 0 ) {
+  if (dungeon != 0) {
     delete dungeon;
   }
 }
@@ -47,8 +47,8 @@ void RogueMapViewer::setUpOpenGl() {
   glClearColor(0.0, 0.0, 0.0, 1.0);
   glDisable(GL_TEXTURE_2D);
 
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	SDL_GL_SwapBuffers();
+//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//  SDL_GL_SwapBuffers();
 }
 
 
@@ -60,7 +60,7 @@ void RogueMapViewer::startViewer() {
     printf("RogueMapViewer::chooseLocation(): error: out of memory 1\n");
     return;
   }
-//	mMenu->setFont(gDefaultFontTextureHandle);
+//  mMenu->setFont(gDefaultFontTextureHandle);
 
   mRogueMap = new RogueMap(ROGUE_MAP_SIDE, ROGUE_MAP_SIDE);
   if (mRogueMap == NULL) {
@@ -73,7 +73,7 @@ void RogueMapViewer::startViewer() {
   printf("PRE CREATE\n");
   dungeon = new DungeonUtil();
   printf("POST CREATE\n");
-  dungeon->createDungeonModel(  ROGUE_MAP_SIDE, ROGUE_MAP_SIDE );
+  dungeon->createDungeonModel( ROGUE_MAP_SIDE, ROGUE_MAP_SIDE);
   randomizeDungeon();
   printf("POST RANDOMIZE\n");
 
@@ -147,7 +147,7 @@ void RogueMapViewer::drawMap(void) const {
 
       tile = mRogueMap->getTile(i, j);
 
-      dungeonTile = dungeon->getDungeonModel()->getTile( i, j );
+      dungeonTile = dungeon->getDungeonModel()->getTile(i, j);
 
       switch(dungeonTile->type) {
       default:
@@ -172,35 +172,35 @@ void RogueMapViewer::drawMap(void) const {
       //switch(tile.type) {
       //default:
       //case MAP_TILE_INVALID:
-      //	color.x = 0.0;
-      //	color.y = 0.0;
-      //	color.z = 0.0;
-      //	break;
+      //  color.x = 0.0;
+      //  color.y = 0.0;
+      //  color.z = 0.0;
+      //  break;
       //case MAP_TILE_WALL:
-      //	color.x = 1.0;
-      //	color.y = 0.0;
-      //	color.z = 0.0;
-      //	break;
+      //  color.x = 1.0;
+      //  color.y = 0.0;
+      //  color.z = 0.0;
+      //  break;
       //case MAP_TILE_FLOOR:
-      //	color.x = 0.0;
-      //	color.y = 1.0;
-      //	color.z = 0.0;
-      //	break;
+      //  color.x = 0.0;
+      //  color.y = 1.0;
+      //  color.z = 0.0;
+      //  break;
       //case MAP_TILE_PATH_SEED:
-      //	color.x = 0.0;
-      //	color.y = 1.0;
-      //	color.z = 1.0;
-      //	break;
+      //  color.x = 0.0;
+      //  color.y = 1.0;
+      //  color.z = 1.0;
+      //  break;
       //case MAP_TILE_DOORWAY:
-      //	color.x = 0.0;
-      //	color.y = 0.0;
-      //	color.z = 1.0;
-      //	break;
+      //  color.x = 0.0;
+      //  color.y = 0.0;
+      //  color.z = 1.0;
+      //  break;
       //case MAP_TILE_PATH:
-      //	color.x = 1.0;
-      //	color.y = 1.0;
-      //	color.z = 0.0;
-      //	break;
+      //  color.x = 1.0;
+      //  color.y = 1.0;
+      //  color.z = 0.0;
+      //  break;
       //}
 
       glColor3d(color.x, color.y, color.z);
@@ -275,14 +275,14 @@ int RogueMapViewer::handleInput (void) {
 
     md.x = -md.x;
 
-//		mRtsCam.translate (md);
+//    mRtsCam.translate (md);
   }
   if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.002);
 
     md.x = -md.x;
 
-//		mRtsCam.pan (md);
+//    mRtsCam.pan (md);
   }
 
   return quit;
@@ -290,15 +290,13 @@ int RogueMapViewer::handleInput (void) {
 
 
 void RogueMapViewer::randomizeDungeon() {
-
-  MoleculeDungeon::createDungeon( *dungeon, v2di_v( ROGUE_MAP_SIDE / 2, ROGUE_MAP_SIDE / 2 ) );
-
+  MoleculeDungeon::createDungeon(*dungeon, v2di_v(ROGUE_MAP_SIDE / 2, ROGUE_MAP_SIDE / 2));
 }
 
 
 int RogueMapViewer::handleKeystroke (void) {
   switch (sdlevent.key.keysym.sym) {
-    case SDLK_ESCAPE:	// quit
+    case SDLK_ESCAPE:  // quit
       return 1;
 
     case SDLK_n:
@@ -317,7 +315,7 @@ int RogueMapViewer::handleKeystroke (void) {
 
 
 int RogueMapViewer::handleKeyup (void) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
         break;

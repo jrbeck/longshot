@@ -72,8 +72,8 @@ void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
     // only the transparency changes for these fellers
     case OBJTYPE_STEAM:
       entity.color[3] = 0.4f - (age * 0.4f);
-      break;	
-  
+      break;
+
     case OBJTYPE_SLIME:
     case OBJTYPE_PLASMA:
     case OBJTYPE_PLASMA_BOMB:
@@ -84,7 +84,7 @@ void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
 
     case OBJTYPE_SMOKE:
       // FIXME: HACK... do this right please!
-//			entity.color[3] = (1.0f - age) * mEntityTypeInfo[OBJTYPE_SMOKE].color[3];
+//      entity.color[3] = (1.0f - age) * mEntityTypeInfo[OBJTYPE_SMOKE].color[3];
       entity.color[3] = (1.0f - age) * 0.25f;
       break;
 
@@ -114,8 +114,8 @@ void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
 }
 
 void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager& assetManager) {
-//	glDisable (GL_TEXTURE_2D);
-//	glEnable (GL_COLOR_MATERIAL);
+//  glDisable (GL_TEXTURE_2D);
+//  glEnable (GL_COLOR_MATERIAL);
 
   glEnable (GL_TEXTURE_2D);
 
@@ -153,13 +153,13 @@ void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, Wor
         //glPopMatrix();
 
         // BILLBOARD
-//				drawBillBoard((*physicsEntities)[index].boundingBox.getCenterPosition());
+//        drawBillBoard((*physicsEntities)[index].boundingBox.getCenterPosition());
       }
     }
   }
 
-//	glDisable (GL_COLOR_MATERIAL);
-//	glEnable (GL_TEXTURE_2D);
+//  glDisable (GL_COLOR_MATERIAL);
+//  glEnable (GL_TEXTURE_2D);
   glColor3f(1.0, 1.0, 1.0);
 }
 
@@ -211,15 +211,15 @@ void PhysicsView::drawEntity(const PhysicsEntity& entity) {
 
 
   // draw displacement vector
-//		if (!obj[index].queued) {
-//			glColor3f (1.0f, 1.0f, 1.0f);
-//			glBegin (GL_LINES);
-//				glVertex3d (0.0, 0.0, 0.0);
-//				glVertex3d (-obj[index].displacement.x,
-//							-obj[index].displacement.y,
-//							-obj[index].displacement.z);
-//			glEnd ();
-//		}
+//    if (!obj[index].queued) {
+//      glColor3f (1.0f, 1.0f, 1.0f);
+//      glBegin (GL_LINES);
+//        glVertex3d (0.0, 0.0, 0.0);
+//        glVertex3d (-obj[index].displacement.x,
+//              -obj[index].displacement.y,
+//              -obj[index].displacement.z);
+//      glEnd ();
+//    }
 
   glPopMatrix ();
 }
@@ -259,14 +259,14 @@ void PhysicsView::drawTextured(const PhysicsEntity &entity, WorldMap &worldMap, 
       glTranslated((double)assetManager.mGunBitmapModel->mWidth * -0.5 * VOXEL_SCALE_X,
         (double)assetManager.mGunBitmapModel->mHeight * -0.5 * VOXEL_SCALE_Y,
         0.0);
-      
+
       assetManager.mGunBitmapModel->bindTexture();
       assetManager.mGunBitmapModel->draw();
     }
     else {
       glTranslated(center.x, center.y, center.z);
       glScaled(dimensions.x, dimensions.y, dimensions.z);
-    
+
       switch (entity.type2) {
       case ITEMTYPE_HEALTHPACK:
         glBindTexture (GL_TEXTURE_2D, mTextureHandles[OBJSKIN_HEALTHPACK]);

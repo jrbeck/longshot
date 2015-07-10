@@ -40,7 +40,7 @@ void WorldMap::resize(int xWidth, int zWidth) {
     return;
   }
 
-  mColumns = new WorldColumn[mNumColumns];	
+  mColumns = new WorldColumn[mNumColumns];
 
   if (mColumns == NULL) {
     printf("error: WorldMap::resize(): cannot allocate map!");
@@ -93,8 +93,8 @@ int WorldMap::getColumnIndexByRegionCoords(int xIndex, int zIndex) const {
 
 
 int WorldMap::getColumnIndex(const v3di_t& worldPosition) const {
-//	int xIndex = worldPosition.x / WORLD_CHUNK_SIDE;
-//	int zIndex = worldPosition.z / WORLD_CHUNK_SIDE;
+//  int xIndex = worldPosition.x / WORLD_CHUNK_SIDE;
+//  int zIndex = worldPosition.z / WORLD_CHUNK_SIDE;
 
   // this is really the region index, and should probably be calling WorldUtil::getRegionIndex()
   int xIndex = (int)floor((double)worldPosition.x / (double)WORLD_CHUNK_SIDE);
@@ -205,9 +205,9 @@ block_t* WorldMap::getBlock(const v3di_t& position) const {
 
 block_t* WorldMap::getBlock(const v3d_t& position) const {
   v3di_t pos = {
-    static_cast<int>(floor(position.x)),
-    static_cast<int>(floor(position.y)),
-    static_cast<int>(floor(position.z))
+    (int)floor(position.x),
+    (int)floor(position.y),
+    (int)floor(position.z)
   };
 
   return getBlock(pos);
@@ -226,7 +226,7 @@ int WorldMap::setBlock(const v3di_t& position, const block_t& block) {
   if (mColumns[column].getBlockType(position) != block.type) {
     addToChangedList(column);
   }
-  
+
   mColumns[column].setBlockAtWorldPosition(position, block);
 
   return 0;
@@ -459,7 +459,7 @@ int WorldMap::fillSphere(const v3d_t& pos, double radius, int blockType, BYTE un
 
 
   return blocksFilled;
-  //	return 0;
+  //  return 0;
 }
 
 
@@ -492,7 +492,7 @@ int WorldMap::clearSphere(const v3d_t& pos, double radius) {
   }
 
   return blocksCleared;
-  //	return 0;
+  //  return 0;
 
 }
 
@@ -511,7 +511,7 @@ void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& 
     static_cast<double>(position.y) / static_cast<double>(WORLD_CHUNK_SIDE))) * WORLD_CHUNK_SIDE;
   chunkPosition.z = worldColumn.mWorldPosition.z;
 
-//	v3di_print("chunk", chunkPosition);
+//  v3di_print("chunk", chunkPosition);
   v3di_t blockPosition;
   block_t block;
   block.type = BLOCK_TYPE_AIR;
@@ -645,9 +645,9 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
               neighborAlpha = gBlockData.get(neighborType)->alpha;
 
               // ha ha...
-//							if (neighborType == BLOCK_TYPE_INVALID) {
-//								neighborAlpha = 1.0;
-//							}
+//              if (neighborType == BLOCK_TYPE_INVALID) {
+//                neighborAlpha = 1.0;
+//              }
 
               if (neighborAlpha < 1.0 ||
                 gBlockData.get(neighborType)->solidityType == BLOCK_SOLIDITY_TYPE_PLANT ||
@@ -661,7 +661,7 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
           }
 
           if (faceVisibility == 0) {
-            //						mNumHiddenBlocks++;
+            //            mNumHiddenBlocks++;
           }
         }
       }
@@ -682,7 +682,7 @@ void WorldMap::addToChangedList( int columnIndex ) {
     }
   }
 
-//	printf ("added %d\n", columnIndex);
+//  printf ("added %d\n", columnIndex);
   mChangedList.push_back (columnIndex);
 }
 
@@ -695,7 +695,7 @@ void WorldMap::removeFromChangedList( int columnIndex ) {
       }
 
       mChangedList.pop_back ();
-//			printf ("removing %d\n", columnIndex);
+//      printf ("removing %d\n", columnIndex);
 
       return;
     }
@@ -710,7 +710,7 @@ void WorldMap::updateFluids() {
 
   for (size_t i = 0; i < tempList.size (); i++) {
     updateFluid (tempList[i]);
-//		printf ("updating fluid %d, %d\n", i, tempList[i]);
+//    printf ("updating fluid %d, %d\n", i, tempList[i]);
   }
 }
 
@@ -865,11 +865,11 @@ int WorldMap::countLiquidNeighbors( int blockType, const v3di_t& worldPosition )
   }
 
   // -y
-//	neighborPosition = v3di_add (worldPosition, v3di_v (0, -1, 0));
-//	neighborType = getBlockType (neighborPosition);
-//	if (neighborType == blockType) {
-//		numWaterNeighbors++;
-//	}
+//  neighborPosition = v3di_add (worldPosition, v3di_v (0, -1, 0));
+//  neighborType = getBlockType (neighborPosition);
+//  if (neighborType == blockType) {
+//    numWaterNeighbors++;
+//  }
 
   // +y
   neighborPosition = v3di_add (worldPosition, v3di_v (0, +1, 0));
@@ -1116,12 +1116,12 @@ bool WorldMap::rayCastSolidBlock(const v3d_t &a, const v3d_t &b, v3di_t &hitPosi
   v3d_t lastPos = a;
 
 static v3d_t faceAdd[6] = {
-    {0.0, 0.0, 0.0},		// BLOCK_SIDE_LEF
-    {1.0, 0.0, 0.0},		// BLOCK_SIDE_RIG
-    {0.0, 1.0, 0.0},		// BLOCK_SIDE_TOP
-    {0.0, 0.0, 0.0},		// BLOCK_SIDE_BOT
-    {0.0, 0.0, 1.0},		// BLOCK_SIDE_FRO
-    {0.0, 0.0, 0.0}			// BLOCK_SIDE_BAC
+    {{ 0.0, 0.0, 0.0 }},    // BLOCK_SIDE_LEF
+    {{ 1.0, 0.0, 0.0 }},    // BLOCK_SIDE_RIG
+    {{ 0.0, 1.0, 0.0 }},    // BLOCK_SIDE_TOP
+    {{ 0.0, 0.0, 0.0 }},    // BLOCK_SIDE_BOT
+    {{ 0.0, 0.0, 1.0 }},    // BLOCK_SIDE_FRO
+    {{ 0.0, 0.0, 0.0 }}     // BLOCK_SIDE_BAC
   };
 
   for (double t = step; t <= 1.0; t += step) {
@@ -1161,7 +1161,7 @@ static v3d_t faceAdd[6] = {
         faceHitResults[s] = plane.doesLineSegmentIntersect(lastPos, pos, faceHitTimes[s]);
       }
 
-      double soonestHit = 1000.0;		// super high value
+      double soonestHit = 1000.0;    // super high value
 
       // this section sets the 'face' variable to the nearest face
       for (int s = 0; s < NUM_BLOCK_SIDES; s++) {

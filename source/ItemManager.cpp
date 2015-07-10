@@ -64,7 +64,7 @@ void ItemManager::destroyItemList(vector<size_t> itemList) {
     int index = getIndexFromHandle(itemList[i]);
     if (index >= 0) {
       mItems[index].active = false;
-//			printf("d: %d\n", mItems[index].handle);
+//      printf("d: %d\n", mItems[index].handle);
       numItemsDestroyed++;
     }
   }
@@ -102,7 +102,7 @@ item_t ItemManager::getItem(size_t itemHandle) {
     return ret;
   }
 
-  int itemIndex = getIndexFromHandle(itemHandle); 
+  int itemIndex = getIndexFromHandle(itemHandle);
   if (itemIndex < 0) {
     item_t ret;
     ret.type = ITEMTYPE_UNDEFINED;
@@ -116,7 +116,7 @@ int ItemManager::getIndexFromHandle(size_t itemHandle) {
   for (int index = 0; index < static_cast<int>(mItems.size()); index++) {
     if (mItems[index].handle == itemHandle) {
       return index;
-    }		
+    }
   }
 
   // can't find it yo
@@ -127,7 +127,7 @@ int ItemManager::getItemType(size_t itemHandle) {
   for (size_t index = 0; index < mItems.size(); index++) {
     if (mItems[index].handle == itemHandle) {
       return mItems[index].type;
-    }		
+    }
   }
 
   // can't find it yo
@@ -400,7 +400,7 @@ size_t ItemManager::generateRandomGun(double dps) {
       // FIXME: default?
       printf("ItemManager::generateRandomGun(): how did you get here?\n");
       projectileType = AMMO_BULLET;
-      
+
       break;
   }
 
@@ -543,7 +543,7 @@ void ItemManager::useRocketPack(
   if (physicsEntity->worldViscosity > 0.0) {
     return;
   }
-  
+
   // handle 'air walking'
   v2d_t walk_force_2d = v2d_scale(walkVector, 300.0);
   v3d_t force = v3d_v(walk_force_2d.x, 0.0, walk_force_2d.y);
@@ -670,9 +670,9 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo) {
     projectileEntity->acc = v3d_scale(shotInfo.angle, mItems[itemIndex].explosionForce);
   }
 
-//	if (mItems[itemIndex].shotSound >= 0) {
+//  if (mItems[itemIndex].shotSound >= 0) {
   mGameModel->physics->addSoundEvent(SOUND_SWOOSH, shotInfo.position);
-//	}
+//  }
 
   return shotInfo.time + mItems[itemIndex].shotDelay;
 }

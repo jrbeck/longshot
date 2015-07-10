@@ -371,27 +371,27 @@ int GameInput::update() {
 // deal with a key down event
 int GameInput::handleKeyDownEvent (int key) {
   switch (key) {
-    case SDLK_ESCAPE:	// quit
+    case SDLK_ESCAPE:  // quit
       mEscapePressed = true;
       break;
 
-    case SDLK_w:		// move forward
+    case SDLK_w:    // move forward
       mWalkForward = true;
       break;
 
-    case SDLK_s:		// move back
+    case SDLK_s:    // move back
       mWalkBackward = true;
       break;
 
-    case SDLK_a:		// move left
+    case SDLK_a:    // move left
       mWalkLeft = true;
       break;
 
-    case SDLK_d:		// move right
+    case SDLK_d:    // move right
       mWalkRight = true;
       break;
 
-    case SDLK_SPACE:	// jump/swim
+    case SDLK_SPACE:  // jump/swim
       mJump = true;
       mSwim = true;
       break;
@@ -408,11 +408,11 @@ int GameInput::handleKeyDownEvent (int key) {
       mUseBackpackItem = true;
       break;
 
-    case SDLK_F1:		// reset the player to default settings
+    case SDLK_F1:    // reset the player to default settings
       mSoftReset = true;
       break;
 
-    case SDLK_p:		// toggle physics on other objects
+    case SDLK_p:    // toggle physics on other objects
       mTogglePhysics = true;
       break;
 
@@ -507,7 +507,7 @@ void GameInput::handleMouseButtonDownEvent (int button) {
       mUseSecondary = true;
       mClickMouse2 = true;
       break;
-        
+
     default:
       break;
   }

@@ -26,7 +26,7 @@ void AiManager::clear() {
     else {
       printf("AiManager::clear(): error: NULL AiEntity\n");
     }
-    
+
   }
   mAiEntities.clear();
 }
@@ -36,7 +36,7 @@ void AiManager::clear() {
 
 size_t AiManager::setPlayerPhysicsHandle() {
   // add the player as an AI entity
-  AiEntity *e = addEntity(AITYPE_PLAYER, v3d_zero());
+  AiEntity* e = addEntity(AITYPE_PLAYER, v3d_zero());
   if (e == NULL) {
     return 0;
   }
@@ -286,10 +286,10 @@ int AiManager::update() {
     spawnEntity(type, pos);
   }
 
-//	double pre_time = (static_cast<double>(SDL_GetTicks ()) / 1000.0);
-//	double post_time = (static_cast<double>(SDL_GetTicks ()) / 1000.0);
-//	printf ("AI time: %.4f\n", post_time - pre_time);
-  
+//  double pre_time = (static_cast<double>(SDL_GetTicks ()) / 1000.0);
+//  double post_time = (static_cast<double>(SDL_GetTicks ()) / 1000.0);
+//  printf ("AI time: %.4f\n", post_time - pre_time);
+
   // now to update the entities
   for (size_t i = 0; i < mAiEntities.size (); i++) {
     // ignore players and dead things
@@ -318,7 +318,7 @@ int AiManager::update() {
 void AiManager::releaseItems(int aiIndex) {
   int items = 0;
   printf("eliminating inventory\n");
-      
+
   // tell the ItemManager to release the inventory items
   for (int inventoryIndex = 0; inventoryIndex < AiEntity::AI_INVENTORY_SIZE; inventoryIndex++) {
     if (mAiEntities[aiIndex]->mInventory[inventoryIndex] > 0) {

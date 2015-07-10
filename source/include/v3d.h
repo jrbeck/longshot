@@ -15,31 +15,23 @@
 
 
 // typedefs * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-typedef struct {
-	union {
-		struct {
-			double x;
-			double y;
-			double z;
-		};
-		double vec[3];
-	};
-} v3d_t;
+union v3d_t {
+  struct {
+    double x;
+    double y;
+    double z;
+  };
+  double vec[3];
+};
 
-
-
-typedef struct {
-	union {
-		struct {
-			int x;
-			int y;
-			int z;
-		};
-		int vec[3];
-	};
-} v3di_t;
-
-
+union v3di_t {
+  struct {
+    int x;
+    int y;
+    int z;
+  };
+  int vec[3];
+};
 
 // prototypes * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 void v3d_print(const char *str, v3d_t a);

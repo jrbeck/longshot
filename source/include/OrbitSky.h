@@ -20,21 +20,21 @@
 
 
 typedef struct {
-	v3d_t pos;
-	GLfloat color[4];
-	GLfloat size;
+  v3d_t pos;
+  GLfloat color[4];
+  GLfloat size;
 } celestial_body;
 
 
 
 class OrbitSky {
 public:
-	OrbitSky();
-	~OrbitSky();
+  OrbitSky();
+  ~OrbitSky();
 
-	void setOrbit(Galaxy &galaxy, size_t planetHandle);
+  void setOrbit(Galaxy &galaxy, size_t planetHandle);
 
-	void draw(gl_camera_c &cam, v3d_t playerPosition);
+  void draw(gl_camera_c &cam, v3d_t playerPosition);
 
-	vector<celestial_body> mBodies;
+  vector<celestial_body> mBodies;
 };

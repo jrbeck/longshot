@@ -29,7 +29,7 @@
 // FIXME: this is hard coded for 32x32x4 textures (64x64 pixels per side) in
 // a 1024x1024 (i.e. 16 textures per side)
 // TODO: try a half-pixel hack to fix the bleeding issues
-//	#define HALF_PIXEL		(1.0f / 2048.0f);
+//  #define HALF_PIXEL    (1.0f / 2048.0f);
 #define TEX_MULT       (0.0625f)
 #define TEX_MULT_HALF  (0.03125f)
 
@@ -63,7 +63,7 @@ public:
   void getBlockTextureCoords(int blockType, GLfloat& textureX, GLfloat& y) const;
 
   void drawBlock(GLfloat height, v3di_t pos, const block_t& block) const;
-/*	void drawWorldBlockFace (
+/*  void drawWorldBlockFace (
     BYTE face,
     const GLfloat *texCoords,
     const GLint *npos,
@@ -110,7 +110,7 @@ private:
 
 // members * * * * * * * * * * * * * * * * * * * * * * *
   int mNumTexturesLoaded;
-//	GLuint mBlockTextureHandles[NUM_BLOCK_TYPES];
+//  GLuint mBlockTextureHandles[NUM_BLOCK_TYPES];
 
   GLuint mTerrainTextureHandle;
 
@@ -122,5 +122,5 @@ private:
   v3d_t mGlobalLightIntensities[6];
 
   // HACK * * * * * *
-//	GLfloat ONE_OVER_LIGHT_LEVEL_MAX;
+//  GLfloat ONE_OVER_LIGHT_LEVEL_MAX;
 };

@@ -93,11 +93,11 @@ bool BoundingBox::sweepTest(const BoundingBox& other, v3d_t displacement, v3d_t&
   double t0, t1;
 
   // if they are intersecting before the translation, return true
-  //	if (isIntersecting (other)) {
-  //		printf ("intersect\n");
-  //		time0 = v3d_zero ();
-  //		return true;
-  //	}
+  //  if (isIntersecting (other)) {
+  //    printf ("intersect\n");
+  //    time0 = v3d_zero ();
+  //    return true;
+  //  }
 
   displacement = v3d_neg(displacement);
   time0 = v3d_v(0.0, 0.0, 0.0);
@@ -181,7 +181,7 @@ bool BoundingBox::sweepTest(const BoundingBox& other, v3d_t displacement, v3d_t&
   }
 
   // determine which axis hit first
-  /*	if (time0.x > time0.y) {
+  /*  if (time0.x > time0.y) {
       if (time0.x > time0.z) {
       axis = 0;
       t0 = time0.x;
@@ -224,8 +224,8 @@ bool BoundingBox::clipDisplacement(
   v3d_t o_near = other.getNearCorner();
   v3d_t o_far = other.getFarCorner();
 
-  v3d_t leading;		// leading faces for this BoundingBox
-  v3d_t nearest;		// nearest faces of the other bb
+  v3d_t leading;    // leading faces for this BoundingBox
+  v3d_t nearest;    // nearest faces of the other bb
 
   // x-axis
   if (displacement.x < 0.0) {
@@ -260,7 +260,7 @@ bool BoundingBox::clipDisplacement(
   // translate leading faces by displacement
   v3d_t translated = v3d_add(leading, displacement);
 
-  v3d_t percent;	// the percent of displacement where a collision occurs
+  v3d_t percent;  // the percent of displacement where a collision occurs
 
   // for each axis check if collision occurs
   // x-axis

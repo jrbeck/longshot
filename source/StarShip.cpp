@@ -42,8 +42,8 @@ int StarShip::initialize(FILE *file, Galaxy *galaxy, int planetHandle) {
     delete mOrbitSky;
   }
   mOrbitSky = new OrbitSky();
-  //	assetManager.setDirectionalLightPositions(v3d_v(0, 100, 0), v3d_v(0, -100, 0));
-  //	mSkySim->initialize(mPlayerStartPos);
+  //  assetManager.setDirectionalLightPositions(v3d_v(0, 100, 0), v3d_v(0, -100, 0));
+  //  mSkySim->initialize(mPlayerStartPos);
   mOrbitSky->setOrbit(*galaxy, planetHandle);
 
 
@@ -112,10 +112,10 @@ void StarShip::initWorldColumns(bool clearColumns) {
       else {
         // try to load from the inactive columns
         if (mWorldMap->mInactiveColumnManager.loadFromInactiveColumns(xIndex, zIndex, mWorldMap->mColumns[columnIndex]) == 0) {
-          //					printf ("loaded column from InactiveColumnManager\n");
+          //          printf ("loaded column from InactiveColumnManager\n");
         }
         else {
-          //					printf ("did not load column from InactiveColumnManager\n");
+          //          printf ("did not load column from InactiveColumnManager\n");
           mWorldMap->clearColumn(columnIndex);
 
           mWorldMap->mColumns[columnIndex].mWorldIndex.x = xIndex;

@@ -89,7 +89,7 @@ void PlayerView::drawMeleeWeapon(const melee_weapon_state_t* weaponState, GLuint
   glTranslated(headPosition.x, headPosition.y, headPosition.z);
   glRotated(RAD2DEG(-handFacing), 0.0, 1.0, 0.0);
   glRotated(RAD2DEG(weaponState->incline), 1.0, 0.0, 1.0);
-  //		glScaled (-1.0, 1.0, 1.0);
+  //    glScaled (-1.0, 1.0, 1.0);
   glTranslated(handPosition.x, handPosition.y, handPosition.z);
   glRotated(RAD2DEG(swing), 1.0, 0.0, 0.0);
 

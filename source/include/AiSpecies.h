@@ -17,38 +17,38 @@
 
 
 enum {
-	MOVEMENT_NONE,
-	MOVEMENT_BALLOON,
-	MOVEMENT_HOPPER
+  MOVEMENT_NONE,
+  MOVEMENT_BALLOON,
+  MOVEMENT_HOPPER
 };
 
 
 class AiSpecies {
 public:
-	// movement types
-	int movementType;
-//	int groundMoveType;
-//	int airMoveType;
-//	int waterMoveType;
-//	int wallMoveType;
+  // movement types
+  int movementType;
+//  int groundMoveType;
+//  int airMoveType;
+//  int waterMoveType;
+//  int wallMoveType;
 
-	// attack types
-//	int meleeType;
-//	int rangedType;
+  // attack types
+//  int meleeType;
+//  int rangedType;
 
-//	int skin;
+//  int skin;
 
-	// inventory
-//	int inventorySize;
+  // inventory
+//  int inventorySize;
 
-	//bool explodeOnDeath;
+  //bool explodeOnDeath;
 
 
-	AiStateMachine stateMachine;
+  AiStateMachine stateMachine;
 
-	bool willAttackSameSpecies;
-	//mAttackPlayer
-	//mSightRange
+  bool willAttackSameSpecies;
+  //mAttackPlayer
+  //mSightRange
 
 };
 
@@ -57,14 +57,14 @@ public:
 
 class SpeciesDataContainer {
 private:
-	AiSpecies mSpecies[NUM_AITYPES];
+  AiSpecies mSpecies[NUM_AITYPES];
 
-	void loadSpeciesData(void);
+  void loadSpeciesData(void);
 
 public:
-	SpeciesDataContainer();
+  SpeciesDataContainer();
 
-	AiSpecies *get(size_t type);
+  AiSpecies *get(size_t type);
 
 };
 

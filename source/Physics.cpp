@@ -56,7 +56,7 @@ vector <PhysicsEntity*>* Physics::getEntityVector() {
 
 
 void Physics::loadInactiveList() {
-//	mInactiveList.load("save/inactive.list");
+//  mInactiveList.load("save/inactive.list");
 }
 
 
@@ -365,7 +365,7 @@ int Physics::update(double time, AssetManager& assetManager) {
     if (mPaused && !timeAdvanced && (obj[index]->expirationTime > 0.0)) {
       obj[index]->expirationTime += PHYSICS_TIME_GRANULARITY;
     }
-      
+
     if (obj[index]->queued) continue;
 
     if (!mPaused || (mAdvanceOneFrame || obj[index]->handle == mPlayerHandle)) {
@@ -663,9 +663,9 @@ v3d_t Physics::calculateAcceleration(size_t index) {
       acc.y = 0.5;
     }
 
-//			drag = v3d_scale (150.0, v3d_neg (v3d_normalize (obj[handle].vel)));
-//			acc = v3d_add (acc, drag);
-      
+//      drag = v3d_scale (150.0, v3d_neg (v3d_normalize (obj[handle].vel)));
+//      acc = v3d_add (acc, drag);
+
     frictionCoeff = 0.98;
     break;
 
@@ -712,14 +712,14 @@ v3d_t Physics::calculateAcceleration(size_t index) {
 
       // this kinda resembles: F = mu * N
       // i.e. force of fric = coeff of fric * normal force
-//			frictionCoeff = 0.98;
-//			fric = frictionCoeff * DEFAULT_GRAVITY;// * obj[index].mass;
+//      frictionCoeff = 0.98;
+//      fric = frictionCoeff * DEFAULT_GRAVITY;// * obj[index].mass;
 
       // FIXME: this was altered to keep fast moving objects from
       // being 'reflected' by the ground friction (velocity squared)
       // it is in SUPER HACK state right now
       if (groundSpeed < 4.0) {
-//				fric = -mFriction * (1.0 / abs (groundSpeed));
+//        fric = -mFriction * (1.0 / abs (groundSpeed));
         fric = -0.75 * ((4.0 - groundSpeed) + (4.0 * 4.0 * frictionCoeff));
       }
       else if (groundSpeed < 20.0) {
@@ -755,11 +755,11 @@ void Physics::integrate_euler(size_t index) {
   v3d_t disp = v3d_scale(physicsEntity->vel, PHYSICS_TIME_GRANULARITY);
 
   // mark them as inert if they've stopped moving
-//	if (obj[index].type != OBJTYPE_PLAYER &&
-//		obj[index].type != OBJTYPE_AI_ENTITY &&
-//		v3d_mag (disp) < EPSILON) {
-//		obj[index].applyPhysics = false;
-//	}
+//  if (obj[index].type != OBJTYPE_PLAYER &&
+//    obj[index].type != OBJTYPE_AI_ENTITY &&
+//    v3d_mag (disp) < EPSILON) {
+//    obj[index].applyPhysics = false;
+//  }
 
   physicsEntity->displacement = disp;
   v3d_t disp_before_clip = disp;
@@ -773,23 +773,23 @@ void Physics::integrate_euler(size_t index) {
 
   if (fabs(clip.x) > 0.0) {
     physicsEntity->vel.x = 0.0;
-//		obj[index].vel.x = -0.5 * obj[index].vel.x;
+//    obj[index].vel.x = -0.5 * obj[index].vel.x;
   }
   if (fabs(clip.y) > 0.0) {
     physicsEntity->vel.y = 0.0;
-//		obj[index].vel.y = -0.5 * obj[index].vel.y;
+//    obj[index].vel.y = -0.5 * obj[index].vel.y;
   }
   if (fabs(clip.z) > 0.0) {
     physicsEntity->vel.z = 0.0;
-//		obj[index].vel.z = -0.5 * obj[index].vel.z;
+//    obj[index].vel.z = -0.5 * obj[index].vel.z;
   }
 
-//	if (obj[index].type == OBJTYPE_SLIME) {
-//		v3d_print ("clip", clip);
-//		v3d_print ("pos", obj[index].pos);
-//		v3d_print ("vel", obj[index].vel);
-//		v3d_print ("dis", obj[index].displacement);
-//	}
+//  if (obj[index].type == OBJTYPE_SLIME) {
+//    v3d_print ("clip", clip);
+//    v3d_print ("pos", obj[index].pos);
+//    v3d_print ("vel", obj[index].vel);
+//    v3d_print ("dis", obj[index].displacement);
+//  }
 
   // create a bouncing force
   if (v3d_mag(clip) > 0.0) {
@@ -862,12 +862,12 @@ void Physics::displaceObject(size_t index) {
   }
 
   // update the inWater status
-//	if (obj[index].type == OBJTYPE_PLAYER ||
-//		obj[index].type == OBJTYPE_AI_ENTITY) {
+//  if (obj[index].type == OBJTYPE_PLAYER ||
+//    obj[index].type == OBJTYPE_AI_ENTITY) {
   physicsEntity->worldViscosity = mGameModel->location->getWorldMap()->getViscosity(physicsEntity->boundingBox);
-//	}
+//  }
 
-//	if (obj[index].handle == mPlayerHandle) printf ("on ground: %d\n", obj[index].on_ground);
+//  if (obj[index].handle == mPlayerHandle) printf ("on ground: %d\n", obj[index].on_ground);
 }
 
 
@@ -890,9 +890,9 @@ bool Physics::updateOnGroundStatus(size_t index) {
 
   int y = static_cast<int>(floor(nc.y)) - 1;
 
-//	if (index == getIndexFromHandle(mPlayerHandle)) {
-//		printf("y: %d, %f\n", y, nc.y - floor (nc.y));
-//	}
+//  if (index == getIndexFromHandle(mPlayerHandle)) {
+//    printf("y: %d, %f\n", y, nc.y - floor (nc.y));
+//  }
 
   WorldMap& worldMap = *mGameModel->location->getWorldMap();
   for (int z = static_cast<int>(floor(nc.z)); z <= static_cast<int>(floor(fc.z)); z++) {
@@ -916,7 +916,7 @@ bool Physics::sweepObjects(size_t indexA, size_t indexB, double& t0, double& t1,
 
   // if they are intersecting before the translation, return true
   if (entityA->boundingBox.isIntersecting (entityB->boundingBox)) {
-//		printf ("intersect\n");
+//    printf ("intersect\n");
     t0 = t1 = 0.0;
     return true;
   }
@@ -1039,7 +1039,7 @@ bool Physics::sweepObjects(size_t indexA, size_t indexB, double& t0, double& t1,
     t0 = time0.z;
   }
 
-//	t0 = max (time0.x, max (time0.y, time0.z));
+//  t0 = max (time0.x, max (time0.y, time0.z));
   t1 = min (time1.x, min (time1.y, time1.z));
 
 
@@ -1063,7 +1063,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
   if (physicsEntity->type == OBJTYPE_AI_ENTITY || physicsEntity->type == OBJTYPE_PLAYER) {
     for (size_t other = 0; other < obj.size (); other++) {
       otherPhysicsEntity = obj[other];
-      
+
       if (!otherPhysicsEntity->active ||
         otherPhysicsEntity->queued ||
         other == index ||
@@ -1187,7 +1187,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
             }
 
             // deal some damage
-//						otherPhysicsEntity->health -= r_num (1.0, 8.0);
+//            otherPhysicsEntity->health -= r_num (1.0, 8.0);
           }
         }
       }
@@ -1198,7 +1198,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
         otherPhysicsEntity->type == OBJTYPE_SPARK ||
         otherPhysicsEntity->type == OBJTYPE_LIVE_BULLET ||
         otherPhysicsEntity->type == OBJTYPE_DEAD_BULLET) {
-//				if (otherPhysicsEntity->boundingBox.isIntersecting (physicsEntity->boundingBox)) {
+//        if (otherPhysicsEntity->boundingBox.isIntersecting (physicsEntity->boundingBox)) {
 
         if (sweepObjects(index, other, t0, t1, axis)) {
           // directly add knockback
@@ -1206,7 +1206,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
 
           if (r_numi(0, 5) == 3) {
             v3d_t position = v3d_add(otherPhysicsEntity->pos, v3d_scale(t0, otherPhysicsEntity->displacement));
-//						printf ("BLOOD!\n");
+//            printf ("BLOOD!\n");
             createEntity(OBJTYPE_BLOOD_SPRAY, position, false);
           }
 
@@ -1353,7 +1353,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
       numCollisions++;
     }
   }
-  
+
   // reset this
   mGotPickupMessage = false;
 
@@ -1416,9 +1416,9 @@ void Physics::clip_displacement_against_world(size_t index) {
           solidityType == BLOCK_SOLIDITY_TYPE_LIQUID ||
           solidityType == BLOCK_SOLIDITY_TYPE_PLANT) continue;
 
-//				if (block.type > BLOCK_TYPE_AIR &&
-//					block.type < NUM_BLOCK_TYPES &&
-//					block.type != globalWaterBlockType) {
+//        if (block.type > BLOCK_TYPE_AIR &&
+//          block.type < NUM_BLOCK_TYPES &&
+//          block.type != globalWaterBlockType) {
 
         // FIXME: sort this mess out!
         {
@@ -1495,14 +1495,14 @@ void Physics::clip_displacement_against_world(size_t index) {
           else {
             test_z = false; }
 
-//					test_x = test_y = test_z = true;
+//          test_x = test_y = test_z = true;
 
-//					if (physicsEntity->type == OBJTYPE_SLIME) {
-//						printf ("test %d, %d, %d\n", test_x, test_y, test_z);
-//					}
+//          if (physicsEntity->type == OBJTYPE_SLIME) {
+//            printf ("test %d, %d, %d\n", test_x, test_y, test_z);
+//          }
 
-//					if (physicsEntity->boundingBox.clipDisplacement (test_x,
-//													test_y, test_z, displacement, bb2)) {
+//          if (physicsEntity->boundingBox.clipDisplacement (test_x,
+//                          test_y, test_z, displacement, bb2)) {
 
 
           if ((test_x || test_y || test_z) && physicsEntity->boundingBox.sweepTest(bb2, physicsEntity->displacement, time0)) {
@@ -1579,8 +1579,8 @@ void Physics::clip_displacement_against_world(size_t index) {
               {
                 createEntity(OBJTYPE_STEAM, physicsEntity->pos, false);
                 physicsEntity->expirationTime = 0.1;
-//									physicsEntity->vel = v3d_zero();
-//									physicsEntity->applyPhysics = false;
+//                  physicsEntity->vel = v3d_zero();
+//                  physicsEntity->applyPhysics = false;
               }
               break;
 
@@ -1592,16 +1592,16 @@ void Physics::clip_displacement_against_world(size_t index) {
 
             case OBJTYPE_SLIME:
             case OBJTYPE_BLOOD_SPRAY:
-//								physicsEntity->vel = v3d_zero();
-//								physicsEntity->applyPhysics = false;
+//                physicsEntity->vel = v3d_zero();
+//                physicsEntity->applyPhysics = false;
               break;
 
             case OBJTYPE_CREATE:
-//								if (i.y > 0) {
-//									v3di_t bleh = v3di_v(physicsEntity->pos);
-//									block_t b;
-//									b.type = 1;
-//								}
+//                if (i.y > 0) {
+//                  v3di_t bleh = v3di_v(physicsEntity->pos);
+//                  block_t b;
+//                  b.type = 1;
+//                }
               break;
 
             case OBJTYPE_DESTROY:
@@ -1653,7 +1653,7 @@ void Physics::grenadeExplosion(size_t index) {
   v3d_t centerPosition = physicsEntity->boundingBox.getCenterPosition ();
 
   addSoundEvent (SOUND_GRENADE_EXPLOSION, centerPosition);
-  
+
 
   for (int i = 0; i < physicsEntity->numParticles; i++) {
     v3d_t randomPosition = v3d_add(centerPosition, v3d_random (0.5));

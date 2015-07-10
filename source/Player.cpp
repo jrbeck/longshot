@@ -151,8 +151,8 @@ void player_c::godMode() {
   inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     mGameModel->itemManager->generateRandomRocketLauncher(gun, 3.0);
-//		gun.bulletType = OBJTYPE_NAPALM;
-//		gun.ammoType = AMMO_NAPALM;
+//    gun.bulletType = OBJTYPE_NAPALM;
+//    gun.ammoType = AMMO_NAPALM;
 
     gun.bulletType = OBJTYPE_SLIME;
     gun.ammoType = AMMO_SLIME;
@@ -256,7 +256,7 @@ bool player_c::pickUpItem(item_t item, AssetManager& assetManager) {
     case ITEMTYPE_HEALTHPACK:
       assetManager.mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
       break;
-    
+
     case ITEMTYPE_GUN_ONE_HANDED:
       assetManager.mSoundSystem.playSoundByHandle(SOUND_PISTOL_RELOAD, 192);
       break;
@@ -275,7 +275,7 @@ void player_c::useEquipped(int whichEquip) {
 
   switch (whichEquip) {
     case EQUIP_PRIMARY:
-      // can't use a non-item	
+      // can't use a non-item
       if (mInventory.mPrimaryItem <= 0) return;
       item = mGameModel->itemManager->getItem(mInventory.mPrimaryItem);
       break;
@@ -289,7 +289,7 @@ void player_c::useEquipped(int whichEquip) {
       printf("player_c::useEquipped(): trying to use invalid equip location\n");
       return;
   }
-  
+
   if (item.type == ITEMTYPE_GUN_ONE_HANDED || item.type == ITEMTYPE_GUN_TWO_HANDED) {
     if (whichEquip == EQUIP_PRIMARY) {
       if (mNextShotTimePrimary > time) return;
@@ -355,7 +355,7 @@ double player_c::fireGun(item_t item, double handedness) {
 
 double player_c::useMeleeWeapon(item_t item) {
   v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
-  
+
   v3d_t targAngle = v3d_normalize(v3d_sub(mTarget, world_head_pos));
   v3d_t displacement = v3d_scale(targAngle, 1.5);
   v3d_t pos = v3d_add(world_head_pos, displacement);
@@ -398,7 +398,7 @@ void player_c::useBackpackItem() {
   if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
 
   item_t item = mGameModel->itemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
-  
+
   switch (item.type) {
   case ITEMTYPE_UNDEFINED:
   case ITEMTYPE_ROCKET_PACK:
@@ -526,9 +526,9 @@ void player_c::updateHud() {
 
 
   // player position
-//	sprintf(text, "%.4f, %.4f, %.4f", mPos.x, mPos.y, mPos.z);
-//	mHud.addText (v2d_v(0.4, 0.1), v2d_v(0.2, 0.05), fontSize,
-//		text, TEXT_JUSTIFICATION_CENTER, color, NULL);
+//  sprintf(text, "%.4f, %.4f, %.4f", mPos.x, mPos.y, mPos.z);
+//  mHud.addText (v2d_v(0.4, 0.1), v2d_v(0.2, 0.05), fontSize,
+//    text, TEXT_JUSTIFICATION_CENTER, color, NULL);
 }
 
 void player_c::drawHud() {
@@ -584,9 +584,9 @@ void player_c::updateCharacterSheet() {
 
   static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
   static GLfloat color2[4] = { 0.8f, 0.6f, 0.2f, 1.0f };
-//	static GLfloat colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.6f};
+//  static GLfloat colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.6f};
   static GLfloat selectedColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-  
+
   static v2d_t fontSize = { 0.015f, 0.03f };
 
   // equipped
@@ -619,7 +619,7 @@ void player_c::updateCharacterSheet() {
 
   for (size_t i = 0; i < NUM_AMMO_TYPES; i++) {
     tl = v2d_v(0.1, lerp(0.7, 0.9 - buttonHeight, i, NUM_AMMO_TYPES));
-//		br = v2d_v (0.4, lerp (0.7 + (buttonHeight * 0.9), 0.9, i, NUM_AMMO_TYPES));;
+//    br = v2d_v (0.4, lerp (0.7 + (buttonHeight * 0.9), 0.9, i, NUM_AMMO_TYPES));;
     dimensions.x = 0.3;
     dimensions.y = buttonHeight * 0.9;
 
@@ -654,7 +654,7 @@ void player_c::updateCharacterSheet() {
 
   for (size_t i = 0; i < mInventory.mBackpack.size(); i++) {
     tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mInventory.mBackpack.size()));
-//		br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size ()));;
+//    br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size ()));;
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9;
 
@@ -705,7 +705,7 @@ bool player_c::update(AssetManager& assetManager) {
     blockType = BLOCK_TYPE_AIR;
   }
   else {
-//		blockType = worldMap.getBlock(v3d_add (mFinalHeadOffset, mPos))->type;
+//    blockType = worldMap.getBlock(v3d_add (mFinalHeadOffset, mPos))->type;
     blockType = block->type;
   }
 
@@ -775,7 +775,7 @@ bool player_c::update(AssetManager& assetManager) {
   // * * * * * * begin dead section * * * * * * * * * * *
   // if dead, player can't do any more
   if (mCurrentHealth <= 0.0) {
-//		printf ("dead\n");
+//    printf ("dead\n");
 
     if (!deathScreamUttered) {
       assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_DEATH, 112);
@@ -882,7 +882,7 @@ bool player_c::update(AssetManager& assetManager) {
       bb.translate (v3d_v (0.001, 0.001, 0.001));
 
       if (!bb.isIntersecting (phys.getEntityByHandle (mPhysicsHandle)->boundingBox)) {
-//				worldMap.fillSphere (v3d_v (neighborPos), 3.0, BLOCK_TYPE_GREEN_STAR_TILE, 0);
+//        worldMap.fillSphere (v3d_v (neighborPos), 3.0, BLOCK_TYPE_GREEN_STAR_TILE, 0);
         worldMap.setBlockType (neighborPos, BLOCK_TYPE_GREEN_STAR_TILE);
       }
     }
@@ -931,7 +931,7 @@ bool player_c::update(AssetManager& assetManager) {
   if (gi.isToggleCharacterSheet()) {
     mShowCharacterSheet = !mShowCharacterSheet;
   }
-  
+
   updateCharacterSheet();
 
   if (gi.isToggleGodMode()) {
@@ -943,10 +943,10 @@ bool player_c::update(AssetManager& assetManager) {
 
 
   mWalkInput = v2d_v(0.0, 0.0);
-  if (gi.isWalkingForward())		mWalkInput.y += 1.0;
-  if (gi.isWalkingBackward())	mWalkInput.y -= 1.0;
-  if (gi.isWalkingLeft())		mWalkInput.x += 1.0;
-  if (gi.isWalkingRight())		mWalkInput.x -= 1.0;
+  if (gi.isWalkingForward())    mWalkInput.y += 1.0;
+  if (gi.isWalkingBackward())  mWalkInput.y -= 1.0;
+  if (gi.isWalkingLeft())    mWalkInput.x += 1.0;
+  if (gi.isWalkingRight())    mWalkInput.x -= 1.0;
 
   bool isJumping = gi.isJumping();
 
@@ -979,7 +979,7 @@ bool player_c::update(AssetManager& assetManager) {
 
         headBobbleAction = HEADBOB_ACTION_WALK_FORWARD;
       }
-      else {	// player not on ground
+      else {  // player not on ground
         walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 300.0);
       }
 
@@ -987,7 +987,7 @@ bool player_c::update(AssetManager& assetManager) {
       mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), force);
     }
 
-  /*	if (isJumping && !phys.isHandleOnGround (mPhysicsHandle)) {
+  /*  if (isJumping && !phys.isHandleOnGround (mPhysicsHandle)) {
       v3d_t force = v3d_v (0.0, 33000.0, 0.0);
 
       phys.add_force (mPhysicsHandle, force);
@@ -1017,9 +1017,9 @@ bool player_c::update(AssetManager& assetManager) {
           liftMagnitude = 5000.0;
         }
 
-  //			liftVector.y += 1.0;
-  //			liftVector.x += 1.5 * walkVector.x;
-  //			liftVector.z += 1.5 * walkVector.y;
+  //      liftVector.y += 1.0;
+  //      liftVector.x += 1.5 * walkVector.x;
+  //      liftVector.z += 1.5 * walkVector.y;
 
 
         // get the player facing vector
@@ -1031,10 +1031,10 @@ bool player_c::update(AssetManager& assetManager) {
 
         v3d_t normalizedForce = v3d_normalize (liftVector);
 
-  //			if (walkVector.y < 0.0) {
-  //				normalizedForce.x = -normalizedForce.x;
-  //				normalizedForce.z = -normalizedForce.z;
-  //			}
+  //      if (walkVector.y < 0.0) {
+  //        normalizedForce.x = -normalizedForce.x;
+  //        normalizedForce.z = -normalizedForce.z;
+  //      }
 
         if (v2d_mag (walkVector) > EPSILON) {
           normalizedForce.x += 0.5 * walkVector.x;
@@ -1049,10 +1049,10 @@ bool player_c::update(AssetManager& assetManager) {
 
         liftVector = v3d_scale (liftMagnitude, liftVector);
 
-  //			printf ("lift: %6.6f\n", liftMagnitude);
-  //			v3d_print ("liftVector", liftVector);
-  //			v3d_print ("normalizedForce", normalizedForce);
-  //			v3d_print ("physEntity.vel", physEntity.vel);
+  //      printf ("lift: %6.6f\n", liftMagnitude);
+  //      v3d_print ("liftVector", liftVector);
+  //      v3d_print ("normalizedForce", normalizedForce);
+  //      v3d_print ("physEntity.vel", physEntity.vel);
 
         phys.add_force (mPhysicsHandle, liftVector);
       }
@@ -1137,7 +1137,7 @@ void player_c::readPhysicsMessages(AssetManager& assetManager) {
   bool gotItem;
 
   while (mGameModel->physics->getNextMessage((int)mGameModel->physics->getPlayerHandle(), &message)) {
-//		printf ("player message: to: %d, from: %d\n", message.recipient, message.sender);
+//    printf ("player message: to: %d, from: %d\n", message.recipient, message.sender);
 
     switch (message.type) {
       case PHYS_MESSAGE_DAMAGE:
@@ -1155,7 +1155,7 @@ void player_c::readPhysicsMessages(AssetManager& assetManager) {
           message.sender = mGameModel->physics->getPlayerHandle();
           message.recipient = MAILBOX_PHYSICS;
           message.type = PHYS_MESSAGE_ITEMGRABBED;
-//					message.iValue2 = message.iValue2;
+//          message.iValue2 = message.iValue2;
 
           mGameModel->physics->sendMessage(message);
         }

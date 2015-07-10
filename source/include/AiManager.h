@@ -13,7 +13,12 @@
 
 #include <vector>
 
-#include <Windows.h>
+#ifdef _WIN32
+  #include <Windows.h>
+#else
+  typedef unsigned char BYTE;
+  typedef unsigned int UINT;
+#endif
 
 #include "GL/glut.h"
 

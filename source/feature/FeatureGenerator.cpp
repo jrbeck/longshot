@@ -22,7 +22,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
       corner = v2di_add(corner, mapIndex);
       printf("dungeon at (%d, %d)\n", corner.x, corner.y);
       DungeonFeature::createDungeon(corner, 3, world);
-      //			createPlain (corner, 8, 8, worldMap);
+      //      createPlain (corner, 8, 8, worldMap);
 
       worldMap.swapOutToInactive();
     }
@@ -61,7 +61,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
       printf("village at (%d, %d)\n", corner.x, corner.y);
       createVillage(side, corner, world);
 
-      //			createPlain (corner, side, side, worldMap);
+      //      createPlain (corner, side, side, worldMap);
 
       worldMap.swapOutToInactive();
     }
@@ -80,13 +80,13 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
     if (corner.x != 0) {
       corner = v2di_add(corner, mapIndex);
       printf("spiral garden at (%d, %d)\n", corner.x, corner.y);
-      //			createPyramid (side, corner, worldMap);
-      //			createPlain (corner, side, side, worldMap);
+      //      createPyramid (side, corner, worldMap);
+      //      createPlain (corner, side, side, worldMap);
 
       FeatureUtil::loadWorldRegion(corner, side, world, false);
 
-      //			height_info_t hI = getHeightInfo (corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
-      //				side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, worldMap);
+      //      height_info_t hI = getHeightInfo (corner.x * WORLD_CHUNK_SIDE, corner.y * WORLD_CHUNK_SIDE,
+      //        side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, worldMap);
 
       growSpiralGarden(corner, side, side, world);
 
@@ -162,8 +162,8 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
         createPlain(corner, side, side, world);
 
         createHouse(corner, world);
-        //				createPlain (corner, 1, 1, worldMap);
-        //				create1by1Tower (corner, worldMap);
+        //        createPlain (corner, 1, 1, worldMap);
+        //        create1by1Tower (corner, worldMap);
 
         worldMap.swapOutToInactive();
       }
@@ -198,9 +198,9 @@ void FeatureGenerator::create1by1Tower(v2di_t cornerIndex, int baseHeight, World
   int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
   int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
-  //	height_info_t heightInfo = getHeightInfo (worldX, worldZ, WORLD_CHUNK_SIDE, WORLD_CHUNK_SIDE, worldMap);
+  //  height_info_t heightInfo = getHeightInfo (worldX, worldZ, WORLD_CHUNK_SIDE, WORLD_CHUNK_SIDE, worldMap);
 
-  //	createPlain (cornerIndex, 1, 1, worldMap);
+  //  createPlain (cornerIndex, 1, 1, worldMap);
 
   // now build the tower
   v3di_t a, b;
@@ -247,19 +247,19 @@ void FeatureGenerator::create1by1Tower(v2di_t cornerIndex, int baseHeight, World
   }
 
   // draw a couple stairs
-  //	v3di_t southwestInsideCorner = v3di_v (worldX + 6, heightInfo.avg, worldZ + 6);
-  //	buildSpiralStaircase (southwestInsideCorner, 3, heightInfo.avg + 26,
-  //		r_numi (0, FG_NUM_CORNERS), worldMap);
+  //  v3di_t southwestInsideCorner = v3di_v (worldX + 6, heightInfo.avg, worldZ + 6);
+  //  buildSpiralStaircase (southwestInsideCorner, 3, heightInfo.avg + 26,
+  //    r_numi (0, FG_NUM_CORNERS), worldMap);
 
   v3di_t southwestInsideCorner = v3di_v(worldX + 5, baseHeight, worldZ + 5);
   FeatureUtil::buildSpiralStaircase(southwestInsideCorner, 5, baseHeight + 26,
     r_numi(0, FG_NUM_CORNERS), worldMap);
 
-  //	v3di_t southwestInsideCorner = v3di_v (worldX + 3, heightInfo.avg, worldZ + 3);
-  //	buildSpiralStaircase (southwestInsideCorner, 9, heightInfo.avg + 27, FG_CORNER_SW, worldMap);
+  //  v3di_t southwestInsideCorner = v3di_v (worldX + 3, heightInfo.avg, worldZ + 3);
+  //  buildSpiralStaircase (southwestInsideCorner, 9, heightInfo.avg + 27, FG_CORNER_SW, worldMap);
 
 
-  //	worldMap.swapOutToInactive ();
+  //  worldMap.swapOutToInactive ();
 
 }
 
@@ -310,7 +310,7 @@ void FeatureGenerator::drillCavern(
   int sideLengthX = sideX * WORLD_CHUNK_SIDE;
   int sideLengthZ = sideZ * WORLD_CHUNK_SIDE;
 
-  //	height_info_t heightInfo = getHeightInfo (worldX, worldZ, sideLengthX, sideLengthZ, worldMap);
+  //  height_info_t heightInfo = getHeightInfo (worldX, worldZ, sideLengthX, sideLengthZ, worldMap);
 
   double halfSideX = (double)sideLengthX / 2;
   double halfSideZ = (double)sideLengthZ / 2;
@@ -340,7 +340,7 @@ void FeatureGenerator::drillCavern(
 
     WorldMap &worldMap = *world.getWorldMap();
     for (int i = 0; i < 75; i++) {
-      //			worldMap.clearSphere (pos, 4.0);
+      //      worldMap.clearSphere (pos, 4.0);
       worldMap.fillSphere(pos, radius, BLOCK_TYPE_DARK_PURPLE, LIGHT_LEVEL_SOLID);
 
       pos = v3d_add(pos, vel);
@@ -504,7 +504,7 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
 
 
   v3di_t a, b;
-  //	heightInfo.avg++;
+  //  heightInfo.avg++;
   int roofHeight = 20;
 
   // fill it
@@ -554,7 +554,7 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
   worldMap.fillVolume(a, b, BLOCK_TYPE_OLD_BRICK);
 
 
-  //	heightInfo.avg++;
+  //  heightInfo.avg++;
 
 
   v2di_t towerCorner;
@@ -705,7 +705,7 @@ void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
     b.y++;
   }
 
-  //	worldMap.swapOutToInactive ();
+  //  worldMap.swapOutToInactive ();
 }
 
 
@@ -845,14 +845,14 @@ void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, Wor
         }
       }
 
-      //			world.loadColumn(cornerIndex.x + i, cornerIndex.y + k, columnBuffer);
+      //      world.loadColumn(cornerIndex.x + i, cornerIndex.y + k, columnBuffer);
     }
   }
 
   delete[] columnBuffer;
   delete[] heightMap;
 
-  //	worldMap.swapOutToInactive ();
+  //  worldMap.swapOutToInactive ();
 }
 
 
@@ -866,7 +866,7 @@ void FeatureGenerator::createVillage(int side, v2di_t cornerIndex, World& world)
 
   height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, width, width, world);
 
-  //	FeatureUtil::loadWorldRegion( cornerIndex, side, world, false );
+  //  FeatureUtil::loadWorldRegion( cornerIndex, side, world, false );
 
   RogueMap rogueMap;
   rogueMap.resize(side, side);
@@ -884,10 +884,10 @@ void FeatureGenerator::createVillage(int side, v2di_t cornerIndex, World& world)
 
       printf("feature at (%d, %d)\n", corner.x, corner.y);
 
-      //			createPlain (corner, buildingSide, buildingSide, worldMap);
+      //      createPlain (corner, buildingSide, buildingSide, worldMap);
 
       createPyramid(buildingSide, corner, world);
-      //			createBuilding2x2 (corner, worldMap);
+      //      createBuilding2x2 (corner, worldMap);
     }
   }
 
@@ -930,8 +930,8 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
   v3di_t regionIndex = WorldUtil::getRegionIndex(startPos);
   v2di_t corner = { regionIndex.x, regionIndex.z };
   printf("dungeon at (%d, %d)\n", corner.x, corner.y);
-  //	createDungeon (corner, 6, worldMap);
-  //	createPlain (corner, 6, 6, worldMap);
+  //  createDungeon (corner, 6, worldMap);
+  //  createPlain (corner, 6, 6, worldMap);
 
 
 
@@ -950,14 +950,14 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
   };
 
 
-  //	loadWorldRegion(corner, 6, worldMap, true);
+  //  loadWorldRegion(corner, 6, worldMap, true);
 
 
-  //	sd
+  //  sd
 
   for (int i = 0; i < 6; i++) {
     for (int j = 0; j < 6; j++) {
-      //			worldMap.loadColumn(corner.x + i, corner.y + j);
+      //      worldMap.loadColumn(corner.x + i, corner.y + j);
       int xIndex = corner.x + i;
       int zIndex = corner.y + j;
 
@@ -998,187 +998,187 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
 // create a level of the dungeon
 // returns the stairsUp location
 //v2di_t FeatureGenerator::createRogueRec (
-//	v2di_t cornerIndex,
-//	v2di_t stairsUp,
-//	int height,
-//	int levelsRemaining,
-//	WorldMap &worldMap)
+//  v2di_t cornerIndex,
+//  v2di_t stairsUp,
+//  int height,
+//  int levelsRemaining,
+//  WorldMap &worldMap)
 //{
-//	int dungeonSide = 8;
+//  int dungeonSide = 8;
 //
-//	// since each tile of the RogueMap is 2m x 2m, halve each axis
-//	RogueMap rogueMap(dungeonSide * (WORLD_CHUNK_SIDE / 2), dungeonSide * (WORLD_CHUNK_SIDE / 2));
+//  // since each tile of the RogueMap is 2m x 2m, halve each axis
+//  RogueMap rogueMap(dungeonSide * (WORLD_CHUNK_SIDE / 2), dungeonSide * (WORLD_CHUNK_SIDE / 2));
 //
-//	// check to see if we are drawing the first level
-//	if (stairsUp.x == 0) {
-//		// decide where the staircase up from this level will be
-//		stairsUp = rogueMap.random_room (100, 6, 6);
-//	}
-//	else {
-//		// draw the room reserved for the stairway back up
-//		rogueMap.draw_room (stairsUp, v2di_add (stairsUp, v2di_v (6, 6)), 100);
-//	}
+//  // check to see if we are drawing the first level
+//  if (stairsUp.x == 0) {
+//    // decide where the staircase up from this level will be
+//    stairsUp = rogueMap.random_room (100, 6, 6);
+//  }
+//  else {
+//    // draw the room reserved for the stairway back up
+//    rogueMap.draw_room (stairsUp, v2di_add (stairsUp, v2di_v (6, 6)), 100);
+//  }
 //
-//	// if there's another level beneath this one, make sure we have a room for the
-//	// downward stairs
-//	v2di_t stairDownRoomCorner;
-//	if (levelsRemaining > 0) {
-//		stairDownRoomCorner = rogueMap.random_room (500, 6, 6);
-//	}
+//  // if there's another level beneath this one, make sure we have a room for the
+//  // downward stairs
+//  v2di_t stairDownRoomCorner;
+//  if (levelsRemaining > 0) {
+//    stairDownRoomCorner = rogueMap.random_room (500, 6, 6);
+//  }
 //
-//	stairsUp.x += 2;
-//	stairsUp.y += 2;
+//  stairsUp.x += 2;
+//  stairsUp.y += 2;
 //
-//	// number of extra rooms on this level (in addition to up and down rooms)
-//	int numAdditionalRooms = 3;
-//	rogueMap.randomize(false, numAdditionalRooms);
-////	rogueMap.grow_paths ();
+//  // number of extra rooms on this level (in addition to up and down rooms)
+//  int numAdditionalRooms = 3;
+//  rogueMap.randomize(false, numAdditionalRooms);
+////  rogueMap.grow_paths ();
 //
-//	rogueMap.drawIdRectInRoom(5, 7);
+//  rogueMap.drawIdRectInRoom(5, 7);
 //
-//	v2di_t entryPoint = stairsUp;
-//	v3di_t worldEntryPoint;
+//  v2di_t entryPoint = stairsUp;
+//  v3di_t worldEntryPoint;
 //
-//	// WARNING: this always corners at 0, 0
-//	int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
-//	int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
+//  // WARNING: this always corners at 0, 0
+//  int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
+//  int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 //
-//	int xSide = dungeonSide * WORLD_CHUNK_SIDE;
-//	int zSide = dungeonSide * WORLD_CHUNK_SIDE;
-//
-//
-//	for (int j = 0; j < dungeonSide; j++) {
-//		for (int i = 0; i < dungeonSide; i++) {
-//			for (int v = 0; v < (WORLD_CHUNK_SIDE / 2); v++) {
-//				for (int u = 0; u < (WORLD_CHUNK_SIDE / 2); u++) {
-//					int rx = u + (i * (WORLD_CHUNK_SIDE / 2));
-//					int rz = v + (j * (WORLD_CHUNK_SIDE / 2));
-//
-//					int wx = worldX + (rx * 2);
-//					int wz = worldZ + (rz * 2);
-//
-//					int type = rogueMap.getTile (rx, rz).type;
-//					int tileId = rogueMap.getTile (rx, rz).id;
-//
-//					if (type != MAP_TILE_WALL) {
-//						// clear the block
-//						clearDungeonBlock (wx, height - 6, wz, worldMap);
-//
-//						// just ignore the rest of this...move along!
-//						v3di_t pos = v3di_v (static_cast<int>(wx), height - 7, static_cast<int>(wz));
-//
-//						char blockType;
-//
-//						// lay down some flooring
-//						blockType = BLOCK_TYPE_BRICK_RED + tileId;
-//						if (tileId == 100) {
-//							blockType = BLOCK_TYPE_WHITE;
-//						}
-//						else if (tileId == -1) {
-//							blockType = BLOCK_TYPE_GREEN_STAR_TILE;
-//						}
-//						else if (tileId == 5) {
-//							blockType = BLOCK_TYPE_LIGHT_STONE;
-//						}
-//						else if (tileId == 7) {
-//							blockType = BLOCK_TYPE_LAVA;
-//						}
-//
-////						blockType = BLOCK_TYPE_GREEN_STAR_TILE;
-//
-//						worldMap.setBlockType (pos, blockType);
-//						pos.x++;
-//						worldMap.setBlockType (pos, blockType);
-//						pos.z++;
-//						worldMap.setBlockType (pos, blockType);
-//						pos.x--;
-//						worldMap.setBlockType (pos, blockType);
+//  int xSide = dungeonSide * WORLD_CHUNK_SIDE;
+//  int zSide = dungeonSide * WORLD_CHUNK_SIDE;
 //
 //
+//  for (int j = 0; j < dungeonSide; j++) {
+//    for (int i = 0; i < dungeonSide; i++) {
+//      for (int v = 0; v < (WORLD_CHUNK_SIDE / 2); v++) {
+//        for (int u = 0; u < (WORLD_CHUNK_SIDE / 2); u++) {
+//          int rx = u + (i * (WORLD_CHUNK_SIDE / 2));
+//          int rz = v + (j * (WORLD_CHUNK_SIDE / 2));
 //
-//						// now the ceiling
-//						blockType = BLOCK_TYPE_BRICK_RED + tileId; // BLOCK_TYPE_STONE;
-//						if (tileId == 100) {
-//							blockType = BLOCK_TYPE_ALIEN_SKIN;
-//						}
-//						else if (tileId == -1) {
-//							blockType = BLOCK_TYPE_GREEN_STAR_TILE;
-//						}
+//          int wx = worldX + (rx * 2);
+//          int wz = worldZ + (rz * 2);
 //
-//						pos = v3di_v (static_cast<int>(wx), height - 3, static_cast<int>(wz));
-//						worldMap.setBlockType (pos, blockType);
-//						pos.x++;
-//						worldMap.setBlockType (pos, blockType);
-//						pos.z++;
-//						worldMap.setBlockType (pos, blockType);
-//						pos.x--;
-//						worldMap.setBlockType (pos, blockType);
-//					}
+//          int type = rogueMap.getTile (rx, rz).type;
+//          int tileId = rogueMap.getTile (rx, rz).id;
 //
-//					// this is a weird way of doing this...
-//					if (rx == entryPoint.x && rz == entryPoint.y) {
-//						// store this for later
-//						worldEntryPoint.x = wx;
-//						worldEntryPoint.y = height - 6;
-//						worldEntryPoint.z = wz;
-//					}
-//				}
-//			}
-//		}
-//	}
+//          if (type != MAP_TILE_WALL) {
+//            // clear the block
+//            clearDungeonBlock (wx, height - 6, wz, worldMap);
 //
+//            // just ignore the rest of this...move along!
+//            v3di_t pos = v3di_v (static_cast<int>(wx), height - 7, static_cast<int>(wz));
 //
-//	v3di_t a, b;
+//            char blockType;
 //
-//	// clear it out now
-//	a = v3di_v (worldEntryPoint.x - 2, worldEntryPoint.y + 3, worldEntryPoint.z - 2);
-////	b = v3di_v (worldEntryPoint.x + 3, worldEntryPoint.y + 40, worldEntryPoint.z + 3);
-//	b = v3di_v (worldEntryPoint.x + 3, height, worldEntryPoint.z + 3);
-//	worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+//            // lay down some flooring
+//            blockType = BLOCK_TYPE_BRICK_RED + tileId;
+//            if (tileId == 100) {
+//              blockType = BLOCK_TYPE_WHITE;
+//            }
+//            else if (tileId == -1) {
+//              blockType = BLOCK_TYPE_GREEN_STAR_TILE;
+//            }
+//            else if (tileId == 5) {
+//              blockType = BLOCK_TYPE_LIGHT_STONE;
+//            }
+//            else if (tileId == 7) {
+//              blockType = BLOCK_TYPE_LAVA;
+//            }
 //
+////            blockType = BLOCK_TYPE_GREEN_STAR_TILE;
 //
-//	// and for the staircase
-//	v3di_t southwestInsideCorner = v3di_v(worldEntryPoint.x - 1, worldEntryPoint.y,  worldEntryPoint.z - 1);
-//	buildSpiralStaircase(southwestInsideCorner, 3, height, FG_CORNER_SW, worldMap);
-//
-//	// place some mosnters while we here
-//	// THIS MAY ACTUALLY BE USED AT SOME POINT!!
-//	//v2di_t monsterPos;
-//	//int numSpawners = r_numi (8, 15);
-//	//for (int i = 0; i < numSpawners; i++) {
-//
-//	//	monsterPos = rogueMap.placeRandomMonster ();
-//
-//	//	if (monsterPos.x >= 0) {
-//	//		inactive_item_t monsterItem;
-//
-//	//		monsterItem.type = INACTIVETYPE_ITEM;
-//	//		monsterItem.type2 = OBJTYPE_MONSTER_SPAWNER;
-//
-//	//		monsterItem.pos.x = static_cast<double>(worldX + (monsterPos.x * 2)) + 1.0;
-//	//		monsterItem.pos.y = static_cast<double>(heightInfo.low - 6) + 1.5;
-//	//		monsterItem.pos.z = static_cast<double>(worldZ + (monsterPos.y * 2)) + 1.0;
-//
-//	//		mInactiveList.addItem (monsterItem);
-//	//	}
-//	//}
-//
-//
-//	// a little tail recursion anyone?
-//	if (levelsRemaining > 0 && stairDownRoomCorner.x != 0) {
-//		createDungeonRec (
-//			cornerIndex,
-//			// stair down on this level becomes stair up on next level
-//			stairDownRoomCorner,
-//			height - 7,
-//			levelsRemaining - 1,
-//			worldMap);
-//	}
+//            worldMap.setBlockType (pos, blockType);
+//            pos.x++;
+//            worldMap.setBlockType (pos, blockType);
+//            pos.z++;
+//            worldMap.setBlockType (pos, blockType);
+//            pos.x--;
+//            worldMap.setBlockType (pos, blockType);
 //
 //
 //
+//            // now the ceiling
+//            blockType = BLOCK_TYPE_BRICK_RED + tileId; // BLOCK_TYPE_STONE;
+//            if (tileId == 100) {
+//              blockType = BLOCK_TYPE_ALIEN_SKIN;
+//            }
+//            else if (tileId == -1) {
+//              blockType = BLOCK_TYPE_GREEN_STAR_TILE;
+//            }
 //
-//	return stairsUp;
+//            pos = v3di_v (static_cast<int>(wx), height - 3, static_cast<int>(wz));
+//            worldMap.setBlockType (pos, blockType);
+//            pos.x++;
+//            worldMap.setBlockType (pos, blockType);
+//            pos.z++;
+//            worldMap.setBlockType (pos, blockType);
+//            pos.x--;
+//            worldMap.setBlockType (pos, blockType);
+//          }
+//
+//          // this is a weird way of doing this...
+//          if (rx == entryPoint.x && rz == entryPoint.y) {
+//            // store this for later
+//            worldEntryPoint.x = wx;
+//            worldEntryPoint.y = height - 6;
+//            worldEntryPoint.z = wz;
+//          }
+//        }
+//      }
+//    }
+//  }
+//
+//
+//  v3di_t a, b;
+//
+//  // clear it out now
+//  a = v3di_v (worldEntryPoint.x - 2, worldEntryPoint.y + 3, worldEntryPoint.z - 2);
+////  b = v3di_v (worldEntryPoint.x + 3, worldEntryPoint.y + 40, worldEntryPoint.z + 3);
+//  b = v3di_v (worldEntryPoint.x + 3, height, worldEntryPoint.z + 3);
+//  worldMap.fillVolume (a, b, BLOCK_TYPE_AIR);
+//
+//
+//  // and for the staircase
+//  v3di_t southwestInsideCorner = v3di_v(worldEntryPoint.x - 1, worldEntryPoint.y,  worldEntryPoint.z - 1);
+//  buildSpiralStaircase(southwestInsideCorner, 3, height, FG_CORNER_SW, worldMap);
+//
+//  // place some mosnters while we here
+//  // THIS MAY ACTUALLY BE USED AT SOME POINT!!
+//  //v2di_t monsterPos;
+//  //int numSpawners = r_numi (8, 15);
+//  //for (int i = 0; i < numSpawners; i++) {
+//
+//  //  monsterPos = rogueMap.placeRandomMonster ();
+//
+//  //  if (monsterPos.x >= 0) {
+//  //    inactive_item_t monsterItem;
+//
+//  //    monsterItem.type = INACTIVETYPE_ITEM;
+//  //    monsterItem.type2 = OBJTYPE_MONSTER_SPAWNER;
+//
+//  //    monsterItem.pos.x = static_cast<double>(worldX + (monsterPos.x * 2)) + 1.0;
+//  //    monsterItem.pos.y = static_cast<double>(heightInfo.low - 6) + 1.5;
+//  //    monsterItem.pos.z = static_cast<double>(worldZ + (monsterPos.y * 2)) + 1.0;
+//
+//  //    mInactiveList.addItem (monsterItem);
+//  //  }
+//  //}
+//
+//
+//  // a little tail recursion anyone?
+//  if (levelsRemaining > 0 && stairDownRoomCorner.x != 0) {
+//    createDungeonRec (
+//      cornerIndex,
+//      // stair down on this level becomes stair up on next level
+//      stairDownRoomCorner,
+//      height - 7,
+//      levelsRemaining - 1,
+//      worldMap);
+//  }
+//
+//
+//
+//
+//  return stairsUp;
 //}
 //
 //

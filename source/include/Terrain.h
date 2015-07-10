@@ -19,58 +19,58 @@
 #include "v3d.h"
 
 
-// defines * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-#define DEFAULT_FIELD_SIDE			(32)
+// defines * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+#define DEFAULT_FIELD_SIDE      (32)
 
-#define DEFAULT_TERRAIN_OFFSET		(16.0)
+#define DEFAULT_TERRAIN_OFFSET    (16.0)
 
 
-//  class definition * * * * * * * * * * * * * * * * * * * * * * * 
+//  class definition * * * * * * * * * * * * * * * * * * * * * * *
 class Terrain {
 public:
-	Terrain (void);
-	Terrain (int side);
-	~Terrain (void);
+  Terrain (void);
+  Terrain (int side);
+  ~Terrain (void);
 
-	int saveToDisk (FILE *file);
-	int loadFromDisk (FILE *file);
+  int saveToDisk (FILE *file);
+  int loadFromDisk (FILE *file);
 
-	int resize (int side);
+  int resize (int side);
 
-	int get_side_length (void) const;
-	
-	void generateTilable (double delta, PseudoRandom &prng);
+  int get_side_length (void) const;
 
-	void normalize (double low, double high);
+  void generateTilable (double delta, PseudoRandom &prng);
 
-	double get_value (int i, int j) const;
-	double getValueBilerp (double i, double j) const;
+  void normalize (double low, double high);
 
-	int set_value (int i, int j, double value);
+  double get_value (int i, int j) const;
+  double getValueBilerp (double i, double j) const;
 
-	int set_all (double value);
-	int set_min (double min);
+  int set_value (int i, int j, double value);
 
-	int smooth (void);
-	void noise (PseudoRandom &prng);
-	double blur_square (int i, int j, int side) const;
+  int set_all (double value);
+  int set_min (double min);
 
-	void alt_smooth (void);
+  int smooth (void);
+  void noise (PseudoRandom &prng);
+  double blur_square (int i, int j, int side) const;
 
-	double getMax (void) const;
-	double getMin (void) const;
+  void alt_smooth (void);
 
-	// gives the value of the lowest neighbor of the eight surrounding points
-	double lowest_neighbor (int i, int j) const;
+  double getMax (void) const;
+  double getMin (void) const;
 
-	void draw (void) const;
+  // gives the value of the lowest neighbor of the eight surrounding points
+  double lowest_neighbor (int i, int j) const;
+
+  void draw (void) const;
 
 private:
-	double getClose(double num, double delta, PseudoRandom &prng) const;
+  double getClose(double num, double delta, PseudoRandom &prng) const;
 
 
-	int mFieldSide;
-	double *mField;
+  int mFieldSide;
+  double *mField;
 };
 
 

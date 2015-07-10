@@ -25,8 +25,8 @@
 #define DONT_ATTACK_PLAYER    (true)
 #define PLAYER_SPECIES        (AITYPE_HUMAN)
 
-class Physics;
-class PhysicsEntity;
+// class Physics;
+// class PhysicsEntity;
 
 class AiEntity {
 public:

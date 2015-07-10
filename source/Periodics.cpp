@@ -17,7 +17,7 @@ Periodics::~Periodics (void) {
 int Periodics::saveToDisk (FILE *file) {
   int errorCode = 0;
 
-/*	for (int i = 0; i < NUM_TERRAINS; i++) {
+/*  for (int i = 0; i < NUM_TERRAINS; i++) {
     errorCode = mTerrains[i].saveToDisk (file);
     if (errorCode != 0) {
       return errorCode;
@@ -134,7 +134,7 @@ GroundCoverInfo Periodics::getGroundCoverInfo(v3di_t worldPosition, BYTE groundT
 
   groundCoverInfo.height = (int)ceil((double)biomeType.groundCoverMaxHeight * (rVal - biomeType.groundCoverHighPass) / (1.0 - biomeType.groundCoverHighPass));
 
-  /*	else if (neighborType == BLOCK_TYPE_SAND && rVal < 0.2) {
+  /*  else if (neighborType == BLOCK_TYPE_SAND && rVal < 0.2) {
   block_t block;
   block.type = BLOCK_TYPE_FLOWER;
   mWorldMap->setBlock(position, block);
@@ -248,11 +248,11 @@ BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHe
       }
       else {
         blockType = BLOCK_TYPE_AIR;
-//				blockType = BLOCK_TYPE_ALIEN_SKIN;
+//        blockType = BLOCK_TYPE_ALIEN_SKIN;
       }
     }
   }
-  
+
   return blockType;
 }
 
@@ -305,12 +305,12 @@ BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
 
   if (value1 < 0.5) {
     // ground type 1 (sand)
-//		blockType = BLOCK_TYPE_SAND;
+//    blockType = BLOCK_TYPE_SAND;
     blockType = BLOCK_TYPE_SAND;
   }
   else {
     // ground type 2 (stone)
-//		blockType = BLOCK_TYPE_SAND;
+//    blockType = BLOCK_TYPE_SAND;
     blockType = BLOCK_TYPE_SAND;
   }
 
@@ -380,7 +380,7 @@ BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
       }
       else {
         blockType =  BLOCK_TYPE_AIR;
-//				blockType =  BLOCK_TYPE_ALIEN_SKIN;
+//        blockType =  BLOCK_TYPE_ALIEN_SKIN;
       }
     }
   }

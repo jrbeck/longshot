@@ -20,7 +20,7 @@
 
 #include "Constants.h"
 
-#define ITEM_NAME_LENGTH	64
+#define ITEM_NAME_LENGTH  64
 
 
 typedef struct {
@@ -55,10 +55,10 @@ typedef struct {
 
 
 //enum {
-//	MODELTYPE_MACE,
-//	MODELTYPE_AXE,
+//  MODELTYPE_MACE,
+//  MODELTYPE_AXE,
 //
-//	NUM_MODELS
+//  NUM_MODELS
 //};
 
 
@@ -110,7 +110,7 @@ public:
   void destroyItem(size_t handle);
   void trimItemsList();
 
-  //	int addItem (item_t item);
+  //  int addItem (item_t item);
   item_t getItem(size_t itemHandle);
   int getIndexFromHandle(size_t itemHandle);
 

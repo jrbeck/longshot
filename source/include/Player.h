@@ -5,7 +5,7 @@
 // * inventory
 // * camera info
 // * movement
-// * 
+// *
 // * etc...
 // *
 // *
@@ -34,14 +34,14 @@
 
 
 // orientation defaults
-#define DEFAULT_POS_X			(30.0)
-#define DEFAULT_POS_Y			(30.0)
-#define DEFAULT_POS_Z			(30.0)
+#define DEFAULT_POS_X      (30.0)
+#define DEFAULT_POS_Y      (30.0)
+#define DEFAULT_POS_Z      (30.0)
 
-#define DEFAULT_FACING			(45.0)
-#define DEFAULT_INCLINE			(0.0)
-#define DEFAULT_INCLINE_MIN		(-88.0)
-#define DEFAULT_INCLINE_MAX		(88.0)
+#define DEFAULT_FACING      (45.0)
+#define DEFAULT_INCLINE      (0.0)
+#define DEFAULT_INCLINE_MIN    (-88.0)
+#define DEFAULT_INCLINE_MAX    (88.0)
 
 
 enum {
@@ -54,7 +54,7 @@ enum {
 
 
 
-#define DEFAULT_BACKPACK_SIZE	(15)
+#define DEFAULT_BACKPACK_SIZE  (15)
 
 class ItemManager;
 struct item_t;
@@ -128,14 +128,14 @@ private:
   GameMenu mCharacterSheet;
   bool mShowCharacterSheet;
 
-  v3d_t mPos;			// where the 'feet' are
+  v3d_t mPos;      // where the 'feet' are
 
-  v3d_t mHeadOffset;			// where's the noggin relative to the phys position
-  v3d_t mFinalHeadOffset;		// where is it after all is considered
-  HeadBobble mHeadBobble;		// something to consider
+  v3d_t mHeadOffset;      // where's the noggin relative to the phys position
+  v3d_t mFinalHeadOffset;    // where is it after all is considered
+  HeadBobble mHeadBobble;    // something to consider
 
-  v3d_t mTarget;			// where the camera is pointed
-  v3d_t up;				// the 'up' vector for the camera
+  v3d_t mTarget;      // where the camera is pointed
+  v3d_t up;        // the 'up' vector for the camera
   v3d_t mLookVector;
 
   bool mIsBlockTargeted;
@@ -169,10 +169,10 @@ private:
 
   GLfloat mVisionTint[4];
 
-  double mFacing;			// the angle on the x-z plane off the positive x-axis
-  double mIncline;		// the angle on the vertical plane off the x-z plane intersection...
-  double mInclineMin;		// upper constraint for incline angle
-  double mInclineMax;		// lower constraint for incline angle
+  double mFacing;      // the angle on the x-z plane off the positive x-axis
+  double mIncline;    // the angle on the vertical plane off the x-z plane intersection...
+  double mInclineMin;    // upper constraint for incline angle
+  double mInclineMax;    // lower constraint for incline angle
 
   bool mPlacedBlock;
 };

@@ -19,7 +19,7 @@
 #include "dungeon/MoleculeDungeon.h"
 
 
-#define ROGUE_MAP_SIDE			128
+#define ROGUE_MAP_SIDE      128
 
 
 class RogueMapViewer {

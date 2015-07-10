@@ -19,12 +19,11 @@
 
 #include "feature/FeatureGenerator.h"
 
+
 enum {
   LOAD_SUCCESSFUL,
   LOAD_UNSUCCESSFUL
-
 };
-
 
 
 class player_c;
@@ -36,17 +35,12 @@ class ItemManager;
 class GameInput;
 
 
-
-
-
 struct GameSaveData {
   bool loadSucceeded;
   v3d_t physicsPos;
   int locationType;
   int planetHandle;
 };
-
-
 
 
 class GameModel {

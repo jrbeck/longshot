@@ -1,7 +1,7 @@
 #include "Longshot.h"
 
 
-Longshot::Longshot() : 
+Longshot::Longshot() :
   mMainMenu(NULL),
   mGame(NULL),
   mRogueViewer(NULL)
@@ -90,7 +90,7 @@ void Longshot::reloadMenu(void) {
 
   mMainMenu->addText(v2d_v(0.6, 0.0), v2d_v(0.2, 0.2), fontSize, "longshot", TEXT_JUSTIFICATION_RIGHT, color, NULL);
 
-//	GLfloat color2[4] = { 0.2f, 0.0f, 0.0f, 1.0f };
+//  GLfloat color2[4] = { 0.2f, 0.0f, 0.0f, 1.0f };
   GLfloat color2[4] = { 0.8f, 0.4f, 0.0f, 1.0f };
   GLfloat bgColor2[4] = { 0.55f, 0.075f, 0.075f, 1.0f };
 
@@ -99,14 +99,14 @@ void Longshot::reloadMenu(void) {
 
   mMainMenu->addButton(v2d_v(0.5, 0.35), v2d_v(0.3, 0.1), fontSize, "new game", TEXT_JUSTIFICATION_RIGHT, PROGRAM_MODE_NEW_GAME, color2, bgColor2);
   mMainMenu->addButton(v2d_v(0.4, 0.5), v2d_v(0.4, 0.1), fontSize, "load game", TEXT_JUSTIFICATION_RIGHT, PROGRAM_MODE_LOAD_GAME, color2, bgColor2);
-//	mMainMenu->addButton(v2d_v(0.3, 0.5), v2d_v(0.5, 0.1), fontSize, "rogue viz", TEXT_JUSTIFICATION_RIGHT, PROGRAM_MODE_ROGUE, color2, bgColor2);
+//  mMainMenu->addButton(v2d_v(0.3, 0.5), v2d_v(0.5, 0.1), fontSize, "rogue viz", TEXT_JUSTIFICATION_RIGHT, PROGRAM_MODE_ROGUE, color2, bgColor2);
   mMainMenu->addButton(v2d_v(0.4, 0.65), v2d_v(0.4, 0.1), fontSize, "fullscreen", TEXT_JUSTIFICATION_RIGHT, PROGRAM_MODE_TOGGLE_FULLSCREEN, color2, bgColor2);
   mMainMenu->addButton(v2d_v(0.6, 0.8), v2d_v(0.2, 0.1), fontSize, "quit", TEXT_JUSTIFICATION_RIGHT, PROGRAM_QUIT, color2, bgColor2);
 }
 
 
 
-// main program loop * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+// main program loop * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 int Longshot::loop() {
 
   printf("block_t size: %d\n", sizeof (block_t));

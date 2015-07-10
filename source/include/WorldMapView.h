@@ -43,7 +43,7 @@ public:
 
   int columnIndex;
   v2di_t indexCoords;
-  //	v3di_t worldCoords;
+  //  v3di_t worldCoords;
   int numChunks;
 
   GLuint mDisplayListHandle;

@@ -98,7 +98,7 @@ void BlockTypeDataContainer::loadBlockTypeData() {
   mData[BLOCK_TYPE_BLOOD].viscosity = 12.0;
 
 
-  //	BLOCK_TYPE_GLASS
+  //  BLOCK_TYPE_GLASS
   mData[BLOCK_TYPE_GLASS].solidityType = BLOCK_SOLIDITY_TYPE_GLASS;
   mData[BLOCK_TYPE_GLASS].lightAttenuation = 0;
 

@@ -144,7 +144,7 @@ int GameMenu::GameMenuhoice(bool waitForInput) {
 
   SDL_Event sdlevent;
 
-//	setup_opengl ();
+//  setup_opengl ();
 
   int click = -1;
   // only wait if we're told
@@ -164,12 +164,12 @@ int GameMenu::GameMenuhoice(bool waitForInput) {
 
     // handle the mousebuttondown event
     case SDL_MOUSEBUTTONDOWN:
-//				handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+//        handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
       break;
 
     case SDL_MOUSEBUTTONUP:
       if (sdlevent.button.button == SDL_BUTTON_LEFT) {
-//				click = mouse_up(sdlevent.button.x / (double)SCREEN_W, ((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
+//        click = mouse_up(sdlevent.button.x / (double)SCREEN_W, ((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
         click = mouse_up((double)sdlevent.button.x / (double)SCREEN_W, (double)sdlevent.button.y / (double)SCREEN_H);
       }
 

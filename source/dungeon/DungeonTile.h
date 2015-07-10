@@ -16,64 +16,64 @@
 #define DEFAULT_TILE_FIELD_VALUE = -1;
 
 enum {
-	DUNGEON_TILE_WALL,
-	DUNGEON_TILE_FLOOR,
-	DUNGEON_TILE_WATER
+  DUNGEON_TILE_WALL,
+  DUNGEON_TILE_FLOOR,
+  DUNGEON_TILE_WATER
 };
 
 enum {
-	DUNGEON_TILE_SPECIAL_NONE,
-	DUNGEON_TILE_SPECIAL_MONSTER_GENERATOR
+  DUNGEON_TILE_SPECIAL_NONE,
+  DUNGEON_TILE_SPECIAL_MONSTER_GENERATOR
 };
 
 
 struct DungeonTile {
-	DungeonTile() :
-		special( DUNGEON_TILE_SPECIAL_NONE ) {}
+  DungeonTile() :
+    special( DUNGEON_TILE_SPECIAL_NONE ) {}
 
-	int type;
-	int id;
-	int floor;
-	int ceiling;
-	int special;
+  int type;
+  int id;
+  int floor;
+  int ceiling;
+  int special;
 };
 
 
 class SelectiveDungeonTile {
 public:
-	SelectiveDungeonTile();
-	~SelectiveDungeonTile();
+  SelectiveDungeonTile();
+  ~SelectiveDungeonTile();
 
-	int* getType();
-	void setType( int type);
-	void unsetType();
+  int* getType();
+  void setType( int type);
+  void unsetType();
 
-	int* getId();
-	void setId( int id );
-	void unsetId();
+  int* getId();
+  void setId( int id );
+  void unsetId();
 
-	int* getFloor();
-	void setFloor( int floor );
-	void unsetFloor();
+  int* getFloor();
+  void setFloor( int floor );
+  void unsetFloor();
 
-	int* getCeiling();
-	void setCeiling( int ceiling );
-	void unsetCeiling();
+  int* getCeiling();
+  void setCeiling( int ceiling );
+  void unsetCeiling();
 
-	int* getSpecial();
-	void setSpecial( int special );
-	void unsetSpecial();
+  int* getSpecial();
+  void setSpecial( int special );
+  void unsetSpecial();
 
-	void setFromDungeonTile( const DungeonTile& tile );
-	DungeonTile getDungeonTile() const;
-	void updateDungeonTile( DungeonTile& otherTile ) const;
+  void setFromDungeonTile( const DungeonTile& tile );
+  DungeonTile getDungeonTile() const;
+  void updateDungeonTile( DungeonTile& otherTile ) const;
 
 private:
-	DungeonTile dungeonTile;
+  DungeonTile dungeonTile;
 
-	bool isTypeSet;
-	bool isIdSet;
-	bool isFloorSet;
-	bool isCeilingSet;
-	bool isSpecialSet;
+  bool isTypeSet;
+  bool isIdSet;
+  bool isFloorSet;
+  bool isCeilingSet;
+  bool isSpecialSet;
 };

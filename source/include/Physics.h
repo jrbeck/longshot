@@ -21,23 +21,23 @@
 
 
 
-//#define PHYSICS_TIME_GRANULARITY	(0.03333333)	// 30 Hz
-//#define PHYSICS_TIME_GRANULARITY	(0.01666667)	// 60 Hz
-#define PHYSICS_TIME_GRANULARITY	(0.01111111)	// 90 Hz
-//#define PHYSICS_TIME_GRANULARITY	(0.00833333)	// 120 Hz
+//#define PHYSICS_TIME_GRANULARITY  (0.03333333)  // 30 Hz
+//#define PHYSICS_TIME_GRANULARITY  (0.01666667)  // 60 Hz
+#define PHYSICS_TIME_GRANULARITY  (0.01111111)  // 90 Hz
+//#define PHYSICS_TIME_GRANULARITY  (0.00833333)  // 120 Hz
 
 
 // physics defaults
-//#define DEFAULT_GRAVITY			(-9.80665)
-#define DEFAULT_GRAVITY			(-15.0)
-#define DEFAULT_FRICTION		(1.0)
-#define DEFAULT_AIR_RESISTANCE	(0.01)
-#define DEFAULT_AIR_WALK		(2.0)
-#define DEFAULT_WALK_ACC		(50.0)
-#define DEFAULT_JUMP_ACC		(250.0)
-#define DEFAULT_MASS			(80.0)
+//#define DEFAULT_GRAVITY      (-9.80665)
+#define DEFAULT_GRAVITY      (-15.0)
+#define DEFAULT_FRICTION    (1.0)
+#define DEFAULT_AIR_RESISTANCE  (0.01)
+#define DEFAULT_AIR_WALK    (2.0)
+#define DEFAULT_WALK_ACC    (50.0)
+#define DEFAULT_JUMP_ACC    (250.0)
+#define DEFAULT_MASS      (80.0)
 
-#define EPSILON					(0.0001)
+#define EPSILON          (0.0001)
 
 
 
@@ -123,9 +123,9 @@ enum {
 };
 
 
-#define MAILBOX_PHYSICS			  (-1)
-#define MAILBOX_ITEMMANAGER		(-2)
-#define MAILBOX_AIMANAGER		  (-3)
+#define MAILBOX_PHYSICS        (-1)
+#define MAILBOX_ITEMMANAGER    (-2)
+#define MAILBOX_AIMANAGER      (-3)
 
 
 typedef struct {

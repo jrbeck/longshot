@@ -64,12 +64,12 @@ int InactiveColumnManager::loadFromInactiveColumns(int x, int z, WorldColumn &wo
   // try to find the column in the column manager
   ColumnDatum *column = readColumn(x, z);
   if (column == NULL) {
-    //		printf("not loading: %d, %d\n", x, z);
+    //    printf("not loading: %d, %d\n", x, z);
     return 1;
   }
 
   worldColumn.mWorldIndex = column->worldIndex;
-  //	v3di_print("col", column->worldIndex);
+  //  v3di_print("col", column->worldIndex);
   worldColumn.mWorldPosition = column->worldPosition;
 
   // load chunks
@@ -99,8 +99,8 @@ void InactiveColumnManager::loadChunkDatum(const ChunkDatum &chunk, WorldColumn 
   worldColumn.mWorldChunks[chunkIndex]->mNumWaterBlocks = chunk.numWaterBlocks;
 
   // otherwise it will update as we call setBlockByIndex()
-  //	mWorldChunks[chunkIndex]->mNumBlocks = 0;
-  //	mWorldChunks[chunkIndex]->mNumWaterBlocks = 0;
+  //  mWorldChunks[chunkIndex]->mNumBlocks = 0;
+  //  mWorldChunks[chunkIndex]->mNumWaterBlocks = 0;
 
   // set the data
   for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; i++) {
@@ -148,7 +148,7 @@ void InactiveColumnManager::clear(void) {
   for (size_t columnIndex = 0; columnIndex < mColumnData.size(); columnIndex++) {
     if (mColumnData[columnIndex] != NULL) {
 
-      //			printf ("#");
+      //      printf ("#");
       clearColumn(columnIndex);
 
       delete mColumnData[columnIndex];
@@ -159,7 +159,7 @@ void InactiveColumnManager::clear(void) {
     }
   }
 
-  //	printf ("a");
+  //  printf ("a");
 
   mColumnData.clear();
 }
@@ -190,7 +190,7 @@ ColumnDatum *InactiveColumnManager::getColumnDatumForSaving(v3di_t worldIndex) {
     return mColumnData[columnIndex];
   }
 
-  //	printf ("NEW ONE %d: (%d, %d)\n", mColumnData.size (), worldIndex.x, worldIndex.z);
+  //  printf ("NEW ONE %d: (%d, %d)\n", mColumnData.size (), worldIndex.x, worldIndex.z);
 
   // otherwise, we get to make a new one
   ColumnDatum *column = new ColumnDatum;

@@ -91,7 +91,7 @@ void game_c::loadPlanetMenu() {
     mMenu = NULL;
   }
   mMenu = new GameMenu();
-//	mMenu->setFont(gDefaultFontTextureHandle);
+//  mMenu->setFont(gDefaultFontTextureHandle);
 
   GLfloat color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
   GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.5f };
@@ -99,7 +99,7 @@ void game_c::loadPlanetMenu() {
 
   mMenu->addButton(v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
   mMenu->addButton(v2d_v (0.80, 0.3), v2d_v (0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
-  
+
   // TEMP: these are just for testing
   mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "ship", TEXT_JUSTIFICATION_CENTER, GAMEMENU_SHIP, color, bgColor);
 }
@@ -111,7 +111,7 @@ void game_c::loadShipMenu() {
     mMenu = NULL;
   }
   mMenu = new GameMenu();
-//	mMenu->setFont(gDefaultFontTextureHandle);
+//  mMenu->setFont(gDefaultFontTextureHandle);
 
   GLfloat color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
   GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.5f };
@@ -126,9 +126,9 @@ void game_c::loadShipMenu() {
   else {
     sprintf(mPlanetNameString, "orbiting planet: NULL");
   }
-  mMenu->addText(v2d_v(0.35, 0.05), v2d_v(0.3, 0.1), fontSize, mPlanetNameString,	TEXT_JUSTIFICATION_CENTER, color, bgColor);
+  mMenu->addText(v2d_v(0.35, 0.05), v2d_v(0.3, 0.1), fontSize, mPlanetNameString,  TEXT_JUSTIFICATION_CENTER, color, bgColor);
 
-  
+
   // TEMP: these are just for testing
   mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "planet map", TEXT_JUSTIFICATION_CENTER, GAMEMENU_PLANET_MAP, color, bgColor);
   mMenu->addButton(v2d_v(0.0, 0.30), v2d_v(0.2, 0.1), fontSize, "galaxy map", TEXT_JUSTIFICATION_CENTER, GAMEMENU_GALAXY_MAP, color, bgColor);
@@ -144,7 +144,7 @@ void game_c::setup_opengl() {
   glViewport(0, 0, SCREEN_W, SCREEN_H);
 
   glEnable(GL_TEXTURE_2D);
-//	glEnable (GL_BLEND);
+//  glEnable (GL_BLEND);
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
   glClearDepth(1.0f);
@@ -153,16 +153,16 @@ void game_c::setup_opengl() {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_CULL_FACE);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-//	glColorMaterial (GL_FRONT_AND_BACK, GL_EMISSION);
+//  glColorMaterial (GL_FRONT_AND_BACK, GL_EMISSION);
   glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-//	glEnable (GL_COLOR_MATERIAL);
+//  glEnable (GL_COLOR_MATERIAL);
 
   // FOG
   glFogi(GL_FOG_MODE, GL_LINEAR);
-//	glFogfv (GL_FOG_COLOR, color[skyColor]);			// Set Fog Color
+//  glFogfv (GL_FOG_COLOR, color[skyColor]);      // Set Fog Color
   glFogf(GL_FOG_DENSITY, 0.05f);
   glHint(GL_FOG_HINT, GL_DONT_CARE);
   glFogf(GL_FOG_START, 100.0f);
@@ -210,7 +210,7 @@ int game_c::enter_game_mode(bool createNewWorld) {
 
   mAssetManager.mSoundSystem.initialize();
   mAssetManager.mSoundSystem.loadSound("cow");
-//	mAssetManager.mSoundSystem.playSoundByHandle (SOUND_AMBIENT, 64);
+//  mAssetManager.mSoundSystem.playSoundByHandle (SOUND_AMBIENT, 64);
 
   gameLoop();
 
@@ -355,7 +355,7 @@ void game_c::gameLoop() {
     }
 
     // rescue single processor machines
-//		SDL_Delay(1);
+//    SDL_Delay(1);
   }
 
   printf("game_c::gameLoop() - done\n");
@@ -528,7 +528,7 @@ int game_c::draw() {
   mGameWindow->swapBuffers();
 
   // don't wanna just leave that sitting there
-//	glFlush ();
+//  glFlush ();
 
   return 0; //blocks_drawn;
 }
@@ -551,7 +551,7 @@ void game_c::deleteAllFilesInFolder(LPWSTR folderPath) {
 
     if (!(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
       numFilesDeleted++;
-//			wprintf (TEXT ("deleting: %s\n"), fullName);
+//      wprintf (TEXT ("deleting: %s\n"), fullName);
       DeleteFile(fullName);
     }
   } while (FindNextFile(hp, &info));

@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <omp.h>
+// #include <omp.h>
 #include <sdl2/SDL_opengl.h>
 
 #include "Location.h"
@@ -25,7 +25,7 @@
 #include "LoadScreen.h"
 
 
-#define NUM_PRELOADED_COLUMNS	100
+#define NUM_PRELOADED_COLUMNS  100
 
 
 class World : public Location {

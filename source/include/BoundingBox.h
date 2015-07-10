@@ -58,7 +58,8 @@ public:
   v3d_t mFarCorner;
 
 private:
-  static enum {
+  // is this an ok place for this?
+  enum {
     TEST_LESS_THAN,
     TEST_INSIDE,
     TEST_GREATER_THAN

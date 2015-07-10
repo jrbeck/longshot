@@ -2,7 +2,7 @@
 // * Location
 // *
 // * desc: interface for game locations e.g.
-// * 	planets, space stations, ships...
+// *   planets, space stations, ships...
 // *
 // *
 // *

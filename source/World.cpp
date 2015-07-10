@@ -249,7 +249,7 @@ int World::loadSurroundingColumns(v3d_t pos) {
       if (!mWorldMap->isColumnLoaded(regionIndex.x, regionIndex.z)) {
         numColumnsLoaded += loadColumn(regionIndex.x, regionIndex.z, true);
 
-//				v3di_print("loaded", regionIndex);
+//        v3di_print("loaded", regionIndex);
 
         if (++numColumnsLoaded > 1) {
           return numColumnsLoaded;
@@ -289,7 +289,7 @@ int World::loadColumn(int xIndex, int zIndex, bool doOutcroppings) {
 
   // try to load from the inactive columns
   if (mWorldMap->mInactiveColumnManager.loadFromInactiveColumns(xIndex, zIndex, mWorldMap->mColumns[columnIndex]) == 0) {
-//		printf ("loaded column from InactiveColumnManager\n");
+//    printf ("loaded column from InactiveColumnManager\n");
 
     numBlocks = 0;
   }
@@ -418,7 +418,7 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
       }
 
       if (worldY < WATER_LEVEL) {  // deal with the water
-//				if (worldY < -20) worldY = -20;
+//        if (worldY < -20) worldY = -20;
         for (worldPosition.y = worldY; worldPosition.y < WATER_LEVEL; worldPosition.y++) {
           // this is where the actual block is figured out
           // this will generate the ground block and all the water above
@@ -468,7 +468,7 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
   int lowest = wc.getLowestBlockHeight();
 
   // fill in the underground
-/*	for (relativePosition.z = 0; relativePosition.z < DEFAULT_REGION_SIDE; relativePosition.z++) {
+/*  for (relativePosition.z = 0; relativePosition.z < DEFAULT_REGION_SIDE; relativePosition.z++) {
     for (relativePosition.x = 0; relativePosition.x < DEFAULT_REGION_SIDE; relativePosition.x++) {
       v3di_t worldPosition;
       worldPosition.x = worldX + relativePosition.x;
@@ -479,14 +479,14 @@ int World::loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *height
 
       for (worldPosition.y = lowest; worldPosition.y < terrainHeight; worldPosition.y++) {
         block_t block = mPeriodics.generateBlockAtWorldPosition (worldPosition);
-        
+
         wc.setBlockAtWorldPosition (worldPosition, block, mPeriodics);
       }
 
     }
   }*/
 
-//	#pragma omp parallel for
+//  #pragma omp parallel for
   for (int rz = 0; rz < WORLD_CHUNK_SIDE; rz++) {
     for (int rx = 0; rx < WORLD_CHUNK_SIDE; rx++) {
       v3di_t worldPosition;
@@ -528,9 +528,9 @@ void World::applyOverdrawBlocks(WorldColumn& wc) {
 }
 
 void World::growTree(v3di_t worldPosition, int floorBlockType, int numWaterInColumn) {
-//	if (r_numi (0, 10) >= 5) {
-//		return;
-//	}
+//  if (r_numi (0, 10) >= 5) {
+//    return;
+//  }
 
 
   double i = static_cast<double>(worldPosition.x);
@@ -550,7 +550,7 @@ void World::growTree(v3di_t worldPosition, int floorBlockType, int numWaterInCol
   {
     if (numWaterInColumn > 3) {
       growPalmTree(worldPosition);
-      
+
     }
     else {
       growCactusTree(worldPosition);
@@ -568,14 +568,14 @@ void World::growTree(v3di_t worldPosition, int floorBlockType, int numWaterInCol
     val2 < 0.6)
   {
     growRandomTree(worldPosition);
-//		growBlockTree(worldPosition);
+//    growBlockTree(worldPosition);
   }
 
 
 // poorly implemented cypress-like trees (dome generation)
 /*
   v3di_t leafPosition;
-//	block.type = BLOCK_TYPE_LEAVES;
+//  block.type = BLOCK_TYPE_LEAVES;
 
   double r = r_num (0.0, 1.0);
   if (r < 0.5) {
@@ -680,7 +680,7 @@ void World::growBlockTree (v3di_t position) {
 
 
 int allowable[] = {
-//	BLOCK_TYPE_DIRT,
+//  BLOCK_TYPE_DIRT,
   BLOCK_TYPE_DIRT_GRASS,
   BLOCK_TYPE_GRASS,
   BLOCK_TYPE_STONE_GRASS,
@@ -758,7 +758,7 @@ void World::growRandomTree(v3di_t position) {
   top.x = position.x;
   top.z = position.z;
   double bottom = position.y - 1.0;
-//		getTerrainHeight (static_cast<int>(floor (top.x)), static_cast<int>(floor (top.z))) - 4.0;
+//    getTerrainHeight (static_cast<int>(floor (top.x)), static_cast<int>(floor (top.z))) - 4.0;
 
   v3d_t pos;
 
@@ -769,7 +769,7 @@ void World::growRandomTree(v3di_t position) {
   double sphereRadiusStart = 1.5;
   double sphereRadiusEnd = 1.0;
   double sphereRadius;
-    
+
 
   double radius = r_num(1.0, 2.0);
   double totalRotation = r_num(2.0, 4.0) * 1.5;
@@ -829,7 +829,7 @@ void World::growSpiralTree (v3di_t position) {
   double sphereRadiusStart = 1.5;
   double sphereRadiusEnd = 1.0;
   double sphereRadius;
-    
+
 
   double radius = r_num (1.0, 2.0);
   double totalRotation = r_num (2.0, 4.0) * 1.5;
@@ -874,9 +874,9 @@ void World::growCactusTree (v3di_t position) {
     position.y++;
     mWorldMap->setBlock (position, block);
 
-//		if (position.y & 1) {
+//    if (position.y & 1) {
 //
-//		}
+//    }
 
   }
 }

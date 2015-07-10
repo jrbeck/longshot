@@ -16,34 +16,34 @@
 
 class Sprite {
 public:
-	Sprite() { }
-	~Sprite() { }
+  Sprite() { }
+  ~Sprite() { }
 
-	GLfloat mVert1[2];
-	GLfloat mVert2[2];
-	GLfloat mVert3[2];
-	GLfloat mVert4[2];
+  GLfloat mVert1[2];
+  GLfloat mVert2[2];
+  GLfloat mVert3[2];
+  GLfloat mVert4[2];
 
-	TextureRegion *mTextureRegion;
+  TextureRegion *mTextureRegion;
 };
 
 
 
 class SpriteBatcher {
 public:
-	Sprite *mSprites;
-	size_t mMaxSprites;
-	size_t mNumSprites;
+  Sprite *mSprites;
+  size_t mMaxSprites;
+  size_t mNumSprites;
 
-	SpriteBatcher(size_t maxSprites);
-	~SpriteBatcher();
+  SpriteBatcher(size_t maxSprites);
+  ~SpriteBatcher();
 
-	void beginBatch(Texture *texture);
-	void endBatch();
+  void beginBatch(Texture *texture);
+  void endBatch();
 
-	void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, TextureRegion *textureRegion);
-	// this expects an angle in degrees
-	void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle, TextureRegion *textureRegion);
+  void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, TextureRegion *textureRegion);
+  // this expects an angle in degrees
+  void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle, TextureRegion *textureRegion);
 };
 
 

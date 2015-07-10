@@ -11,9 +11,15 @@
 #pragma once
 
 #include <string>
-#include <Windows.h>
 
-#include <sdl2/SDL_opengl.h>
+#ifdef _WIN32
+  #include <Windows.h>
+#else
+  typedef unsigned char BYTE;
+  typedef unsigned int UINT;
+#endif
+
+#include <SDL2/SDL_opengl.h>
 
 #include "GL/glut.h"
 
@@ -22,53 +28,53 @@ using namespace std;
 
 
 enum {
-	FONT_INDEX_A,
-	FONT_INDEX_ZERO = 26,
-	FONT_INDEX_PERIOD = 36,
-	FONT_INDEX_DASH,
-	FONT_INDEX_COLON,
-	FONT_INDEX_BANG,
-	FONT_INDEX_QUESTION,
-	FONT_INDEX_PAREN_OPEN,
-	FONT_INDEX_PAREN_CLOSE,
-	FONT_INDEX_APOSTROPHE,
-	FONT_INDEX_COMMA,
-	FONT_INDEX_FORWARD_SLASH,
-	FONT_INDEX_PERCENT,
-	FONT_INDEX_INVALID = 63
+  FONT_INDEX_A,
+  FONT_INDEX_ZERO = 26,
+  FONT_INDEX_PERIOD = 36,
+  FONT_INDEX_DASH,
+  FONT_INDEX_COLON,
+  FONT_INDEX_BANG,
+  FONT_INDEX_QUESTION,
+  FONT_INDEX_PAREN_OPEN,
+  FONT_INDEX_PAREN_CLOSE,
+  FONT_INDEX_APOSTROPHE,
+  FONT_INDEX_COMMA,
+  FONT_INDEX_FORWARD_SLASH,
+  FONT_INDEX_PERCENT,
+  FONT_INDEX_INVALID = 63
 };
 
 
 
 class GlBitmapFont {
 public:
-	GlBitmapFont ();
-	~GlBitmapFont ();
+  GlBitmapFont ();
+  ~GlBitmapFont ();
 
-	int setupFont(int glHandle, int bitmapSideLength, int charWidth, int charHeight);
+  int setupFont(int glHandle, int bitmapSideLength, int charWidth, int charHeight);
 
-	GLfloat getStringWidth (const string &s) const;
-	void drawString (const GLfloat topLeft[2], const GLfloat charDimensions[2], const string &s, const GLfloat color[4]) const;
+  GLfloat getStringWidth (const string &s) const;
+  void drawString (const GLfloat topLeft[2], const GLfloat charDimensions[2], const string &s, const GLfloat color[4]) const;
 
 private:
 
-	void drawLetter (const GLfloat topLeft[2], const GLfloat bottomRight[2], const int charIndex, const GLfloat *color) const;
+  void drawLetter (const GLfloat topLeft[2], const GLfloat bottomRight[2], const int charIndex, const GLfloat *color) const;
 
-	void enterGlMode (void) const;
-	void exitGlMode (void) const;
+  void enterGlMode (void) const;
+  void exitGlMode (void) const;
 
-	// members the user must set
-	int mCharWidth;						// the width of an individual char cell in the image
-	int mCharHeight;					// the height of an individual char cell in the image
-	int mBitmapSideLength;				// the side (both) length for the bitmap
+  // members the user must set
+  int mCharWidth;            // the width of an individual char cell in the image
+  int mCharHeight;          // the height of an individual char cell in the image
+  int mBitmapSideLength;        // the side (both) length for the bitmap
 
-	int mScreenW;						// the width of the screen
-	int mScreenH;						// the height of the screen
+  int mScreenW;            // the width of the screen
+  int mScreenH;            // the height of the screen
 
-	// derived members
-	int mCharsPerLine;					// the number of characters that fit in one line
+  // derived members
+  int mCharsPerLine;          // the number of characters that fit in one line
 
-	GLuint mTextureHandle;				// the openGL handle for the font texture
+  GLuint mTextureHandle;        // the openGL handle for the font texture
 
-	GLfloat mTextureMultiplier[2];		// these get the coords fo the individual chars
+  GLfloat mTextureMultiplier[2];    // these get the coords fo the individual chars
 };

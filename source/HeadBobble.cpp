@@ -28,14 +28,14 @@ void HeadBobble::update(int action, double time) {
     mAnimationTime += MY_2PI;
   }
 
-  //	printf ("anim time: %10f ... ", mAnimationTime);
+  //  printf ("anim time: %10f ... ", mAnimationTime);
 
 
   switch (action) {
   default:
   case HEADBOB_ACTION_STAND:
 
-    //			printf ("standing\n");
+    //      printf ("standing\n");
 
     if (mAnimationTime < 0.1 ||
       MY_2PI - mAnimationTime < 0.1)
@@ -53,7 +53,7 @@ void HeadBobble::update(int action, double time) {
     break;
 
   case HEADBOB_ACTION_WALK_FORWARD:
-    //			printf ("walking\n");
+    //      printf ("walking\n");
 
     mAnimationTime += deltaTime * 8.0;
 

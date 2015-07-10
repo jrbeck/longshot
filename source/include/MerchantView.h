@@ -19,19 +19,19 @@
 
 
 enum {
-	MERCHANT_MODE_SELL,
-	MERCHANT_MODE_BUY
+  MERCHANT_MODE_SELL,
+  MERCHANT_MODE_BUY
 };
 
 enum {
-	MERCHANT_BUTTON_END_TRANSACTION = 1,
-	MERCHANT_BUTTON_SELL_MODE,
-	MERCHANT_BUTTON_BUY_MODE,
+  MERCHANT_BUTTON_END_TRANSACTION = 1,
+  MERCHANT_BUTTON_SELL_MODE,
+  MERCHANT_BUTTON_BUY_MODE,
 
-	MERCHANT_BUTTON_SELL,
-	MERCHANT_BUTTON_BUY,
+  MERCHANT_BUTTON_SELL,
+  MERCHANT_BUTTON_BUY,
 
-	MERCHANT_BUTTON_ITEM_BEGIN = 100
+  MERCHANT_BUTTON_ITEM_BEGIN = 100
 };
 
 
@@ -39,12 +39,12 @@ enum {
 // TODO: move this into it's own header/cpp files
 class Merchant {
 public:
-	void save(FILE *file);
-	void load(FILE *file);
+  void save(FILE *file);
+  void load(FILE *file);
 
-	vector<size_t> mInventoryList;
+  vector<size_t> mInventoryList;
 
-	size_t mCredits;
+  size_t mCredits;
 };
 
 
@@ -52,43 +52,43 @@ public:
 
 class MerchantView {
 public:
-	MerchantView();
-	~MerchantView();
+  MerchantView();
+  ~MerchantView();
 
 
-	// this begins the interaction with a merchant
-	void engageMerchant(player_c &player, ItemManager &itemManager);
+  // this begins the interaction with a merchant
+  void engageMerchant(player_c &player, ItemManager &itemManager);
 
-	void setupMerchant(Merchant &merchant, ItemManager &itemManager);
+  void setupMerchant(Merchant &merchant, ItemManager &itemManager);
 
-	int update(player_c &player, ItemManager &itemManager);
+  int update(player_c &player, ItemManager &itemManager);
 
-	void setupMenu(player_c &player, ItemManager &itemManager);
-	void setupSellMenu(player_c &player, ItemManager &itemManager);
-	void setupBuyMenu(Merchant &merchant, ItemManager &itemManager);
+  void setupMenu(player_c &player, ItemManager &itemManager);
+  void setupSellMenu(player_c &player, ItemManager &itemManager);
+  void setupBuyMenu(Merchant &merchant, ItemManager &itemManager);
 
-	void addSelectedItemInfo(ItemManager &itemManager);
-	void setupInventoryList(ItemManager &itemManager);
+  void addSelectedItemInfo(ItemManager &itemManager);
+  void setupInventoryList(ItemManager &itemManager);
 
 
-	void draw(void);
+  void draw(void);
 
 // MEMBERS * * * * * * * * * *
 
-	GameMenu *mMenu;
+  GameMenu *mMenu;
 
-	int mMode;
-	int mSelectedItem;
+  int mMode;
+  int mSelectedItem;
 
-	vector<size_t> tempList;
+  vector<size_t> tempList;
 
-	GLfloat colorWhite[4];
-	GLfloat colorBackground[4];
-	GLfloat colorSelection[4];
-	v2d_t fontSize;
+  GLfloat colorWhite[4];
+  GLfloat colorBackground[4];
+  GLfloat colorSelection[4];
+  v2d_t fontSize;
 
-	// TODO: this is for testing only
-	Merchant *mMerchant;
+  // TODO: this is for testing only
+  Merchant *mMerchant;
 };
 
 

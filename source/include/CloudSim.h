@@ -24,33 +24,33 @@
 
 class CloudSim {
 public:
-	CloudSim (void);
-	~CloudSim (void);
+  CloudSim (void);
+  ~CloudSim (void);
 
-	void clear(void);
-	void newClouds (v3d_t position);
+  void clear(void);
+  void newClouds (v3d_t position);
 
-	void redrawDisplayLists (v3d_t position);
+  void redrawDisplayLists (v3d_t position);
 
-	void update (GLfloat starAlpha);
+  void update (GLfloat starAlpha);
 
-	void drawForDisplayList (v3d_t position);
-	void draw (gl_camera_c &cam);
+  void drawForDisplayList (v3d_t position);
+  void draw (gl_camera_c &cam);
 
-	void drawCloudBlock (v3di_t position, GLfloat alpha);
+  void drawCloudBlock (v3di_t position, GLfloat alpha);
 
 private:
-	static const int SIDE_WIDTH = 64;
-	static const int BLOCK_SIZE = 32;
+  static const int SIDE_WIDTH = 64;
+  static const int BLOCK_SIZE = 32;
 
-	Terrain mTerrain;
-	PseudoRandom mPrng;
+  Terrain mTerrain;
+  PseudoRandom mPrng;
 
-	GLuint mCloudDisplayListHandle;
+  GLuint mCloudDisplayListHandle;
 
-	GLfloat mLightIntensities[4];
+  GLfloat mLightIntensities[4];
 
-	v3d_t mPosition;
+  v3d_t mPosition;
 };
 
 

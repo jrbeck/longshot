@@ -18,8 +18,8 @@
 #include "Planet.h"
 
 
-#define PLANET_MAP_SIDE			512
-#define MAP_MULTIPLIER			128
+#define PLANET_MAP_SIDE      512
+#define MAP_MULTIPLIER      128
 
 
 class PlanetMap {

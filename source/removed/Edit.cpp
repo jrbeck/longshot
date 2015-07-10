@@ -2,8 +2,8 @@
 
 edit_c::edit_c(void) {
   // initialize the terrain
-//	printf ("%6d: terrain\n", SDL_GetTicks ());
-//	ter.resize (DEFAULT_SIDE_UNIV);
+//  printf ("%6d: terrain\n", SDL_GetTicks ());
+//  ter.resize (DEFAULT_SIDE_UNIV);
 }
 
 
@@ -14,16 +14,16 @@ edit_c::~edit_c(void) {
 void edit_c::setup_opengl(void) {
   // set the clear color
   glClearColor(0.0f, 0.35f, .6f, 0.00f); // nice deep sky blue color
-//	glClearColor (0.2f, 0.2f, 0.2f, 0.0f);
-//	glClearColor (0.5f, 0.2f, 0.0f, 0.0f);	// orangey
+//  glClearColor (0.2f, 0.2f, 0.2f, 0.0f);
+//  glClearColor (0.5f, 0.2f, 0.0f, 0.0f);  // orangey
 
   // set up the viewport
   glViewport(0, 0, SCREEN_W, SCREEN_H);
 
   // enable various things
-  glEnable(GL_TEXTURE_2D);						// Enable 2D Texture Mapping
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE);				// Select The Type Of Blending
-  glShadeModel(GL_SMOOTH);						// Enables Smooth Color Shading
+  glEnable(GL_TEXTURE_2D);            // Enable 2D Texture Mapping
+//  glBlendFunc(GL_SRC_ALPHA, GL_ONE);        // Select The Type Of Blending
+  glShadeModel(GL_SMOOTH);            // Enables Smooth Color Shading
   glEnable(GL_DEPTH_TEST);
   glClearDepth(1.0f);
   glDepthFunc(GL_LEQUAL);
@@ -33,36 +33,36 @@ void edit_c::setup_opengl(void) {
 
   glEnable(GL_LIGHTING);
 
-//	glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
-//	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+//  glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+//  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
   glEnable(GL_COLOR_MATERIAL);
 
   // LIGHTING
-  GLfloat LightAmbient[] =	{ 0.5f, 0.2f, 0.0f, 1.0f };
-  GLfloat LightDiffuse[] =	{ 0.7f, 0.5f, 0.0f, 1.0f };
-  GLfloat LightPosition[] =	{ 0.0f, 100.0f, 0.0f, 1.0f };
+  GLfloat LightAmbient[] =  { 0.5f, 0.2f, 0.0f, 1.0f };
+  GLfloat LightDiffuse[] =  { 0.7f, 0.5f, 0.0f, 1.0f };
+  GLfloat LightPosition[] =  { 0.0f, 100.0f, 0.0f, 1.0f };
 
-  glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);		// Setup The Ambient Light
-  glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);		// Setup The Diffuse Light
-  glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);	// Position The Light
-  glEnable(GL_LIGHT1);								// Enable Light One
-//	glDisable (GL_LIGHT1);
+  glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);    // Setup The Ambient Light
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);    // Setup The Diffuse Light
+  glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);  // Position The Light
+  glEnable(GL_LIGHT1);                // Enable Light One
+//  glDisable (GL_LIGHT1);
 
   glDisable(GL_BLEND);
 
   // FOG
-  GLuint fogMode[] = { GL_EXP, GL_EXP2, GL_LINEAR };	// Storage For Three Types Of Fog
-  GLuint fogfilter = 2;								// Which Fog Mode To Use 
-//	GLfloat	fogColor[4] = {0.2f, 0.2f, 0.2f, 1.0f};		// Fog Color
-  GLfloat	fogColor[4] = {0.5f, 0.2f, 0.0f, 1.0f};		// Fog Color
+  GLuint fogMode[] = { GL_EXP, GL_EXP2, GL_LINEAR };  // Storage For Three Types Of Fog
+  GLuint fogfilter = 2;                // Which Fog Mode To Use
+//  GLfloat  fogColor[4] = {0.2f, 0.2f, 0.2f, 1.0f};    // Fog Color
+  GLfloat  fogColor[4] = {0.5f, 0.2f, 0.0f, 1.0f};    // Fog Color
 
-  glFogi(GL_FOG_MODE, fogMode[fogfilter]);			// Fog Mode
-  glFogfv(GL_FOG_COLOR, fogColor);					// Set Fog Color
-  glFogf(GL_FOG_DENSITY, 0.15f);						// How Dense Will The Fog Be
-  glHint(GL_FOG_HINT, GL_DONT_CARE);					// Fog Hint Value
-  glFogf(GL_FOG_START, 250.0f);						// Fog Start Depth
-  glFogf(GL_FOG_END, 300.0f);						// Fog End Depth
-  glDisable(GL_FOG);									// Enables GL_FOG
+  glFogi(GL_FOG_MODE, fogMode[fogfilter]);      // Fog Mode
+  glFogfv(GL_FOG_COLOR, fogColor);          // Set Fog Color
+  glFogf(GL_FOG_DENSITY, 0.15f);            // How Dense Will The Fog Be
+  glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+  glFogf(GL_FOG_START, 250.0f);            // Fog Start Depth
+  glFogf(GL_FOG_END, 300.0f);            // Fog End Depth
+  glDisable(GL_FOG);                  // Enables GL_FOG
 
   // go ahead and clear the buffer
   glClear(GL_COLOR_BUFFER_BIT);
@@ -95,13 +95,13 @@ int edit_c::enter_edit_mode (void) {
     gl_camera_c *cam = rts.gl_cam_setup ();
 
     // draw the octree
-//		blocks_drawn += oct->draw (*cam);
+//    blocks_drawn += oct->draw (*cam);
 
     // draw the terrain as mesh
     ter.draw ();
 
     // draw the trees
-//		forest.draw_block ();
+//    forest.draw_block ();
 
     // swap the back buffer to the front
     SDL_GL_SwapBuffers ();
@@ -211,11 +211,11 @@ int edit_c::handle_keystroke (void) {
   t2.normalize (0.0, 4.0);
 
   switch (sdlevent.key.keysym.sym) {
-    case SDLK_ESCAPE:	// quit
+    case SDLK_ESCAPE:  // quit
       return 1;
 
     case SDLK_t: // seed a new terrain
-/*			for (int j = 0; j < DEFAULT_SIDE_UNIV; j++) {
+/*      for (int j = 0; j < DEFAULT_SIDE_UNIV; j++) {
         for (int i = 0; i < DEFAULT_SIDE_UNIV; i++) {
           double u, v;
 
@@ -245,7 +245,7 @@ int edit_c::handle_keystroke (void) {
       ter.smooth ();
 
       // convert the the terrain to an octree
-//			oct->from_terrain (ter);
+//      oct->from_terrain (ter);
 
       break;
 
@@ -253,15 +253,15 @@ int edit_c::handle_keystroke (void) {
       ter.alt_smooth ();
 
       // convert the the terrain to an octree
-//			oct->from_terrain (ter);
+//      oct->from_terrain (ter);
 
       break;
 
-    case SDLK_p:		// pause
-//			paused = (paused + 1) % 2;
+    case SDLK_p:    // pause
+//      paused = (paused + 1) % 2;
       break;
 
-    case SDLK_r:		// generate a random number
+    case SDLK_r:    // generate a random number
       rand ();
       break;
 
@@ -276,7 +276,7 @@ int edit_c::handle_keystroke (void) {
 
 // deal with a key up event
 int edit_c::handle_keyup (void) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
         player->add_input_event (INPUT_TYPE_FORE_UP, 1.0);
@@ -294,7 +294,7 @@ int edit_c::handle_keyup (void) {
         player->add_input_event (INPUT_TYPE_RIGHT_UP, 1.0);
         break;
 
-      case SDLK_SPACE:	// jump
+      case SDLK_SPACE:  // jump
         player->add_input_event (INPUT_TYPE_JUMP_UP, 1.0);
         break;
 
@@ -328,7 +328,7 @@ void edit_c::handle_mouse_button_down (int button, v2d_t pos) {
 
 // deal with a mouse button up event
 void edit_c::handle_mouse_button_up (int button, v2d_t pos) {
-/*	if (*mode == MODE_PLAYER) {
+/*  if (*mode == MODE_PLAYER) {
     switch (button) {
       case SDL_BUTTON_RIGHT:
         player->add_input_event (INPUT_TYPE_ROCKET_UP, 1.0);
@@ -352,7 +352,7 @@ void edit_c::create_world_for_game (void) {
   ter.normalize (-25.0, 75.0);
 
   // create the octree
-//	oct->from_terrain (ter);
+//  oct->from_terrain (ter);
 }
 
 

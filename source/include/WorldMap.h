@@ -74,7 +74,7 @@ public:
   int fillSphere(const v3d_t& pos, double radius, int blockType, BYTE uniqueLighting);
   int clearSphere(const v3d_t& pos, double radius);
 
-//	void generateChunkContaining(v3di_t position);
+//  void generateChunkContaining(v3di_t position);
   void generateChunkContaining(WorldColumn& worldColumn, const v3di_t& position);
   bool columnHasFourNeighbors(int columnIndex);
 

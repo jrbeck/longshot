@@ -10,15 +10,21 @@
 
 #pragma once
 
-#include <Windows.h>
+#ifdef _WIN32
+  #include <Windows.h>
+#else
+  typedef unsigned char BYTE;
+  typedef unsigned int UINT;
+#endif
+
 #include "GL/glut.h"
 
 #include "v3d.h"
 
 
-#define WORLD_CHUNK_SIDE			    (16)
-#define WORLD_CHUNK_SIDE_SQUARED	(256)
-#define WORLD_CHUNK_SIDE_CUBED		(4096)
+#define WORLD_CHUNK_SIDE          (16)
+#define WORLD_CHUNK_SIDE_SQUARED  (256)
+#define WORLD_CHUNK_SIDE_CUBED    (4096)
 
 
 enum {
@@ -29,7 +35,7 @@ enum {
   LIGHT_LEVEL_NOT_SET
 };
 
-#define ONE_OVER_LIGHT_LEVEL_MAX		(1.0f/((float)LIGHT_LEVEL_MAX))
+#define ONE_OVER_LIGHT_LEVEL_MAX    (1.0f/((float)LIGHT_LEVEL_MAX))
 
 
 enum {
@@ -60,14 +66,14 @@ enum {
 
 // the various cube corners
 enum {
-  BOX_CORNER_LBB,		// left bottom back
-  BOX_CORNER_LBF,		// left bottom front
-  BOX_CORNER_LTB,		// left top back
-  BOX_CORNER_LTF,		// left top front
-  BOX_CORNER_RBB,		// right bottom back
-  BOX_CORNER_RBF,		// right bottom front
-  BOX_CORNER_RTB,		// right top back
-  BOX_CORNER_RTF,		// right top front
+  BOX_CORNER_LBB,    // left bottom back
+  BOX_CORNER_LBF,    // left bottom front
+  BOX_CORNER_LTB,    // left top back
+  BOX_CORNER_LTF,    // left top front
+  BOX_CORNER_RBB,    // right bottom back
+  BOX_CORNER_RBF,    // right bottom front
+  BOX_CORNER_RTB,    // right top back
+  BOX_CORNER_RTF,    // right top front
 
   NUM_BOX_CORNERS
 };
@@ -105,7 +111,7 @@ enum {
 };
 
 
-  
+
 enum {
   AITYPE_DUMMY,
   AITYPE_BALLOON,
