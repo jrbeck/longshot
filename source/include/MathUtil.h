@@ -21,6 +21,8 @@
 #define DEG2RAD(x) ((x)*DEG_2_RAD)
 #define RAD2DEG(x) ((x)*RAD_2_DEG)
 
+#define MACRO_MIN(x, y) ((x < y) ? (x) : (y))
+#define MACRO_MAX(x, y) ((x > y) ? (x) : (y))
 
 // prototypes * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 

@@ -11,6 +11,9 @@
 #ifndef RogueMap_h_
 #define RogueMap_h_
 
+#include <vector>
+#include <algorithm>
+
 #ifdef _WIN32
   #include <Windows.h>
 #else
@@ -20,11 +23,9 @@
 
 #include "GL/glut.h"
 
+#include "MathUtil.h"
 #include "v2d.h"
 #include "v3d.h"
-
-#include <vector>
-#include <algorithm>
 
 #define MAP_TILE_INVALID    -1
 #define MAP_TILE_WALL        0

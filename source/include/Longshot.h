@@ -13,9 +13,11 @@
 // longshot constants * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #define SCREEN_ASPECT_RATIO    ((double)SCREEN_W / (double)SCREEN_H)
 
-#include "game.h"
+#include "FileSystem.h"
+
+#include "Game.h"
 #include "GameMenu.h"
-#include "rogueviewer.h"
+#include "RogueViewer.h"
 
 #include "PseudoRandom.h"
 #include "GalaxyMap.h"

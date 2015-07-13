@@ -238,31 +238,31 @@ ColumnDatum *InactiveColumnManager::readColumn(int x, int z) {
 int InactiveColumnManager::saveToDisk(FILE *file) {
   // we'll need to know this!
   size_t numColumns = mColumnData.size();
-  fwrite(&numColumns, sizeof size_t, 1, file);
+  fwrite(&numColumns, sizeof (size_t), 1, file);
 
   size_t totalChunks = 0;
 
   for (size_t column = 0; column < numColumns; column++) {
     // write column header data
-    fwrite(&mColumnData[column]->worldIndex, sizeof v3di_t, 1, file);
-    fwrite(&mColumnData[column]->worldPosition, sizeof v3di_t, 1, file);
+    fwrite(&mColumnData[column]->worldIndex, sizeof (v3di_t), 1, file);
+    fwrite(&mColumnData[column]->worldPosition, sizeof (v3di_t), 1, file);
 
     // need a current count of the chunks
     size_t numChunks = mColumnData[column]->chunkData.size();
-    fwrite(&numChunks, sizeof size_t, 1, file);
+    fwrite(&numChunks, sizeof (size_t), 1, file);
 
     totalChunks += numChunks;
 
     for (size_t chunk = 0; chunk < numChunks; chunk++) {
       // write chunk header data
-      fwrite(&mColumnData[column]->chunkData[chunk]->worldIndex, sizeof v3di_t, 1, file);
-      fwrite(&mColumnData[column]->chunkData[chunk]->worldPosition, sizeof v3di_t, 1, file);
+      fwrite(&mColumnData[column]->chunkData[chunk]->worldIndex, sizeof (v3di_t), 1, file);
+      fwrite(&mColumnData[column]->chunkData[chunk]->worldPosition, sizeof (v3di_t), 1, file);
       fwrite(&mColumnData[column]->chunkData[chunk]->numBlocks, sizeof (int), 1, file);
       fwrite(&mColumnData[column]->chunkData[chunk]->numWaterBlocks, sizeof (int), 1, file);
 
       // now for the good stuff
       fwrite(mColumnData[column]->chunkData[chunk]->blockData,
-        sizeof BYTE, WORLD_CHUNK_SIDE_CUBED, file);
+        sizeof (BYTE), WORLD_CHUNK_SIDE_CUBED, file);
     }
   }
 
@@ -280,7 +280,7 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
   clear();
 
   size_t numColumns;
-  fread(&numColumns, sizeof size_t, 1, file);
+  fread(&numColumns, sizeof (size_t), 1, file);
 
   size_t totalChunks = 0;
 
@@ -290,11 +290,11 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
     ColumnDatum *columnDatum = new ColumnDatum;
 
     // read column header data
-    fread(&columnDatum->worldIndex, sizeof v3di_t, 1, file);
-    fread(&columnDatum->worldPosition, sizeof v3di_t, 1, file);
+    fread(&columnDatum->worldIndex, sizeof (v3di_t), 1, file);
+    fread(&columnDatum->worldPosition, sizeof (v3di_t), 1, file);
 
     size_t numChunks;
-    fread(&numChunks, sizeof size_t, 1, file);
+    fread(&numChunks, sizeof (size_t), 1, file);
 
     totalChunks += numChunks;
 
@@ -302,15 +302,15 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
       ChunkDatum *chunkDatum = new ChunkDatum;
 
       // read chunk header data
-      fread(&chunkDatum->worldIndex, sizeof v3di_t, 1, file);
-      fread(&chunkDatum->worldPosition, sizeof v3di_t, 1, file);
+      fread(&chunkDatum->worldIndex, sizeof (v3di_t), 1, file);
+      fread(&chunkDatum->worldPosition, sizeof (v3di_t), 1, file);
       fread(&chunkDatum->numBlocks, sizeof (int), 1, file);
       fread(&chunkDatum->numWaterBlocks, sizeof (int), 1, file);
 
       // now for the good stuff
       chunkDatum->blockData = new BYTE[WORLD_CHUNK_SIDE_CUBED];
       if (chunkDatum->blockData != NULL) {
-        fread(chunkDatum->blockData, sizeof BYTE, WORLD_CHUNK_SIDE_CUBED, file);
+        fread(chunkDatum->blockData, sizeof (BYTE), WORLD_CHUNK_SIDE_CUBED, file);
 
         columnDatum->chunkData.push_back(chunkDatum);
       }

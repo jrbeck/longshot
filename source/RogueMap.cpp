@@ -621,10 +621,10 @@ bool RogueMap::isOnMap (int i, int j) {
 
 
 void RogueMap::draw_room (v2di_t c, v2di_t d, int id) {
-  int l = min (c.x, d.x);
-  int r = max (c.x, d.x);
-  int t = min (c.y, d.y);
-  int b = max (c.y, d.y);
+  int l = MACRO_MIN(c.x, d.x);
+  int r = MACRO_MAX(c.x, d.x);
+  int t = MACRO_MIN(c.y, d.y);
+  int b = MACRO_MAX(c.y, d.y);
 
   map_tile_t tile;
   tile.type = MAP_TILE_FLOOR;

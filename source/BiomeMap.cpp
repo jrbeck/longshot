@@ -193,8 +193,8 @@ BiomeInfo BiomeMap::getBiomeInfo(int i, int j) const {
   double a = mTerrain1.getValueBilerp((double)i * iScale, (double)j * jScale);
   double b = mTerrain2.getValueBilerp((double)i * iScale, (double)j * jScale);
 
-  int aa = min(floor(a / mInterval1), mTypesW - 1);
-  int bb = min(floor(b / mInterval2), mTypesH - 1);
+  int aa = MACRO_MIN(floor(a / mInterval1), mTypesW - 1);
+  int bb = MACRO_MIN(floor(b / mInterval2), mTypesH - 1);
 
   double cutoff = 0.05;
 

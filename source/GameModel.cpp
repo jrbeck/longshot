@@ -142,7 +142,7 @@ int GameModel::saveGameData(void) {
   if (file == NULL) {
     return -1;
   }
-  fwrite(&gameSaveData, sizeof GameSaveData, 1, file);  // physics position
+  fwrite(&gameSaveData, sizeof (GameSaveData), 1, file);  // physics position
   fclose(file);
   return 0;
 }
@@ -155,7 +155,7 @@ GameSaveData GameModel::loadGameData() {
     gameSaveData.loadSucceeded = false;
     return gameSaveData;
   }
-  fread(&gameSaveData, sizeof GameSaveData, 1, file);
+  fread(&gameSaveData, sizeof (GameSaveData), 1, file);
   fclose(file);
   return gameSaveData;
 }

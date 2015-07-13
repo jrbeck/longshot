@@ -106,46 +106,46 @@ void Inventory::previousBackPackItem() {
 
 
 void Inventory::save(FILE* file) {
-  fwrite(&mCredits, sizeof size_t, 1, file);
+  fwrite(&mCredits, sizeof (size_t), 1, file);
 
   size_t backpackSize = mBackpack.size();
-  fwrite(&backpackSize, sizeof size_t, 1, file);
+  fwrite(&backpackSize, sizeof (size_t), 1, file);
   for (size_t i = 0; i < backpackSize; i++) {
-    fwrite(&mBackpack[i], sizeof size_t, 1, file);
+    fwrite(&mBackpack[i], sizeof (size_t), 1, file);
   }
 
-  fwrite(&mPrimaryItem, sizeof size_t, 1, file);
-  fwrite(&mSecondaryItem, sizeof size_t, 1, file);
-  fwrite(&mHeadGear, sizeof size_t, 1, file);
-  fwrite(&mFootGear, sizeof size_t, 1, file);
-  fwrite(&mLegGear, sizeof size_t, 1, file);
-  fwrite(&mTorsoGear, sizeof size_t, 1, file);
-  fwrite(&mAmmoCounter, sizeof size_t, NUM_AMMO_TYPES, file);
-  fwrite(&mSelectedBackpackItem, sizeof size_t, 1, file);
+  fwrite(&mPrimaryItem, sizeof (size_t), 1, file);
+  fwrite(&mSecondaryItem, sizeof (size_t), 1, file);
+  fwrite(&mHeadGear, sizeof (size_t), 1, file);
+  fwrite(&mFootGear, sizeof (size_t), 1, file);
+  fwrite(&mLegGear, sizeof (size_t), 1, file);
+  fwrite(&mTorsoGear, sizeof (size_t), 1, file);
+  fwrite(&mAmmoCounter, sizeof (size_t), NUM_AMMO_TYPES, file);
+  fwrite(&mSelectedBackpackItem, sizeof (size_t), 1, file);
 }
 
 
 void Inventory::load(FILE* file) {
-  fread(&mCredits, sizeof size_t, 1, file);
+  fread(&mCredits, sizeof (size_t), 1, file);
 
   mBackpack.clear();
 
   size_t backpackSize;
-  fread(&backpackSize, sizeof size_t, 1, file);
+  fread(&backpackSize, sizeof (size_t), 1, file);
   for (size_t i = 0; i < backpackSize; i++) {
     size_t backpackItemHandle;
-    fread(&backpackItemHandle, sizeof size_t, 1, file);
+    fread(&backpackItemHandle, sizeof (size_t), 1, file);
     mBackpack.push_back(backpackItemHandle);
   }
 
-  fread(&mPrimaryItem, sizeof size_t, 1, file);
-  fread(&mSecondaryItem, sizeof size_t, 1, file);
-  fread(&mHeadGear, sizeof size_t, 1, file);
-  fread(&mFootGear, sizeof size_t, 1, file);
-  fread(&mLegGear, sizeof size_t, 1, file);
-  fread(&mTorsoGear, sizeof size_t, 1, file);
-  fread(&mAmmoCounter, sizeof size_t, NUM_AMMO_TYPES, file);
-  fread(&mSelectedBackpackItem, sizeof size_t, 1, file);
+  fread(&mPrimaryItem, sizeof (size_t), 1, file);
+  fread(&mSecondaryItem, sizeof (size_t), 1, file);
+  fread(&mHeadGear, sizeof (size_t), 1, file);
+  fread(&mFootGear, sizeof (size_t), 1, file);
+  fread(&mLegGear, sizeof (size_t), 1, file);
+  fread(&mTorsoGear, sizeof (size_t), 1, file);
+  fread(&mAmmoCounter, sizeof (size_t), NUM_AMMO_TYPES, file);
+  fread(&mSelectedBackpackItem, sizeof (size_t), 1, file);
 }
 
 

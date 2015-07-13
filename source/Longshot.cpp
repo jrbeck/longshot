@@ -25,9 +25,7 @@ Longshot::Longshot() :
   // start off in the menu
   program_mode = PROGRAM_MODE_MENU;
 
-  // create the save directory if it doesn't exist
-  // WARNING: windows specific
-  CreateDirectory(TEXT("save"), NULL);
+  FileSystem::createFolder(SAVE_FOLDER);
 
   printf("%6d: exiting Longshot constructor\n", SDL_GetTicks());
   printf("-----------------------------------\n\n");

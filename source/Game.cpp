@@ -182,7 +182,7 @@ int game_c::enter_game_mode(bool createNewWorld) {
   // create a new game or load an old one
   if (createNewWorld) {
     printf("game_c::enter_game_mode(): new game\n");
-    deleteAllFilesInFolder(TEXT("save"));
+    FileSystem::deleteAllFilesInFolder(SAVE_FOLDER);
 
     mGameModel->currentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
     mGameModel->initializeSpaceShip(true);
@@ -532,32 +532,3 @@ int game_c::draw() {
 
   return 0; //blocks_drawn;
 }
-
-
-
-// WARNING: Windows specific
-void game_c::deleteAllFilesInFolder(LPWSTR folderPath) {
-  WIN32_FIND_DATA info;
-  HANDLE hp;
-
-  wchar_t findPath[260];
-  wsprintf(findPath, TEXT ("%s\\*.*"), folderPath);
-  hp = FindFirstFile(findPath, &info);
-  wchar_t fullName[260];
-  int numFilesDeleted = 0;
-
-  do {
-    wsprintf(fullName, TEXT ("%s\\%s"), folderPath, info.cFileName);
-
-    if (!(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-      numFilesDeleted++;
-//      wprintf (TEXT ("deleting: %s\n"), fullName);
-      DeleteFile(fullName);
-    }
-  } while (FindNextFile(hp, &info));
-
-  printf("deleted: %d files\n", numFilesDeleted);
-
-  FindClose(hp);
-}
-

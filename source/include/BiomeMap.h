@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "MathUtil.h"
 #include "PseudoRandom.h"
 #include "Terrain.h"
 #include "BlockTypeData.h"
@@ -51,7 +52,7 @@ enum {
 };
 
 
-BiomeType* gBiomeTypes;
+extern BiomeType gBiomeTypes[];
 
 
 class BiomeMap {

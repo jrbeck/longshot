@@ -30,6 +30,7 @@
 
 // the root/code/include directory
 #include "v2d.h"
+#include "FileSystem.h"
 
 #include "GameModel.h"
 
@@ -48,7 +49,9 @@
 // let's try to get rid of stuff below here...
 #include "RogueMapViewer.h"
 
-#define OUTPUT_FRAME_STATS    false
+#define SAVE_FOLDER "save"
+
+#define OUTPUT_FRAME_STATS (false)
 
 
 enum {
@@ -121,8 +124,4 @@ public:
   int handleMenuChoice(int menuChoice);
   bool update();
   int draw();
-
-
-  // currently Windows specific
-  void deleteAllFilesInFolder(LPWSTR folderPath);
 };

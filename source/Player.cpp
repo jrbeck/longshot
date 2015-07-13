@@ -61,7 +61,7 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle) {
   inventoryHandle = mInventory.getNextFreeBackpackSlot();
   if (inventoryHandle >= 0) {
     item_t blockItem;
-    memset(&blockItem, 0, sizeof item_t);
+    memset(&blockItem, 0, sizeof (item_t));
 
     blockItem.active = true;
     blockItem.type = ITEMTYPE_WORLD_BLOCK;
@@ -111,8 +111,8 @@ int player_c::soft_reset(v3d_t& startPosition) {
 
   mShowCharacterSheet = false;
 
-  memset(&mMeleeStatePrimary, 0, sizeof melee_weapon_state_t);
-  memset(&mMeleeStateSecondary, 0, sizeof melee_weapon_state_t);
+  memset(&mMeleeStatePrimary, 0, sizeof (melee_weapon_state_t));
+  memset(&mMeleeStateSecondary, 0, sizeof (melee_weapon_state_t));
 
   return 0;
 }

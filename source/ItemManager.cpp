@@ -681,7 +681,7 @@ void ItemManager::save(FILE *file) {
   // keep track of the last handle
   // WARNING: this could be intelligently reset between loads,
   // but it's range makes me hesitate as a non-issue
-  fwrite(&mLastHandle, sizeof size_t, 1, file);
+  fwrite(&mLastHandle, sizeof (size_t), 1, file);
 
   // get rid of the inactive items
   trimItemsList();
@@ -692,22 +692,22 @@ void ItemManager::save(FILE *file) {
   printf("ItemManager::save() -----\n");
   printf(" saving: %d items\n", numItems);
 
-  fwrite(&numItems, sizeof size_t, 1, file);
+  fwrite(&numItems, sizeof (size_t), 1, file);
   for(size_t i = 0; i < numItems; i++) {
     printf("%d: %s\n", i, mItems[i].name);
-    fwrite(&mItems[i], sizeof item_t, 1, file);
+    fwrite(&mItems[i], sizeof (item_t), 1, file);
   }
 }
 
 void ItemManager::load(FILE *file) {
-  fread(&mLastHandle, sizeof size_t, 1, file);
+  fread(&mLastHandle, sizeof (size_t), 1, file);
 
   mItems.clear();
   size_t numItems;
-  fread(&numItems, sizeof size_t, 1, file);
+  fread(&numItems, sizeof (size_t), 1, file);
   for(size_t i = 0; i < numItems; i++) {
     item_t item;
-    fread(&item, sizeof item_t, 1, file);
+    fread(&item, sizeof (item_t), 1, file);
     mItems.push_back(item);
   }
 }
