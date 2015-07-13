@@ -28,11 +28,11 @@ GameWindow::GameWindow(const char* windowTitle) :
     mDesktopMode.fullscreen = true;
   }
 
-//  mWindowedMode.screen_w = 320;
-//  mWindowedMode.screen_h = 240;
+  mWindowedMode.screen_w = 320;
+  mWindowedMode.screen_h = 240;
 
-  mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
-  mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
+  // mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
+  // mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
 
   mWindowedMode.fullscreen = false;
 
@@ -72,7 +72,7 @@ int GameWindow::setVideoMode(sdl_mode_info_t mode) {
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     mode.screen_w, mode.screen_h,
     flags);
-  
+
   if (mSdlWindow == NULL) {
     printf("Unable to set video mode: %s\n", SDL_GetError());
     return 1;
