@@ -345,7 +345,7 @@ void AiManager::trimEntitiesList() {
     if (mAiEntities[i]->mActive == false) {
       if (mAiEntities[i]->mType == AITYPE_PLAYER) {
         printf("AiManager::trimEntitiesList(): error: player inactive\n");
-        printf(" (phys handle: %d)\n", mAiEntities[i]->mPhysicsHandle);
+        printf(" (phys handle: %lu)\n", mAiEntities[i]->mPhysicsHandle);
         continue;
       }
       removeEntity(mAiEntities[i]->mHandle);

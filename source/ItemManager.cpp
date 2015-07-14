@@ -690,11 +690,11 @@ void ItemManager::save(FILE *file) {
   size_t numItems = mItems.size();
 
   printf("ItemManager::save() -----\n");
-  printf(" saving: %d items\n", numItems);
+  printf(" saving: %lu items\n", numItems);
 
   fwrite(&numItems, sizeof (size_t), 1, file);
   for(size_t i = 0; i < numItems; i++) {
-    printf("%d: %s\n", i, mItems[i].name);
+    printf("%lu: %s\n", i, mItems[i].name);
     fwrite(&mItems[i], sizeof (item_t), 1, file);
   }
 }

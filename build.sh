@@ -21,6 +21,7 @@ echo "$(tput setaf 7)$(tput setab 4)building $(tput setaf 0)####################
 # g++ source/*.cpp source/dungeon/*.cpp source/feature/*.cpp -w -I source -I source/include -I /opt/X11/include -I /users/jbeck/src/include -l SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf -framework OpenGL -arch i386 -o Release/longshot
 
 # MacOS (default architecture)
-g++ source/*.cpp source/dungeon/*.cpp source/feature/*.cpp -w -I source -I source/include -I /opt/X11/include -I /users/jbeck/src/include -l SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf -framework OpenGL -o Release/longshot
+# g++ source/*.cpp source/dungeon/*.cpp source/feature/*.cpp -w -I source -I source/include -I /opt/X11/include -I /users/jbeck/src/include -l SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf -framework OpenGL -o Release/longshot
+g++ source/*.cpp source/dungeon/*.cpp source/feature/*.cpp -Wall -I source -I source/include -I /opt/X11/include -I /users/jbeck/src/include -l SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf -framework OpenGL -o Release/longshot
 
 echo "$(tput setaf 7)$(tput setab 4)done $(tput setaf 0)#############################################################$(tput sgr 0)"

@@ -15,10 +15,10 @@
 #include "MathUtil.h"
 #include "StarSystem.h"
 
-#define GALACTIC_WIDTH    100
-#define GALACTIC_HEIGHT    100
+#define GALACTIC_WIDTH  (100)
+#define GALACTIC_HEIGHT (100)
 
-#define NUM_STARSYSTEMS    100
+#define NUM_STARSYSTEMS (100)
 
 
 class Galaxy {

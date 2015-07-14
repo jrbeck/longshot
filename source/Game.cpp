@@ -10,8 +10,8 @@ game_c::game_c(GameWindow* gameWindow) :
   mGalaxy(NULL),
   mAiView(NULL),
   mPhysicsView(NULL),
-  mMenu(NULL),
-  mMerchantView(NULL)
+  mMerchantView(NULL),
+  mMenu(NULL)
 {
   printf("game_c constructor ----------------\n");
   mLastUpdateTime = 0.0;
@@ -46,7 +46,6 @@ game_c::game_c(GameWindow* gameWindow) :
 
 
 game_c::~game_c() {
-
   if (mGameInput != NULL) {
     delete mGameInput;
   }
@@ -209,7 +208,7 @@ int game_c::enter_game_mode(bool createNewWorld) {
   setup_opengl();
 
   mAssetManager.mSoundSystem.initialize();
-  mAssetManager.mSoundSystem.loadSound("cow");
+  mAssetManager.mSoundSystem.loadSound(std::string("cow"));
 //  mAssetManager.mSoundSystem.playSoundByHandle (SOUND_AMBIENT, 64);
 
   gameLoop();

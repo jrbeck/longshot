@@ -74,8 +74,9 @@ int AssetManager::loadAssets() {
   // this model type is deprecated
   mModelDisplayListHandles[MELEETYPE_MACE] = ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
   mModelDisplayListHandles[MELEETYPE_AXE] = ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
+  // mModelDisplayListHandles[MELEETYPE_MACE] = 0; //ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
+  // mModelDisplayListHandles[MELEETYPE_AXE] = 0; //ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
 
-  // didn't bring down the house hopefully
   return 0;
 }
 
@@ -124,8 +125,8 @@ int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
   SDL_Surface* surface = IMG_Load(filename);
 
   if (surface == NULL) {
-  //        printf ("SDL could not load image.bmp: %s\n", SDL_GetError());
-  //        SDL_Quit ();
+    printf ("AssetManager::loadTexture: IMG_Load failed on %s: %s\n", filename, SDL_GetError());
+    // SDL_Quit ();
     return -1;
   }
 
@@ -159,8 +160,10 @@ int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
     }
   }
   else {
-    printf("warning: the image is not truecolor..  this will probably break\n");
-    // this error should not go unhandled
+    printf("AssetManager::loadTexture: %s is not in a recognized format, not loading\n", filename);
+    *texture_handle = 0;
+    SDL_FreeSurface(surface);
+    return 1;
   }
 
 
@@ -196,17 +199,14 @@ int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
     surface->pixels);
 
   SDL_FreeSurface(surface);
-
   return 0;
 }
 
 GLuint AssetManager::loadImg(const char *fileName) {
   GLuint textureHandle;
-
   if (loadTexture(fileName, &textureHandle) == 0) {
     return textureHandle;
   }
-
   return 0;
 }
 

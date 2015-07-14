@@ -26,7 +26,7 @@
 #define PLAYER_SPECIES        (AITYPE_HUMAN)
 
 extern class Physics;
-extern class PhysicsEntity;
+extern struct PhysicsEntity;
 
 class AiEntity {
 public:

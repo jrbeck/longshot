@@ -20,14 +20,16 @@ void PhysicsView::loadAssets() {
     AssetManager::drawBlankBlock();
   glEndList();
 
+  printf("let's load some shit\n");
   // load the skins... methinks ItemManager should handle at least some of this
-  mTextureHandles[OBJSKIN_ITEM] = AssetManager::loadImg("art/32_obj_item.bmp");
-  mTextureHandles[OBJSKIN_AMMO_BULLET] = AssetManager::loadImg("art/32_obj_ammo_bullets.bmp");
-  mTextureHandles[OBJSKIN_AMMO_SLIME] = AssetManager::loadImg("art/32_obj_ammo_slime.bmp");
-  mTextureHandles[OBJSKIN_AMMO_PLASMA] = AssetManager::loadImg("art/32_obj_ammo_plasma.bmp");
-  mTextureHandles[OBJSKIN_AMMO_NAPALM] = AssetManager::loadImg("art/32_obj_ammo_napalm.bmp");
-  mTextureHandles[OBJSKIN_HEALTHPACK] = AssetManager::loadImg("art/32_obj_healthpack.bmp");
-  mTextureHandles[OBJSKIN_GRENADE] = AssetManager::loadImg("art/32_obj_grenade.bmp");
+  mTextureHandles[OBJSKIN_ITEM] = AssetManager::loadImg("art/32_obj_item.png");
+  mTextureHandles[OBJSKIN_AMMO_BULLET] = AssetManager::loadImg("art/32_obj_ammo_bullets.png");
+  mTextureHandles[OBJSKIN_AMMO_SLIME] = AssetManager::loadImg("art/32_obj_ammo_slime.png");
+  mTextureHandles[OBJSKIN_AMMO_PLASMA] = AssetManager::loadImg("art/32_obj_ammo_plasma.png");
+  mTextureHandles[OBJSKIN_AMMO_NAPALM] = AssetManager::loadImg("art/32_obj_ammo_napalm.png");
+  mTextureHandles[OBJSKIN_HEALTHPACK] = AssetManager::loadImg("art/32_obj_healthpack.png");
+  mTextureHandles[OBJSKIN_GRENADE] = AssetManager::loadImg("art/32_obj_grenade.png");
+  printf("we have successfully loaded some shit\n");
 }
 
 void PhysicsView::freeAssets() {

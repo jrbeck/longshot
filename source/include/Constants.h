@@ -14,7 +14,7 @@
   #include <Windows.h>
 #else
   typedef unsigned char BYTE;
-  typedef unsigned int UINT;
+  typedef unsigned UINT;
 #endif
 
 #include "GL/glut.h"

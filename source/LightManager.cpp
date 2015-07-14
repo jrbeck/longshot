@@ -233,7 +233,7 @@ void LightManager::load(FILE* file) {
     light->mHandle = mNextHandle++;
     mInactiveLights.push_back(light);
   }
-  printf("LightManager::load(): loaded %d lights\n", mInactiveLights.size());
+  printf("LightManager::load(): loaded %lu lights\n", mInactiveLights.size());
 }
 
 

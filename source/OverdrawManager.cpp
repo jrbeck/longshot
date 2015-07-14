@@ -84,7 +84,7 @@ int OverdrawManager::addOverdrawColumn(int regionIndexX, int regionIndexZ) {
   overdrawColumn->regionIndexX = regionIndexX;
   overdrawColumn->regionIndexZ = regionIndexZ;
   mOverdrawColumns.push_back(overdrawColumn);
-  printf("addedOverdrawColumn: %d\n", mOverdrawColumns.size());
+  printf("addedOverdrawColumn: %lu\n", mOverdrawColumns.size());
   return mOverdrawColumns.size() - 1;
 }
 
@@ -100,12 +100,12 @@ void OverdrawManager::deleteOverdrawColumn(int overdrawColumnIndex) {
 
   if (size == overdrawColumnIndex + 1) {
     mOverdrawColumns.pop_back();
-  printf("deleted OverdrawColumn: %d\n", mOverdrawColumns.size());
+  printf("deleted OverdrawColumn: %lu\n", mOverdrawColumns.size());
     return;
   }
   swap(mOverdrawColumns[overdrawColumnIndex], mOverdrawColumns[size - 1]);
   mOverdrawColumns.pop_back();
-  printf("deleted OverdrawColumn: %d\n", mOverdrawColumns.size());
+  printf("deleted OverdrawColumn: %lu\n", mOverdrawColumns.size());
 }
 
 void OverdrawManager::setOverdrawBlock(int overdrawColumnIndex, OverdrawBlock *overdrawBlock) {

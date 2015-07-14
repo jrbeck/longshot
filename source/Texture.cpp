@@ -57,8 +57,10 @@ int Texture::loadTexture() {
     }
   }
   else {
-    printf("Texture::loadTexture(): warning: the image is not truecolor\n");
-    // this error should not go unhandled
+    printf("Texture::loadTexture(): %s is not in a recognized format, not loading\n", mFileName.c_str());
+    mGlHandle = 0;
+    SDL_FreeSurface(surface);
+    return 1;
   }
 
   glGenTextures(1, &mGlHandle);

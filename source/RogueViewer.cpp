@@ -2,8 +2,8 @@
 
 
 RogueViewer::RogueViewer(GameWindow* gameWindow) :
-  mVizMode(0),
-  mGameWindow(gameWindow)
+  mGameWindow(gameWindow),
+  mVizMode(0)
 {
 //  mGameWindow = gameWindow;
 

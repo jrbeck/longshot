@@ -1,9 +1,9 @@
 #include "GalaxyMap.h"
 
 GalaxyMap::GalaxyMap(GameWindow* gameWindow) :
+  mLeftMouseButtonClicked(false),
   mZoomLevel(ZOOM_GALAXY),
-  mSelectedSystem(-1),
-  mLeftMouseButtonClicked(false)
+  mSelectedSystem(-1)
 {
   mGameWindow = gameWindow;
   mMenu = new GameMenu();

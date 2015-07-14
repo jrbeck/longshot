@@ -480,7 +480,7 @@ void player_c::updateHud() {
     // display the ammo
     switch (currentEquip.type) {
       case ITEMTYPE_GUN_ONE_HANDED:
-        sprintf(text, "ammo: %d\0", mInventory.mAmmoCounter[currentEquip.ammoType]);
+        sprintf(text, "ammo: %lu\0", mInventory.mAmmoCounter[currentEquip.ammoType]);
         mHud.addText(v2d_v(0.0, 0.05), v2d_v(0.2, 0.05), fontSize, text, TEXT_JUSTIFICATION_LEFT, color, NULL);
         break;
     }
@@ -501,7 +501,7 @@ void player_c::updateHud() {
     // display the ammo
     switch (currentEquip.type) {
       case ITEMTYPE_GUN_ONE_HANDED:
-        sprintf (text, "ammo: %d\0", mInventory.mAmmoCounter[currentEquip.ammoType]);
+        sprintf (text, "ammo: %lu\0", mInventory.mAmmoCounter[currentEquip.ammoType]);
         mHud.addText (v2d_v (0.8, 0.05), v2d_v (0.2, 0.05), fontSize,
           text, TEXT_JUSTIFICATION_RIGHT, color, NULL);
         break;
@@ -626,19 +626,19 @@ void player_c::updateCharacterSheet() {
     // FIXME: switch in a for loop? show some class man!
     switch (i) {
       case AMMO_BULLET:
-        sprintf(ammoString, "bullets: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "bullets: %lu\0", mInventory.mAmmoCounter[i]);
         break;
       case AMMO_SLIME:
-        sprintf(ammoString, "slime: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "slime: %lu\0", mInventory.mAmmoCounter[i]);
         break;
       case AMMO_PLASMA:
-        sprintf(ammoString, "plasma: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "plasma: %lu\0", mInventory.mAmmoCounter[i]);
         break;
       case AMMO_NAPALM:
-        sprintf(ammoString, "napalm: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "napalm: %lu\0", mInventory.mAmmoCounter[i]);
         break;
       default:
-        sprintf(ammoString, "undefined: %d\0", mInventory.mAmmoCounter[i]);
+        sprintf(ammoString, "undefined: %lu\0", mInventory.mAmmoCounter[i]);
         break;
     }
 

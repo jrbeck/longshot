@@ -142,8 +142,8 @@ void InactiveColumnManager::clearColumn(size_t columnIndex) {
 
 
 
-void InactiveColumnManager::clear(void) {
-  printf("InactiveColumnManager::clear(): clearing %d columns\n", mColumnData.size());
+void InactiveColumnManager::clear() {
+  printf("InactiveColumnManager::clear(): clearing %lu columns\n", mColumnData.size());
   // deep clear each column
   for (size_t columnIndex = 0; columnIndex < mColumnData.size(); columnIndex++) {
     if (mColumnData[columnIndex] != NULL) {
@@ -193,7 +193,7 @@ ColumnDatum *InactiveColumnManager::getColumnDatumForSaving(v3di_t worldIndex) {
   //  printf ("NEW ONE %d: (%d, %d)\n", mColumnData.size (), worldIndex.x, worldIndex.z);
 
   // otherwise, we get to make a new one
-  ColumnDatum *column = new ColumnDatum;
+  ColumnDatum* column = new ColumnDatum;
 
   column->worldIndex = worldIndex;
 
@@ -266,7 +266,7 @@ int InactiveColumnManager::saveToDisk(FILE *file) {
     }
   }
 
-  printf("InactiveColumnManager::saveToDisk(): saved %d columns, %d chunks\n", numColumns, totalChunks);
+  printf("InactiveColumnManager::saveToDisk(): saved %lu columns, %lu chunks\n", numColumns, totalChunks);
 
   return 0;
 }
@@ -284,7 +284,7 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
 
   size_t totalChunks = 0;
 
-  printf("loading: %d\n", numColumns);
+  printf("loading: %lu\n", numColumns);
 
   for (size_t column = 0; column < numColumns; column++) {
     ColumnDatum *columnDatum = new ColumnDatum;
@@ -322,7 +322,7 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
     mColumnData.push_back(columnDatum);
   }
 
-  printf("InactiveColumnManager::loadFromDisk(): loaded %d columns, %d chunks\n", numColumns, totalChunks);
+  printf("InactiveColumnManager::loadFromDisk(): loaded %lu columns, %lu chunks\n", numColumns, totalChunks);
 
 
   return 0;
@@ -331,7 +331,7 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
 
 
 
-size_t InactiveColumnManager::getNumColumns(void) const {
+size_t InactiveColumnManager::getNumColumns() const {
   return mColumnData.size();
 }
 

@@ -3,8 +3,8 @@
 
 
 Terrain::Terrain (void) :
-  mField(NULL),
-  mFieldSide(0)
+  mFieldSide(0),
+  mField(NULL)
 {
   if (resize (DEFAULT_FIELD_SIDE) == 0) {
     set_all (0.0);

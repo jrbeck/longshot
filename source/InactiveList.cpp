@@ -37,7 +37,7 @@ inactive_item_t InactiveList::popNextItemInColumn (v2di_t index) {
       }
       mItems.pop_back ();
 
-      printf ("item popped, %d remain...\n", mItems.size ());
+      printf ("item popped, %lu remain...\n", mItems.size());
 
       return item;
     }

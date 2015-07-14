@@ -275,7 +275,7 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
   // FIXME: make sure this succeeds you knucklehead!
   //  _assert(mPhysics->createEntity(OBJTYPE_PLAYER, playerStartPosition, 0.0, false) != 0);
   physics->createEntity(OBJTYPE_PLAYER, playerStartPosition, false);
-  printf("player physics handle: %d\n", physics->getPlayerHandle());
+  printf("player physics handle: %lu\n", physics->getPlayerHandle());
 
   // load the pre-generated physics items
   physics->loadInactiveList();

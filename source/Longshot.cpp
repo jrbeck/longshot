@@ -31,7 +31,6 @@ Longshot::Longshot() :
   printf("-----------------------------------\n\n");
 }
 
-
 Longshot::~Longshot(void) {
   printf("%6d: Longshot destructor\n", SDL_GetTicks());
   printf("---------------------------------------------------------\n");
@@ -54,14 +53,13 @@ Longshot::~Longshot(void) {
 
   if (mGameWindow != NULL) {
     delete mGameWindow;
+    mGameWindow = NULL;
   }
 
   printf("\n");
   printf("---------------------------------------------------------\n");
   printf("program execution time: %fs\n", (double)SDL_GetTicks() / 1000.0);
 }
-
-
 
 void Longshot::reloadMenu(void) {
   // WARNING: this is where the default font is being loaded
@@ -70,7 +68,7 @@ void Longshot::reloadMenu(void) {
   if (gDefaultFontTextureHandle != 0) {
     glDeleteTextures(1, &gDefaultFontTextureHandle);
   }
-  if (!AssetManager::loadTexture("art/fonts/font3.png", &gDefaultFontTextureHandle) == 0) {
+  if (AssetManager::loadTexture("art/fonts/font3.png", &gDefaultFontTextureHandle) != 0) {
     printf("Longshot::reloadMenu(): failed to load font\n");
   }
   GameMenu::setDefaultTextureHandle(gDefaultFontTextureHandle);
@@ -102,13 +100,11 @@ void Longshot::reloadMenu(void) {
   mMainMenu->addButton(v2d_v(0.6, 0.8), v2d_v(0.2, 0.1), fontSize, "quit", TEXT_JUSTIFICATION_RIGHT, PROGRAM_QUIT, color2, bgColor2);
 }
 
-
-
 // main program loop * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 int Longshot::loop() {
 
-  printf("block_t size: %d\n", sizeof (block_t));
-  printf("PhysicsEntity size: %d\n", sizeof (PhysicsEntity));
+  printf("block_t size: %lu\n", sizeof (block_t));
+  printf("PhysicsEntity size: %lu\n", sizeof (PhysicsEntity));
 
   // bail immediately if constructor failed at some point
   if (constructor_successful == false) {
