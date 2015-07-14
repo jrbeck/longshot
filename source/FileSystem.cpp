@@ -3,12 +3,14 @@
 #ifdef _WIN32
 
 int FileSystem::createFolder(const char* path) {
-  CreateDirectory(TEXT(path), NULL);
+  // CreateDirectory(TEXT(path), NULL);
+  CreateDirectory(TEXT("save"), NULL);
   return 0;
 }
 
 int FileSystem::deleteAllFilesInFolder(const char* path) {
-  LPWSTR folderPath = TEXT(path);
+  // LPWSTR folderPath = TEXT(path);
+  LPWSTR folderPath = TEXT("save");
   WIN32_FIND_DATA info;
   HANDLE hp;
 

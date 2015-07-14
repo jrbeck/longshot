@@ -321,6 +321,9 @@
     <ClCompile Include="..\source\PlayerView.cpp">
       <Filter>Source Files\view</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\FileSystem.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\include\AiEntity.h">
@@ -565,6 +568,9 @@
     </ClInclude>
     <ClInclude Include="..\source\include\PlayerView.h">
       <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\include\FileSystem.h">
+      <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

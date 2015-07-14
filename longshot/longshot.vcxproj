@@ -110,6 +110,7 @@
     <ClCompile Include="..\source\feature\DungeonFeature.cpp" />
     <ClCompile Include="..\source\feature\FeatureGenerator.cpp" />
     <ClCompile Include="..\source\feature\FeatureUtil.cpp" />
+    <ClCompile Include="..\source\FileSystem.cpp" />
     <ClCompile Include="..\source\Galaxy.cpp" />
     <ClCompile Include="..\source\GalaxyMap.cpp" />
     <ClCompile Include="..\source\Game.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="..\source\include\BoundingSphere.h" />
     <ClInclude Include="..\source\include\CloudSim.h" />
     <ClInclude Include="..\source\include\Constants.h" />
+    <ClInclude Include="..\source\include\FileSystem.h" />
     <ClInclude Include="..\source\include\Galaxy.h" />
     <ClInclude Include="..\source\include\GalaxyMap.h" />
     <ClInclude Include="..\source\include\Game.h" />

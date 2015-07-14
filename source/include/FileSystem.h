@@ -7,6 +7,8 @@
   typedef unsigned int UINT;
 #endif
 
+#include <cstdio>
+
 
 class FileSystem {
 public:
