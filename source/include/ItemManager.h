@@ -50,7 +50,6 @@ typedef struct {
 
   double facing;
   double incline;
-
 } shot_info_t;
 
 
@@ -137,10 +136,10 @@ public:
   bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
   void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
 
-  double useGun(size_t itemHandle, shot_info_t shotInfo, size_t* ammoCounter);
-  double useGun(size_t itemHandle, shot_info_t shotInfo);
+  double useGun(size_t itemHandle, const shot_info_t& shotInfo, size_t* ammoCounter);
+  double useGun(size_t itemHandle, const shot_info_t& shotInfo);
 
-  double useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo);
+  double useMeleeWeapon(size_t itemHandle, const shot_info_t& shotInfo);
 
   // REMINDER: this should really see how many items are no longer
   // around, perhaps on load?

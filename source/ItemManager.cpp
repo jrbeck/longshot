@@ -53,7 +53,7 @@ void ItemManager::readPhysicsMessages() {
   }
 }
 
-void ItemManager::clear(void) {
+void ItemManager::clear() {
   mItems.clear();
   mLastHandle = 1;
 }
@@ -81,7 +81,7 @@ void ItemManager::destroyItem(size_t handle) {
   }
 }
 
-void ItemManager::trimItemsList(void) {
+void ItemManager::trimItemsList() {
   if (mItems.size() == 0) {
     return;
   }
@@ -141,7 +141,7 @@ size_t ItemManager::createItem(item_t item) {
   return item.handle;
 }
 
-size_t ItemManager::generateRandomItem(void) {
+size_t ItemManager::generateRandomItem() {
   item_t newItem;
   memset(&newItem, 0, sizeof (item_t));
 
@@ -577,8 +577,8 @@ void ItemManager::useRocketPack(
 
 double ItemManager::useGun(
   size_t itemHandle,
-  shot_info_t shotInfo,
-  size_t *ammoCounter)
+  const shot_info_t& shotInfo,
+  size_t* ammoCounter)
 {
   int itemIndex = getIndexFromHandle(itemHandle);
 
@@ -611,7 +611,7 @@ double ItemManager::useGun(
 }
 
 // expects shotInfo angle to be normalized
-double ItemManager::useGun(size_t itemHandle, shot_info_t shotInfo) {
+double ItemManager::useGun(size_t itemHandle, const shot_info_t& shotInfo) {
   int itemIndex = getIndexFromHandle(itemHandle);
   if (itemIndex < 0) {
     return shotInfo.time;
@@ -654,7 +654,7 @@ double ItemManager::useGun(size_t itemHandle, shot_info_t shotInfo) {
   return shotInfo.time + mItems[itemIndex].shotDelay;
 }
 
-double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo) {
+double ItemManager::useMeleeWeapon(size_t itemHandle, const shot_info_t& shotInfo) {
   int itemIndex = getIndexFromHandle(itemHandle);
 
   if (itemIndex < 0) {
@@ -677,7 +677,7 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, shot_info_t shotInfo) {
   return shotInfo.time + mItems[itemIndex].shotDelay;
 }
 
-void ItemManager::save(FILE *file) {
+void ItemManager::save(FILE* file) {
   // keep track of the last handle
   // WARNING: this could be intelligently reset between loads,
   // but it's range makes me hesitate as a non-issue
@@ -699,7 +699,7 @@ void ItemManager::save(FILE *file) {
   }
 }
 
-void ItemManager::load(FILE *file) {
+void ItemManager::load(FILE* file) {
   fread(&mLastHandle, sizeof (size_t), 1, file);
 
   mItems.clear();

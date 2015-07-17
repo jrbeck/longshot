@@ -11,8 +11,12 @@ GameWindow::GameWindow(const char* windowTitle) :
 
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     printf("Unable to initialize SDL: %s\n", SDL_GetError());
+    assert(false);
   }
-
+  // int imgFlags = IMG_INIT_PNG;
+  // if (!(IMG_Init(imgFlags) & imgFlags)) {
+  //   printf("SDL_image: IMG_Init error: %s\n", IMG_GetError());
+  // }
   SDL_DisplayMode current;
   // TODO: this defaults to display 0 ... there could be more than just the one
   int displayIndex = 0;
@@ -28,11 +32,11 @@ GameWindow::GameWindow(const char* windowTitle) :
     mDesktopMode.fullscreen = true;
   }
 
-  mWindowedMode.screen_w = 320;
-  mWindowedMode.screen_h = 240;
+  // mWindowedMode.screen_w = 320;
+  // mWindowedMode.screen_h = 240;
 
-  // mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
-  // mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
+  mWindowedMode.screen_w = (int)((double)mDesktopMode.screen_w * 0.9);
+  mWindowedMode.screen_h = (int)((double)mDesktopMode.screen_h * 0.9);
 
   mWindowedMode.fullscreen = false;
 
@@ -49,15 +53,16 @@ GameWindow::~GameWindow() {
   if (mSdlWindow != NULL) {
     SDL_DestroyWindow(mSdlWindow);
   }
+  // IMG_Quit();
   SDL_Quit();
 }
 
-void GameWindow::setIcon(const char *path) {
+void GameWindow::setIcon(const char* path) {
   SDL_SetWindowIcon(mSdlWindow, IMG_Load(path));
 }
 
 int GameWindow::setVideoMode(sdl_mode_info_t mode) {
-  if(mSdlWindow != NULL) {
+  if (mSdlWindow != NULL) {
     SDL_DestroyWindow(mSdlWindow);
     mSdlWindow = NULL;
   }
@@ -93,7 +98,7 @@ int GameWindow::setVideoMode(sdl_mode_info_t mode) {
   glViewport(0, 0, mCurrentMode.screen_w, mCurrentMode.screen_h);
   glClearColor(0, 0, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT);
-  printf("screen resolution: %d, %d\n", mCurrentMode.screen_w, mCurrentMode.screen_h);
+  printf("display resolution: %d, %d\n", mCurrentMode.screen_w, mCurrentMode.screen_h);
 
   return 0;
 }
@@ -107,13 +112,9 @@ void GameWindow::toggleFullscreen() {
   }
 }
 
-
 void GameWindow::swapBuffers() {
   if (mSdlWindow == NULL) {
     return;
   }
   SDL_GL_SwapWindow(mSdlWindow);
 }
-
-
-

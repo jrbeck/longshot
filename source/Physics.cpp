@@ -577,7 +577,7 @@ void Physics::expireEntity(size_t index) {
 
   case OBJTYPE_AI_ENTITY:
     if (physicsEntity->health <= 0.0) {
-      spawnMeatExplosion(physicsEntity->boundingBox.getCenterPosition(), 100);
+      spawnMeatExplosion(physicsEntity->boundingBox.getCenterPosition(), 5);
     }
     break;
 

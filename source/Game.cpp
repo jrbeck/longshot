@@ -208,7 +208,7 @@ int game_c::enter_game_mode(bool createNewWorld) {
   setup_opengl();
 
   mAssetManager.mSoundSystem.initialize();
-  mAssetManager.mSoundSystem.loadSound(std::string("cow"));
+  mAssetManager.mSoundSystem.loadSound("cow");
 //  mAssetManager.mSoundSystem.playSoundByHandle (SOUND_AMBIENT, 64);
 
   gameLoop();

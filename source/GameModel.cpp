@@ -298,7 +298,7 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
   }
   else {
     player->set_draw_distance(r_num(150.0, 500.0));
-    aiManager->setMaxCritters(10);
+    aiManager->setMaxCritters(1);
   }
 
   // TODO: handle the ItemManager:

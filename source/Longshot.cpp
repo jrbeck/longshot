@@ -12,10 +12,10 @@ Longshot::Longshot() :
   constructor_successful = true;
 
   mGameWindow = new GameWindow("Longshot");
-  mGameWindow->setIcon("art/resource/longshot_icon.png");
   // TODO: here would be a good place to do something like:
   // mGameWindow->getConstructorSuccess() ...
   // just sayin'...
+  mGameWindow->setIcon("art/resource/longshot_icon.png");
 
   SDL_ShowCursor(1);
 
@@ -90,7 +90,6 @@ void Longshot::reloadMenu(void) {
   GLfloat color2[4] = { 0.8f, 0.4f, 0.0f, 1.0f };
   GLfloat bgColor2[4] = { 0.55f, 0.075f, 0.075f, 1.0f };
 
-
   fontSize = v2d_v(0.03f, 0.06f);
 
   mMainMenu->addButton(v2d_v(0.5, 0.35), v2d_v(0.3, 0.1), fontSize, "new game", TEXT_JUSTIFICATION_RIGHT, PROGRAM_MODE_NEW_GAME, color2, bgColor2);
@@ -102,7 +101,6 @@ void Longshot::reloadMenu(void) {
 
 // main program loop * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 int Longshot::loop() {
-
   printf("block_t size: %lu\n", sizeof (block_t));
   printf("PhysicsEntity size: %lu\n", sizeof (PhysicsEntity));
 
@@ -113,7 +111,8 @@ int Longshot::loop() {
   }
 
   while (program_mode != PROGRAM_QUIT && program_mode != MENU_APPLICATION_QUIT) {
-    glClearColor(0.1f, 0.0f, 0.1f, 1.0f);
+    // glClearColor(0.1f, 0.0f, 0.1f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     mMainMenu->draw();
     mGameWindow->swapBuffers();

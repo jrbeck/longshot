@@ -1,15 +1,12 @@
 #include "InactiveColumnManager.h"
 
-
 InactiveColumnManager::InactiveColumnManager() {
 }
-
 
 InactiveColumnManager::~InactiveColumnManager() {
   printf("InactiveColumnManager::~InactiveColumnManager()\n");
   clear();
 }
-
 
 int InactiveColumnManager::saveToInactiveColumns(WorldColumn &worldColumn) {
   worldColumn.clearEmptyChunks();
@@ -33,9 +30,6 @@ int InactiveColumnManager::saveToInactiveColumns(WorldColumn &worldColumn) {
   return 0;
 }
 
-
-
-
 void InactiveColumnManager::saveChunkDatum(size_t chunkIndex, ColumnDatum &column, const WorldChunk &chunk) const {
   ChunkDatum *chunkDatum = new ChunkDatum;
 
@@ -58,7 +52,6 @@ void InactiveColumnManager::saveChunkDatum(size_t chunkIndex, ColumnDatum &colum
 
   column.chunkData.push_back(chunkDatum);
 }
-
 
 int InactiveColumnManager::loadFromInactiveColumns(int x, int z, WorldColumn &worldColumn) {
   // try to find the column in the column manager
@@ -107,8 +100,6 @@ void InactiveColumnManager::loadChunkDatum(const ChunkDatum &chunk, WorldColumn 
     worldColumn.mWorldChunks[chunkIndex]->setBlockTypeByIndex(i, chunk.blockData[i]);
   }
 }
-
-
 
 void InactiveColumnManager::clearColumn(size_t columnIndex) {
   if (columnIndex >= mColumnData.size()) {
@@ -164,8 +155,6 @@ void InactiveColumnManager::clear() {
   mColumnData.clear();
 }
 
-
-
 // this is very naive - some sorting would make this much faster
 int InactiveColumnManager::getColumnIndex(int x, int z) {
   for (size_t i = 0; i < mColumnData.size(); i++) {
@@ -178,8 +167,6 @@ int InactiveColumnManager::getColumnIndex(int x, int z) {
 
   return -1;
 }
-
-
 
 ColumnDatum *InactiveColumnManager::getColumnDatumForSaving(v3di_t worldIndex) {
   int columnIndex = getColumnIndex(worldIndex.x, worldIndex.z);
@@ -222,7 +209,6 @@ mColumnData.push_back (column);
 }
 */
 
-
 ColumnDatum *InactiveColumnManager::readColumn(int x, int z) {
   int columnIndex = getColumnIndex(x, z);
 
@@ -232,8 +218,6 @@ ColumnDatum *InactiveColumnManager::readColumn(int x, int z) {
 
   return NULL;
 }
-
-
 
 int InactiveColumnManager::saveToDisk(FILE *file) {
   // we'll need to know this!
@@ -270,8 +254,6 @@ int InactiveColumnManager::saveToDisk(FILE *file) {
 
   return 0;
 }
-
-
 
 int InactiveColumnManager::loadFromDisk(FILE *file) {
   printf("InactiveColumnManager::loadFromDisk ()\n");
@@ -323,16 +305,9 @@ int InactiveColumnManager::loadFromDisk(FILE *file) {
   }
 
   printf("InactiveColumnManager::loadFromDisk(): loaded %lu columns, %lu chunks\n", numColumns, totalChunks);
-
-
   return 0;
 }
-
-
-
 
 size_t InactiveColumnManager::getNumColumns() const {
   return mColumnData.size();
 }
-
-

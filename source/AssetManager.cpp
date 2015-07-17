@@ -72,10 +72,10 @@ int AssetManager::loadAssets() {
 
   // the mace and the axe ...
   // this model type is deprecated
-  mModelDisplayListHandles[MELEETYPE_MACE] = ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
-  mModelDisplayListHandles[MELEETYPE_AXE] = ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
-  // mModelDisplayListHandles[MELEETYPE_MACE] = 0; //ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
-  // mModelDisplayListHandles[MELEETYPE_AXE] = 0; //ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
+  // mModelDisplayListHandles[MELEETYPE_MACE] = ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
+  // mModelDisplayListHandles[MELEETYPE_AXE] = ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
+  mModelDisplayListHandles[MELEETYPE_MACE] = 0; //ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
+  mModelDisplayListHandles[MELEETYPE_AXE] = 0; //ObjectLoader::loadObjectToDisplayList("art\\models\\axe.xml");
 
   return 0;
 }
@@ -123,9 +123,12 @@ void AssetManager::freeAssets() {
 
 int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
   SDL_Surface* surface = IMG_Load(filename);
+  printf("AssetManager::loadTexture: %s\n", filename);
 
   if (surface == NULL) {
-    printf ("AssetManager::loadTexture: IMG_Load failed on %s: %s\n", filename, SDL_GetError());
+    printf("AssetManager::loadTexture: IMG_Load failed on %s: %s\n", filename, SDL_GetError());
+    printf("IMG_Load: %s\n", IMG_GetError());
+    *texture_handle = 0;
     // SDL_Quit ();
     return -1;
   }
@@ -202,7 +205,7 @@ int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
   return 0;
 }
 
-GLuint AssetManager::loadImg(const char *fileName) {
+GLuint AssetManager::loadImg(const char* fileName) {
   GLuint textureHandle;
   if (loadTexture(fileName, &textureHandle) == 0) {
     return textureHandle;

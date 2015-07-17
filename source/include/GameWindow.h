@@ -19,7 +19,7 @@
 
 #include "Constants.h"
 
-#define MAX_WINDOW_TITLE_LENGTH    (128)
+#define MAX_WINDOW_TITLE_LENGTH (128)
 
 struct sdl_mode_info_t {
   int initialized;
@@ -39,7 +39,7 @@ public:
   GameWindow(const char* windowTitle);
   ~GameWindow();
 
-  void setIcon(const char *path);
+  void setIcon(const char* path);
 
   int setVideoMode(sdl_mode_info_t mode);
   void toggleFullscreen();
