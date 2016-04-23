@@ -1,30 +1,21 @@
 #include "BoundingSphere.h"
 
-
-BoundingSphere::BoundingSphere (void) {
+BoundingSphere::BoundingSphere(void) {
   mPosition = v3d_v (0.0, 0.0, 0.0);
-
   mRadius = 1.0;
 }
 
-
-
-BoundingSphere::BoundingSphere (v3d_t position, double radius) {
+BoundingSphere::BoundingSphere(v3d_t position, double radius) {
   mPosition = position;
-
   mRadius = radius;
 }
 
-
-
-BoundingSphere::BoundingSphere (double x, double y, double z, double radius) {
+BoundingSphere::BoundingSphere(double x, double y, double z, double radius) {
   mPosition.x = x;
   mPosition.y = y;
   mPosition.z = z;
-
   mRadius = radius;
 }
-
 
 /*
 inline bool BoundingSphere::isPointInside (v3d_t point) const {
@@ -36,27 +27,18 @@ inline bool BoundingSphere::isPointInside (v3d_t point) const {
 }
 */
 
-
-void BoundingSphere::setPosition (v3d_t position) {
+void BoundingSphere::setPosition(v3d_t position) {
   mPosition = position;
 }
 
-
-
-v3d_t BoundingSphere::getPosition (void) const {
+v3d_t BoundingSphere::getPosition(void) const {
   return mPosition;
 }
 
-
-
-void BoundingSphere::setRadius (double radius) {
+void BoundingSphere::setRadius(double radius) {
   mRadius = radius;
 }
 
-
-
-double BoundingSphere::getRadius (void) const {
+double BoundingSphere::getRadius(void) const {
   return mRadius;
 }
-
-

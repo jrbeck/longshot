@@ -15,12 +15,9 @@ Physics::Physics(GameModel* gameModel) {
   reset();
 }
 
-
-
 Physics::~Physics() {
   clear();
 }
-
 
 void Physics::reset() {
   clear();
@@ -36,7 +33,6 @@ void Physics::reset() {
   mNumSoundEvents = 0;
 }
 
-
 void Physics::clear() {
   obj.clear();
 
@@ -49,16 +45,13 @@ void Physics::clear() {
   mGotPickupMessage = false;
 }
 
-
 vector <PhysicsEntity*>* Physics::getEntityVector() {
   return &obj;
 }
 
-
 void Physics::loadInactiveList() {
 //  mInactiveList.load("save/inactive.list");
 }
-
 
 int Physics::getIndexFromHandle(size_t handle) const {
   size_t numObjs = obj.size();
@@ -72,21 +65,17 @@ int Physics::getIndexFromHandle(size_t handle) const {
   return -1;
 }
 
-
 void Physics::togglePause() {
   mPaused = !mPaused;
 }
-
 
 bool Physics::isPaused() const {
   return mPaused;
 }
 
-
 void Physics::advanceOneFrame() {
   mAdvanceOneFrame = true;
 }
-
 
 void Physics::addQueuedEntities() {
   if (!mEntityAdded) {
@@ -100,7 +89,6 @@ void Physics::addQueuedEntities() {
 
   mEntityAdded = false;
 }
-
 
 void Physics::manageEntitiesList() {
   size_t numObjs = obj.size();

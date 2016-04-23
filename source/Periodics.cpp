@@ -1,20 +1,14 @@
 #include "Periodics.h"
 
-
-
-Periodics::Periodics (void) {
+Periodics::Periodics(void) {
   mSeed = 0;
   mPrng.setSeed(mSeed);
 }
 
-
-
-Periodics::~Periodics (void) {
+Periodics::~Periodics(void) {
 }
 
-
-
-int Periodics::saveToDisk (FILE *file) {
+int Periodics::saveToDisk(FILE *file) {
   int errorCode = 0;
 
 /*  for (int i = 0; i < NUM_TERRAINS; i++) {
@@ -27,11 +21,10 @@ int Periodics::saveToDisk (FILE *file) {
   errorCode = mRandomMap.saveToDisk (file);
 */
 
-  fwrite (&mSeed, sizeof mSeed, 1, file);
+  fwrite(&mSeed, sizeof mSeed, 1, file);
 
   return errorCode;
 }
-
 
 int Periodics::loadFromDisk(FILE *file) {
   int errorCode = 0;
@@ -42,7 +35,6 @@ int Periodics::loadFromDisk(FILE *file) {
 
   return errorCode;
 }
-
 
 void Periodics::randomize(int seed) {
   mSeed = seed;
@@ -68,29 +60,28 @@ void Periodics::randomize(int seed) {
   mBiomeMap.randomize(mPrng, NUM_BIOME_TYPES, 1);
 }
 
-
-int Periodics::getTerrainHeight (int x, int z) const {
+int Periodics::getTerrainHeight(int x, int z) const {
   double u, v;
 
   u = 0.007759 * static_cast<double>(x);
   v = 0.007759 * static_cast<double>(z);
 
-  double val1 = mTerrains[0].getValueBilerp (u, v);
+  double val1 = mTerrains[0].getValueBilerp(u, v);
 
   u = 0.05123 * static_cast<double>(x);
   v = 0.05123 * static_cast<double>(z);
 
-  double val2 = mTerrains[1].getValueBilerp (u, v);
+  double val2 = mTerrains[1].getValueBilerp(u, v);
 
   u = 0.0256 * static_cast<double>(x);
   v = 0.0256 * static_cast<double>(z);
 
-  double rVal = mRandomMap.getValueBilerp (u, v);
+  double rVal = mRandomMap.getValueBilerp(u, v);
 
   u = 0.3756 * static_cast<double>(x);
   v = 0.3756 * static_cast<double>(z);
 
-  double val3 = rVal * mTerrains[2].getValueBilerp (u, v);
+  double val3 = rVal * mTerrains[2].getValueBilerp(u, v);
 
   double height = val1 + val2 + val3;
 
@@ -110,7 +101,6 @@ int Periodics::getTerrainHeight (int x, int z) const {
 
   return (int)floor(height);
 }
-
 
 BiomeInfo Periodics::getBiomeInfo(int x, int z) const {
   return mBiomeMap.getBiomeInfo(x, z);
@@ -265,7 +255,7 @@ BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHe
 //    return generateDesertBlock (worldPosition, terrainHeight);
 //  }
 
-  double rValue = mRandomMap.getValueBilerp (x * 0.257, z * 0.257);
+  double rValue = mRandomMap.getValueBilerp(x * 0.257, z * 0.257);
 
   BYTE blockType;
 
@@ -287,19 +277,17 @@ BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHe
   return blockType;
 }
 
-
-
-BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
+BYTE Periodics::generateDesertBlock(v3di_t worldPosition, int terrainHeight) {
   double x = static_cast<double>(worldPosition.x);
   double y = static_cast<double>(worldPosition.y);
   double z = static_cast<double>(worldPosition.z);
 
-  double rValue = mRandomMap.getValueBilerp (x * 0.257, z * 0.257);
+  double rValue = mRandomMap.getValueBilerp(x * 0.257, z * 0.257);
 
   BYTE blockType;
 
-  double value1 = noise (x * 0.07, y * 0.07, z * 0.07);
-  double value2 = noise (x * 0.013 + (rValue * 0.05),
+  double value1 = noise(x * 0.07, y * 0.07, z * 0.07);
+  double value2 = noise(x * 0.013 + (rValue * 0.05),
     y * 0.013 + (rValue * 0.05),
     z * 0.013 + (rValue * 0.05));
 
@@ -313,7 +301,6 @@ BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
 //    blockType = BLOCK_TYPE_SAND;
     blockType = BLOCK_TYPE_SAND;
   }
-
 
   if (worldPosition.y < terrainHeight) {
     // underground
@@ -354,11 +341,11 @@ BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
 
   else {
     int positiveNoiseHeight = static_cast<int>(floor (
-      25.0 * mRandomMap.getValueBilerp (
+      25.0 * mRandomMap.getValueBilerp(
       x * 0.00321,
       z * 0.00321)));
 
-    double value = mRandomMap.getValueBilerp (x * 0.357, z * 0.357);
+    double value = mRandomMap.getValueBilerp(x * 0.357, z * 0.357);
 
     if (worldPosition.y < terrainHeight + positiveNoiseHeight &&
       worldPosition.y > WATER_LEVEL &&
@@ -385,7 +372,5 @@ BYTE Periodics::generateDesertBlock (v3di_t worldPosition, int terrainHeight) {
     }
   }
 
-
   return blockType;
 }
-

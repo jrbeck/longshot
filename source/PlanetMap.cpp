@@ -10,7 +10,6 @@ PlanetMap::PlanetMap(GameWindow* gameWindow) :
   mLeftMouseButtonClicked = false;
 }
 
-
 PlanetMap::~PlanetMap() {
   if (mMenu != NULL) {
     delete mMenu;
@@ -25,10 +24,6 @@ PlanetMap::~PlanetMap() {
     delete mPeriodics;
   }
 }
-
-
-
-
 
 void PlanetMap::setUpOpenGl() {
   glMatrixMode(GL_PROJECTION);
@@ -54,9 +49,6 @@ void PlanetMap::setUpOpenGl() {
 //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //  SDL_GL_SwapBuffers();
 }
-
-
-
 
 bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
   mMenu = new GameMenu();
@@ -157,12 +149,8 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
   return false;
 }
 
-
-
 void PlanetMap::drawMap(void) {
 }
-
-
 
 void PlanetMap::buildFromPeriodics(int seed) {
   mPeriodics->randomize(seed);
@@ -285,8 +273,6 @@ int PlanetMap::handleInput (void) {
   return quit;
 }
 
-
-
 int PlanetMap::handleKeystroke (void) {
   switch (sdlevent.key.keysym.sym) {
     case SDLK_ESCAPE:  // quit
@@ -305,7 +291,6 @@ int PlanetMap::handleKeystroke (void) {
   return 0;
 }
 
-
 int PlanetMap::handleKeyup (void) {
 /*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
@@ -322,16 +307,12 @@ int PlanetMap::handleKeyup (void) {
   return 0;
 }
 
-
-
 void PlanetMap::handleMouseButtonDown (int button, v2d_t pos) {
   switch (button) {
     case SDL_BUTTON_RIGHT:
       break;
   }
 }
-
-
 
 void PlanetMap::handleMouseButtonUp(int button, v2d_t pos) {
   switch (button) {
@@ -342,8 +323,6 @@ void PlanetMap::handleMouseButtonUp(int button, v2d_t pos) {
     break;
   }
 }
-
-
 
 void PlanetMap::drawTerrain(void) const {
   v3d_t corners[4];
