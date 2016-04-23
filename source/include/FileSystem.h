@@ -14,7 +14,6 @@
 
 #include <cstdio>
 
-
 class FileSystem {
 public:
   // create the save directory if it doesn't exist

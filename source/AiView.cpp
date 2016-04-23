@@ -17,23 +17,23 @@ AiView::~AiView() {
 }
 
 void AiView::loadAssets() {
-  // mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_tiger.png");
+  mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_tiger.png");
 
-  // //  mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_peopleeater.bmp");
+  //  mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_peopleeater.bmp");
 
-  // mHeadTextureHandles[AITYPE_SHOOTER] = AssetManager::loadImg("art/32_head_shooter.bmp");
-  // mHeadTextureHandles[AITYPE_HUMAN] = AssetManager::loadImg("art/32_head_human.bmp");
+  mHeadTextureHandles[AITYPE_SHOOTER] = AssetManager::loadImg("art/32_head_shooter.bmp");
+  mHeadTextureHandles[AITYPE_HUMAN] = AssetManager::loadImg("art/32_head_human.bmp");
 
-  // mTextureHandles[AISKIN_DUMMY] = AssetManager::loadImg("art/32_ai_dummy.bmp");
-  // mTextureHandles[AISKIN_BALLOON] = AssetManager::loadImg("art/32_ai_balloon.bmp");
-  // mTextureHandles[AISKIN_BALLOON_DEAD] = AssetManager::loadImg("art/32_ai_balloon_dead.bmp");
-  // mTextureHandles[AISKIN_SHOOTER] = AssetManager::loadImg("art/32_ai_shooter.bmp");
-  // mTextureHandles[AISKIN_SHOOTER_DEAD] = AssetManager::loadImg("art/32_ai_shooter_dead.bmp");
-  // mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_tiger.bmp");
-  // //  mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_peopleeater.bmp");
-  // mTextureHandles[AISKIN_HOPPER_DEAD] = AssetManager::loadImg("art/32_ai_tiger_dead.bmp");
-  // mTextureHandles[AISKIN_HUMAN] = AssetManager::loadImg("art/32_ai_human.bmp");
-  // mTextureHandles[AISKIN_HUMAN_DEAD] = AssetManager::loadImg("art/32_ai_human_dead.bmp");
+  mTextureHandles[AISKIN_DUMMY] = AssetManager::loadImg("art/32_ai_dummy.bmp");
+  mTextureHandles[AISKIN_BALLOON] = AssetManager::loadImg("art/32_ai_balloon.bmp");
+  mTextureHandles[AISKIN_BALLOON_DEAD] = AssetManager::loadImg("art/32_ai_balloon_dead.bmp");
+  mTextureHandles[AISKIN_SHOOTER] = AssetManager::loadImg("art/32_ai_shooter.bmp");
+  mTextureHandles[AISKIN_SHOOTER_DEAD] = AssetManager::loadImg("art/32_ai_shooter_dead.bmp");
+  mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_tiger.bmp");
+  //  mTextureHandles[AISKIN_HOPPER] = AssetManager::loadImg("art/32_ai_peopleeater.bmp");
+  mTextureHandles[AISKIN_HOPPER_DEAD] = AssetManager::loadImg("art/32_ai_tiger_dead.bmp");
+  mTextureHandles[AISKIN_HUMAN] = AssetManager::loadImg("art/32_ai_human.bmp");
+  mTextureHandles[AISKIN_HUMAN_DEAD] = AssetManager::loadImg("art/32_ai_human_dead.bmp");
 }
 
 void AiView::freeAssets() {
@@ -527,7 +527,3 @@ IntColor AiView::getLightValue(v3d_t position) const {
 
   return color;
 }
-
-
-
-
