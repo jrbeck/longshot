@@ -3,9 +3,19 @@
 
 This is a blocky sci-fi roguelike.
 
-This was my first cpp project. I started it in 2010 or so. I haven't done anything meaningful to it in a while and figured it was probably time to unleash it on the world at large in case someone wants to make some progress on it or learn how not to program.
+This was my first cpp project. I started it in 2010 or so to learn a bit about 3d game development. I haven't done anything meaningful to it in a while and figured it was probably time to unleash it on the world at large in case someone wants to make some progress on it or learn how not to program.
 
 Get more info here: http://www.giantcitygames.com/games/longshot.html
+
+## Features
+* custom graphics engine
+* custom physics engine
+* ai engine
+* procedural world generation
+* roguelike dungeon generation
+* other world 'feature' generation
+* persistent world deformation
+* procedural item generation
 
 ## Building and Running
 Last I checked, this works on at least Windows and Mac OSX, which means it probably works on Linux ... someone care to confirm?
