@@ -21,7 +21,6 @@ void AiManager::clear() {
     else {
       printf("AiManager::clear(): error: NULL AiEntity\n");
     }
-
   }
   mAiEntities.clear();
 }

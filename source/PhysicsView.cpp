@@ -21,13 +21,13 @@ void PhysicsView::loadAssets() {
   glEndList();
 
   // load the skins... methinks ItemManager should handle at least some of this
-  // mTextureHandles[OBJSKIN_ITEM] = AssetManager::loadImg("art/32_obj_item.bmp");
-  // mTextureHandles[OBJSKIN_AMMO_BULLET] = AssetManager::loadImg("art/32_obj_ammo_bullets.bmp");
-  // mTextureHandles[OBJSKIN_AMMO_SLIME] = AssetManager::loadImg("art/32_obj_ammo_slime.bmp");
-  // mTextureHandles[OBJSKIN_AMMO_PLASMA] = AssetManager::loadImg("art/32_obj_ammo_plasma.bmp");
-  // mTextureHandles[OBJSKIN_AMMO_NAPALM] = AssetManager::loadImg("art/32_obj_ammo_napalm.bmp");
-  // mTextureHandles[OBJSKIN_HEALTHPACK] = AssetManager::loadImg("art/32_obj_healthpack.bmp");
-  // mTextureHandles[OBJSKIN_GRENADE] = AssetManager::loadImg("art/32_obj_grenade.bmp");
+  mTextureHandles[OBJSKIN_ITEM] = AssetManager::loadImg("art/32_obj_item.bmp");
+  mTextureHandles[OBJSKIN_AMMO_BULLET] = AssetManager::loadImg("art/32_obj_ammo_bullets.bmp");
+  mTextureHandles[OBJSKIN_AMMO_SLIME] = AssetManager::loadImg("art/32_obj_ammo_slime.bmp");
+  mTextureHandles[OBJSKIN_AMMO_PLASMA] = AssetManager::loadImg("art/32_obj_ammo_plasma.bmp");
+  mTextureHandles[OBJSKIN_AMMO_NAPALM] = AssetManager::loadImg("art/32_obj_ammo_napalm.bmp");
+  mTextureHandles[OBJSKIN_HEALTHPACK] = AssetManager::loadImg("art/32_obj_healthpack.bmp");
+  mTextureHandles[OBJSKIN_GRENADE] = AssetManager::loadImg("art/32_obj_grenade.bmp");
 }
 
 void PhysicsView::freeAssets() {
@@ -627,4 +627,3 @@ void PhysicsView::drawBillBoard(v3d_t pos) {
     glTexCoord2f(0.0, 0.0); glVertex3d(vert.x, vert.y, vert.z);
   glEnd();
 }
-

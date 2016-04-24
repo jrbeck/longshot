@@ -6,7 +6,7 @@ This was my first cpp project and is pretty gross in a lot of ways. I haven't do
 
 Get more info here: http://www.giantcitygames.com/games/longshot.html
 
-## Running
+## Building and Running
 
 Last I checked, this works on at least Windows and Mac OSX, which means it probably works on Linux ... someone care to confirm?
 
@@ -29,3 +29,33 @@ You'll probably want the amazing assets for this. Get them here in stick them in
 http://www.giantcitygames.com/files/longshot_assets.zip
 
 Better yet, make better ones send them my way!
+
+## How to Play
+You start on board your ship. In space. Hit 'esc' to bring up the menu:
+
+'Planet Map' will allow you to teleport to the surface of the planet that you are currently orbiting.
+'Galaxy Map' will allow you to visit other planets.
+'Merchant' will allow you to buy some random gear. For free.
+'Dungeon Map' will draw a pretty dungeon layout. You should really head to the surface to check them out in person.
+
+### Controls
+esc - menu
+w,a,s,d - move
+space - jump
+left mouse button - use primary
+right mouse button - use secondary
+e - pick up items
+g - get some guns and stuff
+F1 - respawn
+F5 - show world chunks
+p - pause
+  n - next frame
+'[' / ']' - increase / decrease draw distance
+
+c - character sheet/inventory
+  mouse wheel - change selection
+  u - use selected item
+  left mouse button - swap current selection into primary
+  right mouse button - swap current selection into secondary
+  m - destroy current selection
+  esc, c - hide character sheet

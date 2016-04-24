@@ -21,11 +21,9 @@
 
 #include "v3d.h"
 
-
 #define WORLD_CHUNK_SIDE          (16)
 #define WORLD_CHUNK_SIDE_SQUARED  (256)
 #define WORLD_CHUNK_SIDE_CUBED    (4096)
-
 
 enum {
   LIGHT_LEVEL_MIN = 0,
@@ -36,7 +34,6 @@ enum {
 };
 
 #define ONE_OVER_LIGHT_LEVEL_MAX    (1.0f/((float)LIGHT_LEVEL_MAX))
-
 
 enum {
   BIT_MASK_1 = 0x01,
@@ -49,8 +46,6 @@ enum {
   BIT_MASK_8 = 0x80
 };
 
-
-
 enum {
   BLOCK_SIDE_LEF,
   BLOCK_SIDE_RIG,
@@ -61,8 +56,6 @@ enum {
 
   NUM_BLOCK_SIDES
 };
-
-
 
 // the various cube corners
 enum {
@@ -77,7 +70,6 @@ enum {
 
   NUM_BOX_CORNERS
 };
-
 
 enum {
   OBJTYPE_PLAYER,
@@ -110,8 +102,6 @@ enum {
   OBJTYPE_UNDEFINED
 };
 
-
-
 enum {
   AITYPE_DUMMY,
   AITYPE_BALLOON,
@@ -124,8 +114,6 @@ enum {
 
 };
 
-
-
 enum {
   AMMO_BULLET,
   AMMO_SLIME,
@@ -134,8 +122,6 @@ enum {
 
   NUM_AMMO_TYPES
 };
-
-
 
 enum {
   ITEMTYPE_GUN_ONE_HANDED,
@@ -154,7 +140,6 @@ enum {
   ITEMTYPE_UNDEFINED
 };
 
-
 enum {
   GUNTYPE_PISTOL,
   GUNTYPE_RIFLE,
@@ -166,14 +151,12 @@ enum {
   NUM_GUNTYPES
 };
 
-
 enum {
   MELEETYPE_MACE,
   MELEETYPE_AXE,
 
   NUM_MELEETYPES
 };
-
 
 enum {
   FACE_DIRECTION_XNEG,
@@ -182,16 +165,12 @@ enum {
   FACE_DIRECTION_ZPOS
 };
 
-
-
 struct block_t {
   BYTE type;
   BYTE faceVisibility;
   BYTE faceLighting[6][3];
   BYTE uniqueLighting;
 };
-
-
 
 struct melee_weapon_state_t {
   int weaponHandle;
@@ -209,8 +188,6 @@ struct melee_weapon_state_t {
   bool hasUsed;
 };
 
-
-
 extern int SCREEN_W;
 extern int SCREEN_H;
 extern bool FULLSCREEN_MODE;
@@ -221,9 +198,6 @@ extern bool FULLSCREEN_MODE;
 // highest class in the program hierarchy that needs it
 extern GLuint gDefaultFontTextureHandle;
 
-
-
-
 // unit cube (0, 0, 0) to (1, 1, 1)
 extern GLfloat cube_corner[NUM_BOX_CORNERS][3];
 // the unit cube, centered at origin
@@ -231,4 +205,3 @@ extern GLfloat cube_corner_centered[NUM_BOX_CORNERS][3];
 extern GLint gCubeFaceNormalLookup[NUM_BLOCK_SIDES][3];
 extern v3di_t gBlockNeighborAddLookup[NUM_BLOCK_SIDES];
 extern BYTE gBlockSideBitmaskLookup[NUM_BLOCK_SIDES];
-

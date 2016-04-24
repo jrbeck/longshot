@@ -20,7 +20,7 @@
 #include "ItemManager.h"
 #include "MathUtil.h"
 
-#define DONT_ATTACK_PLAYER    (true)
+#define DONT_ATTACK_PLAYER    (false)
 #define PLAYER_SPECIES        (AITYPE_HUMAN)
 
 extern class Physics;
