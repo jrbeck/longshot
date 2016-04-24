@@ -192,8 +192,6 @@ void FeatureGenerator::createPyramid(int side, v2di_t cornerIndex, World &world)
   drawPyramid(baseNearPoint, side * WORLD_CHUNK_SIDE, BLOCK_TYPE_OBSIDIAN, world);
 }
 
-
-
 void FeatureGenerator::create1by1Tower(v2di_t cornerIndex, int baseHeight, WorldMap &worldMap) {
   int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
   int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
@@ -263,11 +261,6 @@ void FeatureGenerator::create1by1Tower(v2di_t cornerIndex, int baseHeight, World
 
 }
 
-
-
-
-
-
 void FeatureGenerator::drillSpiral(
   v3d_t top,
   double radius,
@@ -293,10 +286,6 @@ void FeatureGenerator::drillSpiral(
     worldMap.clearSphere(pos, 3.0);
   }
 }
-
-
-
-
 
 void FeatureGenerator::drillCavern(
   v2di_t cornerIndex,
@@ -369,17 +358,12 @@ void FeatureGenerator::drillCavern(
   }
 }
 
-
-
-
 void FeatureGenerator::growSpiralGarden(
   v2di_t cornerIndex,
   int sideX,
   int sideZ,
   World &world)
 {
-
-
   int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
   int worldZ = cornerIndex.y * WORLD_CHUNK_SIDE;
 
@@ -482,15 +466,8 @@ void FeatureGenerator::growSpiralGarden(
 
       worldMap.fillSphere(pos, sphereRadius, blockType, LIGHT_LEVEL_SOLID);
     }
-
   }
 }
-
-
-
-
-
-
 
 void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
   int worldX = cornerIndex.x * WORLD_CHUNK_SIDE;
@@ -501,7 +478,6 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
   height_info_t heightInfo = FeatureUtil::getHeightInfo(worldX, worldZ, sideLength, sideLength, world);
 
   WorldMap &worldMap = *world.getWorldMap();
-
 
   v3di_t a, b;
   //  heightInfo.avg++;
@@ -529,7 +505,6 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
 
   worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 
-
   // clear the entrance
   a.x = worldX + WORLD_CHUNK_SIDE + 4;
   a.y = heightInfo.avg + 1;
@@ -540,7 +515,6 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
   b.z = worldZ + (5 * WORLD_CHUNK_SIDE) - 13;
 
   worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
-
 
   // fill the keep
   a.x = worldX + (WORLD_CHUNK_SIDE * 3) + 4;
@@ -553,9 +527,7 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
 
   worldMap.fillVolume(a, b, BLOCK_TYPE_OLD_BRICK);
 
-
   //  heightInfo.avg++;
-
 
   v2di_t towerCorner;
 
@@ -570,10 +542,7 @@ void FeatureGenerator::createCastle8x8(v2di_t cornerIndex, World &world) {
 
   towerCorner = v2di_v(cornerIndex.x + 6, cornerIndex.y + 6);
   create1by1Tower(towerCorner, heightInfo.avg + 1, worldMap);
-
 }
-
-
 
 void FeatureGenerator::createHouse(v2di_t cornerIndex, World &world) {
   // WARNING: this always corners at 0, 0
@@ -632,8 +601,6 @@ void FeatureGenerator::createHouse(v2di_t cornerIndex, World &world) {
 
   worldMap.fillVolume(a, b, BLOCK_TYPE_AIR);
 }
-
-
 
 void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
   // WARNING: this always corners at 0, 0
@@ -707,10 +674,6 @@ void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
 
   //  worldMap.swapOutToInactive ();
 }
-
-
-
-
 
 void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, World &world) {
   // WARNING: this always corners at 0, 0
@@ -924,7 +887,6 @@ void FeatureGenerator::drawPyramid(
   }
 }
 
-
 void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
   WorldMap &worldMap = *world.getWorldMap();
   v3di_t regionIndex = WorldUtil::getRegionIndex(startPos);
@@ -932,8 +894,6 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
   printf("dungeon at (%d, %d)\n", corner.x, corner.y);
   //  createDungeon (corner, 6, worldMap);
   //  createPlain (corner, 6, 6, worldMap);
-
-
 
   worldMap.resize(6, 6);
 
@@ -992,7 +952,6 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
   worldMap.fillVolume(nc, fc, BLOCK_TYPE_DIRT);
 
 }
-
 
 // recursive rogue burrower
 // create a level of the dungeon
@@ -1182,7 +1141,3 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
 //}
 //
 //
-
-
-
-

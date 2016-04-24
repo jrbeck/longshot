@@ -26,10 +26,9 @@ enum {
   DUNGEON_TILE_SPECIAL_MONSTER_GENERATOR
 };
 
-
 struct DungeonTile {
   DungeonTile() :
-    special( DUNGEON_TILE_SPECIAL_NONE ) {}
+    special(DUNGEON_TILE_SPECIAL_NONE) {}
 
   int type;
   int id;
@@ -38,35 +37,34 @@ struct DungeonTile {
   int special;
 };
 
-
 class SelectiveDungeonTile {
 public:
   SelectiveDungeonTile();
   ~SelectiveDungeonTile();
 
   int* getType();
-  void setType( int type);
+  void setType(int type);
   void unsetType();
 
   int* getId();
-  void setId( int id );
+  void setId(int id);
   void unsetId();
 
   int* getFloor();
-  void setFloor( int floor );
+  void setFloor(int floor);
   void unsetFloor();
 
   int* getCeiling();
-  void setCeiling( int ceiling );
+  void setCeiling(int ceiling);
   void unsetCeiling();
 
   int* getSpecial();
-  void setSpecial( int special );
+  void setSpecial(int special);
   void unsetSpecial();
 
-  void setFromDungeonTile( const DungeonTile& tile );
+  void setFromDungeonTile(const DungeonTile& tile);
   DungeonTile getDungeonTile() const;
-  void updateDungeonTile( DungeonTile& otherTile ) const;
+  void updateDungeonTile(DungeonTile& otherTile) const;
 
 private:
   DungeonTile dungeonTile;

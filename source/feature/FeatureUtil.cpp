@@ -1,10 +1,9 @@
 #include "FeatureUtil.h"
 
-
 void FeatureUtil::loadWorldRegion (
   v2di_t cornerIndex,
   int sideLength,
-  World &world,
+  World& world,
   bool doOutcroppings)
 {
   world.getWorldMap()->resize (sideLength, sideLength);
@@ -16,10 +15,9 @@ void FeatureUtil::loadWorldRegion (
   }
 }
 
-
 // this asks a Periodics (perhaps indirectly) for info about the terrain height
 // the height_info_t posseses a low, high, avg
-height_info_t FeatureUtil::getHeightInfo (int worldX, int worldZ, int sideX, int sideZ, World &world) {
+height_info_t FeatureUtil::getHeightInfo(int worldX, int worldZ, int sideX, int sideZ, World& world) {
   height_info_t heightInfo;
   heightInfo.low = 100000;
   heightInfo.high = -100000;
@@ -51,14 +49,12 @@ height_info_t FeatureUtil::getHeightInfo (int worldX, int worldZ, int sideX, int
   return heightInfo;
 }
 
-
-
 void FeatureUtil::buildSpiralStaircase(
   v3di_t southwestInsideCorner,
   int stairsPerLevel,
   int topHeight,
   int startCorner,
-  WorldMap &worldMap)
+  WorldMap& worldMap)
 {
   int totalHeight = (topHeight + 1) - southwestInsideCorner.y;
   int currentHeight = southwestInsideCorner.y;
@@ -106,8 +102,6 @@ void FeatureUtil::buildSpiralStaircase(
     insideCorner.y = southwestInsideCorner.y;
     insideCorner.z = southwestInsideCorner.z;
   }
-
-
 
   // let's trace the outer spiral and make them point inwards
   for (int level = 0; level < numLevels; level++) {

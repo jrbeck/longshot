@@ -28,7 +28,6 @@ void MoleculeDungeon::createDungeon(DungeonUtil& dungeon, const v2di_t& startPos
     8,
     floorTile);
 
-
   // make the satelite rooms
   for(int i = 0; i < 5; i ++) {
     int x = r_numi(0, dungeonWidth);

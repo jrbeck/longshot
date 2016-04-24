@@ -18,19 +18,14 @@
 #include "FeatureUtil.h"
 #include "DungeonFeature.h"
 
-
-
 // this is for the worldRogueMap
 // i.e. numColumns x numColumns
 #define ROGUE_W    64
 #define ROGUE_H    64
 
-
 class FeatureGenerator {
 public:
-
   static void createSetPieces(int xIndex, int zIndex, World& world, LoadScreen* loadScreen);
-
 
   static void createPyramid(int side, v2di_t cornerIndex, World &world);
   static void create1by1Tower(v2di_t cornerIndex, int baseHeight, WorldMap &worldMap);

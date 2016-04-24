@@ -155,8 +155,6 @@ void DungeonUtil::drawCrookedLine(double x1, double y1, double x2, double y2, in
   }
 }
 
-
-
 void DungeonUtil::drawRect(int x1, int y1, int x2, int y2, const SelectiveDungeonTile& tile) {
   orderAscending(x1, x2);
   orderAscending(y1, y2);

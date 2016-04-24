@@ -1,11 +1,11 @@
 #include "DungeonTile.h"
 
 SelectiveDungeonTile::SelectiveDungeonTile() :
-isTypeSet( false ),
-isIdSet( false ),
-isFloorSet( false ),
-isCeilingSet( false ),
-isSpecialSet( false )
+isTypeSet(false),
+isIdSet(false),
+isFloorSet(false),
+isCeilingSet(false),
+isSpecialSet(false)
 {
 }
 
@@ -20,7 +20,7 @@ int* SelectiveDungeonTile::getType() {
   return 0;
 }
 
-void SelectiveDungeonTile::setType( int type) {
+void SelectiveDungeonTile::setType(int type) {
   dungeonTile.type = type;
   isTypeSet = true;
 }
@@ -37,7 +37,7 @@ int* SelectiveDungeonTile::getId() {
   return 0;
 }
 
-void SelectiveDungeonTile::setId( int id ) {
+void SelectiveDungeonTile::setId(int id) {
   dungeonTile.id = id;
   isIdSet = true;
 }
@@ -54,7 +54,7 @@ int* SelectiveDungeonTile::getFloor() {
   return 0;
 }
 
-void SelectiveDungeonTile::setFloor( int floor ) {
+void SelectiveDungeonTile::setFloor(int floor) {
   dungeonTile.floor = floor;
   isFloorSet = true;
 }
@@ -71,7 +71,7 @@ int* SelectiveDungeonTile::getCeiling() {
   return 0;
 }
 
-void SelectiveDungeonTile::setCeiling( int ceiling ) {
+void SelectiveDungeonTile::setCeiling(int ceiling) {
   dungeonTile.ceiling = ceiling;
   isCeilingSet = true;
 }
@@ -88,7 +88,7 @@ int* SelectiveDungeonTile::getSpecial() {
   return 0;
 }
 
-void SelectiveDungeonTile::setSpecial( int special ) {
+void SelectiveDungeonTile::setSpecial(int special) {
   dungeonTile.special = special;
   isSpecialSet = true;
 }
@@ -97,8 +97,7 @@ void SelectiveDungeonTile::unsetSpecial() {
   isSpecialSet = false;
 }
 
-
-void SelectiveDungeonTile::setFromDungeonTile( const DungeonTile& tile ) {
+void SelectiveDungeonTile::setFromDungeonTile(const DungeonTile& tile) {
   setType( tile.type );
   setId( tile.id );
   setFloor( tile.floor );
@@ -134,7 +133,7 @@ DungeonTile SelectiveDungeonTile::getDungeonTile() const {
   return tile;
 }
 
-void SelectiveDungeonTile::updateDungeonTile( DungeonTile& otherTile ) const {
+void SelectiveDungeonTile::updateDungeonTile(DungeonTile& otherTile) const {
   if( isTypeSet ) {
     otherTile.type = dungeonTile.type;
   }

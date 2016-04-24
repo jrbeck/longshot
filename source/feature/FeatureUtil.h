@@ -33,11 +33,10 @@ struct height_info_t {
 
 class FeatureUtil {
 public:
-  static void loadWorldRegion(v2di_t cornerIndex, int sideLength, World &world, bool doOutcroppings);
-  static height_info_t getHeightInfo(int worldX, int worldZ, int sideX, int sideZ, World &world);
+  static void loadWorldRegion(v2di_t cornerIndex, int sideLength, World& world, bool doOutcroppings);
+  static height_info_t getHeightInfo(int worldX, int worldZ, int sideX, int sideZ, World& world);
 
   static void buildSpiralStaircase(v3di_t southwestInsideCorner, int stairsPerLevel, int topHeight,
-    int startCorner, WorldMap &worldMap);
+    int startCorner, WorldMap& worldMap);
 
 };
-

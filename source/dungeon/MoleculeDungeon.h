@@ -12,10 +12,7 @@
 
 #include "DungeonUtil.h"
 
-
 class MoleculeDungeon {
 public:
   static void createDungeon(DungeonUtil& dungeon, const v2di_t& startPosition);
-
 };
-

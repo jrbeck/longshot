@@ -16,7 +16,6 @@
 
 #define DISPLACEMENT_SCALE (0.7) // this is how the maxDisplacement changes as it recurses in drawCrookedLine
 
-
 class DungeonUtil {
 public:
   DungeonUtil();
