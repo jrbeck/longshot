@@ -39,6 +39,7 @@ You start on board your ship. In space. Hit 'esc' to bring up the menu:
 'Dungeon Map' will draw a pretty dungeon layout. You should really head to the surface to check them out in person.
 
 ### Controls
+```
 esc - menu
 w,a,s,d - move
 space - jump
@@ -59,3 +60,4 @@ c - character sheet/inventory
   right mouse button - swap current selection into secondary
   m - destroy current selection
   esc, c - hide character sheet
+```
