@@ -1,4 +1,6 @@
 # Longshot
+![alt text](http://www.giantcitygames.com/images/longshot_screen.jpg "Longshot Screenshot")
+
 This is a blocky sci-fi roguelike.
 
 This was my first cpp project. I started it in 2010 or so. I haven't done anything meaningful to it in a while and figured it was probably time to unleash it on the world at large in case someone wants to make some progress on it or learn how not to program.
