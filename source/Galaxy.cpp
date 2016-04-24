@@ -1,16 +1,13 @@
 #include "Galaxy.h"
 
-
 Galaxy::Galaxy() {
   mNextHandle = 1;
   randomize(NUM_STARSYSTEMS);
 }
 
-
 Galaxy::~Galaxy() {
   clear();
 }
-
 
 void Galaxy::clear() {
   size_t numSystems = mStarSystems.size();
@@ -21,7 +18,6 @@ void Galaxy::clear() {
   }
   mStarSystems.clear();
 }
-
 
 void Galaxy::randomize(size_t numSystems) {
   for (size_t i = 0; i < numSystems; i++) {
@@ -42,7 +38,6 @@ void Galaxy::randomize(size_t numSystems) {
   }
 }
 
-
 void Galaxy::save(FILE* file) {
   // save the members
   fwrite(&mNextHandle, sizeof mNextHandle, 1, file);
@@ -54,8 +49,6 @@ void Galaxy::save(FILE* file) {
     mStarSystems[i]->save(file);
   }
 }
-
-
 
 void Galaxy::load(FILE* file) {
   // clear out anything that might be in memory
@@ -78,8 +71,6 @@ void Galaxy::load(FILE* file) {
   }
 }
 
-
-
 StarSystem* Galaxy::getStarSystemByHandle(int handle) {
   for (size_t i = 0; i < mStarSystems.size(); i++) {
     if (mStarSystems[i]->mHandle == handle) {
@@ -94,8 +85,6 @@ StarSystem* Galaxy::getStarSystemByHandle(int handle) {
   return NULL;
 }
 
-
-
 Planet* Galaxy::getPlanetByHandle(int handle) {
   Planet* planet;
 
@@ -108,6 +97,3 @@ Planet* Galaxy::getPlanetByHandle(int handle) {
 
   return NULL;
 }
-
-
-

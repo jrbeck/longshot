@@ -1,7 +1,5 @@
 #include "BitmapModel.h"
 
-
-
 BitmapModel::BitmapModel(TextureRegion* region) {
   mTexture = region->mTexture;
 
@@ -22,7 +20,6 @@ BitmapModel::BitmapModel(TextureRegion* region) {
     GL_RGBA,
     GL_UNSIGNED_INT_8_8_8_8,
     pixelData);
-
 
   mDisplayListHandle = glGenLists(1);
   glNewList(mDisplayListHandle, GL_COMPILE);
@@ -198,7 +195,6 @@ void BitmapModel::drawBack(
     0.5f * VOXEL_SCALE_Z);
 }
 
-
 void BitmapModel::drawBlockFaceFront (
   GLfloat s, GLfloat t,
   GLfloat u1, GLfloat v1,
@@ -230,7 +226,6 @@ void BitmapModel::drawBlockFaceFront (
     t * VOXEL_SCALE_Y,
     -0.5f * VOXEL_SCALE_Z);
 }
-
 
 void BitmapModel::drawBlockFaceBack(
   GLfloat s, GLfloat t,
@@ -264,7 +259,6 @@ void BitmapModel::drawBlockFaceBack(
     0.5f * VOXEL_SCALE_Z);
 }
 
-
 void BitmapModel::drawBlockFaceLeft(
   GLfloat s, GLfloat t,
   GLfloat u1, GLfloat v1,
@@ -296,7 +290,6 @@ void BitmapModel::drawBlockFaceLeft(
     t * VOXEL_SCALE_Y,
     0.5f * VOXEL_SCALE_Z);
 }
-
 
 void BitmapModel::drawBlockFaceRight(
   GLfloat s, GLfloat t,
@@ -330,7 +323,6 @@ void BitmapModel::drawBlockFaceRight(
     -0.5f * VOXEL_SCALE_Z);
 }
 
-
 void BitmapModel::drawBlockFaceTop(
   GLfloat s, GLfloat t,
   GLfloat u1, GLfloat v1,
@@ -362,7 +354,6 @@ void BitmapModel::drawBlockFaceTop(
     t * VOXEL_SCALE_Y,
     -0.5f * VOXEL_SCALE_Z);
 }
-
 
 void BitmapModel::drawBlockFaceBottom(
   GLfloat s, GLfloat t,

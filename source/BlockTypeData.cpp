@@ -6,17 +6,11 @@ BlockTypeDataContainer gBlockData;
 
 int gWaterBlockType = BLOCK_TYPE_SLUDGE;
 
-// METHODS * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-
 BlockTypeDataContainer::BlockTypeDataContainer() {
   loadBlockTypeData();
 }
 
-
-
 void BlockTypeDataContainer::loadBlockTypeData() {
-
   BlockTypeData defaultBlockTypeData;
 
   defaultBlockTypeData.alpha = 1.0f;
@@ -46,8 +40,6 @@ void BlockTypeDataContainer::loadBlockTypeData() {
   }
 
   // now handle the specifics
-
-
   mData[BLOCK_TYPE_AIR].alpha = 0.0f;
   mData[BLOCK_TYPE_AIR].lightAttenuation = LIGHT_ATTENUATION_NONE;
   mData[BLOCK_TYPE_AIR].solidityType = BLOCK_SOLIDITY_TYPE_AIR;
@@ -116,13 +108,9 @@ void BlockTypeDataContainer::loadBlockTypeData() {
   mData[BLOCK_TYPE_FLOWER].blocksVisibility = 0.0;
 }
 
-
-
 BlockTypeData* BlockTypeDataContainer::get(int type) {
   if (type < 0 || type >= NUM_BLOCK_TYPES) {
     return &mData[BLOCK_TYPE_AIR];
   }
   return &mData[type];
 }
-
-

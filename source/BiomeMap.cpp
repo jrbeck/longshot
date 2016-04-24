@@ -133,9 +133,6 @@ BiomeType gBiomeTypes[] = {
   },
 };
 
-
-
-
 BiomeMap::BiomeMap() :
   mBiomeTypes(NULL)
 {
@@ -184,7 +181,6 @@ void BiomeMap::randomize(PseudoRandom prng, int typesW, int typesH) {
 }
 
 BiomeInfo BiomeMap::getBiomeInfo(int i, int j) const {
-
   double iScale = 0.075;
   double jScale = 0.075;
 
@@ -212,7 +208,6 @@ BiomeInfo BiomeMap::getBiomeInfo(int i, int j) const {
   else {
     x = 1.0;
   }
-
 
   double y = (b - ((double)bb * mInterval2)) / mInterval2;
   if (y > 0.5) {

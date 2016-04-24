@@ -368,4 +368,3 @@ bool BoundingBox::clipDisplacement(
 
   return false;
 }
-

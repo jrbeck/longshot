@@ -1,10 +1,5 @@
 #include <AssetManager.h>
 
-
-
-
-// METHODS * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 AssetManager::AssetManager() :
   mGunTexture(0),
   mGunTextureRegion(0),
@@ -14,7 +9,6 @@ AssetManager::AssetManager() :
   mBlankBlockCallListHandle(0),
   mShadedBlockCallListHandle(0)
 {
-  // set up the sun and moon lights
   LightSource sun;
   sun.setColor(v3d_v(1.0, 0.95, 0.8));
   sun.setDirection(v3d_v(0.0, -1.0, 0.0));
@@ -26,7 +20,6 @@ AssetManager::AssetManager() :
   mDirectionalLights.push_back(sun);
   mDirectionalLights.push_back(moon);
 
-  // this is default...
   setDirectionalLightPositions(v3d_v(0.0, 100.0, 0.0), v3d_v(0.0, -100.0, 0.0));
 
   for (int i = 0; i < NUM_MELEETYPES; i++) {
@@ -34,14 +27,10 @@ AssetManager::AssetManager() :
   }
 }
 
-
-
 AssetManager::~AssetManager() {
   printf("AssetManager going down!!\n");
   freeAssets();
 }
-
-
 
 int AssetManager::loadAssets() {
   if (loadTexture("art/32_terrain.png", &mTerrainTextureHandle) == 0) {
@@ -68,8 +57,7 @@ int AssetManager::loadAssets() {
   glNewList(mShadedBlockCallListHandle, GL_COMPILE);
     drawBlock(mGlobalLightIntensities);
   glEndList();
-
-
+  
   // the mace and the axe ...
   // this model type is deprecated
   // mModelDisplayListHandles[MELEETYPE_MACE] = ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
@@ -79,7 +67,6 @@ int AssetManager::loadAssets() {
 
   return 0;
 }
-
 
 void AssetManager::freeAssets() {
   if (mTerrainTextureHandle != 0) {
@@ -118,7 +105,6 @@ void AssetManager::freeAssets() {
       mModelDisplayListHandles[i] = 0;
     }
   }
-
 }
 
 int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
@@ -169,7 +155,6 @@ int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
     return 1;
   }
 
-
 //    surfaceAlpha = SDL_DisplayFormat(surface);
 //    SDL_SetAlpha(surfaceAlpha, 0, SDL_ALPHA_TRANSPARENT);
 
@@ -212,7 +197,6 @@ GLuint AssetManager::loadImg(const char* fileName) {
   }
   return 0;
 }
-
 
 void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPosition) {
   mDirectionalLights[0].setDirection (sunPosition);
@@ -275,18 +259,13 @@ void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPos
   glEndList();
 }
 
-
-
 GLuint AssetManager::getBlankBlockCallListHandle() const {
   return mBlankBlockCallListHandle;
 }
 
-
-
 GLuint AssetManager::getShadedBlockCallListHandle() const {
   return mShadedBlockCallListHandle;
 }
-
 
 // draw a block
 void AssetManager::drawBlock (const v3d_t *intensities) const {
@@ -365,8 +344,6 @@ void AssetManager::drawBlock (const v3d_t *intensities) const {
   glEnd ();
 }
 
-
-
 // expects v3d_t intensities[8] - one for each corner
 void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
   v3d_t v3dIntensities[NUM_BOX_CORNERS];
@@ -376,8 +353,7 @@ void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
     v3dIntensities[i].y = (double)intensities[i].y * ONE_OVER_LIGHT_LEVEL_MAX;
     v3dIntensities[i].z = (double)intensities[i].z * ONE_OVER_LIGHT_LEVEL_MAX;
   }
-
-
+  
   // left
   glNormal3d (-1.0, 0.0, 0.0);
 
@@ -515,9 +491,6 @@ void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
   glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
 
-
-
-
 void AssetManager::drawBlock3 (int r, int g, int b) const {
   GLfloat color[4] = {
     (GLfloat)r * ONE_OVER_LIGHT_LEVEL_MAX,
@@ -571,11 +544,6 @@ void AssetManager::drawBlock3 (int r, int g, int b) const {
   glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
   glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
-
-
-
-
-
 
 void AssetManager::drawBlockWithFace(v3di_t intensities) const {
   v3d_t v3dIntensities;
@@ -720,8 +688,6 @@ void AssetManager::drawBlockWithFace(v3di_t intensities) const {
   glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
 }
 
-
-
 void AssetManager::drawBlankBlock (void) {
   // left
   glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
@@ -766,8 +732,6 @@ void AssetManager::drawBlankBlock (void) {
   glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
 }
 
-
-
 void AssetManager::drawBlockFace(int whichFace, const GLfloat intensities[4]) const {
 //  glBegin (GL_QUADS);
 
@@ -795,8 +759,6 @@ void AssetManager::drawBlockFace(int whichFace, const GLfloat intensities[4]) co
 //  glEnd ();
 }
 
-
-
 void AssetManager::drawBlockFaceLeft(const GLfloat intensities[4]) const {
   glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
   glColor4fv (intensities);
@@ -806,8 +768,6 @@ void AssetManager::drawBlockFaceLeft(const GLfloat intensities[4]) const {
   glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
   glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
 }
-
-
 
 void AssetManager::drawBlockFaceRight (const GLfloat intensities[4]) const {
   glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
@@ -819,8 +779,6 @@ void AssetManager::drawBlockFaceRight (const GLfloat intensities[4]) const {
   glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
 }
 
-
-
 void AssetManager::drawBlockFaceTop (const GLfloat intensities[4]) const {
   glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
   glColor4fv(intensities);
@@ -830,8 +788,6 @@ void AssetManager::drawBlockFaceTop (const GLfloat intensities[4]) const {
   glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
   glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 }
-
-
 
 void AssetManager::drawBlockFaceBottom (const GLfloat intensities[4]) const {
   glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
@@ -843,8 +799,6 @@ void AssetManager::drawBlockFaceBottom (const GLfloat intensities[4]) const {
   glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
 }
 
-
-
 void AssetManager::drawBlockFaceFront (const GLfloat intensities[4]) const {
   glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
   glColor4fv (intensities);
@@ -854,8 +808,6 @@ void AssetManager::drawBlockFaceFront (const GLfloat intensities[4]) const {
   glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
   glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
 }
-
-
 
 void AssetManager::drawBlockFaceBack (const GLfloat intensities[4]) const {
   glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
@@ -867,11 +819,9 @@ void AssetManager::drawBlockFaceBack (const GLfloat intensities[4]) const {
   glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
 }
 
-
 GLuint AssetManager::getTerrainTextureHandle() const {
   return mTerrainTextureHandle;
 }
-
 
 void AssetManager::getBlockTextureCoords(int blockType, GLfloat& textureX, GLfloat& textureY) const {
   textureX = ((GLfloat)(blockType % 16) * TEX_MULT);
@@ -895,7 +845,6 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
     faceLighting[i][2] = (GLfloat)block.faceLighting[i][2] * ONE_OVER_LIGHT_LEVEL_MAX;
   }
 
-
   static GLfloat npos[3];
   npos[0] = (GLfloat)pos.x;
   npos[1] = (GLfloat)pos.y;
@@ -908,7 +857,6 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
 
   GLfloat textureX, textureY;
   getBlockTextureCoords(block.type, textureX, textureY);
-
 
   // left
   if (block.faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_LEF]) {
@@ -1080,9 +1028,6 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
   }
 }
 
-
-
-
 void AssetManager::drawPlantBlock(v3di_t worldPosition, const block_t& block) const {
 
   glColor4f(
@@ -1127,7 +1072,6 @@ void AssetManager::drawPlantBlock(v3di_t worldPosition, const block_t& block) co
   glTexCoord2f(texLeft, texBottom); glVertex3f(vertXHigh, vertYLow, vertZLow);
   glTexCoord2f(texLeft, texTop); glVertex3f(vertXHigh, vertYHigh, vertZLow);
 }
-
 
 
 /*

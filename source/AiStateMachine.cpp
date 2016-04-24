@@ -1,13 +1,10 @@
 #include "AiStateMachine.h"
 
-
 AiStateMachine::AiStateMachine() {
 }
 
 AiStateMachine::~AiStateMachine() {
 }
-
-
 
 void AiStateMachine::addState(AiState state) {
   for (size_t i = 0; i < mStates.size(); i++) {
@@ -22,6 +19,3 @@ void AiStateMachine::addState(AiState state) {
 
   mStates.push_back(state);
 }
-
-
-

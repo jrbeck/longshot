@@ -4,7 +4,6 @@ Animation::Animation(float frameDuration) {
   mFrameDuration = frameDuration;
 }
 
-
 Animation::~Animation() {
   size_t numFrames = mFrames.size();
   for (size_t i = 0; i < numFrames; i++) {
@@ -16,11 +15,9 @@ Animation::~Animation() {
   mFrames.clear();
 }
 
-
 void Animation::addFrame(TextureRegion *textureRegion) {
   mFrames.push_back(textureRegion);
 }
-
 
 TextureRegion *Animation::getFrame(float stateTime, int mode) {
   int frameNumber = (int)(stateTime / mFrameDuration);
@@ -34,5 +31,3 @@ TextureRegion *Animation::getFrame(float stateTime, int mode) {
 
   return mFrames[frameNumber];
 }
-
-

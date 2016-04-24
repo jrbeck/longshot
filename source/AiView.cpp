@@ -1,6 +1,5 @@
 #include "AiView.h"
 
-
 AiView::AiView() {
   for (int i = 0; i < NUM_AITYPES; i++) {
     mHeadTextureHandles[i] = 0;
@@ -92,7 +91,6 @@ void AiView::drawEntity(AiEntity& aiEntity) {
   drawHead(aiEntity);
 }
 
-
 void AiView::updateHeadOrientation(AiEntity& aiEntity) const {
   v3d_t targetCenter;
   if (aiEntity.mTargetPhysicsEntity == NULL) {
@@ -138,8 +136,6 @@ void AiView::updateHeadOrientation(AiEntity& aiEntity) const {
   }
 }
 
-
-
 void AiView::updateFacingAngle(AiEntity& aiEntity, double desiredFacingAngle) const {
   // slow down the angle change a bit
   if (desiredFacingAngle - aiEntity.mFacingAngle > MY_PI) {
@@ -169,9 +165,6 @@ void AiView::updateFacingAngle(AiEntity& aiEntity, double desiredFacingAngle) co
     aiEntity.mFacingAngle += MY_2PI;
   }
 }
-
-
-
 
 void AiView::updateLookIncline(AiEntity& aiEntity, double desiredLookIncline) const {
   if (desiredLookIncline >(MY_PI / 20.0)) {
@@ -275,7 +268,6 @@ void AiView::drawBody(AiEntity& aiEntity) {
   glEnd();
 
   glPopMatrix();
-
 }
 
 void AiView::drawHead(AiEntity& aiEntity) {
@@ -371,7 +363,6 @@ void AiView::drawWeapon(AiEntity& aiEntity) {
     swing = 7.0 * (MY_PI / 8.0);
   }
 
-
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glTranslated(headPosition.x, headPosition.y, headPosition.z);
   glRotated(RAD2DEG(-handFacing), 0.0, 1.0, 0.0);
@@ -385,8 +376,6 @@ void AiView::drawWeapon(AiEntity& aiEntity) {
   glPopMatrix();
   glEnable(GL_TEXTURE_2D);
 }
-
-
 
 void AiView::drawBodyBlock(IntColor color) const {
   GLfloat floatColor[4] = {
@@ -442,10 +431,6 @@ void AiView::drawBodyBlock(IntColor color) const {
   glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
 
-
-
-
-
 void AiView::drawBlockWithFace(IntColor color) const {
   GLfloat floatColor[4] = {
     (GLfloat)color.r * ONE_OVER_LIGHT_LEVEL_MAX,
@@ -499,8 +484,6 @@ void AiView::drawBlockWithFace(IntColor color) const {
   glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
   glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
-
-
 
 IntColor AiView::getLightValue(v3d_t position) const {
   IntColor color = { 0, 0, 0 };

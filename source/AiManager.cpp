@@ -5,17 +5,12 @@ AiManager::AiManager(GameModel* gameModel) {
   mMaxCrittersHACK = 0;
 }
 
-
-
 AiManager::~AiManager() {
   clear();
 }
 
-
-
 void AiManager::clear() {
   mNextHandle = 1;
-
   mPlayerAiHandle = 0;
 
   size_t numEntities = mAiEntities.size();
@@ -30,9 +25,6 @@ void AiManager::clear() {
   }
   mAiEntities.clear();
 }
-
-
-
 
 size_t AiManager::setPlayerPhysicsHandle() {
   // add the player as an AI entity
@@ -51,8 +43,6 @@ size_t AiManager::setPlayerPhysicsHandle() {
   return mPlayerAiHandle;
 }
 
-
-
 void AiManager::setPlayerFacingAndIncline(v2d_t facingAndElevation) {
   AiEntity* e = getEntityByHandle(mPlayerAiHandle);
   if (e == NULL) {
@@ -63,7 +53,6 @@ void AiManager::setPlayerFacingAndIncline(v2d_t facingAndElevation) {
   e->mFacingAngle = facingAndElevation.x;
   e->mLookIncline = facingAndElevation.y;
 }
-
 
 AiEntity* AiManager::addEntity(int type, const v3d_t& position) {
   AiEntity* e = new AiEntity(mGameModel);
@@ -93,7 +82,6 @@ AiEntity* AiManager::addEntity(int type, const v3d_t& position) {
   return e;
 }
 
-
 void AiManager::removeEntity(size_t handle) {
   size_t mNumEntities = mAiEntities.size();
   for (size_t i = 0; i < mNumEntities; i++) {
@@ -111,7 +99,6 @@ void AiManager::removeEntity(size_t handle) {
   }
 }
 
-
 AiEntity* AiManager::getEntityByHandle(size_t handle) {
   size_t mNumEntities = mAiEntities.size();
   for (size_t i = 0; i < mNumEntities; i++) {
@@ -122,11 +109,9 @@ AiEntity* AiManager::getEntityByHandle(size_t handle) {
   return NULL;
 }
 
-
 vector<AiEntity*>* AiManager::getEntities(void) {
   return &mAiEntities;
 }
-
 
 size_t AiManager::spawnEntity(
   int type,
@@ -242,8 +227,6 @@ size_t AiManager::spawnEntity(
   return newAiEntity->mHandle;
 }
 
-
-
 int AiManager::update() {
   if (mGameModel->physics->isPaused()) {
     return (int)mAiEntities.size();
@@ -314,7 +297,6 @@ int AiManager::update() {
   return (int)mAiEntities.size();
 }
 
-
 void AiManager::releaseItems(int aiIndex) {
   int items = 0;
   printf("eliminating inventory\n");
@@ -338,7 +320,6 @@ void AiManager::releaseItems(int aiIndex) {
   }
 }
 
-
 void AiManager::trimEntitiesList() {
   size_t numEntities = mAiEntities.size();
   for (size_t i = 0; i < numEntities; i++) {
@@ -354,7 +335,6 @@ void AiManager::trimEntitiesList() {
     }
   }
 }
-
 
 void AiManager::readPhysicsMessages() {
   phys_message_t message;
@@ -373,8 +353,6 @@ void AiManager::readPhysicsMessages() {
   }
 }
 
-
-
 vector<size_t> AiManager::getAllItemHandles(void) {
   vector<size_t> itemList;
 
@@ -389,8 +367,6 @@ vector<size_t> AiManager::getAllItemHandles(void) {
   return itemList;
 }
 
-
 void AiManager::setMaxCritters(int num) {
   mMaxCrittersHACK = num;
 }
-

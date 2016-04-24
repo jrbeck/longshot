@@ -1,6 +1,5 @@
 #include "Constants.h"
 
-
 int SCREEN_W;
 int SCREEN_H;
 bool FULLSCREEN_MODE = (false);
@@ -16,8 +15,6 @@ BYTE gBlockSideBitmaskLookup[NUM_BLOCK_SIDES] = {
   BIT_MASK_6
 };
 
-
-
 GLfloat cube_corner[NUM_BOX_CORNERS][3] = {
       {0.0, 0.0, 0.0},  // LBB
       {0.0, 0.0, 1.0},  // LBF
@@ -27,7 +24,6 @@ GLfloat cube_corner[NUM_BOX_CORNERS][3] = {
       {1.0, 0.0, 1.0},  // RBF
       {1.0, 1.0, 0.0},  // RTB
       {1.0, 1.0, 1.0} };  // RTF
-
 
 GLfloat cube_corner_centered[NUM_BOX_CORNERS][3] = {
       { -0.5, -0.5, -0.5 },  // LBB
@@ -39,7 +35,6 @@ GLfloat cube_corner_centered[NUM_BOX_CORNERS][3] = {
       { +0.5, +0.5, -0.5 },  // RTB
       { +0.5, +0.5, +0.5 } };  // RTF
 
-
 GLint gCubeFaceNormalLookup[NUM_BLOCK_SIDES][3] = {
       {-1, 0, 0},    // BLOCK_SIDE_LEF
       {+1, 0, 0},    // BLOCK_SIDE_RIG
@@ -47,8 +42,6 @@ GLint gCubeFaceNormalLookup[NUM_BLOCK_SIDES][3] = {
       {0, -1, 0},    // BLOCK_SIDE_BOT
       {0, 0, +1},    // BLOCK_SIDE_FRO
       {0, 0, -1} };  // BLOCK_SIDE_BAC
-
-
 
 v3di_t gBlockNeighborAddLookup[NUM_BLOCK_SIDES] = {
       {-1, 0, 0},    // BLOCK_SIDE_LEF

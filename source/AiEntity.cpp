@@ -1,6 +1,5 @@
 #include "AiEntity.h"
 
-
 AiEntity::AiEntity(GameModel* gameModel) {
   mGameModel = gameModel;
 
@@ -20,7 +19,6 @@ AiEntity::AiEntity(GameModel* gameModel) {
     mInventory[i] = 0;
   }
 }
-
 
 void AiEntity::update() {
   Physics& physics = *mGameModel->physics;
@@ -136,26 +134,19 @@ void AiEntity::update() {
   }
 }
 
-
-
-
-
 void AiEntity::updateState() {
-
   // test conditions
-  AiSpecies *spec = gSpeciesData.get(mType);
-  size_t totalStates = spec->stateMachine.mStates.size();
+  AiSpecies* species = gSpeciesData.get(mType);
+  size_t totalStates = species->stateMachine.mStates.size();
   bool isDone = false;
   for (size_t i = 0; i < totalStates && !isDone; i++) {
-    if (spec->stateMachine.mStates[i].state == mCurrentState) {
-      if (testCondition(spec->stateMachine.mStates[i].condition)) {
-        mCurrentState = spec->stateMachine.mStates[i].nextState;
+    if (species->stateMachine.mStates[i].state == mCurrentState) {
+      if (testCondition(species->stateMachine.mStates[i].condition)) {
+        mCurrentState = species->stateMachine.mStates[i].nextState;
         isDone = true;
       }
     }
   }
-
-
 
   switch(mCurrentState) {
   case AISTATE_ALL:
@@ -187,9 +178,6 @@ void AiEntity::updateState() {
   }
 }
 
-
-
-
 bool AiEntity::testCondition(int condition) {
   switch(condition) {
   case CONDITION_FALSE:
@@ -219,7 +207,6 @@ bool AiEntity::testCondition(int condition) {
     return false;
   }
 }
-
 
 void AiEntity::readMail() {
   // lets read some mail
@@ -265,14 +252,11 @@ void AiEntity::readMail() {
   } // done reading mail
 }
 
-
-
 void AiEntity::updatePlayer() {
   Physics& physics = *mGameModel->physics;
   mPhysicsEntity = physics.getEntityByHandle(mPhysicsHandle);
   mWorldPosition = physics.getCenter(mPhysicsHandle);
 }
-
 
 void AiEntity::updateBalloon() {
   v3d_t movementForce = v3d_zero();
@@ -365,7 +349,6 @@ void AiEntity::updateBalloon() {
       mPhysicsEntity->vel.z = rot.z;
     }
 
-
     if (v3d_mag(vecToTarget) < mMinDistanceToPlayer) {
       vecToTarget = v3d_scale(15.0, v3d_normalize(vecToTarget));
       movementForce = v3d_add(movementForce, vecToTarget);
@@ -379,7 +362,6 @@ void AiEntity::updateBalloon() {
     mPhysicsEntity->force.z += movementForce.z;
   }
 }
-
 
 void AiEntity::updateHopper() {
   v3d_t movementForce = v3d_zero();
@@ -446,8 +428,6 @@ void AiEntity::updateHopper() {
   }
 }
 
-
-
 void AiEntity::updateDummy() {
   // check for line of sight
 /*  v3d_t playerPos = v3d_add (physics.getCenter (1), v3d_v (0.0, 1.6 - 0.9, 0.0));
@@ -466,7 +446,6 @@ void AiEntity::updateDummy() {
   }
 */
 }
-
 
 void AiEntity::updateTarget() {
   mTargetPhysicsEntity = NULL;
@@ -616,6 +595,3 @@ bool AiEntity::isTargetInRange(int gunType, double distanceToTarget) {
 
   return true;
 }
-
-
-

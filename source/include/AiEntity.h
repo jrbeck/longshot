@@ -8,7 +8,6 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
 #pragma once
 
 #include <vector>
@@ -20,7 +19,6 @@
 #include "Physics.h"
 #include "ItemManager.h"
 #include "MathUtil.h"
-
 
 #define DONT_ATTACK_PLAYER    (true)
 #define PLAYER_SPECIES        (AITYPE_HUMAN)
@@ -88,7 +86,6 @@ public:
   bool mWasAttacked;
   int mAttackerHandle;
   bool mWillAttackSameSpecies;
-
 
   double mFacingAngle;
   double mLookIncline;

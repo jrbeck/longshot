@@ -8,7 +8,6 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
 #pragma once
 
 #include <vector>
@@ -76,4 +75,3 @@ private:
 
   int mMaxCrittersHACK;
 };
-

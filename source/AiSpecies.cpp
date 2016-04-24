@@ -2,13 +2,9 @@
 
 SpeciesDataContainer gSpeciesData;
 
-
-// METHODS * * * * * * * * * * * * * * *
-
 SpeciesDataContainer::SpeciesDataContainer() {
   loadSpeciesData();
 }
-
 
 void SpeciesDataContainer::loadSpeciesData(void) {
   AiState state;
@@ -42,12 +38,10 @@ void SpeciesDataContainer::loadSpeciesData(void) {
   state.nextState = AISTATE_WANDER;
   mSpecies[AITYPE_BALLOON].stateMachine.addState(state);
 
-
   state.state = AISTATE_WANDER;
   state.condition = CONDITION_END_WANDER;
   state.nextState = AISTATE_STOP;
   mSpecies[AITYPE_BALLOON].stateMachine.addState(state);
-
 
   state.state = AISTATE_RANGE;
   state.condition = CONDITION_TARGET_IN_RANGE;
@@ -63,7 +57,6 @@ void SpeciesDataContainer::loadSpeciesData(void) {
   state.condition = CONDITION_TARGET_LOST;
   state.nextState = AISTATE_STOP;
   mSpecies[AITYPE_BALLOON].stateMachine.addState(state);
-
 
   state.state = AISTATE_ATTACK_RANGE;
   state.condition = CONDITION_TARGET_TOO_CLOSE;
@@ -85,7 +78,6 @@ void SpeciesDataContainer::loadSpeciesData(void) {
   state.nextState = AISTATE_STOP;
   mSpecies[AITYPE_BALLOON].stateMachine.addState(state);
 
-
 //  AITYPE_SHOOTER
   mSpecies[AITYPE_SHOOTER].movementType = MOVEMENT_BALLOON;
   mSpecies[AITYPE_SHOOTER].willAttackSameSpecies = false;
@@ -97,11 +89,7 @@ void SpeciesDataContainer::loadSpeciesData(void) {
 //  AITYPE_HUMAN
   mSpecies[AITYPE_HUMAN].movementType = MOVEMENT_HOPPER;
   mSpecies[AITYPE_HUMAN].willAttackSameSpecies = false;
-
-
 }
-
-
 
 AiSpecies *SpeciesDataContainer::get(size_t type) {
   if (type < NUM_AITYPES) {
@@ -110,5 +98,3 @@ AiSpecies *SpeciesDataContainer::get(size_t type) {
 
   return NULL;
 }
-
-

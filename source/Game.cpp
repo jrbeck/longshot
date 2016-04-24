@@ -4,8 +4,6 @@
 // has to do with sprintf() not being safe....
 #pragma warning (disable : 4996)
 
-
-
 game_c::game_c(GameWindow* gameWindow) :
   mGalaxy(NULL),
   mAiView(NULL),
@@ -42,8 +40,6 @@ game_c::game_c(GameWindow* gameWindow) :
   mGameInput = new GameInput;
   mGameModel->gameInput = mGameInput;
 }
-
-
 
 game_c::~game_c() {
   if (mGameInput != NULL) {

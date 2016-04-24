@@ -1,7 +1,5 @@
 #include "CloudSim.h"
 
-
-
 CloudSim::CloudSim (void) {
   mCloudDisplayListHandle = 0;
 
@@ -14,21 +12,16 @@ CloudSim::CloudSim (void) {
   mPosition = v3d_zero ();
 }
 
-
-
 CloudSim::~CloudSim (void) {
   if (mCloudDisplayListHandle != 0) {
     glDeleteLists (mCloudDisplayListHandle, 1);
   }
 }
 
-
 void CloudSim::clear(void) {
   mTerrain.set_all(0.0);
   redrawDisplayLists(v3d_v(0.0, 0.0, 0.0));
 }
-
-
 
 void CloudSim::newClouds (v3d_t position) {
   mTerrain.resize(SIDE_WIDTH);
@@ -39,8 +32,6 @@ void CloudSim::newClouds (v3d_t position) {
 
   redrawDisplayLists(position);
 }
-
-
 
 void CloudSim::redrawDisplayLists (v3d_t position) {
   if (mCloudDisplayListHandle != 0) {
@@ -53,8 +44,6 @@ void CloudSim::redrawDisplayLists (v3d_t position) {
     drawForDisplayList (position);
   glEndList();
 }
-
-
 
 void CloudSim::update (GLfloat starAlpha) {
   GLfloat dayIntensities[4] = {0.6f, 0.65f, 0.7f, 1.0f};
@@ -70,9 +59,7 @@ void CloudSim::update (GLfloat starAlpha) {
   mLightIntensities[3] = static_cast<GLfloat>(lerp (dayIntensities[3], nightIntensities[3], starAlpha));
 
   redrawDisplayLists (mPosition);
-
 }
-
 
 void CloudSim::drawForDisplayList (v3d_t position) {
   glPushMatrix ();
@@ -96,13 +83,8 @@ void CloudSim::drawForDisplayList (v3d_t position) {
   }
 
   glEnd ();
-
   glPopMatrix ();
-
-
 }
-
-
 
 void CloudSim::draw (gl_camera_c &cam) {
   glEnable (GL_BLEND);
@@ -125,8 +107,6 @@ void CloudSim::draw (gl_camera_c &cam) {
 
   glEnable (GL_CULL_FACE);
 }
-
-
 
 void CloudSim::drawCloudBlock (v3di_t position, GLfloat alpha) {
   GLfloat npos[3], fpos[3];
@@ -213,4 +193,3 @@ void CloudSim::drawCloudBlock (v3di_t position, GLfloat alpha) {
 
   mLightIntensities[3] = oldAlpha;
 }
-

@@ -74,7 +74,6 @@ public:
 
   void drawPlantBlock(v3di_t worldPosition, const block_t& block) const;
 
-
   static void drawBlankBlock();
 
   void drawBlock(const v3d_t* intensities) const;
