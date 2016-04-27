@@ -1,49 +1,36 @@
 #include "Rectangle2d.h"
 
-
-Rectangle2d::Rectangle2d () {
+Rectangle2d::Rectangle2d() {
   setCorners (v2d_v (0.0, 0.0), v2d_v (1.0, 1.0));
 }
 
-
-
-Rectangle2d::Rectangle2d (v2d_t nearCorner, v2d_t farCorner) {
+Rectangle2d::Rectangle2d(v2d_t nearCorner, v2d_t farCorner) {
   setCorners (nearCorner, farCorner);
 }
 
-
-
-void Rectangle2d::setCorners (v2d_t nearCorner, v2d_t farCorner) {
+void Rectangle2d::setCorners(v2d_t nearCorner, v2d_t farCorner) {
   mNearCorner = nearCorner;
   mFarCorner = farCorner;
 }
 
-
-
-v2d_t Rectangle2d::getNearCorner (void) const {
+v2d_t Rectangle2d::getNearCorner() const {
   return mNearCorner;
 }
 
-
-
-v2d_t Rectangle2d::getFarCorner (void) const {
+v2d_t Rectangle2d::getFarCorner() const {
   return mFarCorner;
 }
 
-
-double Rectangle2d::getWidth(void) const {
+double Rectangle2d::getWidth() const {
   return mFarCorner.x - mNearCorner.x;
 }
 
-
-double Rectangle2d::getHeight(void) const {
+double Rectangle2d::getHeight() const {
   return mFarCorner.y - mNearCorner.y;
 }
 
-
-
-bool Rectangle2d::isIntersecting (const Rectangle2d &other) const {
-  // test the near corner
+// test the near corner
+bool Rectangle2d::isIntersecting(const Rectangle2d& other) const {
   if (mFarCorner.x < other.mNearCorner.x) return false;
   if (mFarCorner.y < other.mNearCorner.y) return false;
 
@@ -54,7 +41,7 @@ bool Rectangle2d::isIntersecting (const Rectangle2d &other) const {
   return true;
 }
 
-v2d_t Rectangle2d::transformPoint(v2d_t point, const Rectangle2d &other) const {
+v2d_t Rectangle2d::transformPoint(v2d_t point, const Rectangle2d& other) const {
   v2d_t trans;
 
   double delta = point.x - mNearCorner.x;
@@ -67,5 +54,3 @@ v2d_t Rectangle2d::transformPoint(v2d_t point, const Rectangle2d &other) const {
 
   return trans;
 }
-
-

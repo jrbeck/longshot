@@ -1,30 +1,25 @@
 #include "RogueMapViewer.h"
 
 RogueMapViewer::RogueMapViewer(GameWindow* gameWindow) :
-  mMenu(NULL),
-  mRogueMap(NULL),
+  mMenu(0),
+  mRogueMap(0),
   dungeon(0)
 {
   mGameWindow = gameWindow;
   mLeftMouseButtonClicked = false;
 }
 
-
 RogueMapViewer::~RogueMapViewer() {
-  if (mMenu != NULL) {
+  if (mMenu != 0) {
     delete mMenu;
   }
-  if (mRogueMap != NULL) {
+  if (mRogueMap != 0) {
     delete mRogueMap;
   }
   if (dungeon != 0) {
     delete dungeon;
   }
 }
-
-
-
-
 
 void RogueMapViewer::setUpOpenGl() {
   glMatrixMode(GL_PROJECTION);
@@ -51,24 +46,20 @@ void RogueMapViewer::setUpOpenGl() {
 //  SDL_GL_SwapBuffers();
 }
 
-
-
-
 void RogueMapViewer::startViewer() {
   mMenu = new GameMenu();
-  if (mMenu == NULL) {
+  if (mMenu == 0) {
     printf("RogueMapViewer::chooseLocation(): error: out of memory 1\n");
     return;
   }
 //  mMenu->setFont(gDefaultFontTextureHandle);
 
   mRogueMap = new RogueMap(ROGUE_MAP_SIDE, ROGUE_MAP_SIDE);
-  if (mRogueMap == NULL) {
+  if (mRogueMap == 0) {
     printf("RogueMapViewer::chooseLocation(): error: out of memory 2\n");
     delete mMenu;
     return;
   }
-
 
   printf("PRE CREATE\n");
   dungeon = new DungeonUtil();
@@ -113,8 +104,7 @@ void RogueMapViewer::startViewer() {
   }
 }
 
-
-void RogueMapViewer::drawMap(void) const {
+void RogueMapViewer::drawMap() const {
   v3d_t corners[4];
   v3d_t color;
   map_tile_t tile;
@@ -143,8 +133,6 @@ void RogueMapViewer::drawMap(void) const {
       corners[3].z = 0.0; //mTerrain->get_value(i, j + 1);
       corners[3].y = static_cast<int>(j + 1);
 
-
-
       tile = mRogueMap->getTile(i, j);
 
       dungeonTile = dungeon->getDungeonModel()->getTile(i, j);
@@ -167,7 +155,6 @@ void RogueMapViewer::drawMap(void) const {
         color.z = 0.7;
         break;
       }
-
 
       //switch(tile.type) {
       //default:
@@ -216,26 +203,24 @@ void RogueMapViewer::drawMap(void) const {
   glEnable(GL_TEXTURE_2D);
 }
 
-
-
 // handle an SDL_Event
-int RogueMapViewer::handleInput (void) {
+int RogueMapViewer::handleInput() {
   int quit = 0;
   mMouseMoved = 0;
 
   // goes through all the queued events and deals with each one
-  while (SDL_PollEvent (&sdlevent) && !quit) {
+  while (SDL_PollEvent(&sdlevent) && !quit) {
     switch (sdlevent.type) {
       case SDL_QUIT:
         quit = 1;
         break;
 
       case SDL_KEYDOWN:
-        quit = handleKeystroke ();
+        quit = handleKeystroke();
         break;
 
       case SDL_KEYUP:
-        handleKeyup ();
+        handleKeyup();
         break;
 
       case SDL_MOUSEMOTION:
@@ -251,11 +236,11 @@ int RogueMapViewer::handleInput (void) {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDown (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUp (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
 
       default:
@@ -263,22 +248,21 @@ int RogueMapViewer::handleInput (void) {
     }
   }
 
-
   // RTS MODE
   // handle mouse drag
   // FIXME: not here please!
   Uint8 ms;
-  ms = SDL_GetMouseState (NULL, NULL);
+  ms = SDL_GetMouseState(0, 0);
 
-  if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_LEFT))) {
-    v2d_t md = v2d_scale (mMouseDelta, 0.1);
+  if (mMouseMoved && (ms & SDL_BUTTON(SDL_BUTTON_LEFT))) {
+    v2d_t md = v2d_scale(mMouseDelta, 0.1);
 
     md.x = -md.x;
 
 //    mRtsCam.translate (md);
   }
-  if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
-    v2d_t md = v2d_scale (mMouseDelta, 0.002);
+  if (mMouseMoved && (ms & SDL_BUTTON(SDL_BUTTON_RIGHT))) {
+    v2d_t md = v2d_scale(mMouseDelta, 0.002);
 
     md.x = -md.x;
 
@@ -288,13 +272,11 @@ int RogueMapViewer::handleInput (void) {
   return quit;
 }
 
-
 void RogueMapViewer::randomizeDungeon() {
   MoleculeDungeon::createDungeon(*dungeon, v2di_v(ROGUE_MAP_SIDE / 2, ROGUE_MAP_SIDE / 2));
 }
 
-
-int RogueMapViewer::handleKeystroke (void) {
+int RogueMapViewer::handleKeystroke() {
   switch (sdlevent.key.keysym.sym) {
     case SDLK_ESCAPE:  // quit
       return 1;
@@ -313,8 +295,7 @@ int RogueMapViewer::handleKeystroke (void) {
   return 0;
 }
 
-
-int RogueMapViewer::handleKeyup (void) {
+int RogueMapViewer::handleKeyup() {
 /*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
@@ -330,18 +311,14 @@ int RogueMapViewer::handleKeyup (void) {
   return 0;
 }
 
-
-
-void RogueMapViewer::handleMouseButtonDown (int button, v2d_t pos) {
+void RogueMapViewer::handleMouseButtonDown(int button, v2d_t pos) {
   switch (button) {
     case SDL_BUTTON_RIGHT:
       break;
   }
 }
 
-
-
-void RogueMapViewer::handleMouseButtonUp (int button, v2d_t pos) {
+void RogueMapViewer::handleMouseButtonUp(int button, v2d_t pos) {
   switch (button) {
   case SDL_BUTTON_LEFT:
     mLeftMouseButtonClicked = true;
@@ -350,5 +327,3 @@ void RogueMapViewer::handleMouseButtonUp (int button, v2d_t pos) {
     break;
   }
 }
-
-

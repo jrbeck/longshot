@@ -6,8 +6,8 @@ Planet::Planet() {
 Planet::~Planet() {
 }
 
-void Planet::save(FILE *file) {
+void Planet::save(FILE* file) {
 }
 
-void Planet::load(FILE *file) {
+void Planet::load(FILE* file) {
 }

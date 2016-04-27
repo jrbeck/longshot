@@ -1,10 +1,5 @@
 #include "PlayerView.h"
 
-
-
-
-
-
 void PlayerView::drawEquipped(GameModel* gameModel, AssetManager& assetManager) {
   melee_weapon_state_t* leftHand = gameModel->player->getMeleeWeaponState(EQUIP_PRIMARY);
   melee_weapon_state_t* rightHand = gameModel->player->getMeleeWeaponState(EQUIP_SECONDARY);
@@ -56,9 +51,6 @@ void PlayerView::drawEquippedGun(const melee_weapon_state_t* weaponState, double
   glDisable(GL_ALPHA_TEST);
 }
 
-
-
-
 void PlayerView::drawMeleeWeapon(const melee_weapon_state_t* weaponState, GLuint modelDisplayListHandle) {
   double handFacing = weaponState->facing + (MY_PI / 4.0);
 
@@ -99,10 +91,6 @@ void PlayerView::drawMeleeWeapon(const melee_weapon_state_t* weaponState, GLuint
 
   glPopMatrix();
 }
-
-
-
-
 
 void PlayerView::drawPlayerTargetBlock(player_c* player) {
   int targetFace;
@@ -173,8 +161,3 @@ void PlayerView::drawPlayerTargetBlock(player_c* player) {
   glVertex3d(farCorner.x, nearCorner.y, farCorner.z);
   glEnd();
 }
-
-
-
-
-

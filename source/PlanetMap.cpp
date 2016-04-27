@@ -1,26 +1,26 @@
 #include "PlanetMap.h"
 
 PlanetMap::PlanetMap(GameWindow* gameWindow) :
-  mMenu(NULL),
-  mTerrain(NULL),
-  mColors(NULL),
-  mPeriodics(NULL)
+  mMenu(0),
+  mTerrain(0),
+  mColors(0),
+  mPeriodics(0)
 {
   mGameWindow = gameWindow;
   mLeftMouseButtonClicked = false;
 }
 
 PlanetMap::~PlanetMap() {
-  if (mMenu != NULL) {
+  if (mMenu != 0) {
     delete mMenu;
   }
-  if (mTerrain != NULL) {
+  if (mTerrain != 0) {
     delete mTerrain;
   }
-  if (mColors != NULL) {
+  if (mColors != 0) {
     delete [] mColors;
   }
-  if (mPeriodics != NULL) {
+  if (mPeriodics != 0) {
     delete mPeriodics;
   }
 }
@@ -52,27 +52,27 @@ void PlanetMap::setUpOpenGl() {
 
 bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
   mMenu = new GameMenu();
-  if (mMenu == NULL) {
+  if (mMenu == 0) {
     printf("PlanetMap::chooseLocation(): error: out of memory 1\n");
     return false;
   }
 //  mMenu->setFont(gDefaultFontTextureHandle);
 
   mTerrain = new Terrain(PLANET_MAP_SIDE);
-  if (mTerrain == NULL) {
+  if (mTerrain == 0) {
     printf("PlanetMap::chooseLocation(): error: out of memory 2\n");
     delete mMenu;
     return false;
   }
   mColors = new v3d_t[PLANET_MAP_SIDE * PLANET_MAP_SIDE];
-  if (mColors == NULL) {
+  if (mColors == 0) {
     printf("PlanetMap::chooseLocation(): error: out of memory 3\n");
     delete mMenu;
     delete mTerrain;
     return false;
   }
   mPeriodics = new Periodics();
-  if (mPeriodics == NULL) {
+  if (mPeriodics == 0) {
     printf("PlanetMap::chooseLocation(): error: out of memory 4\n");
     delete mMenu;
     delete mTerrain;
@@ -135,7 +135,6 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
       color,
       bgColor);
 
-
     // k let's draw!
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawTerrain();
@@ -149,7 +148,7 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
   return false;
 }
 
-void PlanetMap::drawMap(void) {
+void PlanetMap::drawMap() {
 }
 
 void PlanetMap::buildFromPeriodics(int seed) {
@@ -204,7 +203,7 @@ void PlanetMap::buildFromPeriodics(int seed) {
 }
 
 // handle an SDL_Event
-int PlanetMap::handleInput (void) {
+int PlanetMap::handleInput() {
   int quit = 0;
   mMouseMoved = 0;
 
@@ -248,16 +247,14 @@ int PlanetMap::handleInput (void) {
     }
   }
 
-
   // RTS MODE
   // handle mouse drag
   // FIXME: not here please!
   Uint8 ms;
-  ms = SDL_GetMouseState (NULL, NULL);
+  ms = SDL_GetMouseState (0, 0);
 
   if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_LEFT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.1);
-
     md.x = -md.x;
 
 //    mRtsCam.translate (md);
@@ -273,7 +270,7 @@ int PlanetMap::handleInput (void) {
   return quit;
 }
 
-int PlanetMap::handleKeystroke (void) {
+int PlanetMap::handleKeystroke() {
   switch (sdlevent.key.keysym.sym) {
     case SDLK_ESCAPE:  // quit
       return 1;
@@ -291,7 +288,7 @@ int PlanetMap::handleKeystroke (void) {
   return 0;
 }
 
-int PlanetMap::handleKeyup (void) {
+int PlanetMap::handleKeyup() {
 /*  if (*mode == MODE_PLAYER) {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
@@ -307,7 +304,7 @@ int PlanetMap::handleKeyup (void) {
   return 0;
 }
 
-void PlanetMap::handleMouseButtonDown (int button, v2d_t pos) {
+void PlanetMap::handleMouseButtonDown(int button, v2d_t pos) {
   switch (button) {
     case SDL_BUTTON_RIGHT:
       break;
@@ -324,7 +321,7 @@ void PlanetMap::handleMouseButtonUp(int button, v2d_t pos) {
   }
 }
 
-void PlanetMap::drawTerrain(void) const {
+void PlanetMap::drawTerrain() const {
   v3d_t corners[4];
 
   glDisable(GL_TEXTURE_2D);
@@ -348,7 +345,6 @@ void PlanetMap::drawTerrain(void) const {
       corners[3].x = static_cast<int>(i);
       corners[3].z = mTerrain->get_value(i, j + 1);
       corners[3].y = static_cast<int>(j + 1);
-
 
       int colorIndex = i + (j * PLANET_MAP_SIDE);
 

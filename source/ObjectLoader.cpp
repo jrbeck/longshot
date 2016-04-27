@@ -1,6 +1,5 @@
 #include "ObjectLoader.h"
 
-
 ObjectLoader::ObjectLoader() {
 }
 
@@ -46,7 +45,7 @@ GLuint ObjectLoader::loadObjectToDisplayList(const char* fileName) {
   return displayListHandle;
 }
 
-int ObjectLoader::loadQuad (XmlParser &xmlParser) {
+int ObjectLoader::loadQuad(XmlParser& xmlParser) {
   // printf ("loading quad:\n");
 
   xml_element_t e = xmlParser.getNextElement();

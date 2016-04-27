@@ -1,10 +1,10 @@
 #include "MerchantView.h"
 
 MerchantView::MerchantView() :
-  mMenu(NULL),
+  mMenu(0),
   mMode(MERCHANT_MODE_SELL),
   mSelectedItem(-1),
-  mMerchant(NULL)
+  mMerchant(0)
 {
   // FIXME: aww...c'mon...
   colorWhite[0] = 1.0f;
@@ -27,21 +27,19 @@ MerchantView::MerchantView() :
   fontSize.y = 0.03f;
 }
 
-
 MerchantView::~MerchantView() {
-  if (mMenu != NULL) {
+  if (mMenu != 0) {
     delete mMenu;
   }
-  if (mMerchant != NULL) {
+  if (mMerchant != 0) {
     delete mMerchant;
   }
 }
 
-
-void MerchantView::engageMerchant(player_c &player, ItemManager &itemManager) {
-  if (mMerchant != NULL) {
+void MerchantView::engageMerchant(player_c& player, ItemManager& itemManager) {
+  if (mMerchant != 0) {
     delete mMerchant;
-    mMerchant = NULL;
+    mMerchant = 0;
   }
   mMerchant = new Merchant();
 
@@ -51,8 +49,7 @@ void MerchantView::engageMerchant(player_c &player, ItemManager &itemManager) {
   setupMenu(player, itemManager);
 }
 
-
-void MerchantView::setupMerchant(Merchant &merchant, ItemManager &itemManager) {
+void MerchantView::setupMerchant(Merchant& merchant, ItemManager& itemManager) {
 
   merchant.mInventoryList.clear();
 
@@ -62,13 +59,10 @@ void MerchantView::setupMerchant(Merchant &merchant, ItemManager &itemManager) {
   }
 }
 
-
-
-int MerchantView::update(player_c &player, ItemManager &itemManager) {
+int MerchantView::update(player_c& player, ItemManager& itemManager) {
   int choice = mMenu->GameMenuhoice(false);
 
   switch (choice) {
-
   case MERCHANT_BUTTON_END_TRANSACTION:
     // TODO: for now, just destroy the placeholder merchant's
     // inventory
@@ -76,6 +70,7 @@ int MerchantView::update(player_c &player, ItemManager &itemManager) {
       itemManager.destroyItem(mMerchant->mInventoryList[i]);
     }
     return 1;
+
   case MERCHANT_BUTTON_SELL_MODE:
     if (mMode != MERCHANT_MODE_SELL) {
       mMode = MERCHANT_MODE_SELL;
@@ -83,6 +78,7 @@ int MerchantView::update(player_c &player, ItemManager &itemManager) {
       setupMenu(player, itemManager);
     }
     break;
+
   case MERCHANT_BUTTON_BUY_MODE:
     if (mMode != MERCHANT_MODE_BUY) {
       mMode = MERCHANT_MODE_BUY;
@@ -132,29 +128,21 @@ int MerchantView::update(player_c &player, ItemManager &itemManager) {
     break;
   }
 
-
-
-
-
   // check to see if the player clicked on an item
   if (choice >= MERCHANT_BUTTON_ITEM_BEGIN) {
     mSelectedItem = choice - MERCHANT_BUTTON_ITEM_BEGIN;
     setupMenu(player, itemManager);
   }
 
-
   return 0;
 }
 
-
-
-void MerchantView::setupMenu(player_c &player, ItemManager &itemManager) {
-  if (mMenu != NULL) {
+void MerchantView::setupMenu(player_c& player, ItemManager& itemManager) {
+  if (mMenu != 0) {
     delete mMenu;
-    mMenu = NULL;
+    mMenu = 0;
   }
   mMenu = new GameMenu();
-
 
   mMenu->addText(v2d_v(0.6, 0.1), v2d_v(0.3, 0.05), fontSize,
     "inventory", TEXT_JUSTIFICATION_CENTER, colorWhite, colorBackground);
@@ -171,14 +159,9 @@ void MerchantView::setupMenu(player_c &player, ItemManager &itemManager) {
   else {
     setupBuyMenu(*mMerchant, itemManager);
   }
-
-
-
 }
 
-
-
-void MerchantView::setupSellMenu(player_c &player, ItemManager &itemManager) {
+void MerchantView::setupSellMenu(player_c& player, ItemManager& itemManager) {
   char tempString[128];
 
   mMenu->addButton(v2d_v(0.15, 0.2), v2d_v(0.2, 0.05), fontSize,
@@ -205,10 +188,7 @@ void MerchantView::setupSellMenu(player_c &player, ItemManager &itemManager) {
   setupInventoryList(itemManager);
 }
 
-
-
-void MerchantView::setupBuyMenu(Merchant &merchant, ItemManager &itemManager) {
-
+void MerchantView::setupBuyMenu(Merchant& merchant, ItemManager& itemManager) {
   mMenu->addButton(v2d_v(0.15, 0.2), v2d_v(0.2, 0.05), fontSize,
     "sell mode", TEXT_JUSTIFICATION_CENTER, MERCHANT_BUTTON_SELL_MODE, colorWhite, colorBackground);
 
@@ -230,12 +210,9 @@ void MerchantView::setupBuyMenu(Merchant &merchant, ItemManager &itemManager) {
 
   // add the buttons for the merchant's inventory
   setupInventoryList(itemManager);
-
 }
 
-
-
-void MerchantView::addSelectedItemInfo(ItemManager &itemManager) {
+void MerchantView::addSelectedItemInfo(ItemManager& itemManager) {
   char tempString[128];
 
   // show details for the selected item
@@ -282,10 +259,7 @@ void MerchantView::addSelectedItemInfo(ItemManager &itemManager) {
   }
 }
 
-
-
-void MerchantView::setupInventoryList(ItemManager &itemManager) {
-
+void MerchantView::setupInventoryList(ItemManager& itemManager) {
   double buttonHeight = (0.875 - 0.175) / static_cast<double>(tempList.size ());
   v2d_t tl, dimensions;
 
@@ -308,12 +282,8 @@ void MerchantView::setupInventoryList(ItemManager &itemManager) {
         item.name, TEXT_JUSTIFICATION_LEFT, MERCHANT_BUTTON_ITEM_BEGIN + i, colorWhite, bgColor);
     }
   }
-
 }
-
 
 void MerchantView::draw(void) {
   mMenu->draw();
 }
-
-

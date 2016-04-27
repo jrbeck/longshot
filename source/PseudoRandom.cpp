@@ -12,11 +12,11 @@ void PseudoRandom::setSeed(UINT seed) {
   mX = mSeed = seed;
 }
 
-UINT PseudoRandom::getSeed(void) const {
+UINT PseudoRandom::getSeed() const {
   return mSeed;
 }
 
-int PseudoRandom::getNextInt(void) {
+int PseudoRandom::getNextInt() {
   int value = (int)((mX = ((mA * mX) + mC)) >> 16u);
 
   // FIXME: is there a faster way to do this?
@@ -34,7 +34,7 @@ int PseudoRandom::getNextInt(int low, int high) {
   return (int)floor(((val / (double)(mRandMax + 1)) * (double)(high - low)) + (double)low);
 }
 
-double PseudoRandom::getNextDouble(void) {
+double PseudoRandom::getNextDouble() {
   return (double)getNextInt () / ((double)mRandMax + 1.0);
 }
 

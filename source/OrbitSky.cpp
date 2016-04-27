@@ -1,15 +1,12 @@
 #include "OrbitSky.h"
 
-
-
 OrbitSky::OrbitSky() {
 }
-
 
 OrbitSky::~OrbitSky() {
 }
 
-void OrbitSky::setOrbit(Galaxy &galaxy, size_t planetHandle) {
+void OrbitSky::setOrbit(Galaxy& galaxy, size_t planetHandle) {
   mBodies.clear();
 
   // space is so black...
@@ -18,23 +15,18 @@ void OrbitSky::setOrbit(Galaxy &galaxy, size_t planetHandle) {
   celestial_body body;
   body.color[3] = 1.0f;
 
-
   // set up the stars
   for (int i = 0; i < 150; i++) {
     body.color[0] = r_num(0.8, 1.0);
     body.color[1] = r_num(0.8, 1.0);
     body.color[2] = r_num(0.8, 1.0);
-
     body.pos = v3d_random(1000.0);
-
     body.size = 1.0f;
-
     mBodies.push_back(body);
   }
 
-
   // set up the sun
-  GLfloat *sunColor = galaxy.getStarSystemByHandle(planetHandle)->mStarColor;
+  GLfloat* sunColor = galaxy.getStarSystemByHandle(planetHandle)->mStarColor;
   body.color[0] = sunColor[0];
   body.color[1] = sunColor[1];
   body.color[2] = sunColor[2];
@@ -59,13 +51,9 @@ void OrbitSky::setOrbit(Galaxy &galaxy, size_t planetHandle) {
   body.size = 40.0f;
 
   mBodies.push_back(body);
-
-
 }
 
-
-void OrbitSky::draw(gl_camera_c &cam, v3d_t playerPosition) {
-
+void OrbitSky::draw(gl_camera_c& cam, v3d_t playerPosition) {
   // we'll use these to restore them afterwards
   v2d_t oldNearAndFar = cam.getNearAndFar ();
 
@@ -78,12 +66,8 @@ void OrbitSky::draw(gl_camera_c &cam, v3d_t playerPosition) {
   glDisable (GL_FOG);
   glEnable (GL_BLEND);
 
-
-
   size_t numBodies = mBodies.size();
   for (size_t i = 0; i < numBodies; i++) {
-
-
     glPushMatrix ();
       glTranslated(mBodies[i].pos.x + playerPosition.x,
         mBodies[i].pos.y + playerPosition.y,
@@ -96,9 +80,7 @@ void OrbitSky::draw(gl_camera_c &cam, v3d_t playerPosition) {
         AssetManager::drawBlankBlock ();
       glEnd ();
     glPopMatrix ();
-
   }
-
 
   glDisable (GL_BLEND);
   glEnable (GL_FOG);
@@ -108,7 +90,4 @@ void OrbitSky::draw(gl_camera_c &cam, v3d_t playerPosition) {
 
   // restore the view volume
   cam.setNearAndFar (oldNearAndFar);
-
 }
-
-

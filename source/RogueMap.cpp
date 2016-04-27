@@ -1,32 +1,25 @@
 #include "RogueMap.h"
 
-
-RogueMap::RogueMap () {
+RogueMap::RogueMap() {
   mMap = NULL;
   mWidth = 0;
   mHeight = 0;
   mLastRoomHandle = 0;
 }
 
-
-
-RogueMap::RogueMap (int width, int height) {
+RogueMap::RogueMap(int width, int height) {
   mMap = NULL;
   resize (width, height);
   mLastRoomHandle = 0;
 }
 
-
-
-RogueMap::~RogueMap () {
+RogueMap::~RogueMap() {
   if (mMap != NULL) {
     delete [] mMap;
   }
 }
 
-
-
-void RogueMap::resize (int width, int height) {
+void RogueMap::resize(int width, int height) {
   if (mMap != NULL) {
     delete [] mMap;
   }
@@ -39,27 +32,19 @@ void RogueMap::resize (int width, int height) {
   clear ();
 }
 
-
-
-int RogueMap::getWidth (void) const {
+int RogueMap::getWidth() const {
   return mWidth;
 }
 
-
-
-int RogueMap::getHeight (void) const {
+int RogueMap::getHeight() const {
   return mHeight;
 }
 
-
-
-int RogueMap::getLastRoomHandle (void) const {
+int RogueMap::getLastRoomHandle() const {
   return mLastRoomHandle;
 }
 
-
-
-void RogueMap::randomize (bool clearMap, int numRooms) {
+void RogueMap::randomize(bool clearMap, int numRooms) {
   if (clearMap) {
     clear();
   }
@@ -90,9 +75,7 @@ void RogueMap::randomize (bool clearMap, int numRooms) {
   }
 }
 
-
-
-void RogueMap::clear (void) {
+void RogueMap::clear() {
   map_tile_t blank;
 
   blank.type = MAP_TILE_WALL;
@@ -112,9 +95,7 @@ void RogueMap::clear (void) {
   mLastRoomHandle = 0;
 }
 
-
-
-int RogueMap::getRoomIndexByHandle (int handle) {
+int RogueMap::getRoomIndexByHandle(int handle) {
   if (handle <= 0) {
     return -1;
   }
@@ -128,10 +109,8 @@ int RogueMap::getRoomIndexByHandle (int handle) {
   return -1;
 }
 
-
-
 // WARNING: occurrence index is zero-based
-int RogueMap::getRoomIndexById (int id, int occurrence) {
+int RogueMap::getRoomIndexById(int id, int occurrence) {
   for (size_t i = 0; i < mRooms.size (); i++) {
     if (mRooms[i].id == id) {
       // what? don't trust the compiler? ;)
@@ -144,9 +123,7 @@ int RogueMap::getRoomIndexById (int id, int occurrence) {
   return -1;
 }
 
-
-
-v2di_t RogueMap::random_room (int id, int width, int height) {
+v2di_t RogueMap::random_room(int id, int width, int height) {
   v2di_t a, b;
 
   int done;
@@ -191,9 +168,7 @@ v2di_t RogueMap::random_room (int id, int width, int height) {
   return a;
 }
 
-
-
-int RogueMap::placeRandomDoor (int roomId) {
+int RogueMap::placeRandomDoor(int roomId) {
   // not gonna happen if there are no rooms
   if (mRooms.size () == 0) {
     return -1;
@@ -236,13 +211,7 @@ int RogueMap::placeRandomDoor (int roomId) {
   return 0;
 }
 
-
-
-
-
-
-
-void RogueMap::random_path (void) {
+void RogueMap::random_path() {
 /*  v2di_t a, b;
 
   // keep trying till we draw a path
@@ -259,9 +228,7 @@ void RogueMap::random_path (void) {
 */
 }
 
-
-
-void RogueMap::grow_paths (void) {
+void RogueMap::grow_paths() {
   v2di_t a, b;
 
   map_tile_t tile;
@@ -313,9 +280,7 @@ void RogueMap::grow_paths (void) {
   }
 }
 
-
-
-int RogueMap::draw_path (v2di_t a, v2di_t b) {
+int RogueMap::draw_path(v2di_t a, v2di_t b) {
   int *open = new int[mWidth * mHeight];
 
   for (int j = 0; j < mHeight; j++) {
@@ -513,9 +478,7 @@ int RogueMap::draw_path (v2di_t a, v2di_t b) {
   return count;
 } // END of draw_path()
 
-
-
-int RogueMap::path_valid_pos (int x, int y) {
+int RogueMap::path_valid_pos(int x, int y) {
   for (int j = -1; j < 2; j++) {
     for (int i = -1; i < 2; i++) {
       if (!isOnMap (x + i, y + j)) return 0;
@@ -527,9 +490,7 @@ int RogueMap::path_valid_pos (int x, int y) {
   return 1;
 }
 
-
-
-v2di_t RogueMap::placeRandomMonster (void) {
+v2di_t RogueMap::placeRandomMonster() {
   bool monsterPlaced = false;
   int numTries = 0;
   v2di_t position;
@@ -555,9 +516,7 @@ v2di_t RogueMap::placeRandomMonster (void) {
   return position;
 }
 
-
-
-bool RogueMap::isValidMonsterLocation (v2di_t pos) {
+bool RogueMap::isValidMonsterLocation(v2di_t pos) {
   map_tile_t tile = getTile (pos.x, pos.y);
 
   if (tile.monsterPresent) return false;
@@ -566,9 +525,8 @@ bool RogueMap::isValidMonsterLocation (v2di_t pos) {
   return true;
 }
 
-
 // if a is an edge, returns the id of the room it's attached to
-int RogueMap::onEdge (v2di_t a) {
+int RogueMap::onEdge(v2di_t a) {
   // must be on map
   if (!isOnMap (a.x, a.y)) return ID_NONE;
 
@@ -608,9 +566,7 @@ int RogueMap::onEdge (v2di_t a) {
        (r * getTile (a.x - 1, a.y).id);
 }
 
-
-
-bool RogueMap::isOnMap (int i, int j) {
+bool RogueMap::isOnMap(int i, int j) {
   if (i < 0 || j < 0 || i >= mWidth || j >= mHeight) {
     return false;
   }
@@ -618,9 +574,7 @@ bool RogueMap::isOnMap (int i, int j) {
   return true;
 }
 
-
-
-void RogueMap::draw_room (v2di_t c, v2di_t d, int id) {
+void RogueMap::draw_room(v2di_t c, v2di_t d, int id) {
   int l = MACRO_MIN(c.x, d.x);
   int r = MACRO_MAX(c.x, d.x);
   int t = MACRO_MIN(c.y, d.y);
@@ -652,9 +606,7 @@ void RogueMap::draw_room (v2di_t c, v2di_t d, int id) {
   mRooms.push_back (room);
 }
 
-
-
-void RogueMap::drawIdRectInRoom (int roomId, int rectId) {
+void RogueMap::drawIdRectInRoom(int roomId, int rectId) {
   int index;
 
   for (size_t i = 0; i < mRooms.size (); i++) {
@@ -672,9 +624,7 @@ void RogueMap::drawIdRectInRoom (int roomId, int rectId) {
   }
 }
 
-
-
-map_tile_t RogueMap::getTile (int i, int j) {
+map_tile_t RogueMap::getTile(int i, int j) {
   if (mMap == NULL || !isOnMap (i, j)) {
     map_tile_t dummy;
 
@@ -686,9 +636,7 @@ map_tile_t RogueMap::getTile (int i, int j) {
   return mMap[i + (j * mWidth)];
 }
 
-
-
-void RogueMap::setTile (int i, int j, map_tile_t tile) {
+void RogueMap::setTile(int i, int j, map_tile_t tile) {
   if (mMap == NULL ||  !isOnMap (i, j)) {
     return;
   }
@@ -696,10 +644,7 @@ void RogueMap::setTile (int i, int j, map_tile_t tile) {
   mMap[i + (j * mWidth)] = tile;
 }
 
-
-
-
-v2di_t RogueMap::getRandomRoomIndex (void) {
+v2di_t RogueMap::getRandomRoomIndex() {
   v2di_t index = v2di_v (-1, -1);
 
   if (mMap == NULL) {
@@ -721,9 +666,7 @@ v2di_t RogueMap::getRandomRoomIndex (void) {
   return index;
 }
 
-
-
-v2di_t RogueMap::getEntryPoint (void) {
+v2di_t RogueMap::getEntryPoint() {
   v2di_t index = v2di_v (-1, -1);
 
   if (mMap == NULL) {
@@ -755,9 +698,7 @@ v2di_t RogueMap::getEntryPoint (void) {
   return index;
 }
 
-
-
-void RogueMap::draw (void) {
+void RogueMap::draw() {
   GLfloat color1[4] = {1.0, 0.0, 0.0, 1.0};
   GLfloat color2[4] = {0.0, 1.0, 0.0, 1.0};
   GLfloat color3[4] = {0.0, 0.0, 1.0, 1.0};
@@ -823,9 +764,4 @@ void RogueMap::draw (void) {
 
     }
   }
-
-
-
 }
-
-

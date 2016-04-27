@@ -4,16 +4,13 @@
 // has to do with sprintf() not being safe....
 #pragma warning (disable : 4996)
 
-
 player_c::player_c(GameModel* gameModel) {
   mGameModel = gameModel;
   mInventory.resizeBackpack(DEFAULT_BACKPACK_SIZE);
 }
 
-
 player_c::~player_c () {
 }
-
 
 int player_c::reset(size_t physicsHandle, size_t aiHandle) {
   mStartLocationFound = false;
@@ -82,8 +79,6 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle) {
   return 0;
 }
 
-
-
 // reset everything but the physics handle
 int player_c::soft_reset(v3d_t& startPosition) {
   mHeadOffset = v3d_v(0.25, 1.6, 0.25);
@@ -117,12 +112,10 @@ int player_c::soft_reset(v3d_t& startPosition) {
   return 0;
 }
 
-
 void player_c::setStartPosition(v3d_t& startPosition) {
     mStartPosition = startPosition;
     mStartLocationFound = true;
 }
-
 
 void player_c::godMode() {
   printf ("you naughty little stinker you...\n");
@@ -813,7 +806,6 @@ bool player_c::update(AssetManager& assetManager) {
   // * * * * * * end dead section * * * * * * * * * * *
 
 
-
   if (mShowCharacterSheet) {
     if (gi.isClickMouse1()) {
       if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
@@ -1115,7 +1107,6 @@ bool player_c::update(AssetManager& assetManager) {
     mGameModel->physics->add_force(mGameModel->physics->getPlayerHandle(), swimForce);
   }
 
-
   // now we know what the player is doing, so let's update this
   mHeadBobble.update(headBobbleAction, mLastUpdateTime);
 
@@ -1128,7 +1119,6 @@ bool player_c::update(AssetManager& assetManager) {
 
   return escapePressed;
 }
-
 
 void player_c::readPhysicsMessages(AssetManager& assetManager) {
   phys_message_t message;
@@ -1168,9 +1158,6 @@ void player_c::readPhysicsMessages(AssetManager& assetManager) {
   }
 }
 
-
-
-
 void player_c::placeLight() {
   if (mPlacedBlock) {
     mPlacedBlock = false;
@@ -1194,8 +1181,6 @@ void player_c::placeLight() {
   }
 }
 
-
-Inventory *player_c::getInventory(void) {
+Inventory* player_c::getInventory(void) {
   return &mInventory;
 }
-
