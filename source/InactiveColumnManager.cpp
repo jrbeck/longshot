@@ -177,7 +177,7 @@ ColumnDatum *InactiveColumnManager::getColumnDatumForSaving(v3di_t worldIndex) {
     return mColumnData[columnIndex];
   }
 
-  //  printf ("NEW ONE %d: (%d, %d)\n", mColumnData.size (), worldIndex.x, worldIndex.z);
+  //  printf ("NEW ONE %d: (%d, %d)\n", mColumnData.size(), worldIndex.x, worldIndex.z);
 
   // otherwise, we get to make a new one
   ColumnDatum* column = new ColumnDatum;

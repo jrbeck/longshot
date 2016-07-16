@@ -17,8 +17,7 @@ void AiManager::clear() {
   for (size_t i = 0; i < numEntities; i++) {
     if (mAiEntities[i] != NULL) {
       delete mAiEntities[i];
-    }
-    else {
+    } else {
       printf("AiManager::clear(): error: NULL AiEntity\n");
     }
   }
@@ -108,7 +107,7 @@ AiEntity* AiManager::getEntityByHandle(size_t handle) {
   return NULL;
 }
 
-vector<AiEntity*>* AiManager::getEntities(void) {
+vector<AiEntity*>* AiManager::getEntities() {
   return &mAiEntities;
 }
 
@@ -191,8 +190,7 @@ size_t AiManager::spawnEntity(
     if (type == AITYPE_HOPPER) {
       if (itemRandom > 7.0) {
         newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomItem();
-      }
-      else {
+      } else {
         newAiEntity->mInventory[i] = 0;
       }
     }
@@ -205,8 +203,7 @@ size_t AiManager::spawnEntity(
         if (itemRandom > 9.6) {
           // this one could be dangerous
           newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomGun(r_num(5.0, 10.0));
-        }
-        else {
+        } else {
           // 'weak' gun
           newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomGun(r_num(1.0, 2.5));
         }
@@ -215,8 +212,7 @@ size_t AiManager::spawnEntity(
         // maybe generate some other random item
         if (itemRandom > 9.0) {
           newAiEntity->mInventory[i] = mGameModel->itemManager->generateRandomItem();
-        }
-        else {
+        } else {
           newAiEntity->mInventory[i] = 0;
         }
       }
@@ -236,7 +232,7 @@ int AiManager::update() {
 
   // we'll just count these up
   size_t liveCritters = 0;
-  for (size_t i = 0; i < mAiEntities.size (); i++) {
+  for (size_t i = 0; i < mAiEntities.size(); i++) {
     if (mAiEntities[i]->mCurrentHealth > 0.0) {
       liveCritters++;
     }
@@ -264,7 +260,6 @@ int AiManager::update() {
     pos.y = height + 30.0;
 
     int type = r_numi(1, NUM_AITYPES);
-
     spawnEntity(type, pos);
   }
 
@@ -273,7 +268,7 @@ int AiManager::update() {
 //  printf ("AI time: %.4f\n", post_time - pre_time);
 
   // now to update the entities
-  for (size_t i = 0; i < mAiEntities.size (); i++) {
+  for (size_t i = 0; i < mAiEntities.size(); i++) {
     // ignore players and dead things
     if (mAiEntities[i]->mType == AITYPE_PLAYER) {
       mAiEntities[i]->updatePlayer();
@@ -282,8 +277,7 @@ int AiManager::update() {
     // kill off dead physics objects
     if (mGameModel->physics->getIndexFromHandle(mAiEntities[i]->mPhysicsHandle) == -1) {
       mAiEntities[i]->mActive = false;
-    }
-    else if (mAiEntities[i]->mActive) {
+    } else if (mAiEntities[i]->mActive) {
       mAiEntities[i]->update();
     }
 

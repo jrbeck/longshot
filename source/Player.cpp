@@ -647,7 +647,7 @@ void player_c::updateCharacterSheet() {
 
   for (size_t i = 0; i < mInventory.mBackpack.size(); i++) {
     tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mInventory.mBackpack.size()));
-//    br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size ()));;
+//    br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size()));;
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9;
 

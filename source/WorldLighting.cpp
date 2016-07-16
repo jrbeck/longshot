@@ -342,7 +342,7 @@ void WorldLighting::applyLighting(
 
   float sunlightgMult;
 
-  for (size_t chunkIndex = 0; chunkIndex < worldMap.mColumns[columnIndex].mWorldChunks.size (); chunkIndex++) {
+  for (size_t chunkIndex = 0; chunkIndex < worldMap.mColumns[columnIndex].mWorldChunks.size(); chunkIndex++) {
     chunkPosition = worldMap.mColumns[columnIndex].mWorldChunks[chunkIndex]->mWorldPosition;
 
     for (relativePosition.z = 0; relativePosition.z < WORLD_CHUNK_SIDE; relativePosition.z++) {

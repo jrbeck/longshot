@@ -47,18 +47,15 @@ void AiEntity::update() {
     for (int i = 0; i < AI_INVENTORY_SIZE; i++) {
       if (mInventory[i] > 0) {
         item_t item = mGameModel->itemManager->getItem(mInventory[i]);
-
         if (item.type == ITEMTYPE_GUN_ONE_HANDED && r_numi(0, 10) < 3) {
           mGameModel->itemManager->destroyItem(mInventory[i]);
-        }
-        else {
+        } else {
           v3d_t itemForce = v3d_random(20.0);
           itemForce.y = 10.0;
           PhysicsEntity* itemPhysicsEntity = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, true);
           if (itemPhysicsEntity != NULL) {
             physics.setItemHandleAndType(itemPhysicsEntity->handle, mInventory[i], mGameModel->itemManager->getItemType(mInventory[i]));
           }
-
         }
 
         mInventory[i] = 0;
@@ -477,7 +474,7 @@ void AiEntity::aquireTarget() {
   WorldMap& worldMap = *mGameModel->location->getWorldMap();
 
   // try to find target
-  for (size_t j = 0; j < aiEntities.size (); j++) {
+  for (size_t j = 0; j < aiEntities.size(); j++) {
     // ignore self and dead things
     if (!aiEntities[j]->mActive || aiEntities[j]->mType == mType || aiEntities[j]->mHandle == mHandle) {
       continue;

@@ -103,7 +103,7 @@ int InputEventQueue::add_event (double time, int type, double value) {
 // returns 0 if no more events
 // returns 1 if an event was successfully removed
 int InputEventQueue::extract_soonest (input_event_t *e) {
-  if (q.size () < 1) {
+  if (q.size() < 1) {
     // signal that there are no more events
     return 0; }
 
@@ -115,7 +115,7 @@ int InputEventQueue::extract_soonest (input_event_t *e) {
   }
 
   // stick the info in the pointer
-  *e = q[q.size () - 1];
+  *e = q[q.size() - 1];
 
   // remove the last element in the list
   q.pop_back ();
@@ -128,7 +128,7 @@ int InputEventQueue::extract_soonest (input_event_t *e) {
 // returns the time of the next event
 // returns -1.0 if no next event
 double InputEventQueue::time_next (void) {
-  if (q.size () < 1) {
+  if (q.size() < 1) {
     // signal that there are no more events
     return -1.0; }
 
@@ -140,7 +140,7 @@ double InputEventQueue::time_next (void) {
   }
 
   // return the time
-  return q[q.size () - 1].time;
+  return q[q.size() - 1].time;
 }
 
 

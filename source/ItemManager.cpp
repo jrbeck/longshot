@@ -88,7 +88,7 @@ void ItemManager::trimItemsList() {
 
   for (int i = 0; i <= ((int)mItems.size() - 1); i++) {
     if (!mItems[i].active) {
-      swap(mItems[i], mItems[mItems.size () - 1]);
+      swap(mItems[i], mItems[mItems.size() - 1]);
       mItems.pop_back();
     }
   }

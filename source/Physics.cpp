@@ -1049,7 +1049,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
   int axis;
 
   if (physicsEntity->type == OBJTYPE_AI_ENTITY || physicsEntity->type == OBJTYPE_PLAYER) {
-    for (size_t other = 0; other < obj.size (); other++) {
+    for (size_t other = 0; other < obj.size(); other++) {
       otherPhysicsEntity = obj[other];
 
       if (!otherPhysicsEntity->active ||

@@ -87,7 +87,7 @@ void ColumnVisibilityTracker::hideColumn (v2di_t index) {
 
 
 void ColumnVisibilityTracker::addColumn (column_viz_t column) {
-  for (size_t i = 0; i < mColumns.size (); i++) {
+  for (size_t i = 0; i < mColumns.size(); i++) {
     if (column.index.x == mColumns[i].index.x &&
       column.index.y == mColumns[i].index.y) {
 
@@ -97,8 +97,8 @@ void ColumnVisibilityTracker::addColumn (column_viz_t column) {
       }
       else {
         // two oppposite calls cancel out
-        if (i != mColumns.size () - 1) {
-          swap (mColumns[i], mColumns[mColumns.size () - 1]);
+        if (i != mColumns.size() - 1) {
+          swap (mColumns[i], mColumns[mColumns.size() - 1]);
         }
 
         printf ("i never had a chance!\n");
@@ -117,12 +117,12 @@ void ColumnVisibilityTracker::addColumn (column_viz_t column) {
 column_viz_t ColumnVisibilityTracker::popColumn (void) {
   column_viz_t column;
 
-  if (mColumns.size () == 0) {
+  if (mColumns.size() == 0) {
     column.type = COLUMN_VIZ_NULL;
     return column;
   }
 
-  column = mColumns[mColumns.size () - 1];
+  column = mColumns[mColumns.size() - 1];
   mColumns.pop_back ();
 
 //  printf ("* * * * column popped!\n");

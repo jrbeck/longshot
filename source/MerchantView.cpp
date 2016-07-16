@@ -260,11 +260,11 @@ void MerchantView::addSelectedItemInfo(ItemManager& itemManager) {
 }
 
 void MerchantView::setupInventoryList(ItemManager& itemManager) {
-  double buttonHeight = (0.875 - 0.175) / static_cast<double>(tempList.size ());
+  double buttonHeight = (0.875 - 0.175) / static_cast<double>(tempList.size());
   v2d_t tl, dimensions;
 
   for (size_t i = 0; i < tempList.size(); i++) {
-    tl = v2d_v (0.55, lerp (0.175, 0.875 - buttonHeight, i, tempList.size ()));
+    tl = v2d_v (0.55, lerp (0.175, 0.875 - buttonHeight, i, tempList.size()));
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9; // 0.9 is the TOTAL HEIGHT
 

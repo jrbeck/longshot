@@ -90,7 +90,7 @@ bool WorldColumn::isInColumn( const v3di_t& worldPosition) const {
 
 
 int WorldColumn::pickChunkFromWorldHeight( int height ) const {
-  for (int i = 0; i < static_cast<int>(mWorldChunks.size ()); i++) {
+  for (int i = 0; i < static_cast<int>(mWorldChunks.size()); i++) {
     if (height >= mWorldChunks[i]->mWorldPosition.y &&
       height < (mWorldChunks[i]->mWorldPosition.y + WORLD_CHUNK_SIDE))
     {
@@ -219,7 +219,7 @@ int WorldColumn::createChunkContaining( const v3di_t& worldPosition ) {
     static_cast<double>( worldPosition.y ) / static_cast<double>( WORLD_CHUNK_SIDE ) ) );
   worldIndex.z = mWorldIndex.z;
 
-//  printf ("num chunks in column: %d\n", mWorldChunks.size ());
+//  printf ("num chunks in column: %d\n", mWorldChunks.size());
 //  v3di_print ("empty world index", worldIndex);
 
   WorldChunk* chunk = new WorldChunk;
@@ -230,7 +230,7 @@ int WorldColumn::createChunkContaining( const v3di_t& worldPosition ) {
 
   updateHighestAndLowest();
 
-  return (static_cast<int>( mWorldChunks.size () ) - 1 );
+  return (static_cast<int>( mWorldChunks.size() ) - 1 );
 }
 
 
@@ -246,7 +246,7 @@ int WorldColumn::getLowestBlockHeight() const {
 
 // this is called whenever a chunk is added or removed
 void WorldColumn::updateHighestAndLowest() {
-  if (mWorldChunks.size () == 0) {
+  if (mWorldChunks.size() == 0) {
     printf ("WorldColumn::updateHighestAndLowest() : no chunks\n");
     return;
   }
@@ -256,7 +256,7 @@ void WorldColumn::updateHighestAndLowest() {
   int highest = -1000000;
   int lowest = 1000000;
 
-  for (size_t i = 0; i < mWorldChunks.size (); i++) {
+  for (size_t i = 0; i < mWorldChunks.size(); i++) {
     if (mWorldChunks[i]->mWorldPosition.y > highest) {
       highest = mWorldChunks[i]->mWorldPosition.y;
     }

@@ -9,7 +9,7 @@ RogueMap::RogueMap() {
 
 RogueMap::RogueMap(int width, int height) {
   mMap = NULL;
-  resize (width, height);
+  resize(width, height);
   mLastRoomHandle = 0;
 }
 
@@ -100,7 +100,7 @@ int RogueMap::getRoomIndexByHandle(int handle) {
     return -1;
   }
 
-  for (size_t i = 0; i < mRooms.size (); i++) {
+  for (size_t i = 0; i < mRooms.size(); i++) {
     if (mRooms[i].handle == handle) {
       return i;
     }
@@ -111,7 +111,7 @@ int RogueMap::getRoomIndexByHandle(int handle) {
 
 // WARNING: occurrence index is zero-based
 int RogueMap::getRoomIndexById(int id, int occurrence) {
-  for (size_t i = 0; i < mRooms.size (); i++) {
+  for (size_t i = 0; i < mRooms.size(); i++) {
     if (mRooms[i].id == id) {
       // what? don't trust the compiler? ;)
       if (occurrence-- <= 0) {
@@ -170,13 +170,13 @@ v2di_t RogueMap::random_room(int id, int width, int height) {
 
 int RogueMap::placeRandomDoor(int roomId) {
   // not gonna happen if there are no rooms
-  if (mRooms.size () == 0) {
+  if (mRooms.size() == 0) {
     return -1;
   }
 
   // find the room in question
   int roomIndex = -1;
-  for (size_t i = 0; i < mRooms.size () && roomIndex < 0; i++) {
+  for (size_t i = 0; i < mRooms.size() && roomIndex < 0; i++) {
     if (mRooms[i].id == roomId) {
       roomIndex = i;
     }
@@ -609,7 +609,7 @@ void RogueMap::draw_room(v2di_t c, v2di_t d, int id) {
 void RogueMap::drawIdRectInRoom(int roomId, int rectId) {
   int index;
 
-  for (size_t i = 0; i < mRooms.size (); i++) {
+  for (size_t i = 0; i < mRooms.size(); i++) {
     index = getRoomIndexById (roomId, i);
 
     if (index == -1) break;

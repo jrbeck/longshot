@@ -146,7 +146,7 @@ void WorldMap::clearColumn(int xIndex, int zIndex) {
 void WorldMap::clearColumn(size_t columnIndex) {
   // if the column is already loaded, put it to disk
   if (//mColumns[columnIndex].mNeedsToBeSaved &&
-    mColumns[columnIndex].mWorldChunks.size () > 0)
+    mColumns[columnIndex].mWorldChunks.size() > 0)
   {
     mInactiveColumnManager.saveToInactiveColumns(mColumns[columnIndex]);
   }
@@ -676,7 +676,7 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
 
 
 void WorldMap::addToChangedList( int columnIndex ) {
-  for (size_t i = 0; i < mChangedList.size (); i++) {
+  for (size_t i = 0; i < mChangedList.size(); i++) {
     if (mChangedList[i] == columnIndex) {
       return;
     }
@@ -688,10 +688,10 @@ void WorldMap::addToChangedList( int columnIndex ) {
 
 
 void WorldMap::removeFromChangedList( int columnIndex ) {
-  for (size_t i = 0; i < mChangedList.size (); i++) {
+  for (size_t i = 0; i < mChangedList.size(); i++) {
     if (mChangedList[i] == columnIndex) {
-      if (i != mChangedList.size () - 1) {
-        swap (mChangedList[i], mChangedList[mChangedList.size () - 1]);
+      if (i != mChangedList.size() - 1) {
+        swap (mChangedList[i], mChangedList[mChangedList.size() - 1]);
       }
 
       mChangedList.pop_back ();
@@ -708,7 +708,7 @@ void WorldMap::updateFluids() {
 
   mChangedList.clear ();
 
-  for (size_t i = 0; i < tempList.size (); i++) {
+  for (size_t i = 0; i < tempList.size(); i++) {
     updateFluid (tempList[i]);
 //    printf ("updating fluid %d, %d\n", i, tempList[i]);
   }
@@ -976,7 +976,7 @@ void WorldMap::swapOutToInactive() {
 
 void WorldMap::saveToInactive() {
   for (int column = 0; column < mNumColumns; column++) {
-    if (mColumns[column].mWorldChunks.size () > 0) {
+    if (mColumns[column].mWorldChunks.size() > 0) {
       mInactiveColumnManager.saveToInactiveColumns(mColumns[column]);
     }
   }

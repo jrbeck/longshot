@@ -6,7 +6,7 @@ void FeatureUtil::loadWorldRegion (
   World& world,
   bool doOutcroppings)
 {
-  world.getWorldMap()->resize (sideLength, sideLength);
+  world.getWorldMap()->resize(sideLength, sideLength);
 
   for (int k = 0; k < sideLength; k++) {
     for (int i = 0; i < sideLength; i++) {

@@ -72,7 +72,7 @@ public:
   RogueMap (int width, int height);
   ~RogueMap ();
 
-  void resize (int width, int height);
+  void resize(int width, int height);
 
   int getWidth (void) const;
   int getHeight (void) const;

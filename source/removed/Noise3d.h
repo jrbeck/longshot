@@ -35,7 +35,7 @@ public:
   Noise3d (int side);
   ~Noise3d (void);
 
-  int resize (int side);
+  int resize(int side);
 
   int get_side_length (void);
 
@@ -82,7 +82,7 @@ Noise3d::Noise3d (void) {
   mSideLengthSquared = 0;
 
   // allocate the field and set to zero
-  if (resize (DEFAULT_FIELD_SIDE) == 0) {
+  if (resize(DEFAULT_FIELD_SIDE) == 0) {
     // clear the field to zeros
     set_all (0.0);
   }
@@ -98,7 +98,7 @@ Noise3d::Noise3d (int side) {
   mSideLengthSquared = 0;
 
   // allocate the field and set to zero
-  if (resize (side) == 0) {
+  if (resize(side) == 0) {
     // clear the field to zeros
     set_all (0.0);
   }
@@ -116,7 +116,7 @@ Noise3d::~Noise3d (void) {
 // **************************************************
 //  resize the terrain
 // **************************************************
-int Noise3d::resize (int side) {
+int Noise3d::resize(int side) {
   // if the field is already allocated and of the same size, nothing to do
   if (mSideLength == side && field != NULL) {
     return 0;
@@ -459,9 +459,9 @@ void Noise3d::noiseFrom2d (void) {
   terrain_c x, y, z;
 
 
-  x.resize (mSideLength);
-  y.resize (mSideLength);
-  z.resize (mSideLength);
+  x.resize(mSideLength);
+  y.resize(mSideLength);
+  z.resize(mSideLength);
 
   x.generateTilable (32.0);
   y.generateTilable (32.0);

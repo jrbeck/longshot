@@ -6,7 +6,7 @@ Terrain::Terrain (void) :
   mFieldSide(0),
   mField(NULL)
 {
-  if (resize (DEFAULT_FIELD_SIDE) == 0) {
+  if (resize(DEFAULT_FIELD_SIDE) == 0) {
     set_all (0.0);
   }
 }
@@ -17,7 +17,7 @@ Terrain::Terrain (int side) :
   mField(NULL),
   mFieldSide(0)
 {
-  if (resize (side) == 0) {
+  if (resize(side) == 0) {
     set_all (0.0);
   }
 }
@@ -51,7 +51,7 @@ int Terrain::loadFromDisk (FILE *file) {
   int fieldSide;
   fread (&fieldSide, sizeof fieldSide, 1, file);
 
-  resize (fieldSide);
+  resize(fieldSide);
 
   if (mField == NULL) {
     // memory alloc error
@@ -68,7 +68,7 @@ int Terrain::loadFromDisk (FILE *file) {
 
 
 
-int Terrain::resize (int side) {
+int Terrain::resize(int side) {
   // if the field is already allocated and of the same size, nothing to do
   if (mFieldSide == side && mField != NULL) {
     return 0;

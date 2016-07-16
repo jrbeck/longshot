@@ -8,7 +8,7 @@ void process_events (double process_until) {
     draw_input_flag = 3;
     temp.time = next_input_time;
     next_input_time += INPUT_DELAY;
-    for (int i = 0; i < (int)input_neuron.size (); i++) {
+    for (int i = 0; i < (int)input_neuron.size(); i++) {
       temp.target = input_neuron[i];
       temp.charge = input_level;
 
@@ -19,13 +19,13 @@ void process_events (double process_until) {
   }
 
   // process all the events which occur in this time frame
-  while (event_list.size () > 0 && event_list[0].time <= process_until) {
+  while (event_list.size() > 0 && event_list[0].time <= process_until) {
     event_t cur = event_extract_soonest (event_list);
 
     // just to make things a touch easier to write
     int t = cur.target;
 
-//    printf ("%5.3f: (q_size: %d): target:%d, targ charge:%.2f, syn charge:%.2f, targ thresh:%.2f\n", cur.time, e.size (), t, neuron[t].charge, cur.charge,
+//    printf ("%5.3f: (q_size: %d): target:%d, targ charge:%.2f, syn charge:%.2f, targ thresh:%.2f\n", cur.time, e.size(), t, neuron[t].charge, cur.charge,
 //      neuron[t].threshold);
 
     // handle the decay of the target neuron's charge
@@ -46,7 +46,7 @@ void process_events (double process_until) {
       num_fires++;
 
       // send a signal through each synapse
-      for (int j = 0; j < (int)neuron[t].synapse.size (); j++) {
+      for (int j = 0; j < (int)neuron[t].synapse.size(); j++) {
         temp.target = neuron[t].synapse[j].target;
         temp.charge = neuron[t].threshold * neuron[t].synapse[j].percent;
         temp.time = cur.time + (neuron[t].synapse[j].length * (1.0f / SIGNAL_PROPOGATION_RATE));
@@ -63,7 +63,7 @@ void process_events (double process_until) {
     }
   }
 
-//  printf ("%d, ", e.size ());
+//  printf ("%d, ", e.size());
 }
 
 
@@ -114,7 +114,7 @@ pq_event_c::~pq_event_c () {
 void pq_event_c::insert (pq_event_t e) {
   heap.push_back (e);
 
-  decrease_key ((int)heap.size () - 1);
+  decrease_key ((int)heap.size() - 1);
 
   // increment the global counter
   num_events++;
@@ -123,11 +123,11 @@ void pq_event_c::insert (pq_event_t e) {
 
 pq_event_t pq_event_c::extract_soonest (void) {
   // this better not happen!
-  assert (heap.size () > 0);
+  assert (heap.size() > 0);
 
   pq_event_t  ret = heap[0];
 
-  heap[0] = heap[heap.size () - 1];
+  heap[0] = heap[heap.size() - 1];
   heap.pop_back ();
 
   min_heapify (0);
@@ -154,10 +154,10 @@ void pq_event_c::min_heapify (int i) {
 
   int smallest;
 
-  if (l < (int)heap.size () && heap[l].time < heap[i].time) smallest = l;
+  if (l < (int)heap.size() && heap[l].time < heap[i].time) smallest = l;
   else smallest = i;
 
-  if (r < (int)heap.size () && heap[r].time < heap[smallest].time) smallest = r;
+  if (r < (int)heap.size() && heap[r].time < heap[smallest].time) smallest = r;
 
   if (smallest != i) {
     // swap!

@@ -206,7 +206,7 @@ void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPos
     mGlobalLightIntensities[i] = v3d_zero ();
   }
 
-  for (size_t light = 0; light < mDirectionalLights.size (); light++) {
+  for (size_t light = 0; light < mDirectionalLights.size(); light++) {
     bool isTheSun = false;
 
     if (light == 0) {

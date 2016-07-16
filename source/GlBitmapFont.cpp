@@ -85,7 +85,7 @@ void GlBitmapFont::drawString (
   const string &s,
   const GLfloat color[4]) const
 {
-  if (s.size () <= 0) {
+  if (s.size() <= 0) {
     return;
   }
 
@@ -99,7 +99,7 @@ void GlBitmapFont::drawString (
 
 //  enterGlMode ();
 
-  for (size_t i = 0; i < s.size (); i++) {
+  for (size_t i = 0; i < s.size(); i++) {
     character = s[i];
 
     br[0] = tl[0] + charDimensions[0];

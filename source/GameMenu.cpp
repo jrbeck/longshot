@@ -81,7 +81,7 @@ size_t GameMenu::addButton(
 
   mMenuItems.push_back (item);
 
-  return mMenuItems.size () - 1;
+  return mMenuItems.size() - 1;
 }
 
 
@@ -133,7 +133,7 @@ size_t GameMenu::addText(
 
   mMenuItems.push_back(item);
 
-  return mMenuItems.size () - 1;
+  return mMenuItems.size() - 1;
 }
 
 
@@ -190,7 +190,7 @@ int GameMenu::GameMenuhoice(bool waitForInput) {
 
 int GameMenu::mouse_up(double x, double y) {
   // see if the dummy actually managed to hit something
-  for (size_t i = 0; i < mMenuItems.size (); i++) {
+  for (size_t i = 0; i < mMenuItems.size(); i++) {
     if (mMenuItems[i].type == MENUITEM_BUTTON) {
       if (x >= mMenuItems[i].position[0] &&
         x <= (mMenuItems[i].position[0] + mMenuItems[i].dimensions[0]) &&
@@ -244,7 +244,7 @@ void GameMenu::draw(void) {
   GLfloat pos[2];
   GLfloat dim[2];
 
-  for (size_t i = 0; i < mMenuItems.size (); i++) {
+  for (size_t i = 0; i < mMenuItems.size(); i++) {
 
     switch (mMenuItems[i].textJustification) {
       case TEXT_JUSTIFICATION_LEFT:

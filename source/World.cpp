@@ -197,7 +197,7 @@ int World::preloadColumns(int numColumns, v3d_t pos, LoadScreen* loadScreen) {
   printf ("%6d:  World::preloadColumns()", SDL_GetTicks ());
 
   // resize the WorldMap in case someone was monkeying with it
-  mWorldMap->resize (WORLD_MAP_SIDE, WORLD_MAP_SIDE);
+  mWorldMap->resize(WORLD_MAP_SIDE, WORLD_MAP_SIDE);
 
   // okay, let's actually load something now
   int numColumnsLoaded = 0;

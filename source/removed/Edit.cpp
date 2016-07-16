@@ -3,7 +3,7 @@
 edit_c::edit_c(void) {
   // initialize the terrain
 //  printf ("%6d: terrain\n", SDL_GetTicks ());
-//  ter.resize (DEFAULT_SIDE_UNIV);
+//  ter.resize(DEFAULT_SIDE_UNIV);
 }
 
 

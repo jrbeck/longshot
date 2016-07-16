@@ -59,7 +59,7 @@ public:
   WorldRegion (int side);
   ~WorldRegion (void);
 
-  int resize (int side);
+  int resize(int side);
 
   void setWorldPosition (v3di_t worldPosition);
 
@@ -223,7 +223,7 @@ WorldRegion::~WorldRegion (void) {
 
 
 // clear and resize the array
-int WorldRegion::resize (int side) {
+int WorldRegion::resize(int side) {
   clear ();
 
   root.side_length = side;

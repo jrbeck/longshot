@@ -35,7 +35,7 @@ public:
   int saveToDisk (FILE *file);
   int loadFromDisk (FILE *file);
 
-  int resize (int side);
+  int resize(int side);
 
   int get_side_length (void) const;
 

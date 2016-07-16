@@ -39,7 +39,7 @@ v3d_t physics_c::acceleration (size_t i, double t, const phys_state_t &state) {
   ret.y += DEFAULT_GRAVITY;
 
   // apply forces
-  for (size_t f = 0; f < obj[i].force.size (); f++) {
+  for (size_t f = 0; f < obj[i].force.size(); f++) {
     if (t >= obj[i].force[f].time_start &&
       t < obj[i].force[f].time_end) {
         ret = v3d_add (ret, v3d_scale (obj[i].force[f].vector, obj[i].one_over_mass));

@@ -28,12 +28,12 @@ void InactiveList::addItem (inactive_item_t item) {
 inactive_item_t InactiveList::popNextItemInColumn (v2di_t index) {
   inactive_item_t item;
 
-  for (size_t i = 0; i < mItems.size (); i++) {
+  for (size_t i = 0; i < mItems.size(); i++) {
     if (isInColumn (index, mItems[i].pos)) {
       item = mItems[i];
 
-      if (i != mItems.size () - 1) {
-        swap (mItems[i], mItems[mItems.size () - 1]);
+      if (i != mItems.size() - 1) {
+        swap (mItems[i], mItems[mItems.size() - 1]);
       }
       mItems.pop_back ();
 
@@ -72,7 +72,7 @@ bool InactiveList::isInColumn (v2di_t index, v3d_t position) {
 
 
 int InactiveList::save( FILE* file ) {
-  int size = mItems.size ();
+  int size = mItems.size();
 
   // write the number of items
   fwrite (&size, sizeof (int), 1, file);
