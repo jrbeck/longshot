@@ -41,7 +41,7 @@ GameWindow::GameWindow(const char* windowTitle) :
   mWindowedMode.fullscreen = false;
 
   if (setVideoMode(mWindowedMode)) {
-    //constructor_successful = false;
+    mConstructorSuccessful = false;
     // leap of faith?
     // meh...
     assert(false);

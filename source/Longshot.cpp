@@ -1,6 +1,5 @@
 #include "Longshot.h"
 
-
 Longshot::Longshot() :
   mMainMenu(NULL),
   mGame(NULL),
@@ -9,7 +8,7 @@ Longshot::Longshot() :
   printf("Longshot constructor ----------------\n");
 
   // lets hope this stays this way
-  constructor_successful = true;
+  mConstructorSuccessful = true;
 
   mGameWindow = new GameWindow("Longshot");
   // TODO: here would be a good place to do something like:
@@ -23,7 +22,7 @@ Longshot::Longshot() :
   reloadMenu();
 
   // start off in the menu
-  program_mode = PROGRAM_MODE_MENU;
+  mProgramMode = PROGRAM_MODE_MENU;
 
   FileSystem::createFolder(SAVE_FOLDER);
 
@@ -31,7 +30,7 @@ Longshot::Longshot() :
   printf("-----------------------------------\n\n");
 }
 
-Longshot::~Longshot(void) {
+Longshot::~Longshot() {
   printf("%6d: Longshot destructor\n", SDL_GetTicks());
   printf("---------------------------------------------------------\n");
 
@@ -61,7 +60,7 @@ Longshot::~Longshot(void) {
   printf("program execution time: %fs\n", (double)SDL_GetTicks() / 1000.0);
 }
 
-void Longshot::reloadMenu(void) {
+void Longshot::reloadMenu() {
   // WARNING: this is where the default font is being loaded
   // it has to be done when there is a context change (e.g.
   // windowed mode->fullscreen), so it is here...
@@ -105,12 +104,12 @@ int Longshot::loop() {
   printf("PhysicsEntity size: %lu\n", sizeof (PhysicsEntity));
 
   // bail immediately if constructor failed at some point
-  if (constructor_successful == false) {
+  if (mConstructorSuccessful == false) {
     printf("Longshot::loop(): constructor failed!\n");
     return -1;
   }
 
-  while (program_mode != PROGRAM_QUIT && program_mode != MENU_APPLICATION_QUIT) {
+  while (mProgramMode != PROGRAM_QUIT && mProgramMode != MENU_APPLICATION_QUIT) {
     // glClearColor(0.1f, 0.0f, 0.1f, 1.0f);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -118,19 +117,19 @@ int Longshot::loop() {
     mGameWindow->swapBuffers();
 
     // figure out what the user wants to do
-    program_mode = mMainMenu->GameMenuhoice(true);
+    mProgramMode = mMainMenu->gameMenuChoice(true);
 
     // and do it
-    switch (program_mode) {
+    switch (mProgramMode) {
       case PROGRAM_MODE_NEW_GAME:
         printf("menu choice: new game\n");
         mGame = new game_c(mGameWindow);
-        mGame->enter_game_mode(true);
+        mGame->enterGameMode(true);
         break;
       case PROGRAM_MODE_LOAD_GAME:
         printf("menu choice: load game\n");
         mGame = new game_c(mGameWindow);
-        mGame->enter_game_mode(false);
+        mGame->enterGameMode(false);
         break;
 
       case PROGRAM_MODE_TOGGLE_FULLSCREEN:
@@ -166,4 +165,3 @@ int Longshot::loop() {
 
   return 0;
 }
-

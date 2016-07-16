@@ -53,7 +53,6 @@
 
 #define OUTPUT_FRAME_STATS (false)
 
-
 enum {
   GAMESTATE_PLAY,
   GAMESTATE_MENU,
@@ -72,8 +71,6 @@ enum {
 
   GAMEMENU_MERCHANT
 };
-
-
 
 class game_c {
   GameModel *mGameModel;
@@ -114,9 +111,9 @@ public:
   void loadShipMenu();
 
   GameWindow* getGameWindow();
-  void setup_opengl();
+  void setupOpenGl();
 
-  int enter_game_mode(bool createNewWorld);
+  int enterGameMode(bool createNewWorld);
 
   void initializeWorldViews();
 

@@ -60,7 +60,7 @@ void MerchantView::setupMerchant(Merchant& merchant, ItemManager& itemManager) {
 }
 
 int MerchantView::update(player_c& player, ItemManager& itemManager) {
-  int choice = mMenu->GameMenuhoice(false);
+  int choice = mMenu->gameMenuChoice(false);
 
   switch (choice) {
   case MERCHANT_BUTTON_END_TRANSACTION:

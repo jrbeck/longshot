@@ -35,7 +35,6 @@ public:
   ~Longshot();
 
   void reloadMenu();
-
   int loop();
 
 private:
@@ -59,8 +58,6 @@ private:
   game_c* mGame;
   RogueViewer* mRogueViewer;
 
-  int program_mode;
-
-  bool constructor_successful;
+  int mProgramMode;
+  bool mConstructorSuccessful;
 };
-

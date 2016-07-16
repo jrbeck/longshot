@@ -77,15 +77,15 @@ public:
 
   void setFont1(int glHandle);
 
-  size_t addButton(v2d_t position, v2d_t dimensions, v2d_t fontSize, const char* button_text,
+  size_t addButton(v2d_t position, v2d_t dimensions, v2d_t fontSize, const char* buttonText,
     int textJustification, int value, const GLfloat* color, const GLfloat* backgroundColor);
 
   size_t addText(v2d_t position, v2d_t dimensions, v2d_t fontSize, const char* text,
     int textJustification, const GLfloat* color, const GLfloat *backgroundColor);
 
-  int GameMenuhoice(bool waitForInput);
+  int gameMenuChoice(bool waitForInput);
 
-  int mouse_up(double x, double y);
+  int mouseUp(double x, double y);
 
   void draw(void);
 

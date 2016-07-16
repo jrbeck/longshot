@@ -92,13 +92,12 @@ void game_c::loadPlanetMenu() {
   GLfloat bgColor[4] = { 0.0f, 0.0f, 0.0f, 0.5f };
   v2d_t fontSize = { 0.015f, 0.03f };
 
-  mMenu->addButton(v2d_v (0.80, 0.15), v2d_v (0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
-  mMenu->addButton(v2d_v (0.80, 0.3), v2d_v (0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
+  mMenu->addButton(v2d_v(0.80, 0.15), v2d_v(0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
+  mMenu->addButton(v2d_v(0.80, 0.3), v2d_v(0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
 
   // TEMP: these are just for testing
   mMenu->addButton(v2d_v(0.0, 0.15), v2d_v(0.2, 0.1), fontSize, "ship", TEXT_JUSTIFICATION_CENTER, GAMEMENU_SHIP, color, bgColor);
 }
-
 
 void game_c::loadShipMenu() {
   if (mMenu != NULL) {
@@ -135,7 +134,7 @@ GameWindow* game_c::getGameWindow() {
   return mGameWindow;
 }
 
-void game_c::setup_opengl() {
+void game_c::setupOpenGl() {
   glViewport(0, 0, SCREEN_W, SCREEN_H);
 
   glEnable(GL_TEXTURE_2D);
@@ -171,19 +170,19 @@ void game_c::setup_opengl() {
 }
 
 // it is here where the magic begins
-int game_c::enter_game_mode(bool createNewWorld) {
+int game_c::enterGameMode(bool createNewWorld) {
   printf ("\n%6d: entered GAME mode ----------------\n", SDL_GetTicks());
 
   // create a new game or load an old one
   if (createNewWorld) {
-    printf("game_c::enter_game_mode(): new game\n");
+    printf("game_c::enterGameMode(): new game\n");
     FileSystem::deleteAllFilesInFolder(SAVE_FOLDER);
 
     mGameModel->currentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
     mGameModel->initializeSpaceShip(true);
   }
   else {
-    printf("game_c::enter_game_mode(): loading game\n");
+    printf("game_c::enterGameMode(): loading game\n");
     mGameModel->load(mGameWindow);
   }
 
@@ -201,11 +200,11 @@ int game_c::enter_game_mode(bool createNewWorld) {
   SDL_SetRelativeMouseMode(SDL_TRUE);
   SDL_ShowCursor(0);
 
-  setup_opengl();
+  setupOpenGl();
 
   mAssetManager.mSoundSystem.initialize();
   mAssetManager.mSoundSystem.loadSound("cow");
-//  mAssetManager.mSoundSystem.playSoundByHandle (SOUND_AMBIENT, 64);
+  // mAssetManager.mSoundSystem.playSoundByHandle(SOUND_AMBIENT, 64);
 
   gameLoop();
 
@@ -293,7 +292,7 @@ void game_c::gameLoop() {
       }
     }
     else if (mGameState == GAMESTATE_MENU) {
-      int menuChoice = mMenu->GameMenuhoice(false);
+      int menuChoice = mMenu->gameMenuChoice(false);
       if (escapePressed) {
         printf("escape\n");
         menuChoice = GAMEMENU_BACKTOGAME;

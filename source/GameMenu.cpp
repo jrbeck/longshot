@@ -32,7 +32,7 @@ size_t GameMenu::addButton(
   v2d_t position,
   v2d_t dimensions,
   v2d_t fontSize,
-  const char *button_text,
+  const char *buttonText,
   int textJustification,
   int value,
   const GLfloat *color,
@@ -77,7 +77,7 @@ size_t GameMenu::addButton(
   }
 
   // this assignment operator copies the c string
-  item.text = button_text;
+  item.text = buttonText;
 
   mMenuItems.push_back (item);
 
@@ -137,14 +137,14 @@ size_t GameMenu::addText(
 }
 
 
-int GameMenu::GameMenuhoice(bool waitForInput) {
+int GameMenu::gameMenuChoice(bool waitForInput) {
   // release the mouse
   SDL_SetRelativeMouseMode(SDL_FALSE);
   SDL_ShowCursor(1);
 
   SDL_Event sdlevent;
 
-//  setup_opengl ();
+//  setupOpenGl ();
 
   int click = -1;
   // only wait if we're told
@@ -169,8 +169,8 @@ int GameMenu::GameMenuhoice(bool waitForInput) {
 
     case SDL_MOUSEBUTTONUP:
       if (sdlevent.button.button == SDL_BUTTON_LEFT) {
-//        click = mouse_up(sdlevent.button.x / (double)SCREEN_W, ((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
-        click = mouse_up((double)sdlevent.button.x / (double)SCREEN_W, (double)sdlevent.button.y / (double)SCREEN_H);
+//        click = mouseUp(sdlevent.button.x / (double)SCREEN_W, ((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
+        click = mouseUp((double)sdlevent.button.x / (double)SCREEN_W, (double)sdlevent.button.y / (double)SCREEN_H);
       }
 
       break;
@@ -188,7 +188,7 @@ int GameMenu::GameMenuhoice(bool waitForInput) {
 }
 
 
-int GameMenu::mouse_up(double x, double y) {
+int GameMenu::mouseUp(double x, double y) {
   // see if the dummy actually managed to hit something
   for (size_t i = 0; i < mMenuItems.size(); i++) {
     if (mMenuItems[i].type == MENUITEM_BUTTON) {

@@ -36,7 +36,7 @@ public:
   edit_c (void);
   ~edit_c (void);
 
-  void setup_opengl (void);
+  void setupOpenGl (void);
 
   int enter_edit_mode (void);
 

@@ -11,7 +11,7 @@ edit_c::~edit_c(void) {
 }
 
 
-void edit_c::setup_opengl(void) {
+void edit_c::setupOpenGl(void) {
   // set the clear color
   glClearColor(0.0f, 0.35f, .6f, 0.00f); // nice deep sky blue color
 //  glClearColor (0.2f, 0.2f, 0.2f, 0.0f);
@@ -84,7 +84,7 @@ int edit_c::enter_edit_mode (void) {
 
   int blocks_drawn = 0;
 
-  setup_opengl ();
+  setupOpenGl ();
 
   while (!quit) {
     unsigned int delta_t = SDL_GetTicks () - ticks;
