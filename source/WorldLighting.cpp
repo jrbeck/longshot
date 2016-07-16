@@ -1,12 +1,10 @@
 #include "WorldLighting.h"
 
-
 // this is only 256 * 2 * sizeof(int)
 // this is fine as long we don't thread this
 int layerBuffer[WORLD_CHUNK_SIDE_SQUARED * 2];
 
-
-void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
+void WorldLighting::createShadowVolume(int columnIndex, WorldMap& worldMap) {
   v3di_t worldPosition;
   v3di_t kernelPos;
   char blockType;
@@ -15,7 +13,6 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
   int lightValue;
   int lightSum;
   int lightCount;
-
 
 //  int kernel[9];
 
@@ -52,11 +49,11 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
       worldPosition.x = worldMap.mColumns[columnIndex].mWorldPosition.x;
       for (int x = 0; x < WORLD_CHUNK_SIDE; x++, worldPosition.x++) {
 
-        blockType = worldMap.mColumns[columnIndex].getBlockType (worldPosition);
+        blockType = worldMap.mColumns[columnIndex].getBlockType(worldPosition);
         lightAttenuation = gBlockData.get(blockType)->lightAttenuation;
 
         if (lightAttenuation >= LIGHT_ATTENUATION_MAX) { // opaque
-          worldMap.mColumns[columnIndex].setUniqueLighting (worldPosition, worldMap.mWorldLightingFloor);
+          worldMap.mColumns[columnIndex].setUniqueLighting(worldPosition, worldMap.mWorldLightingFloor);
           layerBuffer[bufferIndex(x, writePlane, z)] = LIGHT_LEVEL_SOLID;
         }
         else {  // transparent block
@@ -77,7 +74,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
           kernelPos.y = worldPosition.y + 1;
           kernelPos.z = worldPosition.z;
 
-//          lightSum = getUniqueLighting (kernelPos);
+//          lightSum = getUniqueLighting(kernelPos);
           lightSum = layerBuffer[bufferIndex(x, readPlane, z)];
           lightCount = 1;
 
@@ -86,10 +83,10 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
           {
             // if we're getting sunlight from above, just propagate it
             currentLightLevel = worldMap.mWorldLightingCeiling - lightAttenuation - (numSolidNeighbors * NEIGHBOR_ATTENUATION);
-            currentLightLevel = max (currentLightLevel, (int)worldMap.mWorldLightingFloor);
+            currentLightLevel = max(currentLightLevel, (int)worldMap.mWorldLightingFloor);
 //            currentLightLevel = min (currentLightLevel, (int)worldMap.mWorldLightingCeiling);
 
-            worldMap.mColumns[columnIndex].setUniqueLighting (
+            worldMap.mColumns[columnIndex].setUniqueLighting(
               worldPosition, currentLightLevel);
             layerBuffer[bufferIndex(x, writePlane, z)] = currentLightLevel;
           }
@@ -105,7 +102,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x - 1;
               kernelPos.z = worldPosition.z - 1;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -126,7 +123,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x - 1;
               kernelPos.z = worldPosition.z;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -147,7 +144,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x - 1;
               kernelPos.z = worldPosition.z + 1;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -168,7 +165,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x;
               kernelPos.z = worldPosition.z - 1;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -189,7 +186,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x;
               kernelPos.z = worldPosition.z + 1;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -210,7 +207,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x + 1;
               kernelPos.z = worldPosition.z - 1;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -231,7 +228,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x + 1;
               kernelPos.z = worldPosition.z;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -252,7 +249,7 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             else {
               kernelPos.x = worldPosition.x + 1;
               kernelPos.z = worldPosition.z + 1;
-              lightValue = worldMap.getUniqueLighting (kernelPos);
+              lightValue = worldMap.getUniqueLighting(kernelPos);
             }
 
             if (lightValue == LIGHT_LEVEL_INVALID ||
@@ -267,9 +264,9 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
             }
 
             currentLightLevel = (lightSum / lightCount) - lightAttenuation - (numSolidNeighbors * NEIGHBOR_ATTENUATION);
-            currentLightLevel = max (currentLightLevel, (int)worldMap.mWorldLightingFloor);
+            currentLightLevel = max(currentLightLevel, (int)worldMap.mWorldLightingFloor);
 //            currentLightLevel = min (currentLightLevel, (int)worldMap.mWorldLightingCeiling);
-            worldMap.mColumns[columnIndex].setUniqueLighting (worldPosition, currentLightLevel);
+            worldMap.mColumns[columnIndex].setUniqueLighting(worldPosition, currentLightLevel);
             layerBuffer[bufferIndex(x, writePlane, z)] = currentLightLevel;
           }
         }
@@ -292,8 +289,6 @@ void WorldLighting::createShadowVolume( int columnIndex, WorldMap& worldMap ) {
   worldMap.mColumns[columnIndex].mNeedLightingApplied = false;
   worldMap.mColumns[columnIndex].mNeedDisplayList = false;
 }
-
-
 
 int WorldLighting::getNumSolidNeighbors( v3di_t worldPosition, const WorldMap& worldMap ) {
   int numSolidNeighbors = 0;
@@ -325,7 +320,6 @@ int WorldLighting::getNumSolidNeighbors( v3di_t worldPosition, const WorldMap& w
 
   return numSolidNeighbors;
 }
-
 
 void WorldLighting::applyLighting(
   int columnIndex,
@@ -428,5 +422,3 @@ void WorldLighting::applyLighting(
   worldMap.mColumns[columnIndex].mNeedLightingApplied = false;
   worldMap.mColumns[columnIndex].mNeedDisplayList = true;
 }
-
-

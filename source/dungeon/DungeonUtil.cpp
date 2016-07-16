@@ -64,7 +64,7 @@ void DungeonUtil::drawVerticalLine(int x, int y1, int y2, const SelectiveDungeon
 //  float deltaX = (float)(x2 - x1);
 //  float deltaY = (float)(y2 - y1);
 //
-//  for(int i = 0; i < steps; i++) {
+//  for (int i = 0; i < steps; i++) {
 //    float percent = (float)i / (float)(steps - 1);
 //    drawFilledCircle(round_int(x + (percent * deltaX)), round_int(y + (percent * deltaY)), brushSize, tile);
 //  }
@@ -76,7 +76,7 @@ void DungeonUtil::drawLine(double x1, double y1, double x2, double y2, float bru
   double deltaX = (x2 - x1);
   double deltaY = (y2 - y1);
 
-  for(int i = 0; i < steps; i++) {
+  for (int i = 0; i < steps; i++) {
     double percent = (double)i / (double)(MACRO_MAX(steps - 1, 1));
     drawFilledCircle(round_int(x + (percent * deltaX)), round_int(y + (percent * deltaY)), brushSize, tile);
   }
@@ -169,8 +169,8 @@ void DungeonUtil::drawFilledRect(int x1, int y1, int x2, int y2, const Selective
   orderAscending(x1, x2);
   orderAscending(y1, y2);
 
-  for(int j = y1; j <= y2; j++) {
-    for(int i = x1; i <= x2; i++) {
+  for (int j = y1; j <= y2; j++) {
+    for (int i = x1; i <= x2; i++) {
       mDungeon->setTile(i, j, tile);
     }
   }
@@ -181,8 +181,8 @@ void DungeonUtil::drawFilledRect(int x1, int y1, int x2, int y2, const Selective
   orderAscending(y1, y2);
 
   // draw the interior: shamelessly stolen from the other drawFilledRect()
-  for(int j = y1 + 1; j < y2; j++) {
-    for(int i = x1 + 1; i < x2; i++) {
+  for (int j = y1 + 1; j < y2; j++) {
+    for (int i = x1 + 1; i < x2; i++) {
       mDungeon->setTile(i, j, innerTile);
     }
   }
@@ -207,8 +207,8 @@ void DungeonUtil::drawFilledCircle(int x, int y, float radius, const SelectiveDu
   int lowY = MACRO_MAX(y - radiusCeiling, 0);
   int highY = MACRO_MIN(y + radiusCeiling, mDungeon->getHeight() - 1);
 
-  for(int j = lowY; j <= highY; j++) {
-    for(int i = lowX; i <= highX; i++) {
+  for (int j = lowY; j <= highY; j++) {
+    for (int i = lowX; i <= highX; i++) {
       if (dist(x, y, i, j) <= radius) {
         mDungeon->setTile(i, j, tile);
       }
@@ -223,7 +223,7 @@ void DungeonUtil::drawFilledCircle(int x, int y, float radius, const SelectiveDu
 }
 
 void DungeonUtil::drawArc(int x, int y, float radius, float startAngle, float arcAngle, float brushSize, int steps, const SelectiveDungeonTile& tile) {
-  for(int i = 0; i < steps; i++) {
+  for (int i = 0; i < steps; i++) {
     float percent = (float)i / (float)steps;
     v2di_t position = arcLerp(x, y, radius, startAngle, arcAngle, percent);
     drawFilledCircle(position.x, position.y, brushSize, tile);
@@ -232,7 +232,7 @@ void DungeonUtil::drawArc(int x, int y, float radius, float startAngle, float ar
 
 void DungeonUtil::drawSpiral(int x, int y, float brushSize, float startAngle, float rotation, float startRadius, float endRadius, int steps, const SelectiveDungeonTile& tile) {
   float deltaRadius = endRadius - startRadius;
-  for(int i = 0; i < steps; i++) {
+  for (int i = 0; i < steps; i++) {
     float percent = (float)i / (float)steps;
     float currentRadius = startRadius + (percent * deltaRadius);
     v2di_t position = arcLerp(x, y, currentRadius, startAngle, rotation, percent);

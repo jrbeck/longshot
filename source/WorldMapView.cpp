@@ -1,7 +1,5 @@
 #include "WorldMapView.h"
 
-
-
 WorldMapView::WorldMapView() :
 mWorldMap(NULL),
 mColumnInfo(NULL)

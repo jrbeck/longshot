@@ -5,13 +5,11 @@ WorldLight::WorldLight() :
 {
 }
 
-
 WorldLight::~WorldLight() {
   if (mBuffer != NULL) {
     delete [] mBuffer;
   }
 }
-
 
 void WorldLight::set(const v3d_t& position, double radius, const IntColor& color) {
   mWorldPosition = position;
@@ -36,7 +34,6 @@ void WorldLight::set(const v3d_t& position, double radius, const IntColor& color
 
   initBuffer();
 }
-
 
 void WorldLight::initBuffer() {
   if (mBuffer != NULL) {
@@ -85,7 +82,6 @@ void WorldLight::initBuffer() {
   }
 }
 
-
 IntColor WorldLight::getLevel(const v3di_t& worldPosition) const {
   static IntColor noColor = { 0, 0, 0 };
   if (isInVolume(worldPosition) == false ||
@@ -116,7 +112,6 @@ bool WorldLight::isInVolume(const v3di_t& worldPosition) const {
   return true;
 }
 
-
 void WorldLight::turnOff() {
   if (mBuffer != NULL) {
     delete [] mBuffer;
@@ -124,12 +119,9 @@ void WorldLight::turnOff() {
   }
 }
 
-
-
 void WorldLight::turnOn() {
   initBuffer();
 }
-
 
 void WorldLight::save(FILE* file) const {
   fwrite(&mWorldPosition, sizeof (v3d_t), 1, file);
@@ -138,7 +130,6 @@ void WorldLight::save(FILE* file) const {
   fwrite(&mColor.g, sizeof (int), 1, file);
   fwrite(&mColor.b, sizeof (int), 1, file);
 }
-
 
 void WorldLight::load(FILE* file) {
   fread(&mWorldPosition, sizeof (v3d_t), 1, file);
@@ -149,6 +140,3 @@ void WorldLight::load(FILE* file) {
 
   set(mWorldPosition, mRadius, mColor);
 }
-
-
-

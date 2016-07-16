@@ -14,7 +14,7 @@ SelectiveDungeonTile::~SelectiveDungeonTile() {
 
 // type * * * * * * * * * * * *
 int* SelectiveDungeonTile::getType() {
-  if ( isTypeSet ) {
+  if (isTypeSet) {
     return &dungeonTile.type;
   }
   return 0;
@@ -31,7 +31,7 @@ void SelectiveDungeonTile::unsetType() {
 
 // id * * * * * * * * * * * *
 int* SelectiveDungeonTile::getId() {
-  if ( isIdSet ) {
+  if (isIdSet) {
     return &dungeonTile.id;
   }
   return 0;
@@ -48,7 +48,7 @@ void SelectiveDungeonTile::unsetId() {
 
 // floor * * * * * * * * * * * *
 int* SelectiveDungeonTile::getFloor() {
-  if ( isFloorSet ) {
+  if (isFloorSet) {
     return &dungeonTile.floor;
   }
   return 0;
@@ -65,7 +65,7 @@ void SelectiveDungeonTile::unsetFloor() {
 
 // ceiling * * * * * * * * * * * *
 int* SelectiveDungeonTile::getCeiling() {
-  if ( isCeilingSet ) {
+  if (isCeilingSet) {
     return &dungeonTile.ceiling;
   }
   return 0;
@@ -82,7 +82,7 @@ void SelectiveDungeonTile::unsetCeiling() {
 
 // special * * * * * * * * * * * *
 int* SelectiveDungeonTile::getSpecial() {
-  if ( isSpecialSet ) {
+  if (isSpecialSet) {
     return &dungeonTile.special;
   }
   return 0;
@@ -98,32 +98,32 @@ void SelectiveDungeonTile::unsetSpecial() {
 }
 
 void SelectiveDungeonTile::setFromDungeonTile(const DungeonTile& tile) {
-  setType( tile.type );
-  setId( tile.id );
-  setFloor( tile.floor );
-  setCeiling( tile.ceiling );
-  setSpecial( tile.special );
+  setType(tile.type);
+  setId(tile.id);
+  setFloor(tile.floor);
+  setCeiling(tile.ceiling);
+  setSpecial(tile.special);
 }
 
 DungeonTile SelectiveDungeonTile::getDungeonTile() const {
   DungeonTile tile;
-  if( isTypeSet ) {
+  if (isTypeSet) {
     tile.type = dungeonTile.type;
   }
 
-  if( isIdSet ) {
+  if (isIdSet) {
     tile.id = dungeonTile.id;
   }
 
-  if( isFloorSet ) {
+  if (isFloorSet) {
     tile.floor = dungeonTile.floor;
   }
 
-  if( isCeilingSet ) {
+  if (isCeilingSet) {
     tile.ceiling = dungeonTile.ceiling;
   }
 
-  if( isSpecialSet ) {
+  if (isSpecialSet) {
     tile.special = dungeonTile.special;
   }
   else {
@@ -134,23 +134,23 @@ DungeonTile SelectiveDungeonTile::getDungeonTile() const {
 }
 
 void SelectiveDungeonTile::updateDungeonTile(DungeonTile& otherTile) const {
-  if( isTypeSet ) {
+  if (isTypeSet) {
     otherTile.type = dungeonTile.type;
   }
 
-  if( isIdSet ) {
+  if (isIdSet) {
     otherTile.id = dungeonTile.id;
   }
 
-  if( isFloorSet ) {
+  if (isFloorSet) {
     otherTile.floor = dungeonTile.floor;
   }
 
-  if( isCeilingSet ) {
+  if (isCeilingSet) {
     otherTile.ceiling = dungeonTile.ceiling;
   }
 
-  if( isSpecialSet ) {
+  if (isSpecialSet) {
     otherTile.special = dungeonTile.special;
   }
 }

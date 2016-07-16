@@ -2,7 +2,7 @@
 
 
 void MoleculeDungeon::createDungeon(DungeonUtil& dungeon, const v2di_t& startPosition) {
-  if(dungeon.getDungeonModel() == 0) {
+  if (dungeon.getDungeonModel() == 0) {
     return;
   }
 
@@ -29,7 +29,7 @@ void MoleculeDungeon::createDungeon(DungeonUtil& dungeon, const v2di_t& startPos
     floorTile);
 
   // make the satelite rooms
-  for(int i = 0; i < 5; i ++) {
+  for (int i = 0; i < 5; i ++) {
     int x = r_numi(0, dungeonWidth);
     int y = r_numi(0, dungeonHeight);
 

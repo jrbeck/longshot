@@ -15,7 +15,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
 
   for (int i = 0; i < 6; i++) {
     v2di_t corner;
-
     corner = worldRogueMap.random_room(ID_START + i, 8, 8);
 
     if (corner.x != 0) {
@@ -89,7 +88,6 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
       //        side * WORLD_CHUNK_SIDE, side * WORLD_CHUNK_SIDE, worldMap);
 
       growSpiralGarden(corner, side, side, world);
-
 
       worldMap.swapOutToInactive();
     }
