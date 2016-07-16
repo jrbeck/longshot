@@ -20,13 +20,11 @@
 #define ACTION_NONE      0
 #define ACTION_WARP      1
 
-
 struct GalaxyMapResult {
   int action;
   StarSystem* starSystem;
   Planet* planet;
 };
-
 
 class GalaxyMap {
 public:
@@ -46,13 +44,12 @@ public:
   void drawRing(float radius, v2d_t center, const GLfloat color[4]);
 
   GameWindow* mGameWindow;
-
   Galaxy* mGalaxy;
 
   // TODO: get this i/o junk outta here
-  int handleInput(void);
-  int handleKeystroke(void);
-  int handleKeyup(void);
+  int handleInput();
+  int handleKeystroke();
+  int handleKeyup();
   void handleMouseButtonDown(int button, v2d_t pos);
   void handleMouseButtonUp(int button, v2d_t pos);
 

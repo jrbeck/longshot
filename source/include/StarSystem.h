@@ -40,8 +40,8 @@ public:
   void clear(void);
   void randomize(void);
 
-  void save(FILE *file);
-  void load(FILE *file);
+  void save(FILE* file);
+  void load(FILE* file);
 
   Planet *getPlanetByHandle(int handle);
 

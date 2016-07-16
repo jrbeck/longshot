@@ -21,13 +21,11 @@ GalaxyMap::~GalaxyMap() {
 
 GalaxyMapResult GalaxyMap::enterViewMode(Galaxy* galaxy, Planet* selectedPlanet) {
   mGalaxy = galaxy;
-
   setUpOpenGl();
 
   int quit = 0;
   while (!quit && mResult.action == ACTION_NONE) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
     setUpOpenGl();
 
@@ -66,13 +64,11 @@ GalaxyMapResult GalaxyMap::enterViewMode(Galaxy* galaxy, Planet* selectedPlanet)
   return mResult;
 }
 
-void GalaxyMap::drawGalaxy(Planet *selectedPlanet) {
-
+void GalaxyMap::drawGalaxy(Planet* selectedPlanet) {
   static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
   static GLfloat selectedColor[4] = { 0.0f, 0.83f, 0.0f, 1.0f };
 
   v2d_t mouse;
-
   mouse.x = GALACTIC_WIDTH * (mMousePos.x / SCREEN_W);
   mouse.y = GALACTIC_HEIGHT * (1.0 - (mMousePos.y / SCREEN_H));
 
@@ -90,7 +86,7 @@ void GalaxyMap::drawGalaxy(Planet *selectedPlanet) {
     drawHex(0.5f, mGalaxy->mStarSystems[i]->mPosition, mGalaxy->mStarSystems[i]->mStarColor);
   }
 
-  StarSystem *inRangeSystem = NULL;
+  StarSystem* inRangeSystem = NULL;
 
   // show the nearest if in range
   if (nearestDist < 5.0) {
@@ -114,22 +110,19 @@ void GalaxyMap::drawGalaxy(Planet *selectedPlanet) {
 
     // now draw the line from the nearest StarSystem (if in range)
     // to the selected StarSystem (if they're not the same)
-    if (inRangeSystem != NULL &&
-      inRangeSystem->mHandle != selectedSystem->mHandle)
-    {
+    if (inRangeSystem != NULL && inRangeSystem->mHandle != selectedSystem->mHandle) {
       glBegin(GL_LINES);
         glVertex3d(inRangeSystem->mPosition.x, inRangeSystem->mPosition.y, 0.0);
         glVertex3d(selectedSystem->mPosition.x, selectedSystem->mPosition.y, 0.0);
       glEnd();
     }
-
   }
 
   // this might need to be updated
   updateGalaxyMenu(mGalaxy->getStarSystemByHandle(selectedPlanet->mHandle), inRangeSystem);
 }
 
-void GalaxyMap::drawStarSystem(StarSystem &starSystem, Planet *selectedPlanet) {
+void GalaxyMap::drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet) {
   float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
   float selectedColor[4] = { 0.0f, 0.83f, 0.0f, 1.0f };
 
@@ -194,7 +187,7 @@ void GalaxyMap::drawStarSystem(StarSystem &starSystem, Planet *selectedPlanet) {
   // draw a ring around the selected planet if non-NULL and
   // in this system
   if (selectedPlanet != NULL) {
-    Planet *selPlanet; // this should be the same as selectedPlanet in the end
+    Planet* selPlanet; // this should be the same as selectedPlanet in the end
     selPlanet = starSystem.getPlanetByHandle(selectedPlanet->mHandle);
     if (selPlanet != NULL) {
       drawRing(
@@ -207,7 +200,7 @@ void GalaxyMap::drawStarSystem(StarSystem &starSystem, Planet *selectedPlanet) {
   updateStarSystemMenu();
 }
 
-void GalaxyMap::updateGalaxyMenu(StarSystem *currentSystem, StarSystem *hoverSystem) {
+void GalaxyMap::updateGalaxyMenu(StarSystem* currentSystem, StarSystem* hoverSystem) {
   mMenu->clear();
 
   static GLfloat colorWhite[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -254,8 +247,8 @@ void GalaxyMap::drawHex(float radius, v2d_t center, const GLfloat color[4]) {
   glColor4fv(color);
   glBegin(GL_TRIANGLE_FAN);
     for (int i = 450; i > 90; i -= 60) {
-      degInRad = DEG2RAD ((double)i);
-      glVertex2f (
+      degInRad = DEG2RAD((double)i);
+      glVertex2f(
         (GLfloat)((cos(degInRad) * radius) + center.x),
         (GLfloat)((sin(degInRad) * radius) + center.y));
     }
@@ -265,21 +258,21 @@ void GalaxyMap::drawHex(float radius, v2d_t center, const GLfloat color[4]) {
 void GalaxyMap::drawRing(float radius, v2d_t center, const GLfloat color[4]) {
   if (radius <= 0.0f) return;
   double degInRad;
-  glColor4fv (color);
-  glBegin (GL_LINE_STRIP);
+  glColor4fv(color);
+  glBegin(GL_LINE_STRIP);
     // initial vertex
-    glVertex2d (center.x + radius, center.y);
+    glVertex2d(center.x + radius, center.y);
 
     // other vertices
     for (int i = 5; i < 360; i += 5) {
       degInRad = DEG2RAD((double)i);
-      glVertex2d (
+      glVertex2d(
         center.x + (cos(degInRad) * radius),
         center.y + (sin(degInRad) * radius));
     }
 
     // final vertex
-    glVertex2d (center.x + radius, center.y);
+    glVertex2d(center.x + radius, center.y);
   glEnd ();
 }
 
@@ -295,15 +288,12 @@ int GalaxyMap::handleInput() {
       case SDL_QUIT:
         quit = 1;
         break;
-
       case SDL_KEYDOWN:
         quit = handleKeystroke ();
         break;
-
       case SDL_KEYUP:
         handleKeyup();
         break;
-
       case SDL_MOUSEMOTION:
         mMouseDelta.x = -sdlevent.motion.xrel;
         mMouseDelta.y = sdlevent.motion.yrel;
@@ -312,22 +302,17 @@ int GalaxyMap::handleInput() {
         mMousePos.y = SCREEN_H - sdlevent.motion.y;
 
         mMouseMoved = 1;
-
         break;
-
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
         handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
-
       case SDL_MOUSEBUTTONUP:
         handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
-
       case SDL_MOUSEWHEEL:
         // this doens't exist ... hasn't been needed yet
  //       handleMouseWeelEvent(sdlevent.wheel);
-
       default:
         break;
     }
@@ -339,18 +324,14 @@ int GalaxyMap::handleInput() {
   Uint8 ms;
   ms = SDL_GetMouseState(NULL, NULL);
 
-  if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_LEFT))) {
+  if (mMouseMoved && (ms & SDL_BUTTON(SDL_BUTTON_LEFT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.1);
-
     md.x = -md.x;
-
 //    mRtsCam.translate (md);
   }
-  if (mMouseMoved && (ms & SDL_BUTTON (SDL_BUTTON_RIGHT))) {
+  if (mMouseMoved && (ms & SDL_BUTTON(SDL_BUTTON_RIGHT))) {
     v2d_t md = v2d_scale (mMouseDelta, 0.002);
-
     md.x = -md.x;
-
 //    mRtsCam.pan (md);
   }
 
@@ -361,13 +342,10 @@ int GalaxyMap::handleKeystroke() {
   switch (sdlevent.key.keysym.sym) {
     case SDLK_ESCAPE:  // quit
       return 1;
-
     case SDLK_a:
       break;
-
     case SDLK_z:
       break;
-
   }
 
   // don't quit!
@@ -379,8 +357,6 @@ int GalaxyMap::handleKeyup() {
     switch (sdlevent.key.keysym.sym) {
       case SDLK_w:
         break;
-
-
       case SDLK_SPACE:
         break;
     }
@@ -392,7 +368,6 @@ int GalaxyMap::handleKeyup() {
 
 void GalaxyMap::handleMouseButtonDown(int button, v2d_t pos) {
   switch (button) {
-
     case SDL_BUTTON_RIGHT:
       break;
   }
