@@ -86,7 +86,7 @@ void CloudSim::drawForDisplayList (v3d_t position) {
   glPopMatrix ();
 }
 
-void CloudSim::draw (gl_camera_c &cam) {
+void CloudSim::draw (GlCamera &cam) {
   glEnable (GL_BLEND);
   glDisable (GL_CULL_FACE);
 

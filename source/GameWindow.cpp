@@ -41,13 +41,11 @@ GameWindow::GameWindow(const char* windowTitle) :
   mWindowedMode.fullscreen = false;
 
   if (setVideoMode(mWindowedMode)) {
-    mConstructorSuccessful = false;
     // leap of faith?
     // meh...
     assert(false);
   }
 }
-
 
 GameWindow::~GameWindow() {
   if (mSdlWindow != NULL) {

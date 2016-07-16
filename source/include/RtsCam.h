@@ -31,7 +31,7 @@ class rts_cam_c {
   v3d_t mTarget;    // where the camera is pointed
   v3d_t mUpVector;  // the 'up' vector for the camera
 
-  gl_camera_c mGlCamera;  // this is the general camera
+  GlCamera mGlCamera;  // this is the general camera
 
   double mFacing;    // the angle on the x-z plane off the positive x-axis
 
@@ -76,7 +76,7 @@ public:
   int set_near_and_far (double n, double f);
 
   // use the gluLookAt () to set view at render time
-  gl_camera_c *gl_cam_setup (void);
+  GlCamera *gl_cam_setup (void);
 };
 
 

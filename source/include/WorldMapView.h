@@ -69,9 +69,9 @@ public:
   void drawLiquidForDisplayList(const WorldChunk &chunk, const AssetManager &assetManager) const;
   void drawChunkBoxForDisplayList(v3di_t worldPosition) const;
 
-  void drawSolidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const;
-  void drawLiquidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const;
-  void drawChunkBoxes(const gl_camera_c &camera, const AssetManager &assetManager) const;
+  void drawSolidBlocks(const GlCamera &camera, const AssetManager &assetManager) const;
+  void drawLiquidBlocks(const GlCamera &camera, const AssetManager &assetManager) const;
+  void drawChunkBoxes(const GlCamera &camera, const AssetManager &assetManager) const;
 
 private:
   WorldMap *mWorldMap;

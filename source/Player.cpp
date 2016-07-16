@@ -206,7 +206,7 @@ void player_c::adjust_draw_distance(double amount) {
 
 // use the gluLookAt () to set view at render time
 // also set the frustum
-gl_camera_c player_c::gl_cam_setup(void) {
+GlCamera player_c::gl_cam_setup(void) {
   cam.perspective();
   cam.look_at(v3d_add(mPos, mFinalHeadOffset), mTarget, up);
   return cam;

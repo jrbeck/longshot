@@ -84,7 +84,7 @@ public:
   void adjust_draw_distance(double amount);
 
   // use the gluLookAt () to set view at render time
-  gl_camera_c gl_cam_setup();
+  GlCamera gl_cam_setup();
 
   v3d_t get_pos();
   int set_pos(v3d_t a);
@@ -118,7 +118,7 @@ public:
   void placeLight();
   Inventory* getInventory();
 
-  gl_camera_c cam;
+  GlCamera cam;
 
 private:
   GameModel* mGameModel;

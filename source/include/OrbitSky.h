@@ -34,7 +34,7 @@ public:
 
   void setOrbit(Galaxy &galaxy, size_t planetHandle);
 
-  void draw(gl_camera_c &cam, v3d_t playerPosition);
+  void draw(GlCamera &cam, v3d_t playerPosition);
 
   vector<celestial_body> mBodies;
 };

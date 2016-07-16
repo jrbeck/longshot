@@ -53,7 +53,7 @@ void OrbitSky::setOrbit(Galaxy& galaxy, size_t planetHandle) {
   mBodies.push_back(body);
 }
 
-void OrbitSky::draw(gl_camera_c& cam, v3d_t playerPosition) {
+void OrbitSky::draw(GlCamera& cam, v3d_t playerPosition) {
   // we'll use these to restore them afterwards
   v2d_t oldNearAndFar = cam.getNearAndFar ();
 

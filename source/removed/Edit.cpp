@@ -92,7 +92,7 @@ int edit_c::enter_edit_mode (void) {
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // get the camera info
-    gl_camera_c *cam = rts.gl_cam_setup ();
+    GlCamera *cam = rts.gl_cam_setup ();
 
     // draw the octree
 //    blocks_drawn += oct->draw (*cam);

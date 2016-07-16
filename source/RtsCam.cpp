@@ -175,7 +175,7 @@ int rts_cam_c::set_near_and_far (double n, double f) {
 
 
 // use the gluLookAt () to set view at render time
-gl_camera_c *rts_cam_c::gl_cam_setup (void) {
+GlCamera *rts_cam_c::gl_cam_setup (void) {
   mGlCamera.perspective ();
 
   mGlCamera.look_at (mPosition, mTarget, mUpVector);

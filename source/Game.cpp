@@ -489,7 +489,7 @@ int game_c::draw() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // get the camera from the player's perspective
-  gl_camera_c cam = mPlayer->gl_cam_setup();
+  GlCamera cam = mPlayer->gl_cam_setup();
 
   // we need this for the billboard sprites
   mPhysicsView->setViewPosition(cam.getPosition());

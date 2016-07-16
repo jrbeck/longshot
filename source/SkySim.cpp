@@ -102,7 +102,7 @@ void SkySim::update() {
 
 
 
-void SkySim::draw(gl_camera_c &cam, v3d_t playerPosition) {
+void SkySim::draw(GlCamera &cam, v3d_t playerPosition) {
   double secs = (static_cast<double>(SDL_GetTicks ()) / mTimeFactor) + mInitialTimeOfDay;
 
 //  secs = 0.0;

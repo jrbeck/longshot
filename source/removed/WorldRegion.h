@@ -74,7 +74,7 @@ public:
   block_t *getBlockAtWorldPosition (v3di_t pos);
   bool isSolidBlockAtWorldPosition (v3di_t pos);
 
-  int draw (gl_camera_c &cam, AssetManager &assetManager);
+  int draw (GlCamera &cam, AssetManager &assetManager);
 
   int generateFromTerrain (int *terrain, v3di_t worldPosition, terrain_c &randomMap);
 
@@ -113,7 +113,7 @@ private:
   void drawForDisplayList (AssetManager &assetManager);
   void drawForDisplayList_rec (octree_node *n, AssetManager &assetManager);
 
-  int draw_rec (octree_node *n, gl_camera_c &cam, AssetManager &assetManager);
+  int draw_rec (octree_node *n, GlCamera &cam, AssetManager &assetManager);
   int draw_rec (octree_node *n, AssetManager &assetManager);
 
 // members * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1050,7 +1050,7 @@ void WorldRegion::drawForDisplayList_rec (octree_node *n, AssetManager &assetMan
 
 
 // draw the blocks
-int WorldRegion::draw (gl_camera_c &cam, AssetManager &assetManager) {
+int WorldRegion::draw (GlCamera &cam, AssetManager &assetManager) {
   // bail if the root has no children
   if (root.num_children == 0) return 0;
 
@@ -1114,7 +1114,7 @@ int WorldRegion::draw_rec (octree_node *n, AssetManager &assetManager) {
 
 
 // recursive part of draw () - using frustum culling
-int WorldRegion::draw_rec (octree_node *n, gl_camera_c &cam, AssetManager &assetManager) {
+int WorldRegion::draw_rec (octree_node *n, GlCamera &cam, AssetManager &assetManager) {
   // draw the block if we're at a leaf
   if (n->side_length == 1) {
     if (n->block->faceVisible > 0) {

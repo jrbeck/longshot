@@ -9,8 +9,7 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-#ifndef GlCamera_h_
-#define GlCamera_h_
+#pragma once
 
 #ifdef _WIN32
   #include <Windows.h>
@@ -30,14 +29,12 @@
 #include "BoundingBox.h"
 #include "BoundingSphere.h"
 
-
 #define PLANE_TOP  0
 #define PLANE_BOT  1
 #define PLANE_LEF  2
 #define PLANE_RIG  3
 #define PLANE_NEA  4
 #define PLANE_FAR  5
-
 
 #define FRUSTUM_INSIDE      0
 #define FRUSTUM_INTERSECT    1
@@ -54,38 +51,37 @@
 #define NEAR_NOTCH    (0.05)
 #define FAR_NOTCH    (20.0)
 
-
-class gl_camera_c {
+class GlCamera {
 public:
-  gl_camera_c ();
-  ~gl_camera_c ();
+  GlCamera();
+  ~GlCamera();
 
-  void resize_screen (int w, int h);
+  void resize_screen(int w, int h);
 
-  void set_fov_near_far (double fov, double n, double f);
-  void set_near_far_min_max (double nmin, double nmax, double fmin, double fmax);
+  void set_fov_near_far(double fov, double n, double f);
+  void set_near_far_min_max(double nmin, double nmax, double fmin, double fmax);
 
-  void adjust_near (double amount);
-  void adjust_far (double amount);
+  void adjust_near(double amount);
+  void adjust_far(double amount);
 
-  void set_far (double new_far);
+  void set_far(double new_far);
 
-  v2d_t getNearAndFar (void);
-  void setNearAndFar (v2d_t nearAndFar);
+  v2d_t getNearAndFar(void);
+  void setNearAndFar(v2d_t nearAndFar);
 
   v3d_t getPosition(void);
 
-  void perspective (void);
-  void look_at (v3d_t position, v3d_t target, v3d_t upVector);
+  void perspective(void);
+  void look_at(v3d_t position, v3d_t target, v3d_t upVector);
   void updateGlVariables(void);
 
-  void set_planes (void);
+  void set_planes(void);
 
-  int point_visible (v3d_t p);
-  int point_visible (v3di_t p);
+  int point_visible(v3d_t p);
+  int point_visible(v3di_t p);
 
-  int bounding_box_test (BoundingBox &box);
-  int bounding_sphere_test (const BoundingSphere &sphere) const;
+  int bounding_box_test(BoundingBox& box);
+  int bounding_sphere_test(const BoundingSphere& sphere) const;
 
 private:
   int mScreenWidth;        // the dimensions of the viewport
@@ -110,6 +106,3 @@ private:
 
   Plane3d mPlanes[6];      // the planes for each frustum face
 };
-
-
-#endif // GlCamera_h_

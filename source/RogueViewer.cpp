@@ -89,7 +89,7 @@ int RogueViewer::start() {
 //  SDL_WM_GrabInput (SDL_GRAB_OFF);
 //  SDL_ShowCursor (1);
 
-  gl_camera_c* cam;
+  GlCamera* cam;
 
   mRtsCam.initializeCamera(v2di_v(SCREEN_W, SCREEN_H), 45.0, 0.1, 1024.0);
 

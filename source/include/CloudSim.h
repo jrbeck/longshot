@@ -35,7 +35,7 @@ public:
   void update (GLfloat starAlpha);
 
   void drawForDisplayList (v3d_t position);
-  void draw (gl_camera_c &cam);
+  void draw (GlCamera &cam);
 
   void drawCloudBlock (v3di_t position, GLfloat alpha);
 

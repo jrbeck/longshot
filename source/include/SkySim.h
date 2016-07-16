@@ -26,7 +26,7 @@ public:
   void setSkyColorAndWorldLighting(void);
 
   void update();
-  void draw(gl_camera_c &cam, v3d_t playerPosition);
+  void draw(GlCamera &cam, v3d_t playerPosition);
 
   int getSkyLightLevel(void);
 

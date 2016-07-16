@@ -313,7 +313,7 @@ void WorldMapView::drawChunkBoxForDisplayList(v3di_t worldPosition) const {
 }
 
 // this actually renders the display lists
-void WorldMapView::drawSolidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const {
+void WorldMapView::drawSolidBlocks(const GlCamera &camera, const AssetManager &assetManager) const {
   //  glDisable (GL_TEXTURE_2D);
   glEnable(GL_BLEND);
   glAlphaFunc(GL_GREATER, 0.9f);
@@ -346,7 +346,7 @@ void WorldMapView::drawSolidBlocks(const gl_camera_c &camera, const AssetManager
   //  glEnable (GL_TEXTURE_2D);
 }
 
-void WorldMapView::drawLiquidBlocks(const gl_camera_c &camera, const AssetManager &assetManager) const {
+void WorldMapView::drawLiquidBlocks(const GlCamera &camera, const AssetManager &assetManager) const {
   //  glDisable (GL_TEXTURE_2D);
   glDepthMask(GL_FALSE);
   glEnable(GL_BLEND);
@@ -375,7 +375,7 @@ void WorldMapView::drawLiquidBlocks(const gl_camera_c &camera, const AssetManage
   //  glEnable (GL_TEXTURE_2D);
 }
 
-void WorldMapView::drawChunkBoxes(const gl_camera_c &camera, const AssetManager &assetManager) const {
+void WorldMapView::drawChunkBoxes(const GlCamera &camera, const AssetManager &assetManager) const {
   glDisable(GL_TEXTURE_2D);
 
   GLuint handle;
