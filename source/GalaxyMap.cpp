@@ -11,6 +11,8 @@ GalaxyMap::GalaxyMap(GameWindow* gameWindow) :
   mResult.action = ACTION_NONE;
   mResult.starSystem = NULL;
   mResult.planet = NULL;
+
+  sprintf(mMessage, "");
 }
 
 GalaxyMap::~GalaxyMap() {
@@ -21,6 +23,7 @@ GalaxyMap::~GalaxyMap() {
 
 GalaxyMapResult GalaxyMap::enterViewMode(Galaxy* galaxy, Planet* selectedPlanet) {
   mGalaxy = galaxy;
+
   setUpOpenGl();
 
   int quit = 0;
@@ -64,11 +67,13 @@ GalaxyMapResult GalaxyMap::enterViewMode(Galaxy* galaxy, Planet* selectedPlanet)
   return mResult;
 }
 
-void GalaxyMap::drawGalaxy(Planet* selectedPlanet) {
+void GalaxyMap::drawGalaxy(Planet *selectedPlanet) {
+
   static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
   static GLfloat selectedColor[4] = { 0.0f, 0.83f, 0.0f, 1.0f };
 
   v2d_t mouse;
+
   mouse.x = GALACTIC_WIDTH * (mMousePos.x / SCREEN_W);
   mouse.y = GALACTIC_HEIGHT * (1.0 - (mMousePos.y / SCREEN_H));
 
@@ -187,7 +192,7 @@ void GalaxyMap::drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet) {
   // draw a ring around the selected planet if non-NULL and
   // in this system
   if (selectedPlanet != NULL) {
-    Planet* selPlanet; // this should be the same as selectedPlanet in the end
+    Planet *selPlanet; // this should be the same as selectedPlanet in the end
     selPlanet = starSystem.getPlanetByHandle(selectedPlanet->mHandle);
     if (selPlanet != NULL) {
       drawRing(
@@ -200,23 +205,40 @@ void GalaxyMap::drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet) {
   updateStarSystemMenu();
 }
 
+void GalaxyMap::updateInfoMessage(StarSystem* currentSystem, StarSystem* hoverSystem) {
+  if (hoverSystem == NULL) {
+    sprintf(mMessage, "nothing selected");
+  }
+  else if (currentSystem == hoverSystem) {
+    sprintf(mMessage, "going nowhere!");
+  }
+  else if (currentSystem != hoverSystem) {
+    double dist = v2d_dist(currentSystem->mPosition, hoverSystem->mPosition);
+    sprintf(mMessage, "going somewhere? %.2f", dist);
+  }
+  else {
+    sprintf(mMessage, "does not compute");
+  }
+}
+
 void GalaxyMap::updateGalaxyMenu(StarSystem* currentSystem, StarSystem* hoverSystem) {
   mMenu->clear();
 
   static GLfloat colorWhite[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
   static GLfloat colorGrey[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-
   static v2d_t fontSize = { 0.01, 0.02 };
+
+  updateInfoMessage(currentSystem, hoverSystem);
 
   mMenu->addText(
     v2d_v(0.1, 0.1),
     v2d_v(0.3, 0.05),
     fontSize,
-    "blah",
+    mMessage,
     TEXT_JUSTIFICATION_CENTER,
     colorWhite,
-    colorGrey);
-
+    colorGrey
+  );
 }
 
 void GalaxyMap::updateStarSystemMenu() {
@@ -273,7 +295,7 @@ void GalaxyMap::drawRing(float radius, v2d_t center, const GLfloat color[4]) {
 
     // final vertex
     glVertex2d(center.x + radius, center.y);
-  glEnd ();
+  glEnd();
 }
 
 // handle an SDL_Event
@@ -283,17 +305,20 @@ int GalaxyMap::handleInput() {
   mLeftMouseButtonClicked = false;
 
   // goes through all the queued events and deals with each one
-  while (SDL_PollEvent (&sdlevent) && !quit) {
+  while (SDL_PollEvent(&sdlevent) && !quit) {
     switch (sdlevent.type) {
       case SDL_QUIT:
         quit = 1;
         break;
+
       case SDL_KEYDOWN:
-        quit = handleKeystroke ();
+        quit = handleKeystroke();
         break;
+
       case SDL_KEYUP:
         handleKeyup();
         break;
+
       case SDL_MOUSEMOTION:
         mMouseDelta.x = -sdlevent.motion.xrel;
         mMouseDelta.y = sdlevent.motion.yrel;
@@ -302,17 +327,22 @@ int GalaxyMap::handleInput() {
         mMousePos.y = SCREEN_H - sdlevent.motion.y;
 
         mMouseMoved = 1;
+
         break;
+
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
         handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
+
       case SDL_MOUSEBUTTONUP:
         handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
         break;
+
       case SDL_MOUSEWHEEL:
         // this doens't exist ... hasn't been needed yet
  //       handleMouseWeelEvent(sdlevent.wheel);
+
       default:
         break;
     }
@@ -325,12 +355,12 @@ int GalaxyMap::handleInput() {
   ms = SDL_GetMouseState(NULL, NULL);
 
   if (mMouseMoved && (ms & SDL_BUTTON(SDL_BUTTON_LEFT))) {
-    v2d_t md = v2d_scale (mMouseDelta, 0.1);
+    v2d_t md = v2d_scale(mMouseDelta, 0.1);
     md.x = -md.x;
 //    mRtsCam.translate (md);
   }
   if (mMouseMoved && (ms & SDL_BUTTON(SDL_BUTTON_RIGHT))) {
-    v2d_t md = v2d_scale (mMouseDelta, 0.002);
+    v2d_t md = v2d_scale(mMouseDelta, 0.002);
     md.x = -md.x;
 //    mRtsCam.pan (md);
   }

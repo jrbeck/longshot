@@ -36,6 +36,7 @@ public:
   void drawGalaxy(Planet* selectedPlanet);
   void drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet);
 
+  void updateInfoMessage(StarSystem* currentSystem, StarSystem* hoverSystem);
   void updateGalaxyMenu(StarSystem* currentSystem, StarSystem* hoverSystem);
   void updateStarSystemMenu();
 
@@ -44,6 +45,7 @@ public:
   void drawRing(float radius, v2d_t center, const GLfloat color[4]);
 
   GameWindow* mGameWindow;
+
   Galaxy* mGalaxy;
 
   // TODO: get this i/o junk outta here
@@ -63,6 +65,7 @@ public:
 
   int mZoomLevel;
   int mSelectedSystem;
+  char mMessage[256];
 
   GalaxyMapResult mResult;
 };

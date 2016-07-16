@@ -1,11 +1,11 @@
 #include "Rectangle2d.h"
 
 Rectangle2d::Rectangle2d() {
-  setCorners (v2d_v (0.0, 0.0), v2d_v (1.0, 1.0));
+  setCorners(v2d_v(0.0, 0.0), v2d_v(1.0, 1.0));
 }
 
 Rectangle2d::Rectangle2d(v2d_t nearCorner, v2d_t farCorner) {
-  setCorners (nearCorner, farCorner);
+  setCorners(nearCorner, farCorner);
 }
 
 void Rectangle2d::setCorners(v2d_t nearCorner, v2d_t farCorner) {
@@ -29,8 +29,8 @@ double Rectangle2d::getHeight() const {
   return mFarCorner.y - mNearCorner.y;
 }
 
-// test the near corner
 bool Rectangle2d::isIntersecting(const Rectangle2d& other) const {
+  // test the near corner
   if (mFarCorner.x < other.mNearCorner.x) return false;
   if (mFarCorner.y < other.mNearCorner.y) return false;
 
