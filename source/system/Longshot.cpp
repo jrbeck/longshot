@@ -134,7 +134,6 @@ int Longshot::loop() {
 
       case PROGRAM_MODE_TOGGLE_FULLSCREEN:
         printf("menu choice: toggle fullscreen\n");
-
         mGameWindow->toggleFullscreen();
 
         // since the context has changed, ogl assets must be reloaded
