@@ -14,7 +14,7 @@
 #include <cmath>
 
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 #include "math_util.h"
 #include "v2d.h"

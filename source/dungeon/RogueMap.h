@@ -21,7 +21,7 @@
   typedef unsigned int UINT;
 #endif
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 #include "MathUtil.h"
 #include "v2d.h"

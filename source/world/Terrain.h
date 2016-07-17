@@ -11,7 +11,7 @@
 #ifndef Terrain_h_
 #define Terrain_h_
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 #include "MathUtil.h"
 #include "PseudoRandom.h"

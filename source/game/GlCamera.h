@@ -19,7 +19,7 @@
 #endif
 
 #include <GL/glu.h>
-#include <GL/glut.h>
+#include <../vendor/GL/glut.h>
 
 #include <math.h>
 

@@ -26,7 +26,7 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 // the root/code/include directory
 #include "v2d.h"

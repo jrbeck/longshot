@@ -20,7 +20,7 @@
   typedef unsigned int UINT;
 #endif
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 #include "AssetManager.h"
 #include "GlBitmapFont.h"

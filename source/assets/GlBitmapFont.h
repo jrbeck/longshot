@@ -21,7 +21,7 @@
 
 #include <SDL2/SDL_opengl.h>
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 using namespace std;
 

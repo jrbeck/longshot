@@ -6,7 +6,7 @@ SpeciesDataContainer::SpeciesDataContainer() {
   loadSpeciesData();
 }
 
-void SpeciesDataContainer::loadSpeciesData(void) {
+void SpeciesDataContainer::loadSpeciesData() {
   AiState state;
 
 //  AITYPE_DUMMY
@@ -91,7 +91,7 @@ void SpeciesDataContainer::loadSpeciesData(void) {
   mSpecies[AITYPE_HUMAN].willAttackSameSpecies = false;
 }
 
-AiSpecies *SpeciesDataContainer::get(size_t type) {
+AiSpecies* SpeciesDataContainer::get(size_t type) {
   if (type < NUM_AITYPES) {
     return &mSpecies[type];
   }

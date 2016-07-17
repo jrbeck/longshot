@@ -8,20 +8,17 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef AiSpecies_h_
-#define AiSpecies_h_
+#pragma once
 
 #include "AssetManager.h"
 
 #include "AiStateMachine.h"
-
 
 enum {
   MOVEMENT_NONE,
   MOVEMENT_BALLOON,
   MOVEMENT_HOPPER
 };
-
 
 class AiSpecies {
 public:
@@ -49,32 +46,18 @@ public:
   bool willAttackSameSpecies;
   //mAttackPlayer
   //mSightRange
-
 };
-
-
-
 
 class SpeciesDataContainer {
 private:
   AiSpecies mSpecies[NUM_AITYPES];
 
-  void loadSpeciesData(void);
+  void loadSpeciesData();
 
 public:
   SpeciesDataContainer();
 
-  AiSpecies *get(size_t type);
-
+  AiSpecies* get(size_t type);
 };
 
-
-// this is quite important!
-// oh, and creepy.
 extern SpeciesDataContainer gSpeciesData;
-
-
-
-
-
-#endif // AiSpecies_h_
