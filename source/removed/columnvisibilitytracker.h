@@ -87,7 +87,7 @@ void ColumnVisibilityTracker::hideColumn (v2di_t index) {
 
 
 void ColumnVisibilityTracker::addColumn (column_viz_t column) {
-  for (size_t i = 0; i < mColumns.size(); i++) {
+  for (size_t i = 0; i < mColumns.size(); ++i) {
     if (column.index.x == mColumns[i].index.x &&
       column.index.y == mColumns[i].index.y) {
 

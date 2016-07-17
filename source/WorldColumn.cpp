@@ -6,7 +6,7 @@ WorldColumn::WorldColumn() {
 
 WorldColumn::~WorldColumn() {
   size_t numWorldChunks = mWorldChunks.size();
-  for (size_t i = 0; i < numWorldChunks; i++) {
+  for (size_t i = 0; i < numWorldChunks; ++i) {
     if (mWorldChunks[i] != 0) {
       delete mWorldChunks[i];
     }
@@ -15,7 +15,7 @@ WorldColumn::~WorldColumn() {
 
 void WorldColumn::clear() {
   size_t numWorldChunks = mWorldChunks.size();
-  for (size_t i = 0; i < numWorldChunks; i++) {
+  for (size_t i = 0; i < numWorldChunks; ++i) {
     if( mWorldChunks[i] != 0 ) {
       delete mWorldChunks[i];
     }
@@ -47,7 +47,7 @@ void WorldColumn::clearEmptyChunks() {
   bool hasClearedChunk = false;
   size_t numWorldChunks = mWorldChunks.size();
   size_t lastChunkIndex = numWorldChunks - 1;
-  for (size_t i = 0; i < numWorldChunks; i++) {
+  for (size_t i = 0; i < numWorldChunks; ++i) {
     if (mWorldChunks[i]->mNumBlocks == 0) {
       if (i != lastChunkIndex) {
         swap(mWorldChunks[i], mWorldChunks[lastChunkIndex]);
@@ -83,7 +83,7 @@ bool WorldColumn::isInColumn(const v3di_t& worldPosition) const {
 }
 
 int WorldColumn::pickChunkFromWorldHeight(int height) const {
-  for (int i = 0; i < static_cast<int>(mWorldChunks.size()); i++) {
+  for (int i = 0; i < static_cast<int>(mWorldChunks.size()); ++i) {
     if (height >= mWorldChunks[i]->mWorldPosition.y &&
       height < (mWorldChunks[i]->mWorldPosition.y + WORLD_CHUNK_SIDE))
     {
@@ -236,7 +236,7 @@ void WorldColumn::updateHighestAndLowest() {
   int highest = -1000000;
   int lowest = 1000000;
 
-  for (size_t i = 0; i < mWorldChunks.size(); i++) {
+  for (size_t i = 0; i < mWorldChunks.size(); ++i) {
     if (mWorldChunks[i]->mWorldPosition.y > highest) {
       highest = mWorldChunks[i]->mWorldPosition.y;
     }

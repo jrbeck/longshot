@@ -13,7 +13,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
   // okay, let's get that WorldMap
   WorldMap &worldMap = *world.getWorldMap();
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     v2di_t corner;
     corner = worldRogueMap.random_room(ID_START + i, 8, 8);
 
@@ -29,7 +29,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
 
   loadScreen->draw(1, 6);
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 1; ++i) {
     v2di_t corner;
 
     int side = 8;
@@ -48,7 +48,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
 
   loadScreen->draw(2, 6);
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 1; ++i) {
     v2di_t corner;
 
     int side = 16;
@@ -69,7 +69,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
   loadScreen->draw(3, 6);
 
   // hmmm
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     v2di_t corner;
 
     int side = 6;
@@ -95,7 +95,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
 
 
   // CAVERNS
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 4; ++i) {
     v2di_t corner;
 
     int side = 6;
@@ -117,7 +117,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
   loadScreen->draw(4, 6);
 
   // castle?
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 1; ++i) {
     v2di_t corner;
 
     int side = 8;
@@ -140,7 +140,7 @@ void FeatureGenerator::createSetPieces(int xIndex, int zIndex, World& world, Loa
 
   loadScreen->draw(5, 6);
 
-  for (int i = 0; i < 50; i++) {
+  for (int i = 0; i < 50; ++i) {
     int side = 1;
 
     v2di_t corner;
@@ -235,7 +235,7 @@ void FeatureGenerator::create1by1Tower(v2di_t cornerIndex, int baseHeight, World
   b.z = worldZ + 8;
   b.y = a.y;
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 3; ++i) {
     worldMap.clearBlock(a);
     worldMap.clearBlock(b);
     a.y++;
@@ -326,7 +326,7 @@ void FeatureGenerator::drillCavern(
     double radius = r_num(1.0, 4.0);
 
     WorldMap &worldMap = *world.getWorldMap();
-    for (int i = 0; i < 75; i++) {
+    for (int i = 0; i < 75; ++i) {
       //      worldMap.clearSphere (pos, 4.0);
       worldMap.fillSphere(pos, radius, BLOCK_TYPE_DARK_PURPLE, LIGHT_LEVEL_SOLID);
 
@@ -397,7 +397,7 @@ void FeatureGenerator::growSpiralGarden(
   }
 
   WorldMap &worldMap = *world.getWorldMap();
-  for (int i = 0; i < numSpirals; i++) {
+  for (int i = 0; i < numSpirals; ++i) {
     v3d_t top;
 
     double height;
@@ -663,7 +663,7 @@ void FeatureGenerator::createBuilding2x2(v2di_t cornerIndex, World &world) {
   b.z = worldZ + 8;
   b.y = a.y;
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 3; ++i) {
     worldMap.clearBlock(a);
     worldMap.clearBlock(b);
     a.y++;
@@ -700,7 +700,7 @@ void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, Wor
 
   // make it a plain
   for (int k = 0; k < bufferZ; k++) {
-    for (int i = 0; i < bufferX; i++) {
+    for (int i = 0; i < bufferX; ++i) {
       heightMap[i + (k * bufferX)] = floorHeight;
     }
   }
@@ -713,7 +713,7 @@ void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, Wor
   indices[2] = bufferX * (bufferZ - 2);
   indices[3] = bufferX * (bufferZ - 1);
 
-  for (int i = 0; i < (WORLD_CHUNK_SIDE * sideX) + 2; i++) {
+  for (int i = 0; i < (WORLD_CHUNK_SIDE * sideX) + 2; ++i) {
     int x = worldX + (i - 1);
     heightMap[i + indices[0]] = world.getTerrainHeight(x, worldZ - 1);
     heightMap[i + indices[1]] = world.getTerrainHeight(x, worldZ);
@@ -741,7 +741,7 @@ void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, Wor
   indices[2] = bufferX; // these are for the reading
   indices[3] = bufferX * (bufferZ - 2);
 
-  for (int i = 2; i < (WORLD_CHUNK_SIDE * sideX); i++) {
+  for (int i = 2; i < (WORLD_CHUNK_SIDE * sideX); ++i) {
     int x = worldX + (i - 1);
     heightMap[i + indices[0]] = (heightMap[i + indices[2]] + floorHeight) / 2;
     heightMap[i + indices[1]] = (heightMap[i + indices[3]] + floorHeight) / 2;
@@ -766,7 +766,7 @@ void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, Wor
   indices[2] = bufferX * 2; // these are for the reading
   indices[3] = bufferX * (bufferZ - 3);
 
-  for (int i = 3; i < ((WORLD_CHUNK_SIDE * sideX) - 1); i++) {
+  for (int i = 3; i < ((WORLD_CHUNK_SIDE * sideX) - 1); ++i) {
     int x = worldX + (i - 1);
     heightMap[i + indices[0]] = (heightMap[i + indices[2]] + floorHeight) / 2;
     heightMap[i + indices[1]] = (heightMap[i + indices[3]] + floorHeight) / 2;
@@ -795,7 +795,7 @@ void FeatureGenerator::createPlain(v2di_t cornerIndex, int sideX, int sideZ, Wor
 
   // now build the columns
   for (int k = 0; k < sideZ; k++) {
-    for (int i = 0; i < sideX; i++) {
+    for (int i = 0; i < sideX; ++i) {
 
       int xCorner = i * (WORLD_CHUNK_SIDE);
       int zCorner = k * (WORLD_CHUNK_SIDE);
@@ -832,7 +832,7 @@ void FeatureGenerator::createVillage(int side, v2di_t cornerIndex, World& world)
   RogueMap rogueMap;
   rogueMap.resize(side, side);
 
-  for (int i = 0; i < 50; i++) {
+  for (int i = 0; i < 50; ++i) {
 
     int buildingSide = 2;
 
@@ -913,7 +913,7 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
 
   //  sd
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     for (int j = 0; j < 6; j++) {
       //      worldMap.loadColumn(corner.x + i, corner.y + j);
       int xIndex = corner.x + i;
@@ -1005,7 +1005,7 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
 //
 //
 //  for (int j = 0; j < dungeonSide; j++) {
-//    for (int i = 0; i < dungeonSide; i++) {
+//    for (int i = 0; i < dungeonSide; ++i) {
 //      for (int v = 0; v < (WORLD_CHUNK_SIDE / 2); v++) {
 //        for (int u = 0; u < (WORLD_CHUNK_SIDE / 2); u++) {
 //          int rx = u + (i * (WORLD_CHUNK_SIDE / 2));
@@ -1102,7 +1102,7 @@ void FeatureGenerator::createForViewer(v3d_t startPos, int type, World &world) {
 //  // THIS MAY ACTUALLY BE USED AT SOME POINT!!
 //  //v2di_t monsterPos;
 //  //int numSpawners = r_numi (8, 15);
-//  //for (int i = 0; i < numSpawners; i++) {
+//  //for (int i = 0; i < numSpawners; ++i) {
 //
 //  //  monsterPos = rogueMap.placeRandomMonster ();
 //

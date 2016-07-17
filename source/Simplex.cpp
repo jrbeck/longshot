@@ -152,7 +152,7 @@ double simplex_noise (int octaves, double x, double y, double z) {
   int i;
   value = noise (x, y, z);
 
-  for (i = 0; i < octaves; i++){
+  for (i = 0; i < octaves; ++i){
     value += noise (
       x * pow (2.0f, i),
       y * pow (2.0f, i),

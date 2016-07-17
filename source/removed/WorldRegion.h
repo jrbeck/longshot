@@ -165,7 +165,7 @@ WorldRegion::WorldRegion (void) {
   num_blocks = 0;
 
   // set the children to NULL
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     root.node[i] = NULL; }
 
   // we don't have anything to draw yet
@@ -206,7 +206,7 @@ WorldRegion::WorldRegion (int side) {
   num_blocks = 0;
 
   // set the children to NULL
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     root.node[i] = NULL; }
 
   // we don't have anything to draw yet
@@ -248,7 +248,7 @@ int WorldRegion::resize(int side) {
   num_blocks = 0;
 
   // set the children to NULL
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     root.node[i] = NULL; }
 */
 
@@ -321,7 +321,7 @@ int WorldRegion::clear_rec (octree_node *n) {
 
   // internal node
   if (n->num_children > 0) {
-    for (int i = 0; i < 8 && n->num_children > 0; i++) {
+    for (int i = 0; i < 8 && n->num_children > 0; ++i) {
       // free the child node if it has been allocated
       if (n->node[i] != NULL) {
         // got to see about all the descendents
@@ -601,7 +601,7 @@ int WorldRegion::create_node (octree_node *parent, int child) {
   parent->node[child]->boundingSphere.setRadius (1.7322 * halfSide);
 
   // set all the child nodes to NULL
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     parent->node[child]->node[i] = NULL; }
 
   // alert success
@@ -739,7 +739,7 @@ void WorldRegion::clear_block_rec (octree_node *n, v3di_t pos) {
 
   temp.type = BLOCK_TYPE_DIRT;
   temp.numFacesVisible = 6;
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     temp.faceVisible[i] = true;
     temp.facesEarth[i] = true;
   }
@@ -993,7 +993,7 @@ void WorldRegion::drawForDisplayList (AssetManager &assetManager) {
   if (root.num_children == 0) return;
 
   // adress the child nodes
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     if (root.node[i] != NULL) {
       drawForDisplayList_rec (root.node[i], assetManager);
     }
@@ -1016,7 +1016,7 @@ void WorldRegion::drawForDisplayList_rec (octree_node *n, AssetManager &assetMan
   if (n->num_children == 0) return;
 
   // adress the progeny
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     if (n->node[i] != NULL) {
       drawForDisplayList_rec (n->node[i], assetManager);
     }
@@ -1067,7 +1067,7 @@ int WorldRegion::draw (GlCamera &cam, AssetManager &assetManager) {
   int count = 0;
 
   // adress the child nodes
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     if (root.node[i] != NULL) {
 //      int cull = cam.bounding_box_test (root.node[i]->b_box);
       int cull = cam.bounding_sphere_test (root.node[i]->boundingSphere);
@@ -1104,7 +1104,7 @@ int WorldRegion::draw_rec (octree_node *n, AssetManager &assetManager) {
   int count = 0;
 
   // adress the progeny
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     if (n->node[i] != NULL) {
         count += draw_rec (n->node[i], assetManager); } }
 
@@ -1133,7 +1133,7 @@ int WorldRegion::draw_rec (octree_node *n, GlCamera &cam, AssetManager &assetMan
   int count = 0;
 
   // adress the progeny
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 8; ++i) {
     if (n->node[i] != NULL) {
 //      int cull = cam.bounding_box_test (n->node[i]->b_box);
       int cull = cam.bounding_sphere_test (n->node[i]->boundingSphere);

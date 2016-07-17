@@ -11,7 +11,7 @@ Periodics::~Periodics(void) {
 int Periodics::saveToDisk(FILE *file) {
   int errorCode = 0;
 
-/*  for (int i = 0; i < NUM_TERRAINS; i++) {
+/*  for (int i = 0; i < NUM_TERRAINS; ++i) {
     errorCode = mTerrains[i].saveToDisk (file);
     if (errorCode != 0) {
       return errorCode;

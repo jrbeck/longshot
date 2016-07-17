@@ -83,7 +83,7 @@ void Physics::addQueuedEntities() {
   }
 
   size_t numObjs = obj.size();
-  for (size_t i = 0; i < numObjs; i++) {
+  for (size_t i = 0; i < numObjs; ++i) {
     obj[i]->queued = false;
   }
 
@@ -92,7 +92,7 @@ void Physics::addQueuedEntities() {
 
 void Physics::manageEntitiesList() {
   size_t numObjs = obj.size();
-  for (size_t i = 0; i < numObjs; i++) {
+  for (size_t i = 0; i < numObjs; ++i) {
     if (!obj[i]->active) {
       // clear out the ol' mailbox
       clearMailBox((int)obj[i]->handle);
@@ -500,7 +500,7 @@ void Physics::updateEntity(size_t index) {
     break;
 
   case OBJTYPE_PLASMA_BOMB:
-    for (int i = 0; i < rnum; i++) {
+    for (int i = 0; i < rnum; ++i) {
       PhysicsEntity* otherEntity = createEntity(OBJTYPE_PLASMA_SPARK, v3d_add(v3d_random(0.20), physicsEntity->boundingBox.getCenterPosition()), true);
       if (otherEntity != NULL) {
         setVelocity(otherEntity->handle, v3d_random(0.5));
@@ -544,7 +544,7 @@ void Physics::expireEntity(size_t index) {
   case OBJTYPE_EXPLOSION:
     pos = physicsEntity->boundingBox.getCenterPosition();
     v3d_t force;
-    for (size_t i = 0; i < 10; i++) {
+    for (size_t i = 0; i < 10; ++i) {
       force = v3d_v(r_num(-5., 5.0), r_num(-5.0, 5.0), r_num(-5.0, 5.0));
       createEntity(OBJTYPE_SMOKE, pos, force, false);
     }
@@ -1643,7 +1643,7 @@ void Physics::grenadeExplosion(size_t index) {
   addSoundEvent (SOUND_GRENADE_EXPLOSION, centerPosition);
 
 
-  for (int i = 0; i < physicsEntity->numParticles; i++) {
+  for (int i = 0; i < physicsEntity->numParticles; ++i) {
     v3d_t randomPosition = v3d_add(centerPosition, v3d_random (0.5));
     newPhysicsEntity = createEntity(physicsEntity->type2, randomPosition, true);
     if (newPhysicsEntity != NULL) {
@@ -1673,12 +1673,12 @@ void Physics::grenadeExplosion(size_t index) {
 void Physics::spawnExplosion(const v3d_t& pos, size_t numParticles) {
   addSoundEvent (SOUND_GRENADE_EXPLOSION, pos);
 
-  for (size_t i = 0; i < numParticles - 10; i++) {
+  for (size_t i = 0; i < numParticles - 10; ++i) {
     createEntity(OBJTYPE_SPARK, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
   int num_napalms = r_numi(5, 10);
-  for (size_t i = 0; i < static_cast<size_t>(num_napalms); i++) {
+  for (size_t i = 0; i < static_cast<size_t>(num_napalms); ++i) {
     createEntity(OBJTYPE_NAPALM, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
@@ -1695,7 +1695,7 @@ void Physics::spawnExplosion(const v3d_t& pos, size_t numParticles) {
 void Physics::spawnMeatExplosion(const v3d_t& pos, size_t numParticles) {
   addSoundEvent(SOUND_SPLAT, pos);
 
-  for (size_t i = 0; i < numParticles; i++) {
+  for (size_t i = 0; i < numParticles; ++i) {
     createEntity(OBJTYPE_BLOOD_SPRAY, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
@@ -1709,7 +1709,7 @@ void Physics::spawnMeatExplosion(const v3d_t& pos, size_t numParticles) {
 
 void Physics::plasmaBombExplode(const v3d_t& pos, size_t numParticles) {
   PhysicsEntity* newPhysicsEntity;
-  for (size_t i = 0; i < numParticles; i++) {
+  for (size_t i = 0; i < numParticles; ++i) {
     newPhysicsEntity = createEntity(OBJTYPE_PLASMA_SPARK, pos, true);
 
     if (newPhysicsEntity != NULL) {
@@ -1770,7 +1770,7 @@ int Physics::addSoundEvent(int type, const v3d_t& position) {
 
 
 void Physics::playSoundEvents(AssetManager& assetManager) {
-  for (int i = 0; i < mNumSoundEvents; i++) {
+  for (int i = 0; i < mNumSoundEvents; ++i) {
     assetManager.mSoundSystem.playSoundByHandle(mSoundEvents[i], mSoundVolumes[i]);
   }
   mNumSoundEvents = 0;
@@ -1815,7 +1815,7 @@ void Physics::sendMessage(const phys_message_t& message) {
 
 
 int Physics::getNextMessage(int recipient, phys_message_t* message) {
-  for (size_t i = 0; i < mMessages.size(); i++) {
+  for (size_t i = 0; i < mMessages.size(); ++i) {
     if (mMessages[i].recipient == recipient) {
       *message = mMessages[i];
       size_t lastMessage = mMessages.size() - 1;
@@ -1837,7 +1837,7 @@ int Physics::getNextMessage(int recipient, phys_message_t* message) {
 }
 
 void Physics::clearMailBox(int recipient) {
-  for (size_t i = 0; i < mMessages.size(); i++) {
+  for (size_t i = 0; i < mMessages.size(); ++i) {
     if (mMessages[i].recipient == recipient) {
       size_t lastMessage = mMessages.size() - 1;
 
@@ -1858,7 +1858,7 @@ vector<size_t> Physics::getAllItemHandles() const {
   vector<size_t> itemList;
   PhysicsEntity* physicsEntity;
 
-  for (size_t i = 0; i < obj.size(); i++) {
+  for (size_t i = 0; i < obj.size(); ++i) {
     physicsEntity = obj[i];
     if (physicsEntity->type == OBJTYPE_ITEM) {
       itemList.push_back(physicsEntity->itemHandle);

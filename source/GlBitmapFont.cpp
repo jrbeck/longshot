@@ -44,7 +44,7 @@ GLfloat GlBitmapFont::getStringWidth (const string &s) const {
   GLfloat width = 0.0f;
   BYTE c;
 
-  for (size_t i = 0; i < s.length (); i++) {
+  for (size_t i = 0; i < s.length (); ++i) {
 
     c = s[i];
 
@@ -99,7 +99,7 @@ void GlBitmapFont::drawString (
 
 //  enterGlMode ();
 
-  for (size_t i = 0; i < s.size(); i++) {
+  for (size_t i = 0; i < s.size(); ++i) {
     character = s[i];
 
     br[0] = tl[0] + charDimensions[0];

@@ -54,14 +54,14 @@ DungeonTile* DungeonModel::getBuffer() const {
 
 void DungeonModel::setBuffer(const DungeonTile& tile) {
   int bufferLength = mWidth * mHeight;
-  for (int i = 0; i < bufferLength; i++) {
+  for (int i = 0; i < bufferLength; ++i) {
     buffer[i] = tile;
   }
 }
 
 void DungeonModel::setBuffer(const SelectiveDungeonTile& tile) {
   int bufferLength = mWidth * mHeight;
-  for (int i = 0; i < bufferLength; i++) {
+  for (int i = 0; i < bufferLength; ++i) {
     tile.updateDungeonTile(buffer[i]);
   }
 }

@@ -7,7 +7,7 @@ AiStateMachine::~AiStateMachine() {
 }
 
 void AiStateMachine::addState(AiState state) {
-  for (size_t i = 0; i < mStates.size(); i++) {
+  for (size_t i = 0; i < mStates.size(); ++i) {
     // prevent duplicates
     if (mStates[i].state == state.state &&
       mStates[i].condition == state.condition &&

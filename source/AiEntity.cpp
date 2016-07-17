@@ -15,7 +15,7 @@ AiEntity::AiEntity(GameModel* gameModel) {
   mLookIncline = 0.0;
   v3d_zero(&mHeadOrientation);
 
-  for (int i = 0; i < AI_INVENTORY_SIZE; i++) {
+  for (int i = 0; i < AI_INVENTORY_SIZE; ++i) {
     mInventory[i] = 0;
   }
 }
@@ -44,7 +44,7 @@ void AiEntity::update() {
   // ever get the urge to merge?
   if (mCurrentHealth <= 0.0) {
     // turn inventory items into phys entities
-    for (int i = 0; i < AI_INVENTORY_SIZE; i++) {
+    for (int i = 0; i < AI_INVENTORY_SIZE; ++i) {
       if (mInventory[i] > 0) {
         item_t item = mGameModel->itemManager->getItem(mInventory[i]);
         if (item.type == ITEMTYPE_GUN_ONE_HANDED && r_numi(0, 10) < 3) {
@@ -136,7 +136,7 @@ void AiEntity::updateState() {
   AiSpecies* species = gSpeciesData.get(mType);
   size_t totalStates = species->stateMachine.mStates.size();
   bool isDone = false;
-  for (size_t i = 0; i < totalStates && !isDone; i++) {
+  for (size_t i = 0; i < totalStates && !isDone; ++i) {
     if (species->stateMachine.mStates[i].state == mCurrentState) {
       if (testCondition(species->stateMachine.mStates[i].condition)) {
         mCurrentState = species->stateMachine.mStates[i].nextState;

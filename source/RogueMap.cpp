@@ -49,7 +49,7 @@ void RogueMap::randomize(bool clearMap, int numRooms) {
     clear();
   }
 
-  for (int i = 0; i < numRooms; i++) {
+  for (int i = 0; i < numRooms; ++i) {
 //    random_room (i + ID_START, r_numi (4, 30), r_numi (4, 30));
     random_room(5, r_numi (4, 30), r_numi (4, 30));
   }
@@ -64,7 +64,7 @@ void RogueMap::randomize(bool clearMap, int numRooms) {
 
   // change certain things to MAP_TILE_PATH type
   for (int j = 0; j < mHeight; j++) {
-    for (int i = 0; i < mWidth; i++) {
+    for (int i = 0; i < mWidth; ++i) {
       if (getTile (i, j).color.r == 64  ||  // MAP_TILE_PATH
         getTile (i, j).color.r == 192 ||  // MAP_TILE_SEED
         getTile (i, j).color.g == 192)    // MAP_TILE_SEED
@@ -86,7 +86,7 @@ void RogueMap::clear() {
   blank.monsterPresent = false;
 
   for (int j = 0; j < mHeight; j++) {
-    for (int i = 0; i < mWidth; i++) {
+    for (int i = 0; i < mWidth; ++i) {
       setTile (i, j, blank);
     }
   }
@@ -100,7 +100,7 @@ int RogueMap::getRoomIndexByHandle(int handle) {
     return -1;
   }
 
-  for (size_t i = 0; i < mRooms.size(); i++) {
+  for (size_t i = 0; i < mRooms.size(); ++i) {
     if (mRooms[i].handle == handle) {
       return i;
     }
@@ -111,7 +111,7 @@ int RogueMap::getRoomIndexByHandle(int handle) {
 
 // WARNING: occurrence index is zero-based
 int RogueMap::getRoomIndexById(int id, int occurrence) {
-  for (size_t i = 0; i < mRooms.size(); i++) {
+  for (size_t i = 0; i < mRooms.size(); ++i) {
     if (mRooms[i].id == id) {
       // what? don't trust the compiler? ;)
       if (occurrence-- <= 0) {
@@ -138,7 +138,7 @@ v2di_t RogueMap::random_room(int id, int width, int height) {
 
     // check if the room overlaps anything it shouldn't
     for (int j = 0; j < height + 3; j++) {
-      for (int i = 0; i < width + 3; i++) {
+      for (int i = 0; i < width + 3; ++i) {
         if (getTile (a.x + i, a.y + j).type != MAP_TILE_WALL) {
           done = 0;
         }
@@ -176,7 +176,7 @@ int RogueMap::placeRandomDoor(int roomId) {
 
   // find the room in question
   int roomIndex = -1;
-  for (size_t i = 0; i < mRooms.size() && roomIndex < 0; i++) {
+  for (size_t i = 0; i < mRooms.size() && roomIndex < 0; ++i) {
     if (mRooms[i].id == roomId) {
       roomIndex = i;
     }
@@ -284,7 +284,7 @@ int RogueMap::draw_path(v2di_t a, v2di_t b) {
   int *open = new int[mWidth * mHeight];
 
   for (int j = 0; j < mHeight; j++) {
-    for (int i = 0; i < mWidth; i++) {
+    for (int i = 0; i < mWidth; ++i) {
       if (getTile (i, j).type == MAP_TILE_WALL || getTile (i, j).type == MAP_TILE_PATH) {
         open[i + (j * mWidth)] = -1;
       }
@@ -306,7 +306,7 @@ int RogueMap::draw_path(v2di_t a, v2di_t b) {
     count = 0;
 
     for (int j = 0; j < mHeight; j++) {
-      for (int i = 0; i < mWidth; i++) {
+      for (int i = 0; i < mWidth; ++i) {
 
         // we start on the last iteration's placements
         if (open[i + (j * mWidth)] == move) {
@@ -369,7 +369,7 @@ int RogueMap::draw_path(v2di_t a, v2di_t b) {
   int minimum;
 
 /*  for (int j = 0; j < mHeight; j++) {
-    for (int i = 0; i < mWidth; i++) {
+    for (int i = 0; i < mWidth; ++i) {
       if (open[j][i] >= 0) {
         map[j][i].color.r = open[j][i] * 3;
         map[j][i].type = MAP_TILE_FLOOR;
@@ -452,7 +452,7 @@ int RogueMap::draw_path(v2di_t a, v2di_t b) {
     tile.id = ID_NONE;
 
     for (int j = 0; j < mHeight; j++) {
-      for (int i = 0; i < mWidth; i++) {
+      for (int i = 0; i < mWidth; ++i) {
         if (open[i + (j * mWidth)] == 101010) {
           setTile (i, j, tile);
         }
@@ -480,7 +480,7 @@ int RogueMap::draw_path(v2di_t a, v2di_t b) {
 
 int RogueMap::path_valid_pos(int x, int y) {
   for (int j = -1; j < 2; j++) {
-    for (int i = -1; i < 2; i++) {
+    for (int i = -1; i < 2; ++i) {
       if (!isOnMap (x + i, y + j)) return 0;
       if (//map[y + j][x + i].type == MAP_TILE_PATH ||
         getTile (x + i, y + j).type == MAP_TILE_FLOOR) return 0;
@@ -588,7 +588,7 @@ void RogueMap::draw_room(v2di_t c, v2di_t d, int id) {
   tile.id = id;
 
   for (int j = t; j <= b; j++) {
-    for (int i = l; i <= r; i++) {
+    for (int i = l; i <= r; ++i) {
       setTile (i, j, tile);
     }
   }
@@ -609,13 +609,13 @@ void RogueMap::draw_room(v2di_t c, v2di_t d, int id) {
 void RogueMap::drawIdRectInRoom(int roomId, int rectId) {
   int index;
 
-  for (size_t i = 0; i < mRooms.size(); i++) {
+  for (size_t i = 0; i < mRooms.size(); ++i) {
     index = getRoomIndexById (roomId, i);
 
     if (index == -1) break;
 
     for (int j = mRooms[index].nearCorner.y + 1; j < mRooms[index].farCorner.y; j++) {
-      for (int i = mRooms[index].nearCorner.x + 1; i < mRooms[index].farCorner.x; i++) {
+      for (int i = mRooms[index].nearCorner.x + 1; i < mRooms[index].farCorner.x; ++i) {
         map_tile_t tile = getTile (i, j);
         tile.id = rectId;
         setTile (i, j, tile);
@@ -651,7 +651,7 @@ v2di_t RogueMap::getRandomRoomIndex() {
     return index;
   }
 
-  for (int i = 0; i < 10000; i++) {
+  for (int i = 0; i < 10000; ++i) {
     int x = r_numi (8, mWidth - 8);
     int z = r_numi (8, mHeight - 8);
 
@@ -673,7 +673,7 @@ v2di_t RogueMap::getEntryPoint() {
     return index;
   }
 
-  for (int i = 0; i < 50000; i++) {
+  for (int i = 0; i < 50000; ++i) {
     int x = r_numi (8, mWidth - 8);
     int z = r_numi (8, mHeight - 8);
 
@@ -710,7 +710,7 @@ void RogueMap::draw() {
   map_tile_t tile;
 
   for (int j = 0; j < mHeight; j++) {
-    for (int i = 0; i < mWidth; i++) {
+    for (int i = 0; i < mWidth; ++i) {
 
       tile = getTile (i, j);
 

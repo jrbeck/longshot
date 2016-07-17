@@ -189,7 +189,7 @@ int World::preloadColumns(int numColumns, v3d_t pos, LoadScreen* loadScreen) {
   int numColumnsLoaded = 0;
   int numChunksLoaded = 0;
 
-  for (int i = 0; i < numColumns; i++) {
+  for (int i = 0; i < numColumns; ++i) {
     loadSurroundingColumns(pos);
 
     printf(".");
@@ -224,7 +224,7 @@ int World::loadSurroundingColumns(v3d_t pos) {
   }
 
   for (int count = 1; count < maxCount; /*count++*/ ) {
-    for (int i = 0; i < runLength; i++) {
+    for (int i = 0; i < runLength; ++i) {
       // move to the next column region
       regionIndex.x += nextAdd[direction][0];
       regionIndex.z += nextAdd[direction][1];
@@ -282,7 +282,7 @@ int World::loadColumn(int xIndex, int zIndex, bool doOutcroppings) {
     int heightMap[(WORLD_CHUNK_SIDE + 2) * (WORLD_CHUNK_SIDE + 2)];
 
     for (int k = 0; k < (WORLD_CHUNK_SIDE + 2); k++) {
-      for (int i = 0; i < (WORLD_CHUNK_SIDE + 2); i++) {
+      for (int i = 0; i < (WORLD_CHUNK_SIDE + 2); ++i) {
         heightMap[i + (k * (WORLD_CHUNK_SIDE + 2))] = mPeriodics.getTerrainHeight(worldX + i - 1, worldZ + k - 1);
       }
     }
@@ -569,7 +569,7 @@ void World::growTree(v3di_t worldPosition, int floorBlockType, int numWaterInCol
   double radius = r_num(2.0, 3.0);
 
   for (int j = 0; j < height; j++) {
-    for (int i = -5; i <= 5; i++) {
+    for (int i = -5; i <= 5; ++i) {
       for (int k = -5; k <= 5; k++) {
         leafPosition.x = position.x + i;
         leafPosition.y = position.y + j;
@@ -637,7 +637,7 @@ void World::growBlockTree(v3di_t position) {
   height = r_numi(1, 6);
 
   for (int j = 0; j < height; j++) {
-    for (int i = -2; i <= 2; i++) {
+    for (int i = -2; i <= 2; ++i) {
       for (int k = -2; k <= 2; k++) {
         leafPosition.x = position.x + i;
         leafPosition.y = position.y + j;
@@ -868,7 +868,7 @@ void World::growPalmTree(v3di_t position) {
   int spread = r_numi(3, 5);
 
   // horizontal parts
-  for (int i = 1; i < spread; i++) {
+  for (int i = 1; i < spread; ++i) {
     leafPosition = position;
     leafPosition.x += i;
     mWorldMap->setBlock(leafPosition, block);
@@ -890,7 +890,7 @@ void World::growPalmTree(v3di_t position) {
   spread--;
 
   // vertical parts
-  for (int i = 1; i < drop; i++) {
+  for (int i = 1; i < drop; ++i) {
     leafPosition = position;
     leafPosition.x += spread;
     leafPosition.y -= i;

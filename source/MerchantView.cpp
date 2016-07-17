@@ -53,7 +53,7 @@ void MerchantView::setupMerchant(Merchant& merchant, ItemManager& itemManager) {
 
   merchant.mInventoryList.clear();
 
-  for (size_t i = 0; i < 8; i++) {
+  for (size_t i = 0; i < 8; ++i) {
     size_t handle = itemManager.generateRandomGun(r_num(1.0, 7.0));
     merchant.mInventoryList.push_back(handle);
   }
@@ -66,7 +66,7 @@ int MerchantView::update(player_c& player, ItemManager& itemManager) {
   case MERCHANT_BUTTON_END_TRANSACTION:
     // TODO: for now, just destroy the placeholder merchant's
     // inventory
-    for (size_t i = 0; i < mMerchant->mInventoryList.size(); i++) {
+    for (size_t i = 0; i < mMerchant->mInventoryList.size(); ++i) {
       itemManager.destroyItem(mMerchant->mInventoryList[i]);
     }
     return 1;
@@ -90,7 +90,7 @@ int MerchantView::update(player_c& player, ItemManager& itemManager) {
   case MERCHANT_BUTTON_SELL:
     if (mSelectedItem >= 0) {
       Inventory *inv = player.getInventory();
-      for (int i = 0; i < inv->mBackpack.size(); i++) {
+      for (int i = 0; i < inv->mBackpack.size(); ++i) {
         if (inv->mBackpack[i] == tempList[mSelectedItem]) {
           // remove from backpack
           inv->mBackpack[i] = 0;
@@ -109,7 +109,7 @@ int MerchantView::update(player_c& player, ItemManager& itemManager) {
   case MERCHANT_BUTTON_BUY:
     if (mSelectedItem >= 0) {
       Inventory *inv = player.getInventory();
-      for (int i = 0; i < inv->mBackpack.size(); i++) {
+      for (int i = 0; i < inv->mBackpack.size(); ++i) {
         if (inv->mBackpack[i] == 0) {
           // put in backpack
           inv->mBackpack[i] = tempList[mSelectedItem];
@@ -178,7 +178,7 @@ void MerchantView::setupSellMenu(player_c& player, ItemManager& itemManager) {
 
   // setup the MerchantView list from the player's backpack
   Inventory *inventory = player.getInventory();
-  for (size_t i = 0; i < inventory->mBackpack.size(); i++) {
+  for (size_t i = 0; i < inventory->mBackpack.size(); ++i) {
     if (inventory->mBackpack[i] != 0) {
       tempList.push_back(inventory->mBackpack[i]);
     }
@@ -202,7 +202,7 @@ void MerchantView::setupBuyMenu(Merchant& merchant, ItemManager& itemManager) {
   addSelectedItemInfo(itemManager);
 
   // setup the MerchantView list from the merchant's inventory
-  for (size_t i = 0; i < mMerchant->mInventoryList.size(); i++) {
+  for (size_t i = 0; i < mMerchant->mInventoryList.size(); ++i) {
     if (mMerchant->mInventoryList[i] != 0) {
       tempList.push_back(mMerchant->mInventoryList[i]);
     }
@@ -263,7 +263,7 @@ void MerchantView::setupInventoryList(ItemManager& itemManager) {
   double buttonHeight = (0.875 - 0.175) / static_cast<double>(tempList.size());
   v2d_t tl, dimensions;
 
-  for (size_t i = 0; i < tempList.size(); i++) {
+  for (size_t i = 0; i < tempList.size(); ++i) {
     tl = v2d_v (0.55, lerp (0.175, 0.875 - buttonHeight, i, tempList.size()));
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9; // 0.9 is the TOTAL HEIGHT

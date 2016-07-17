@@ -6,7 +6,7 @@ RogueViewer::RogueViewer(GameWindow* gameWindow) :
 {
 //  mGameWindow = gameWindow;
 
-  for (int i = 0; i < NUM_VIZ_MODES; i++) {
+  for (int i = 0; i < NUM_VIZ_MODES; ++i) {
     mCameraStates[i].position = v3d_v(50.0, 50.0, 50.0);
     mCameraStates[i].target = v3d_v(0.0, 0.0, 0.0);
   }
@@ -76,7 +76,7 @@ int RogueViewer::start() {
 //  mWorld.generateClouds (mRtsCam.getTarget ());
 
   // set up a map for each mode
-  for (int i = 0; i < NUM_VIZ_MODES; i++) {
+  for (int i = 0; i < NUM_VIZ_MODES; ++i) {
     swapVizMode(i);
     generateNewMap();
   }
@@ -350,12 +350,12 @@ void RogueViewer::generateNewMap() {
 //    FeatureGenerator::createForViewer (startLocation, 0, mWorldMap);
 
     // prepare for viewing
-    for (int i = 0; i < mWorldMap.mNumColumns; i++) {
+    for (int i = 0; i < mWorldMap.mNumColumns; ++i) {
       // FIXME: this was commented out when createShadowVolume
       // got an option for a cloud cover...
 //      WorldLighting::createShadowVolume (i, mWorldMap);
     }
-    for (int i = 0; i < mWorldMap.mNumColumns; i++) {
+    for (int i = 0; i < mWorldMap.mNumColumns; ++i) {
       mWorldMap.updateBlockVisibility(i);
       // FIXME: this was commented out when LightmManager was required
       // it will generate NOTHING without this

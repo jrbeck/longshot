@@ -81,7 +81,7 @@ void GalaxyMap::drawGalaxy(Planet *selectedPlanet) {
   double nearestDist = v2d_dist(mouse, mGalaxy->mStarSystems[nearest]->mPosition);
 
   size_t numStarSystems = mGalaxy->mStarSystems.size();
-  for (size_t i = 0; i < numStarSystems; i++) {
+  for (size_t i = 0; i < numStarSystems; ++i) {
     double dist = v2d_dist(mouse, mGalaxy->mStarSystems[i]->mPosition);
     if (dist < nearestDist) {
       nearestDist = dist;
@@ -148,7 +148,7 @@ void GalaxyMap::drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet) {
 
   // draw the planets
   size_t numPlanets = starSystem.mPlanets.size();
-  for (size_t i = 0; i < numPlanets; i++) {
+  for (size_t i = 0; i < numPlanets; ++i) {
     double orbitRadius = starSystem.mPlanets[i]->mOrbitRadius;
     double orbitAngle = starSystem.mPlanets[i]->mAngle;
 

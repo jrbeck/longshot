@@ -9,7 +9,7 @@ StarSystem::~StarSystem() {
 
 void StarSystem::clear() {
   size_t numPlanets = mPlanets.size();
-  for(size_t i = 0; i < numPlanets; i++) {
+  for(size_t i = 0; i < numPlanets; ++i) {
     if(mPlanets[i] != NULL) {
       delete mPlanets[i];
     }
@@ -31,7 +31,7 @@ void StarSystem::randomize() {
   mStarRadius = r_num(MIN_STAR_RADIUS, MAX_STAR_RADIUS);
   size_t numPlanets = r_numi(MIN_PLANETS, MAX_PLANETS);
 
-  for (size_t i = 0; i < numPlanets; i++) {
+  for (size_t i = 0; i < numPlanets; ++i) {
     Planet* planet = new Planet();
     if (planet == NULL) {
       printf("StarSystem::StarSystem(): out of memory\n");
@@ -62,7 +62,7 @@ void StarSystem::save(FILE* file) {
   size_t numPlanets = mPlanets.size();
   fwrite(&numPlanets, sizeof (numPlanets), 1, file);
 
-  for (size_t i = 0; i < numPlanets; i++) {
+  for (size_t i = 0; i < numPlanets; ++i) {
     fwrite(mPlanets[i], sizeof (Planet), 1, file);
 //    mPlanets[i]->save(file);
   }
@@ -82,7 +82,7 @@ void StarSystem::load(FILE* file) {
   // load the planets
   size_t numPlanets;
   fread(&numPlanets, sizeof (numPlanets), 1, file);
-  for (size_t i = 0; i < numPlanets; i++) {
+  for (size_t i = 0; i < numPlanets; ++i) {
     Planet* planet = new Planet();
     if (planet == NULL) {
       printf("StarSystem::load(): error: out of memory\n");
@@ -96,7 +96,7 @@ void StarSystem::load(FILE* file) {
 }
 
 Planet* StarSystem::getPlanetByHandle(int handle) {
-  for (size_t i = 0; i < mPlanets.size(); i++) {
+  for (size_t i = 0; i < mPlanets.size(); ++i) {
     if (mPlanets[i]->mHandle == handle) {
       return mPlanets[i];
     }

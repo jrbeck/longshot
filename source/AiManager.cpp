@@ -14,7 +14,7 @@ void AiManager::clear() {
   mPlayerAiHandle = 0;
 
   size_t numEntities = mAiEntities.size();
-  for (size_t i = 0; i < numEntities; i++) {
+  for (size_t i = 0; i < numEntities; ++i) {
     if (mAiEntities[i] != NULL) {
       delete mAiEntities[i];
     } else {
@@ -82,7 +82,7 @@ AiEntity* AiManager::addEntity(int type, const v3d_t& position) {
 
 void AiManager::removeEntity(size_t handle) {
   size_t mNumEntities = mAiEntities.size();
-  for (size_t i = 0; i < mNumEntities; i++) {
+  for (size_t i = 0; i < mNumEntities; ++i) {
     if (mAiEntities[i]->mHandle == handle) {
       if (mAiEntities[i]->mType == AITYPE_PLAYER) {
         printf("AiManager::removeEntity(): error: asked to remove player AI\n");
@@ -99,7 +99,7 @@ void AiManager::removeEntity(size_t handle) {
 
 AiEntity* AiManager::getEntityByHandle(size_t handle) {
   size_t mNumEntities = mAiEntities.size();
-  for (size_t i = 0; i < mNumEntities; i++) {
+  for (size_t i = 0; i < mNumEntities; ++i) {
     if (mAiEntities[i]->mHandle == handle) {
       return mAiEntities[i];
     }
@@ -184,7 +184,7 @@ size_t AiManager::spawnEntity(
   mGameModel->physics->setOwner(physicsHandle, newAiEntity->mHandle);
 
   // give it some items
-  for (int i = 0; i < AiEntity::AI_INVENTORY_SIZE; i++) {
+  for (int i = 0; i < AiEntity::AI_INVENTORY_SIZE; ++i) {
     double itemRandom = r_num (0.0, 10.0);
 
     if (type == AITYPE_HOPPER) {
@@ -232,7 +232,7 @@ int AiManager::update() {
 
   // we'll just count these up
   size_t liveCritters = 0;
-  for (size_t i = 0; i < mAiEntities.size(); i++) {
+  for (size_t i = 0; i < mAiEntities.size(); ++i) {
     if (mAiEntities[i]->mCurrentHealth > 0.0) {
       liveCritters++;
     }
@@ -268,7 +268,7 @@ int AiManager::update() {
 //  printf ("AI time: %.4f\n", post_time - pre_time);
 
   // now to update the entities
-  for (size_t i = 0; i < mAiEntities.size(); i++) {
+  for (size_t i = 0; i < mAiEntities.size(); ++i) {
     // ignore players and dead things
     if (mAiEntities[i]->mType == AITYPE_PLAYER) {
       mAiEntities[i]->updatePlayer();
@@ -315,7 +315,7 @@ void AiManager::releaseItems(int aiIndex) {
 
 void AiManager::trimEntitiesList() {
   size_t numEntities = mAiEntities.size();
-  for (size_t i = 0; i < numEntities; i++) {
+  for (size_t i = 0; i < numEntities; ++i) {
     if (mAiEntities[i]->mActive == false) {
       if (mAiEntities[i]->mType == AITYPE_PLAYER) {
         printf("AiManager::trimEntitiesList(): error: player inactive\n");
@@ -349,7 +349,7 @@ void AiManager::readPhysicsMessages() {
 vector<size_t> AiManager::getAllItemHandles(void) {
   vector<size_t> itemList;
 
-  for (size_t i = 0; i < mAiEntities.size(); i++) {
+  for (size_t i = 0; i < mAiEntities.size(); ++i) {
     for (size_t j = 0; j < AiEntity::AI_INVENTORY_SIZE; j++) {
       if (mAiEntities[i]->mInventory[j] > 0) {
         itemList.push_back(mAiEntities[i]->mInventory[j]);

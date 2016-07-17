@@ -36,7 +36,7 @@ void WorldChunk::setWorldPosition(const v3di_t& worldPosition) {
 void WorldChunk::clear() {
 //  if (mBlocks != NULL) {
 //    memset (mBlocks, 0, sizeof (*mBlocks) * mSideLength * mSideLengthSquared);
-    for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; i++) {
+    for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; ++i) {
       mBlocks[i].type = BLOCK_TYPE_AIR;
       mBlocks[i].uniqueLighting = LIGHT_LEVEL_NOT_SET;
     }

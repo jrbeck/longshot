@@ -9,7 +9,7 @@ void FeatureUtil::loadWorldRegion (
   world.getWorldMap()->resize(sideLength, sideLength);
 
   for (int k = 0; k < sideLength; k++) {
-    for (int i = 0; i < sideLength; i++) {
+    for (int i = 0; i < sideLength; ++i) {
       world.loadColumn(cornerIndex.x + i, cornerIndex.y + k, doOutcroppings);
     }
   }
@@ -26,7 +26,7 @@ height_info_t FeatureUtil::getHeightInfo(int worldX, int worldZ, int sideX, int 
   int count = 0;
 
   for (int k = 0; k < sideZ; k++) {
-    for (int i = 0; i < sideX; i++) {
+    for (int i = 0; i < sideX; ++i) {
       int height = world.getTerrainHeight (worldX + i, worldZ + k);
       sum += height;
       count++;

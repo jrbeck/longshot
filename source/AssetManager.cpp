@@ -22,7 +22,7 @@ AssetManager::AssetManager() :
 
   setDirectionalLightPositions(v3d_v(0.0, 100.0, 0.0), v3d_v(0.0, -100.0, 0.0));
 
-  for (int i = 0; i < NUM_MELEETYPES; i++) {
+  for (int i = 0; i < NUM_MELEETYPES; ++i) {
     mModelDisplayListHandles[i] = 0;
   }
 }
@@ -99,7 +99,7 @@ void AssetManager::freeAssets() {
   }
   // END TESTING
 
-  for (int i = 0; i < NUM_MELEETYPES; i++) {
+  for (int i = 0; i < NUM_MELEETYPES; ++i) {
     if (mModelDisplayListHandles[i] != 0) {
       glDeleteLists(mModelDisplayListHandles[i], 1);
       mModelDisplayListHandles[i] = 0;
@@ -202,7 +202,7 @@ void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPos
   mDirectionalLights[0].setDirection (sunPosition);
   mDirectionalLights[1].setDirection (moonPosition);
 
-  for (size_t i = 0; i < 6; i++) {
+  for (size_t i = 0; i < 6; ++i) {
     mGlobalLightIntensities[i] = v3d_zero ();
   }
 
@@ -348,7 +348,7 @@ void AssetManager::drawBlock (const v3d_t *intensities) const {
 void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
   v3d_t v3dIntensities[NUM_BOX_CORNERS];
 
-  for (int i = 0; i < NUM_BOX_CORNERS; i++) {
+  for (int i = 0; i < NUM_BOX_CORNERS; ++i) {
     v3dIntensities[i].x = (double)intensities[i].x * ONE_OVER_LIGHT_LEVEL_MAX;
     v3dIntensities[i].y = (double)intensities[i].y * ONE_OVER_LIGHT_LEVEL_MAX;
     v3dIntensities[i].z = (double)intensities[i].z * ONE_OVER_LIGHT_LEVEL_MAX;
@@ -839,7 +839,7 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
 
   static GLfloat faceLighting[6][3];
 
-  for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+  for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
     faceLighting[i][0] = (GLfloat)block.faceLighting[i][0] * ONE_OVER_LIGHT_LEVEL_MAX;
     faceLighting[i][1] = (GLfloat)block.faceLighting[i][1] * ONE_OVER_LIGHT_LEVEL_MAX;
     faceLighting[i][2] = (GLfloat)block.faceLighting[i][2] * ONE_OVER_LIGHT_LEVEL_MAX;
@@ -1087,7 +1087,7 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
 
   static GLfloat faceLighting[6][3];
 
-  for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+  for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
     faceLighting[i][0] = (GLfloat)block.faceLighting[i][0] * ONE_OVER_LIGHT_LEVEL_MAX;
     faceLighting[i][1] = (GLfloat)block.faceLighting[i][1] * ONE_OVER_LIGHT_LEVEL_MAX;
     faceLighting[i][2] = (GLfloat)block.faceLighting[i][2] * ONE_OVER_LIGHT_LEVEL_MAX;

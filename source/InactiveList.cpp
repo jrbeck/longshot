@@ -28,7 +28,7 @@ void InactiveList::addItem (inactive_item_t item) {
 inactive_item_t InactiveList::popNextItemInColumn (v2di_t index) {
   inactive_item_t item;
 
-  for (size_t i = 0; i < mItems.size(); i++) {
+  for (size_t i = 0; i < mItems.size(); ++i) {
     if (isInColumn (index, mItems[i].pos)) {
       item = mItems[i];
 
@@ -77,7 +77,7 @@ int InactiveList::save( FILE* file ) {
   // write the number of items
   fwrite (&size, sizeof (int), 1, file);
 
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size; ++i) {
     fwrite (&mItems[i], sizeof (inactive_item_t), 1, file);
 //    printf ("T: (%d) ", mItems[i].type);
 //    v3d_print ("pos", mItems[i].pos);
@@ -97,7 +97,7 @@ int InactiveList::load( FILE* file ) {
   fread (&size, sizeof (int), 1, file);
 
   inactive_item_t item;
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size; ++i) {
     fread (&item, sizeof (inactive_item_t), 1, file);
     mItems.push_back (item);
   }

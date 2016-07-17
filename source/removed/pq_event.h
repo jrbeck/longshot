@@ -8,7 +8,7 @@ void process_events (double process_until) {
     draw_input_flag = 3;
     temp.time = next_input_time;
     next_input_time += INPUT_DELAY;
-    for (int i = 0; i < (int)input_neuron.size(); i++) {
+    for (int i = 0; i < (int)input_neuron.size(); ++i) {
       temp.target = input_neuron[i];
       temp.charge = input_level;
 

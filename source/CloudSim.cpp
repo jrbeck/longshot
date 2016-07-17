@@ -70,7 +70,7 @@ void CloudSim::drawForDisplayList (v3d_t position) {
   glBegin (GL_QUADS);
 
   for (int j = 0; j < SIDE_WIDTH; j++) {
-    for (int i = 0; i < SIDE_WIDTH; i++) {
+    for (int i = 0; i < SIDE_WIDTH; ++i) {
       double terrainValue = mTerrain.getValueBilerp (i, j) - 0.5;
       if (terrainValue > 0.15) {
         GLfloat alpha = static_cast<GLfloat>(terrainValue);
@@ -91,7 +91,7 @@ void CloudSim::draw (GlCamera &cam) {
   glDisable (GL_CULL_FACE);
 
   for (int j = -1; j <= 1; j++) {
-    for (int i = -1; i <= 1; i++) {
+    for (int i = -1; i <= 1; ++i) {
       // FIXME: implement bounding box optimization
       // clip the entire region against the frustum if possible
 //      if (glCamera.bounding_box_test (mBoundingBox) == FRUSTUM_OUTSIDE) {

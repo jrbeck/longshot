@@ -23,7 +23,7 @@ int InactiveColumnManager::saveToInactiveColumns(WorldColumn &worldColumn) {
   }
 
   // write chunks
-  for (size_t i = 0; i < worldColumn.mWorldChunks.size(); i++) {
+  for (size_t i = 0; i < worldColumn.mWorldChunks.size(); ++i) {
     saveChunkDatum(i, *columnDatum, *worldColumn.mWorldChunks[i]);
   }
 
@@ -46,7 +46,7 @@ void InactiveColumnManager::saveChunkDatum(size_t chunkIndex, ColumnDatum &colum
   }
 
   // load the chunk data into blockData
-  for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; i++) {
+  for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; ++i) {
     chunkDatum->blockData[i] = chunk.getBlockTypeByIndex(i);
   }
 
@@ -66,7 +66,7 @@ int InactiveColumnManager::loadFromInactiveColumns(int x, int z, WorldColumn &wo
   worldColumn.mWorldPosition = column->worldPosition;
 
   // load chunks
-  for (size_t i = 0; i < column->chunkData.size(); i++) {
+  for (size_t i = 0; i < column->chunkData.size(); ++i) {
     loadChunkDatum(*column->chunkData[i], worldColumn);
   }
 
@@ -96,7 +96,7 @@ void InactiveColumnManager::loadChunkDatum(const ChunkDatum &chunk, WorldColumn 
   //  mWorldChunks[chunkIndex]->mNumWaterBlocks = 0;
 
   // set the data
-  for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; i++) {
+  for (int i = 0; i < WORLD_CHUNK_SIDE_CUBED; ++i) {
     worldColumn.mWorldChunks[chunkIndex]->setBlockTypeByIndex(i, chunk.blockData[i]);
   }
 }
@@ -157,7 +157,7 @@ void InactiveColumnManager::clear() {
 
 // this is very naive - some sorting would make this much faster
 int InactiveColumnManager::getColumnIndex(int x, int z) {
-  for (size_t i = 0; i < mColumnData.size(); i++) {
+  for (size_t i = 0; i < mColumnData.size(); ++i) {
     if (mColumnData[i]->worldIndex.x == x &&
       mColumnData[i]->worldIndex.z == z)
     {

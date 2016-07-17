@@ -116,7 +116,7 @@ void RogueMapViewer::drawMap() const {
   glBegin(GL_QUADS);
 
   for (int j = 0; j < ROGUE_MAP_SIDE; j++) {
-    for (int i = 0; i < ROGUE_MAP_SIDE; i++) {
+    for (int i = 0; i < ROGUE_MAP_SIDE; ++i) {
       corners[0].x = static_cast<int>(i);
       corners[0].z = 0.0; //mTerrain->get_value(i, j);
       corners[0].y = static_cast<int>(j);

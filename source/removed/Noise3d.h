@@ -232,7 +232,7 @@ void Noise3d::normalize (double low, double high) {
 
   for (int k = 0; k < mSideLength; k++) {
     for (int j = 0; j < mSideLength; j++) {
-      for (int i = 0; i < mSideLength; i++) {
+      for (int i = 0; i < mSideLength; ++i) {
         double oldValue = get_value (i, j, k);
 
         set_value (i, j, k, (newRange * (oldValue - oldMin) / (oldMax - oldMin)) + low);
@@ -363,7 +363,7 @@ int Noise3d::set_value (int i, int j, int k, double value) {
 // **************************************************
 int Noise3d::set_all (double value) {
 
-  for (int i = 0; i < mSideLength * mSideLengthSquared; i++) {
+  for (int i = 0; i < mSideLength * mSideLengthSquared; ++i) {
     field[i] = value;
   }
 
@@ -376,7 +376,7 @@ int Noise3d::set_all (double value) {
 // **************************************************
 int Noise3d::set_min (double min) {
 /*  for (int j = 0; j < mSideLength; j++) {
-    for (int i = 0; i < mSideLength; i++) {
+    for (int i = 0; i < mSideLength; ++i) {
       // get the value at i, j
       double val = get_value (i, j);
 
@@ -404,7 +404,7 @@ int Noise3d::smooth (void) {
   // now fill the scratch buffer up with smoothed values
   for (int k = 0; k < mSideLength; k++) {
     for (int j = 0; j < mSideLength; j++) {
-      for (int i = 0; i < mSideLength; i++) {
+      for (int i = 0; i < mSideLength; ++i) {
         buf[i + (j * mSideLength) + (k * mSideLengthSquared)] = blurCube (i, j, k, 1);
       }
     }
@@ -413,7 +413,7 @@ int Noise3d::smooth (void) {
   // set the real field values
   for (int k = 0; k < mSideLength; k++) {
     for (int j = 0; j < mSideLength; j++) {
-      for (int i = 0; i < mSideLength; i++) {
+      for (int i = 0; i < mSideLength; ++i) {
         set_value (i, j, k, buf[i + (j * mSideLength) + (k * mSideLengthSquared)]);
       }
     }
@@ -432,7 +432,7 @@ void Noise3d::noise (int octaves) {
   double high = -1000.00;
   for (int k = 0; k < mSideLength; k++) {
     for (int j = 0; j < mSideLength; j++) {
-      for (int i = 0; i < mSideLength; i++) {
+      for (int i = 0; i < mSideLength; ++i) {
         double iF = 5.0 * static_cast<double>(i) / static_cast<double>(mSideLength);
         double jF = 5.0 * static_cast<double>(j) / static_cast<double>(mSideLength);
         double kF = 5.0 * static_cast<double>(k) / static_cast<double>(mSideLength);
@@ -473,7 +473,7 @@ void Noise3d::noiseFrom2d (void) {
 
   for (int k = 0; k < mSideLength; k++) {
     for (int j = 0; j < mSideLength; j++) {
-      for (int i = 0; i < mSideLength; i++) {
+      for (int i = 0; i < mSideLength; ++i) {
         double xVal = x.get_value (j, k);
         double yVal = y.get_value (i, k);
         double zVal = z.get_value (i, j);
@@ -501,7 +501,7 @@ void Noise3d::alt_smooth (void) {
 
   // now fill the scratch buffer up with smoothed values
   for (int j = 0; j < mSideLength; j++) {
-    for (int i = 0; i < mSideLength; i++) {
+    for (int i = 0; i < mSideLength; ++i) {
       double orig = get_value (i, j);
       double blur = blur_square (i, j, 4);
 
@@ -514,7 +514,7 @@ void Noise3d::alt_smooth (void) {
 
   // set the real field values
   for (int j = 0; j < mSideLength; j++) {
-    for (int i = 0; i < mSideLength; i++) {
+    for (int i = 0; i < mSideLength; ++i) {
       set_value (i, j, buf[i + (j * mSideLength)]); } }
 
   // free up the scratch buffer
@@ -553,7 +553,7 @@ double Noise3d::getMax (void) {
   double maxValue = field[0];
 
   for (int j = 0; j < mSideLength; j++) {
-    for (int i = 0; i < mSideLength; i++) {
+    for (int i = 0; i < mSideLength; ++i) {
       if ((value = get_value (i, j)) > maxValue) {
         maxValue = value;
       }
@@ -572,7 +572,7 @@ double Noise3d::getMin (void) {
   double minValue = field[0];
 
   for (int j = 0; j < mSideLength; j++) {
-    for (int i = 0; i < mSideLength; i++) {
+    for (int i = 0; i < mSideLength; ++i) {
       if ((value = get_value (i, j)) < minValue) {
         minValue = value;
       }

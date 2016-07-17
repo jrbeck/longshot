@@ -1,10 +1,10 @@
 #include "AiView.h"
 
 AiView::AiView() {
-  for (int i = 0; i < NUM_AITYPES; i++) {
+  for (int i = 0; i < NUM_AITYPES; ++i) {
     mHeadTextureHandles[i] = 0;
   }
-  for (int i = 0; i < NUM_AISKINS; i++) {
+  for (int i = 0; i < NUM_AISKINS; ++i) {
     mTextureHandles[i] = 0;
   }
 
@@ -36,13 +36,13 @@ void AiView::loadAssets() {
 }
 
 void AiView::freeAssets() {
-  for (int i = 0; i < NUM_AITYPES; i++) {
+  for (int i = 0; i < NUM_AITYPES; ++i) {
     if (mHeadTextureHandles[i] > 0) {
       glDeleteTextures(1, &mHeadTextureHandles[i]);
       mHeadTextureHandles[i] = 0;
     }
   }
-  for (int i = 0; i < NUM_AISKINS; i++) {
+  for (int i = 0; i < NUM_AISKINS; ++i) {
     if (mTextureHandles[i] > 0) {
       glDeleteTextures(1, &mTextureHandles[i]);
       mTextureHandles[i] = 0;
@@ -59,7 +59,7 @@ void AiView::draw(GameModel* gameModel) {
   vector<AiEntity *>* aiEntities = gameModel->aiManager->getEntities();
 
   size_t numEntities = aiEntities->size();
-  for (size_t i = 0; i < numEntities; i++) {
+  for (size_t i = 0; i < numEntities; ++i) {
     drawEntity(*(*aiEntities)[i]);
   }
 }

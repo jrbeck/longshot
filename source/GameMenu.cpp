@@ -52,26 +52,26 @@ size_t GameMenu::addButton(
   item.value = value;
 
   if (color != NULL) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.color[i] = color[i];
     }
   }
   else {
     // default color
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.color[i] = 1.0f;
     }
   }
 
 
   if (backgroundColor != NULL) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.backgroundColor[i] = backgroundColor[i];
     }
   }
   else {
     // default background color
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.backgroundColor[i] = 0.0f;
     }
   }
@@ -106,25 +106,25 @@ size_t GameMenu::addText(
   item.textJustification = textJustification;
 
   if (color != NULL) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.color[i] = color[i];
     }
   }
   else {
     // default color
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.color[i] = 1.0f;
     }
   }
 
   if (backgroundColor != NULL) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.backgroundColor[i] = backgroundColor[i];
     }
   }
   else {
     // default background color
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
       item.backgroundColor[i] = 0.0f;
     }
   }
@@ -190,7 +190,7 @@ int GameMenu::gameMenuChoice(bool waitForInput) {
 
 int GameMenu::mouseUp(double x, double y) {
   // see if the dummy actually managed to hit something
-  for (size_t i = 0; i < mMenuItems.size(); i++) {
+  for (size_t i = 0; i < mMenuItems.size(); ++i) {
     if (mMenuItems[i].type == MENUITEM_BUTTON) {
       if (x >= mMenuItems[i].position[0] &&
         x <= (mMenuItems[i].position[0] + mMenuItems[i].dimensions[0]) &&
@@ -225,7 +225,7 @@ void GameMenu::draw(void) {
 
   // draw the button/text background
   glBegin (GL_QUADS);
-    for (size_t i = 0; i < mMenuItems.size(); i++) {
+    for (size_t i = 0; i < mMenuItems.size(); ++i) {
       GLfloat br[2] = {
         mMenuItems[i].position[0] + mMenuItems[i].dimensions[0],
         mMenuItems[i].position[1] + mMenuItems[i].dimensions[1] };
@@ -244,7 +244,7 @@ void GameMenu::draw(void) {
   GLfloat pos[2];
   GLfloat dim[2];
 
-  for (size_t i = 0; i < mMenuItems.size(); i++) {
+  for (size_t i = 0; i < mMenuItems.size(); ++i) {
 
     switch (mMenuItems[i].textJustification) {
       case TEXT_JUSTIFICATION_LEFT:

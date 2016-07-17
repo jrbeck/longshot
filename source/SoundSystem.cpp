@@ -7,7 +7,7 @@ SoundSystem::SoundSystem() {
   mAudioChannels = 2;
   mChunkSize = 1024;
 
-  for (int i = 0; i < NUM_SOUNDS; i++) {
+  for (int i = 0; i < NUM_SOUNDS; ++i) {
     mWav[i] = NULL;
   }
 }
@@ -15,7 +15,7 @@ SoundSystem::SoundSystem() {
 
 SoundSystem::~SoundSystem() {
   printf("SoundSystem::~SoundSystem: unloading sounds (%d)\n", NUM_SOUNDS);
-  for (int i = 0; i < NUM_SOUNDS; i++) {
+  for (int i = 0; i < NUM_SOUNDS; ++i) {
     if (mWav[i] != NULL) {
       Mix_FreeChunk(mWav[i]);
     }
@@ -101,7 +101,7 @@ int SoundSystem::loadSound(char* fileName) {
   mWav[SOUND_PUNCH] = Mix_LoadWAV("sounds/tgc/punch.ogg");
 
 
-  for (int i = 0; i < NUM_SOUNDS; i++) {
+  for (int i = 0; i < NUM_SOUNDS; ++i) {
     if (mWav[i] != NULL) {
       Mix_VolumeChunk(mWav[i], 127);
     }

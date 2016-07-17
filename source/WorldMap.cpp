@@ -51,7 +51,7 @@ void WorldMap::clear(bool clearInactive) {
   if (!clearInactive) {
     saveToInactive();
   }
-  for (int i = 0; i < mNumColumns; i++) {
+  for (int i = 0; i < mNumColumns; ++i) {
     mColumns[i].clear();
   }
   if (clearInactive) {
@@ -66,7 +66,7 @@ void WorldMap::clear(bool clearInactive) {
 // those coords. this has nothing to do with whether or not columns are
 // loaded into memory, etc...
 // CANNOT (within the limits of the elementary variables) RETURN A 'BAD' VALUE,
-// since the length of the index will only ever be: mXWidth*mZWidth (i.e. ~40*40)
+// since the length of the index will only ever be: mXWidth * mZWidth (i.e. ~ 40 * 40)
 int WorldMap::getColumnIndexByRegionCoords(int xIndex, int zIndex) const {
   if (xIndex >= mXWidth) {
     xIndex = xIndex % mXWidth;
@@ -146,7 +146,6 @@ void WorldMap::clearColumn(size_t columnIndex) {
 
 int WorldMap::getBlockType(const v3di_t& position) const {
   int column = pickColumn(position);
-
   if (column == -1) {
     return BLOCK_TYPE_INVALID;
   }
@@ -155,7 +154,6 @@ int WorldMap::getBlockType(const v3di_t& position) const {
 
 void WorldMap::setBlockType(const v3di_t& position, BYTE type) {
   int column = pickColumn(position);
-
   if (column == -1) {
     mOverdrawManager.setBlock(position, type);
     return;
@@ -170,21 +168,17 @@ void WorldMap::setBlockType(const v3di_t& position, BYTE type) {
 
 void WorldMap::setBlockVisibility(const v3di_t& position, BYTE visibility) {
   int column = pickColumn(position);
-
   if (column == -1) {
     return;
   }
-
   mColumns[column].setBlockVisibility(position, visibility);
 }
 
 block_t* WorldMap::getBlock(const v3di_t& position) const {
   int column = pickColumn(position);
-
   if (column == -1) {
     return NULL;
   }
-
   return mColumns[column].getBlockAtWorldPosition(position);
 }
 
@@ -194,13 +188,11 @@ block_t* WorldMap::getBlock(const v3d_t& position) const {
     (int)floor(position.y),
     (int)floor(position.z)
   };
-
   return getBlock(pos);
 }
 
 int WorldMap::setBlock(const v3di_t& position, const block_t& block) {
   int column = pickColumn(position);
-
   if (column == -1) {
     mOverdrawManager.setBlock(position, block.type);
     return -1;
@@ -212,13 +204,11 @@ int WorldMap::setBlock(const v3di_t& position, const block_t& block) {
   }
 
   mColumns[column].setBlockAtWorldPosition(position, block);
-
   return 0;
 }
 
 void WorldMap::clearBlock(const v3di_t& position) {
   int column = pickColumn(position);
-
   if (column == -1) {
     mOverdrawManager.setBlock(position, BLOCK_TYPE_AIR);
     return;
@@ -248,16 +238,12 @@ void WorldMap::clearBlock(const v3di_t& position) {
   }
 
   // now deal with the boundary issues
-  for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+  for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
     neighborPosition = v3di_add(position, gBlockNeighborAddLookup[i]);
-
     int neighborColumn = pickColumn(neighborPosition);
-
     if (neighborColumn >= 0) {
       generateChunkContaining(mColumns[neighborColumn], neighborPosition);
-
       mColumns[neighborColumn].mNeedShadowVolume = true;
-
       addToChangedList(neighborColumn);
     }
   }
@@ -265,59 +251,51 @@ void WorldMap::clearBlock(const v3di_t& position) {
 
 BYTE WorldMap::getUniqueLighting(const v3di_t& position) const {
   int column = pickColumn(position);
-
   if (column == -1) {
     return LIGHT_LEVEL_INVALID;
   }
-
   return mColumns[column].getUniqueLighting(position);
 }
 
-void WorldMap::setUniqueLighting( const v3di_t& position, BYTE level ) {
+void WorldMap::setUniqueLighting(const v3di_t& position, BYTE level) {
   int column = pickColumn(position);
-
   if (column == -1) {
     return;
   }
-
   mColumns[column].setUniqueLighting(position, level);
 }
 
 bool WorldMap::isSolidBlock(const v3di_t& position) const {
   int column = pickColumn(position);
-
   if (column == -1) {
     return false;
   }
-
   return mColumns[column].isSolidBlockAtWorldPosition(position);
 }
 
 bool WorldMap::isBoundingBoxEmpty( const BoundingBox& boundingBox ) const {
-  for (int z = (int)(floor(boundingBox.mNearCorner.z)); z <= (int)(floor(boundingBox.mFarCorner.z)); z++) {
-    for (int y = (int)(floor(boundingBox.mNearCorner.y)); y <= (int)(floor(boundingBox.mFarCorner.y)); y++) {
-      for (int x = (int)(floor(boundingBox.mNearCorner.x)); x <= (int)(floor(boundingBox.mFarCorner.x)); x++) {
+  for (int z = (int)(floor(boundingBox.mNearCorner.z)); z <= (int)(floor(boundingBox.mFarCorner.z)); ++z) {
+    for (int y = (int)(floor(boundingBox.mNearCorner.y)); y <= (int)(floor(boundingBox.mFarCorner.y)); ++y) {
+      for (int x = (int)(floor(boundingBox.mNearCorner.x)); x <= (int)(floor(boundingBox.mFarCorner.x)); ++x) {
         if (isSolidBlock(v3di_v (x, y, z))) {
           return false;
         }
       }
     }
   }
-
   return true;
 }
 
 bool WorldMap::isBoundingBoxInLiquid(const BoundingBox& boundingBox) const {
-  for (int z = (int)(floor(boundingBox.mNearCorner.z)); z <= (int)(floor(boundingBox.mFarCorner.z)); z++) {
-    for (int y = (int)(floor(boundingBox.mNearCorner.y)); y <= (int)(floor(boundingBox.mFarCorner.y)); y++) {
-      for (int x = (int)(floor(boundingBox.mNearCorner.x)); x <= (int)(floor(boundingBox.mFarCorner.x)); x++) {
+  for (int z = (int)(floor(boundingBox.mNearCorner.z)); z <= (int)(floor(boundingBox.mFarCorner.z)); ++z) {
+    for (int y = (int)(floor(boundingBox.mNearCorner.y)); y <= (int)(floor(boundingBox.mFarCorner.y)); ++y) {
+      for (int x = (int)(floor(boundingBox.mNearCorner.x)); x <= (int)(floor(boundingBox.mFarCorner.x)); ++x) {
         if (gBlockData.get(getBlockType(v3di_v(x, y, z)))->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
           return true;
         }
       }
     }
   }
-
   return false;
 }
 
@@ -333,9 +311,9 @@ double WorldMap::getViscosity(const BoundingBox& boundingBox) const {
   int startZ = (int)(floor(boundingBox.mNearCorner.z));
   int endZ = (int)(floor(boundingBox.mFarCorner.z));
 
-  for (int z = startZ; z <= endZ; z++) {
-    for (int y = startY; y <= endY; y++) {
-      for (int x = startX; x <= endX; x++) {
+  for (int z = startZ; z <= endZ; ++z) {
+    for (int y = startY; y <= endY; ++y) {
+      for (int x = startX; x <= endX; ++x) {
         maxViscosity = max(maxViscosity, gBlockData.get(getBlockType(v3di_v(x, y, z)))->viscosity);
       }
     }
@@ -358,9 +336,9 @@ double WorldMap::getHealthEffects(const BoundingBox& boundingBox) const {
   int startZ = (int)(floor(boundingBox.mNearCorner.z));
   int endZ = (int)(floor(boundingBox.mFarCorner.z));
 
-  for (int z = startZ; z <= endZ; z++) {
-    for (int y = startY; y <= endY; y++) {
-      for (int x = startX; x <= endX; x++) {
+  for (int z = startZ; z <= endZ; ++z) {
+    for (int y = startY; y <= endY; ++y) {
+      for (int x = startX; x <= endX; ++x) {
         totalHealthEffect += gBlockData.get(getBlockType(v3di_v(x, y, z)))->healthEffect;
       }
     }
@@ -387,9 +365,9 @@ void WorldMap::fillVolume(v3di_t a, v3di_t b, int blockType) {
   }
 
   v3di_t pos;
-  for (pos.z = a.z; pos.z <= b.z; pos.z++) {
-    for (pos.y = a.y; pos.y <= b.y; pos.y++) {
-      for (pos.x = a.x; pos.x <= b.x; pos.x++) {
+  for (pos.z = a.z; pos.z <= b.z; ++pos.z) {
+    for (pos.y = a.y; pos.y <= b.y; ++pos.y) {
+      for (pos.x = a.x; pos.x <= b.x; ++pos.x) {
         // clear first to ensure we have all the neighbors
         if (gBlockData.get(blockType)->solidityType != BLOCK_SOLIDITY_TYPE_ROCK || gBlockData.get(blockType)->alpha < 1.0) {
           clearBlock(pos);
@@ -402,74 +380,61 @@ void WorldMap::fillVolume(v3di_t a, v3di_t b, int blockType) {
 
 int WorldMap::fillSphere(const v3d_t& pos, double radius, int blockType, BYTE uniqueLighting) {
   BoundingSphere s(pos, radius);
-
   int blocksFilled = 0;
 
-  v3di_t start = v3di_v(static_cast<int>(pos.x - (radius + 1)),
-    static_cast<int>(pos.y - (radius + 1)),
-    static_cast<int>(pos.z - (radius + 1)));
+  v3di_t start = v3di_v((int)(pos.x - (radius + 1)),
+    (int)(pos.y - (radius + 1)),
+    (int)(pos.z - (radius + 1)));
 
-  v3di_t stop = v3di_v(static_cast<int>(pos.x + (radius + 1)),
-    static_cast<int>(pos.y + (radius + 1)),
-    static_cast<int>(pos.z + (radius + 1)));
+  v3di_t stop = v3di_v((int)(pos.x + (radius + 1)),
+    (int)(pos.y + (radius + 1)),
+    (int)(pos.z + (radius + 1)));
 
   v3di_t i;
   block_t block;
   block.type = blockType;
   block.uniqueLighting = uniqueLighting;
 
-  for (i.z = start.z; i.z <= stop.z; i.z++) {
-    for (i.y = start.y; i.y <= stop.y; i.y++) {
-      for (i.x = start.x; i.x <= stop.x; i.x++) {
-        if (s.isPointInside(v3d_v (static_cast<int>(i.x + 0.5),
-          static_cast<int>(i.y + 0.5),
-          static_cast<int>(i.z + 0.5))))
-        {
+  for (i.z = start.z; i.z <= stop.z; ++i.z) {
+    for (i.y = start.y; i.y <= stop.y; ++i.y) {
+      for (i.x = start.x; i.x <= stop.x; ++i.x) {
+        if (s.isPointInside(v3d_v((int)(i.x + 0.5), (int)(i.y + 0.5), (int)(i.z + 0.5)))) {
           setBlock(i, block);
         }
       }
     }
   }
-
   return blocksFilled;
-  //  return 0;
 }
 
 int WorldMap::clearSphere(const v3d_t& pos, double radius) {
   BoundingSphere s(pos, radius);
-
   int blocksCleared = 0;
 
-  v3di_t start = v3di_v(static_cast<int>(pos.x - (radius + 1)),
-    static_cast<int>(pos.y - (radius + 1)),
-    static_cast<int>(pos.z - (radius + 1)));
+  v3di_t start = v3di_v((int)(pos.x - (radius + 1)),
+    (int)(pos.y - (radius + 1)),
+    (int)(pos.z - (radius + 1)));
 
-  v3di_t stop = v3di_v(static_cast<int>(pos.x + (radius + 1)),
-    static_cast<int>(pos.y + (radius + 1)),
-    static_cast<int>(pos.z + (radius + 1)));
+  v3di_t stop = v3di_v((int)(pos.x + (radius + 1)),
+    (int)(pos.y + (radius + 1)),
+    (int)(pos.z + (radius + 1)));
 
   v3di_t i;
-
-  for (i.z = start.z; i.z <= stop.z; i.z++) {
-    for (i.y = start.y; i.y <= stop.y; i.y++) {
-      for (i.x = start.x; i.x <= stop.x; i.x++) {
-        if (s.isPointInside (v3d_v (static_cast<int>(i.x + 0.5),
-          static_cast<int>(i.y + 0.5),
-          static_cast<int>(i.z + 0.5))))
-        {
+  for (i.z = start.z; i.z <= stop.z; ++i.z) {
+    for (i.y = start.y; i.y <= stop.y; ++i.y) {
+      for (i.x = start.x; i.x <= stop.x; ++i.x) {
+        if (s.isPointInside (v3d_v((int)(i.x + 0.5), (int)(i.y + 0.5), (int)(i.z + 0.5)))) {
           clearBlock(i);
         }
       }
     }
   }
-
   return blocksCleared;
-  //  return 0;
 }
 
 void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& position ) {
   // check to see if it has already been loaded
-  if (worldColumn.pickChunkFromWorldHeight (position.y) >= 0) {
+  if (worldColumn.pickChunkFromWorldHeight(position.y) >= 0) {
     return;
   }
 
@@ -477,8 +442,8 @@ void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& 
   v3di_t chunkPosition;
 
   chunkPosition.x = worldColumn.mWorldPosition.x;
-  chunkPosition.y = static_cast<int>(floor (
-    static_cast<double>(position.y) / static_cast<double>(WORLD_CHUNK_SIDE))) * WORLD_CHUNK_SIDE;
+  chunkPosition.y = (int)(floor (
+    (double)(position.y) / (double)(WORLD_CHUNK_SIDE))) * WORLD_CHUNK_SIDE;
   chunkPosition.z = worldColumn.mWorldPosition.z;
 
 //  v3di_print("chunk", chunkPosition);
@@ -488,15 +453,13 @@ void WorldMap::generateChunkContaining( WorldColumn &worldColumn, const v3di_t& 
   block.faceVisibility = 0;
   block.uniqueLighting = LIGHT_LEVEL_NOT_SET;
 
-  for (relativePosition.z = 0; relativePosition.z < WORLD_CHUNK_SIDE; relativePosition.z++) {
-    for (relativePosition.y = 0; relativePosition.y < WORLD_CHUNK_SIDE; relativePosition.y++) {
-      for (relativePosition.x = 0; relativePosition.x < WORLD_CHUNK_SIDE; relativePosition.x++) {
-        blockPosition = v3di_add (chunkPosition, relativePosition);
-
+  for (relativePosition.z = 0; relativePosition.z < WORLD_CHUNK_SIDE; ++relativePosition.z) {
+    for (relativePosition.y = 0; relativePosition.y < WORLD_CHUNK_SIDE; ++relativePosition.y) {
+      for (relativePosition.x = 0; relativePosition.x < WORLD_CHUNK_SIDE; ++relativePosition.x) {
+        blockPosition = v3di_add(chunkPosition, relativePosition);
         if (mPeriodics != NULL) {
           block.type = mPeriodics->generateBlockAtWorldPosition(blockPosition);
         }
-
         worldColumn.setBlockAtWorldPosition(blockPosition, block);
       }
     }
@@ -549,12 +512,12 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
   int neighborType;
   double neighborAlpha;
 
-  for (size_t chunkIndex = 0; chunkIndex < mColumns[columnIndex].mWorldChunks.size(); chunkIndex++) {
+  for (size_t chunkIndex = 0; chunkIndex < mColumns[columnIndex].mWorldChunks.size(); ++chunkIndex) {
     chunkPosition = mColumns[columnIndex].mWorldChunks[chunkIndex]->mWorldPosition;
 
-    for (relativePosition.z = 0; relativePosition.z < WORLD_CHUNK_SIDE; relativePosition.z++) {
-      for (relativePosition.y = 0; relativePosition.y < WORLD_CHUNK_SIDE; relativePosition.y++) {
-        for (relativePosition.x = 0; relativePosition.x < WORLD_CHUNK_SIDE; relativePosition.x++) {
+    for (relativePosition.z = 0; relativePosition.z < WORLD_CHUNK_SIDE; ++relativePosition.z) {
+      for (relativePosition.y = 0; relativePosition.y < WORLD_CHUNK_SIDE; ++relativePosition.y) {
+        for (relativePosition.x = 0; relativePosition.x < WORLD_CHUNK_SIDE; ++relativePosition.x) {
           worldPosition = v3di_add(chunkPosition, relativePosition);
 
           type = mColumns[columnIndex].getBlockType(worldPosition);
@@ -569,15 +532,13 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
           }
           // BLOCK_SOLIDITY_TYPE_GLASS
           else if (solidityType == BLOCK_SOLIDITY_TYPE_GLASS) {
-            for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+            for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
               neighborAdd = gBlockNeighborAddLookup[i];
               neighborPosition = v3di_add(worldPosition, neighborAdd);
               neighborType = getBlockType(neighborPosition);
               neighborAlpha = gBlockData.get(neighborType)->alpha;
 
-              if (neighborType != type &&
-                neighborAlpha < 1.0)
-              {
+              if (neighborType != type && neighborAlpha < 1.0) {
                 faceVisibility |= gBlockSideBitmaskLookup[i];
               }
             }
@@ -585,18 +546,14 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
             setBlockVisibility (worldPosition, faceVisibility);
           }
           // TRANSLUCENT
-          else if (blockAlpha > 0.0 &&
-            blockAlpha < 1.0)
-          {
-            for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+          else if (blockAlpha > 0.0 && blockAlpha < 1.0) {
+            for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
               neighborAdd = gBlockNeighborAddLookup[i];
               neighborPosition = v3di_add(worldPosition, neighborAdd);
               neighborType = getBlockType(neighborPosition);
               neighborAlpha = gBlockData.get(neighborType)->alpha;
 
-              if (neighborType != type &&
-                neighborAlpha < 1.0)
-              {
+              if (neighborType != type && neighborAlpha < 1.0) {
                 faceVisibility |= gBlockSideBitmaskLookup[i];
               }
             }
@@ -605,7 +562,7 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
           }
           // NON-TRANSLUCENT
           else if (blockAlpha == 1.0) {
-            for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+            for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
               neighborAdd = gBlockNeighborAddLookup[i];
               neighborPosition = v3di_add(worldPosition, neighborAdd);
               neighborType = getBlockType(neighborPosition);
@@ -642,7 +599,7 @@ void WorldMap::updateBlockVisibility(int columnIndex) {
 }
 
 void WorldMap::addToChangedList(int columnIndex) {
-  for (size_t i = 0; i < mChangedList.size(); i++) {
+  for (size_t i = 0; i < mChangedList.size(); ++i) {
     if (mChangedList[i] == columnIndex) {
       return;
     }
@@ -653,7 +610,7 @@ void WorldMap::addToChangedList(int columnIndex) {
 }
 
 void WorldMap::removeFromChangedList(int columnIndex) {
-  for (size_t i = 0; i < mChangedList.size(); i++) {
+  for (size_t i = 0; i < mChangedList.size(); ++i) {
     if (mChangedList[i] == columnIndex) {
       if (i != mChangedList.size() - 1) {
         swap(mChangedList[i], mChangedList[mChangedList.size() - 1]);
@@ -673,7 +630,7 @@ void WorldMap::updateFluids() {
 
   mChangedList.clear();
 
-  for (size_t i = 0; i < tempList.size(); i++) {
+  for (size_t i = 0; i < tempList.size(); ++i) {
     updateFluid (tempList[i]);
 //    printf ("updating fluid %d, %d\n", i, tempList[i]);
   }
@@ -682,25 +639,18 @@ void WorldMap::updateFluids() {
 
 bool WorldMap::updateFluid( int columnIndex ) {
   // need four neighbors?
-
   bool changesMade = false;
-
   v3di_t worldPosition;
-
   int highestBlockHeight = mColumns[columnIndex].getHighestBlockHeight();
   int lowestBlockHeight = mColumns[columnIndex].getLowestBlockHeight();
-
   char blockType;
 
-  for (worldPosition.y = highestBlockHeight; worldPosition.y >= lowestBlockHeight; worldPosition.y--) {
-    for (int z = 0; z < WORLD_CHUNK_SIDE; z++) {
+  for (worldPosition.y = highestBlockHeight; worldPosition.y >= lowestBlockHeight; --worldPosition.y) {
+    for (int z = 0; z < WORLD_CHUNK_SIDE; ++z) {
       worldPosition.z = mColumns[columnIndex].mWorldPosition.z + z;
-
-      for (int x = 0; x < WORLD_CHUNK_SIDE; x++) {
+      for (int x = 0; x < WORLD_CHUNK_SIDE; ++x) {
         worldPosition.x = mColumns[columnIndex].mWorldPosition.x + x;
-
         blockType = getBlockType(worldPosition);
-
         if (gBlockData.get(blockType)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
           changesMade |= updateLiquidBlock(blockType, columnIndex, worldPosition);
         }
@@ -710,15 +660,12 @@ bool WorldMap::updateFluid( int columnIndex ) {
 
   if (changesMade) {
     // clean up the placeholders
-    for (worldPosition.y = lowestBlockHeight; worldPosition.y <= highestBlockHeight; worldPosition.y++) {
-      for (int z = -1; z <= WORLD_CHUNK_SIDE; z++) {
+    for (worldPosition.y = lowestBlockHeight; worldPosition.y <= highestBlockHeight; ++worldPosition.y) {
+      for (int z = -1; z <= WORLD_CHUNK_SIDE; ++z) {
         worldPosition.z = mColumns[columnIndex].mWorldPosition.z + z;
-
-        for (int x = -1; x <= WORLD_CHUNK_SIDE; x++) {
+        for (int x = -1; x <= WORLD_CHUNK_SIDE; ++x) {
           worldPosition.x = mColumns[columnIndex].mWorldPosition.x + x;
-
           blockType = getBlockType(worldPosition);
-
           if (blockType >= BLOCK_TYPE_PLACEHOLDER) {
             setBlockType(worldPosition, blockType - BLOCK_TYPE_PLACEHOLDER);
           }
@@ -732,7 +679,6 @@ bool WorldMap::updateFluid( int columnIndex ) {
 
 bool WorldMap::updateLiquidBlock(int blockType, int columnIndex, const v3di_t& worldPosition) {
   char neighborType;
-
   char air = BLOCK_TYPE_AIR;
   char liquid = blockType + BLOCK_TYPE_PLACEHOLDER;
 
@@ -746,19 +692,14 @@ bool WorldMap::updateLiquidBlock(int blockType, int columnIndex, const v3di_t& w
     neighborType == BLOCK_TYPE_INVALID) {
     setBlockType(worldPosition, air);
     setBlockType(neighborPosition, liquid);
-
-    // all done for this time slice
     return true;
   }
 
   bool changesMade = false;
-
   int numWaterNeighbors = countLiquidNeighbors(blockType, worldPosition);
 
   if (numWaterNeighbors < 2) {
-    setBlockType (worldPosition, air);
-
-    // all done for this time slice
+    setBlockType(worldPosition, air);
     return true;
   }
   else {
@@ -828,8 +769,8 @@ int WorldMap::countLiquidNeighbors(int blockType, const v3di_t& worldPosition) c
   }
 
   // -y
-//  neighborPosition = v3di_add (worldPosition, v3di_v (0, -1, 0));
-//  neighborType = getBlockType (neighborPosition);
+//  neighborPosition = v3di_add(worldPosition, v3di_v(0, -1, 0));
+//  neighborType = getBlockType(neighborPosition);
 //  if (neighborType == blockType) {
 //    numWaterNeighbors++;
 //  }
@@ -876,9 +817,8 @@ int WorldMap::countLiquidNeighbors(int blockType, const v3di_t& worldPosition) c
   return numWaterNeighbors;
 }
 
-int WorldMap::save(FILE *file) {
+int WorldMap::save(FILE* file) {
   printf("saving WorldMap...\n");
-
   int errorCode = 0;
 
   // update the inactive columns
@@ -901,7 +841,7 @@ int WorldMap::save(FILE *file) {
   return errorCode;
 }
 
-int WorldMap::load(FILE *file) {
+int WorldMap::load(FILE* file) {
   printf ("loading WorldMap:\n");
 
   // clear everything first
@@ -925,7 +865,7 @@ void WorldMap::swapOutToInactive() {
   printf("WorldMap::swapOutToInactive()\n");
   saveToInactive();
   printf("A\n");
-  for (int i = 0; i < mNumColumns; i++) {
+  for (int i = 0; i < mNumColumns; ++i) {
     mColumns[i].clear();
   }
   printf("B\n");
@@ -941,7 +881,7 @@ void WorldMap::saveToInactive() {
   }
 }
 
-bool WorldMap::lineOfSight(const v3d_t &a, const v3d_t &b) const {
+bool WorldMap::lineOfSight(const v3d_t& a, const v3d_t& b) const {
   v3d_t diff = v3d_sub(b, a);
 
   int start;
@@ -950,23 +890,20 @@ bool WorldMap::lineOfSight(const v3d_t &a, const v3d_t &b) const {
 
   // x-axis
   if (diff.x != 0.0) { // && (floor (a.x) != floor (b.x))) {
-    int direction = static_cast<int>(sign(diff.x));
-
+    int direction = (int)(sign(diff.x));
     if (direction > 0) {
-      start = static_cast<int>(ceil(a.x));
-      end = static_cast<int>(floor(b.x));
+      start = (int)(ceil(a.x));
+      end = (int)(floor(b.x));
       add = 1;
     }
     else {
-      start = static_cast<int>(floor(a.x));
-      end = static_cast<int>(ceil(b.x));
+      start = (int)(floor(a.x));
+      end = (int)(ceil(b.x));
       add = -1;
     }
 
     for (int x = start; x != (end + add); x += add) {
-      double percent = (static_cast<double>(x) - static_cast<double>(a.x)) /
-        (static_cast<double>(b.x) - static_cast<double>(a.x));
-
+      double percent = ((double)(x) - (double)(a.x)) / ((double)(b.x) - (double)(a.x));
       v3d_t pos = v3d_interpolate(a, b, percent);
 
       v3di_t blockPos;
@@ -976,8 +913,8 @@ bool WorldMap::lineOfSight(const v3d_t &a, const v3d_t &b) const {
       else {
         blockPos.x = x + add;
       }
-      blockPos.y = static_cast<int>(floor(pos.y));
-      blockPos.z = static_cast<int>(floor(pos.z));
+      blockPos.y = (int)(floor(pos.y));
+      blockPos.z = (int)(floor(pos.z));
 
       if (isSolidBlock(blockPos)) {
         return false;
@@ -987,34 +924,31 @@ bool WorldMap::lineOfSight(const v3d_t &a, const v3d_t &b) const {
 
   // y-axis
   if (diff.y != 0.0) { // && (floor (a.y) != floor (b.y))) {
-    int direction = static_cast<int>(sign(diff.y));
-
+    int direction = (int)(sign(diff.y));
     if (direction > 0) {
-      start = static_cast<int>(ceil(a.y));
-      end = static_cast<int>(floor(b.y));
+      start = (int)(ceil(a.y));
+      end = (int)(floor(b.y));
       add = 1;
     }
     else {
-      start = static_cast<int>(floor(a.y));
-      end = static_cast<int>(ceil(b.y));
+      start = (int)(floor(a.y));
+      end = (int)(ceil(b.y));
       add = -1;
     }
 
     for (int y = start; y != (end + add); y += add) {
-      double percent = (static_cast<double>(y) - static_cast<double>(a.y)) /
-        (static_cast<double>(b.y) - static_cast<double>(a.y));
-
+      double percent = ((double)(y) - (double)(a.y)) / ((double)(b.y) - (double)(a.y));
       v3d_t pos = v3d_interpolate(a, b, percent);
 
       v3di_t blockPos;
-      blockPos.x = static_cast<int>(floor(pos.x));
+      blockPos.x = (int)(floor(pos.x));
       if (add > 0) {
         blockPos.y = y;
       }
       else {
         blockPos.y = y + add;
       }
-      blockPos.z = static_cast<int>(floor(pos.z));
+      blockPos.z = (int)(floor(pos.z));
 
       if (isSolidBlock(blockPos)) {
         return false;
@@ -1024,28 +958,25 @@ bool WorldMap::lineOfSight(const v3d_t &a, const v3d_t &b) const {
 
   // z-axis
   if (diff.z != 0.0) { // && (floor (a.z) != floor (b.z))) {
-    int direction = static_cast<int>(sign(diff.z));
-
+    int direction = (int)(sign(diff.z));
     if (direction > 0) {
-      start = static_cast<int>(ceil(a.z));
-      end = static_cast<int>(floor(b.z));
+      start = (int)(ceil(a.z));
+      end = (int)(floor(b.z));
       add = 1;
     }
     else {
-      start = static_cast<int>(floor(a.z));
-      end = static_cast<int>(ceil(b.z));
+      start = (int)(floor(a.z));
+      end = (int)(ceil(b.z));
       add = -1;
     }
 
     for (int z = start; z != (end + add); z += add) {
-      double percent = (static_cast<double>(z) - static_cast<double>(a.z)) /
-        (static_cast<double>(b.z) - static_cast<double>(a.z));
-
+      double percent = ((double)(z) - (double)(a.z)) / ((double)(b.z) - (double)(a.z));
       v3d_t pos = v3d_interpolate(a, b, percent);
 
       v3di_t blockPos;
-      blockPos.x = static_cast<int>(floor(pos.x));
-      blockPos.y = static_cast<int>(floor(pos.y));
+      blockPos.x = (int)(floor(pos.x));
+      blockPos.y = (int)(floor(pos.y));
       if (add > 0) {
         blockPos.z = z;
       }
@@ -1062,7 +993,7 @@ bool WorldMap::lineOfSight(const v3d_t &a, const v3d_t &b) const {
   return true;
 }
 
-bool WorldMap::rayCastSolidBlock(const v3d_t &a, const v3d_t &b, v3di_t &hitPosition, int &face) const {
+bool WorldMap::rayCastSolidBlock(const v3d_t& a, const v3d_t& b, v3di_t& hitPosition, int& face) const {
   v3d_t diff = v3d_sub(b, a);
 
   double magnitude = v3d_mag(diff);
@@ -1072,7 +1003,7 @@ bool WorldMap::rayCastSolidBlock(const v3d_t &a, const v3d_t &b, v3di_t &hitPosi
   v3d_t pos;
   v3d_t lastPos = a;
 
-static v3d_t faceAdd[6] = {
+  static v3d_t faceAdd[6] = {
     {{ 0.0, 0.0, 0.0 }},    // BLOCK_SIDE_LEF
     {{ 1.0, 0.0, 0.0 }},    // BLOCK_SIDE_RIG
     {{ 0.0, 1.0, 0.0 }},    // BLOCK_SIDE_TOP
@@ -1114,7 +1045,6 @@ static v3d_t faceAdd[6] = {
           gCubeFaceNormalLookup[s][2] };
 
         plane.setFromPointAndNormal(point, normal);
-
         faceHitResults[s] = plane.doesLineSegmentIntersect(lastPos, pos, faceHitTimes[s]);
       }
 

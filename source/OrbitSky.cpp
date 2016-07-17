@@ -16,7 +16,7 @@ void OrbitSky::setOrbit(Galaxy& galaxy, size_t planetHandle) {
   body.color[3] = 1.0f;
 
   // set up the stars
-  for (int i = 0; i < 150; i++) {
+  for (int i = 0; i < 150; ++i) {
     body.color[0] = r_num(0.8, 1.0);
     body.color[1] = r_num(0.8, 1.0);
     body.color[2] = r_num(0.8, 1.0);
@@ -67,7 +67,7 @@ void OrbitSky::draw(GlCamera& cam, v3d_t playerPosition) {
   glEnable (GL_BLEND);
 
   size_t numBodies = mBodies.size();
-  for (size_t i = 0; i < numBodies; i++) {
+  for (size_t i = 0; i < numBodies; ++i) {
     glPushMatrix ();
       glTranslated(mBodies[i].pos.x + playerPosition.x,
         mBodies[i].pos.y + playerPosition.y,

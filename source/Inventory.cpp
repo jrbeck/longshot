@@ -15,7 +15,7 @@ Inventory::~Inventory() {
 void Inventory::clear() {
   mCredits = 1000;
 
-  for (size_t i = 0; i < mBackpack.size(); i++) {
+  for (size_t i = 0; i < mBackpack.size(); ++i) {
     mBackpack[i] = 0;
   }
 
@@ -27,7 +27,7 @@ void Inventory::clear() {
   mLegGear = 0;
   mTorsoGear = 0;
 
-  for (int i = 0; i < NUM_AMMO_TYPES; i++) {
+  for (int i = 0; i < NUM_AMMO_TYPES; ++i) {
     mAmmoCounter[i] = 0;
   }
 
@@ -47,7 +47,7 @@ void Inventory::resizeBackpack(int newSize) {
 
   mBackpack.resize(newSize);
 
-  for (int i = oldSize; i < newSize; i++) {
+  for (int i = oldSize; i < newSize; ++i) {
     mBackpack[i] = 0;
   }
 }
@@ -55,7 +55,7 @@ void Inventory::resizeBackpack(int newSize) {
 
 
 int Inventory::getNextFreeBackpackSlot() {
-  for (size_t i = 0; i < mBackpack.size(); i++) {
+  for (size_t i = 0; i < mBackpack.size(); ++i) {
     if (mBackpack[i] == 0) {
       return i;
     }
@@ -110,7 +110,7 @@ void Inventory::save(FILE* file) {
 
   size_t backpackSize = mBackpack.size();
   fwrite(&backpackSize, sizeof (size_t), 1, file);
-  for (size_t i = 0; i < backpackSize; i++) {
+  for (size_t i = 0; i < backpackSize; ++i) {
     fwrite(&mBackpack[i], sizeof (size_t), 1, file);
   }
 
@@ -132,7 +132,7 @@ void Inventory::load(FILE* file) {
 
   size_t backpackSize;
   fread(&backpackSize, sizeof (size_t), 1, file);
-  for (size_t i = 0; i < backpackSize; i++) {
+  for (size_t i = 0; i < backpackSize; ++i) {
     size_t backpackItemHandle;
     fread(&backpackItemHandle, sizeof (size_t), 1, file);
     mBackpack.push_back(backpackItemHandle);

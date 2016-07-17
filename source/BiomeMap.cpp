@@ -162,7 +162,7 @@ void BiomeMap::randomize(PseudoRandom prng, int typesW, int typesH) {
   // HACK: this is meant to be populated randomly per-planet
   // fix this ok?
   for (int j = 0; j < mTypesH; j++) {
-    for (int i = 0; i < mTypesW; i++) {
+    for (int i = 0; i < mTypesW; ++i) {
       // this is a terrible thing to do
       // TODO... parameterize biomes!
       int index = i + (j * mTypesW);

@@ -2,7 +2,7 @@
 
 
 PhysicsView::PhysicsView() {
-  for (int i = 0; i < NUM_OBJSKINS; i++) {
+  for (int i = 0; i < NUM_OBJSKINS; ++i) {
     mTextureHandles[i] = 0;
   }
 
@@ -36,7 +36,7 @@ void PhysicsView::freeAssets() {
     mBlankBlockCallListHandle = 0;
   }
 
-  for (int i = 0; i < NUM_OBJSKINS; i++) {
+  for (int i = 0; i < NUM_OBJSKINS; ++i) {
     if (mTextureHandles[i] > 0) {
       glDeleteTextures (1, &mTextureHandles[i]);
       mTextureHandles[i] = 0;
@@ -50,7 +50,7 @@ void PhysicsView::setViewPosition(v3d_t pos) {
 
 void PhysicsView::update(vector<PhysicsEntity*>* physicsEntities, double time) {
   size_t numEntities = physicsEntities->size();
-  for (size_t i = 0; i < numEntities; i++) {
+  for (size_t i = 0; i < numEntities; ++i) {
     setEntityColor(*(*physicsEntities)[i], time);
   }
 }

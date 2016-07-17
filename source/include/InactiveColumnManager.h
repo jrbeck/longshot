@@ -59,7 +59,7 @@ public:
   ~ColumnDatum () {
 //    printf ("COLUMN DATUM DESTROYER!\n");
     size_t numChunks = chunkData.size();
-    for (size_t i = 0; i < numChunks; i++) {
+    for (size_t i = 0; i < numChunks; ++i) {
       delete chunkData[i];
     }
     chunkData.clear();

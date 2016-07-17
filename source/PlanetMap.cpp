@@ -160,7 +160,7 @@ void PlanetMap::buildFromPeriodics(int seed) {
   int halfMapSide = PLANET_MAP_SIDE / 2;
 
   for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; ++i) {
       worldPosition.x = ((i - halfMapSide) * MAP_MULTIPLIER);
       worldPosition.z = ((j - halfMapSide) * MAP_MULTIPLIER);
 
@@ -186,7 +186,7 @@ void PlanetMap::buildFromPeriodics(int seed) {
 
   // let's do a little shading to make it look nicer
   for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; ++i) {
       double height = mTerrain->get_value(i, j);
 
       GLfloat colorMult = 0.8 * ((GLfloat)height + 10.0f) / 20.0;
@@ -329,7 +329,7 @@ void PlanetMap::drawTerrain() const {
   glBegin(GL_QUADS);
 
   for (int j = 0; j < PLANET_MAP_SIDE; j++) {
-    for (int i = 0; i < PLANET_MAP_SIDE; i++) {
+    for (int i = 0; i < PLANET_MAP_SIDE; ++i) {
       corners[0].x = static_cast<int>(i);
       corners[0].z = mTerrain->get_value(i, j);
       corners[0].y = static_cast<int>(j);

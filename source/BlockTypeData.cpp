@@ -35,7 +35,7 @@ void BlockTypeDataContainer::loadBlockTypeData() {
   defaultBlockTypeData.blocksVisibility = 100.0;
 
   // set all to the default block
-  for (int i = 0; i < NUM_BLOCK_TYPES; i++) {
+  for (int i = 0; i < NUM_BLOCK_TYPES; ++i) {
     mData[i] = defaultBlockTypeData;
   }
 

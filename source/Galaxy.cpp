@@ -11,7 +11,7 @@ Galaxy::~Galaxy() {
 
 void Galaxy::clear() {
   size_t numSystems = mStarSystems.size();
-  for (size_t i = 0; i < numSystems; i++) {
+  for (size_t i = 0; i < numSystems; ++i) {
     if (mStarSystems[i] != NULL) {
       delete mStarSystems[i];
     }
@@ -20,7 +20,7 @@ void Galaxy::clear() {
 }
 
 void Galaxy::randomize(size_t numSystems) {
-  for (size_t i = 0; i < numSystems; i++) {
+  for (size_t i = 0; i < numSystems; ++i) {
     StarSystem *starSystem = new StarSystem();
     if (starSystem == NULL) {
       printf("Galaxy::Galaxy(): out of memory\n");
@@ -45,7 +45,7 @@ void Galaxy::save(FILE* file) {
   // save the StarSystems
   size_t numSystems = mStarSystems.size();
   fwrite(&numSystems, sizeof numSystems, 1, file);
-  for (size_t i = 0; i < numSystems; i++) {
+  for (size_t i = 0; i < numSystems; ++i) {
     mStarSystems[i]->save(file);
   }
 }
@@ -60,7 +60,7 @@ void Galaxy::load(FILE* file) {
   // load from the file
   size_t numSystems;
   fread(&numSystems, sizeof numSystems, 1, file);
-  for (size_t i = 0; i < numSystems; i++) {
+  for (size_t i = 0; i < numSystems; ++i) {
     StarSystem* starSystem = new StarSystem();
     if (starSystem == NULL) {
       printf("Galaxy::load(): error: out of memory\n");
@@ -72,7 +72,7 @@ void Galaxy::load(FILE* file) {
 }
 
 StarSystem* Galaxy::getStarSystemByHandle(int handle) {
-  for (size_t i = 0; i < mStarSystems.size(); i++) {
+  for (size_t i = 0; i < mStarSystems.size(); ++i) {
     if (mStarSystems[i]->mHandle == handle) {
       return mStarSystems[i];
     }
@@ -88,7 +88,7 @@ StarSystem* Galaxy::getStarSystemByHandle(int handle) {
 Planet* Galaxy::getPlanetByHandle(int handle) {
   Planet* planet;
 
-  for (size_t i = 0; i < mStarSystems.size(); i++) {
+  for (size_t i = 0; i < mStarSystems.size(); ++i) {
     planet = mStarSystems[i]->getPlanetByHandle(handle);
     if (planet != NULL) {
       return planet;

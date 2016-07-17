@@ -30,7 +30,7 @@ void SpriteBatcher::endBatch() {
 
   glBegin (GL_QUADS);
 
-  for (size_t i = 0; i < mNumSprites; i++) {
+  for (size_t i = 0; i < mNumSprites; ++i) {
     Sprite &sprite = mSprites[i];
 
     u1 = sprite.mTextureRegion->u1;

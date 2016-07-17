@@ -316,7 +316,7 @@ void DungeonFeature::addMonsterGenerators(
   // THIS MAY ACTUALLY BE USED AT SOME POINT!!
   //v2di_t monsterPos;
   //int numSpawners = r_numi (8, 15);
-  //for (int i = 0; i < numSpawners; i++) {
+  //for (int i = 0; i < numSpawners; ++i) {
 
   //  monsterPos = rogueMap.placeRandomMonster ();
 

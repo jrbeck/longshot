@@ -6,7 +6,7 @@ Animation::Animation(float frameDuration) {
 
 Animation::~Animation() {
   size_t numFrames = mFrames.size();
-  for (size_t i = 0; i < numFrames; i++) {
+  for (size_t i = 0; i < numFrames; ++i) {
     if (mFrames[i] != NULL) {
       delete mFrames[i];
     }

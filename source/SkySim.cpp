@@ -29,7 +29,7 @@ SkySim::~SkySim() {
 void SkySim::initialize(v3d_t playerStartPosition) {
 
   // set up stars
-  for (size_t i = 0; i < NUM_STARS; i++) {
+  for (size_t i = 0; i < NUM_STARS; ++i) {
     mStars[i].x = r_num (-10.0, 10.0);
     mStars[i].y = r_num (-10.0, 10.0);
     mStars[i].z = r_num (-10.0, 10.0);
@@ -166,7 +166,7 @@ void SkySim::draw(GlCamera &cam, v3d_t playerPosition) {
   mCloudSim->draw (cam);
 
   // draw the stars
-  for (size_t i = 0; i < NUM_STARS; i++) {
+  for (size_t i = 0; i < NUM_STARS; ++i) {
     glPushMatrix ();
       glRotated (secs, 0.0, 0.0, 1.0);
 

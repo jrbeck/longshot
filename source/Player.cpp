@@ -121,7 +121,7 @@ void player_c::godMode() {
   printf ("you naughty little stinker you...\n");
 
   // some ammo?
-  for (int i = 0; i < NUM_AMMO_TYPES; i++) {
+  for (int i = 0; i < NUM_AMMO_TYPES; ++i) {
     mInventory.mAmmoCounter[i] = 10000;
   }
 
@@ -610,7 +610,7 @@ void player_c::updateCharacterSheet() {
   double buttonHeight = (0.9 - 0.7) / static_cast<double>(NUM_AMMO_TYPES);
   char ammoString[50];
 
-  for (size_t i = 0; i < NUM_AMMO_TYPES; i++) {
+  for (size_t i = 0; i < NUM_AMMO_TYPES; ++i) {
     tl = v2d_v(0.1, lerp(0.7, 0.9 - buttonHeight, i, NUM_AMMO_TYPES));
 //    br = v2d_v (0.4, lerp (0.7 + (buttonHeight * 0.9), 0.9, i, NUM_AMMO_TYPES));;
     dimensions.x = 0.3;
@@ -645,7 +645,7 @@ void player_c::updateCharacterSheet() {
   buttonHeight = (0.9 - 0.3) / static_cast<double>(mInventory.mBackpack.size());
   GLfloat *itemColor;
 
-  for (size_t i = 0; i < mInventory.mBackpack.size(); i++) {
+  for (size_t i = 0; i < mInventory.mBackpack.size(); ++i) {
     tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mInventory.mBackpack.size()));
 //    br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size()));;
     dimensions.x = 0.4;

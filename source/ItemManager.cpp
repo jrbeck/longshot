@@ -60,7 +60,7 @@ void ItemManager::clear() {
 
 void ItemManager::destroyItemList(vector<size_t> itemList) {
   int numItemsDestroyed = 0;
-  for (size_t i = 0; i < itemList.size(); i++) {
+  for (size_t i = 0; i < itemList.size(); ++i) {
     int index = getIndexFromHandle(itemList[i]);
     if (index >= 0) {
       mItems[index].active = false;
@@ -86,7 +86,7 @@ void ItemManager::trimItemsList() {
     return;
   }
 
-  for (int i = 0; i <= ((int)mItems.size() - 1); i++) {
+  for (int i = 0; i <= ((int)mItems.size() - 1); ++i) {
     if (!mItems[i].active) {
       swap(mItems[i], mItems[mItems.size() - 1]);
       mItems.pop_back();
@@ -617,7 +617,7 @@ double ItemManager::useGun(size_t itemHandle, const shot_info_t& shotInfo) {
     return shotInfo.time;
   }
 
-  for (int i = 0; i < mItems[itemIndex].bulletsPerShot; i++) {
+  for (int i = 0; i < mItems[itemIndex].bulletsPerShot; ++i) {
     v3d_t finalAngle = shotInfo.angle;
     finalAngle.x += r_num(-mItems[itemIndex].bulletSpread, mItems[itemIndex].bulletSpread);
     finalAngle.y += r_num(-mItems[itemIndex].bulletSpread, mItems[itemIndex].bulletSpread);
@@ -661,7 +661,7 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, const shot_info_t& shotInf
     return shotInfo.time;
   }
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 1; ++i) {
     v3d_t finalAngle = shotInfo.angle;
     int bulletType = OBJTYPE_MELEE_ATTACK;
     PhysicsEntity* projectileEntity = mGameModel->physics->createEntity(bulletType, shotInfo.position, true);
@@ -693,7 +693,7 @@ void ItemManager::save(FILE* file) {
   printf(" saving: %lu items\n", numItems);
 
   fwrite(&numItems, sizeof (size_t), 1, file);
-  for(size_t i = 0; i < numItems; i++) {
+  for(size_t i = 0; i < numItems; ++i) {
     printf("%lu: %s\n", i, mItems[i].name);
     fwrite(&mItems[i], sizeof (item_t), 1, file);
   }
@@ -705,7 +705,7 @@ void ItemManager::load(FILE* file) {
   mItems.clear();
   size_t numItems;
   fread(&numItems, sizeof (size_t), 1, file);
-  for(size_t i = 0; i < numItems; i++) {
+  for(size_t i = 0; i < numItems; ++i) {
     item_t item;
     fread(&item, sizeof (item_t), 1, file);
     mItems.push_back(item);

@@ -216,7 +216,7 @@ int edit_c::handle_keystroke (void) {
 
     case SDLK_t: // seed a new terrain
 /*      for (int j = 0; j < DEFAULT_SIDE_UNIV; j++) {
-        for (int i = 0; i < DEFAULT_SIDE_UNIV; i++) {
+        for (int i = 0; i < DEFAULT_SIDE_UNIV; ++i) {
           double u, v;
 
           u = 2.0 * static_cast<double>(i) * (8.0 / DEFAULT_SIDE_UNIV);

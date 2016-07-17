@@ -170,7 +170,7 @@ void Terrain::normalize(double low, double high) {
   double oldMax = getMax();
 
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       double oldValue = get_value (i, j);
       set_value(i, j, (newRange * (oldValue - oldMin) / (oldMax - oldMin)) + low);
     }
@@ -335,7 +335,7 @@ int Terrain::set_value (int i, int j, double value) {
 // **************************************************
 int Terrain::set_all (double value) {
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       set_value (i, j, value); } }
 
   return 0;
@@ -347,7 +347,7 @@ int Terrain::set_all (double value) {
 // **************************************************
 int Terrain::set_min (double min) {
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       // get the value at i, j
       double val = get_value (i, j);
 
@@ -374,7 +374,7 @@ int Terrain::smooth (void) {
 
   // now fill the scratch buffer up with smoothed values
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       if (get_value (i, j) < 12.0) {
         buf[i + (j * mFieldSide)] = blur_square (i, j, 4); }
       if (get_value (i, j) < 24.0) {
@@ -389,7 +389,7 @@ int Terrain::smooth (void) {
 
   // set the real field values
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       set_value (i, j, buf[i + (j * mFieldSide)]);
     }
   }
@@ -404,7 +404,7 @@ int Terrain::smooth (void) {
 
 void Terrain::noise (PseudoRandom &prng) {
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       double v = get_value (i, j);
       set_value (i, j, getClose (v, 1.0, prng));
     }
@@ -428,7 +428,7 @@ void Terrain::alt_smooth (void) {
 
   // now fill the scratch buffer up with smoothed values
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       double orig = get_value (i, j);
       double blur = blur_square (i, j, 4);
 
@@ -441,7 +441,7 @@ void Terrain::alt_smooth (void) {
 
   // set the real field values
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       set_value (i, j, buf[i + (j * mFieldSide)]); } }
 
   // free up the scratch buffer
@@ -472,7 +472,7 @@ double Terrain::getMax (void) const {
   double maxValue = mField[0];
 
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       if ((value = get_value (i, j)) > maxValue) {
         maxValue = value;
       }
@@ -489,7 +489,7 @@ double Terrain::getMin (void) const {
   double minValue = mField[0];
 
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       if ((value = get_value (i, j)) < minValue) {
         minValue = value;
       }
@@ -532,7 +532,7 @@ void Terrain::draw (void) const {
   glBegin (GL_QUADS);
 
   for (int j = 0; j < mFieldSide; j++) {
-    for (int i = 0; i < mFieldSide; i++) {
+    for (int i = 0; i < mFieldSide; ++i) {
       corners[0].x = static_cast<int>(i);
       corners[0].y = get_value (i, j);
       corners[0].z = static_cast<int>(j);

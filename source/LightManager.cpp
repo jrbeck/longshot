@@ -88,7 +88,7 @@ void LightManager::updateWorldColumns(const WorldLight& light, WorldMap& worldMa
 void LightManager::removeLight(size_t handle) {
   // first check the active lights
   size_t numLights = mLights.size();
-  for (size_t i = 0; i < numLights; i++) {
+  for (size_t i = 0; i < numLights; ++i) {
     if (mLights[i]->mHandle == handle) {
       delete mLights[i];
       if (i != (numLights - 1)) {
@@ -101,7 +101,7 @@ void LightManager::removeLight(size_t handle) {
 
   // now for the inactive lights list
   numLights = mInactiveLights.size();
-  for (size_t i = 0; i < numLights; i++) {
+  for (size_t i = 0; i < numLights; ++i) {
     if (mLights[i]->mHandle == handle) {
       delete mInactiveLights[i];
       if (i != (numLights - 1)) {
@@ -118,7 +118,7 @@ IntColor LightManager::getLightLevel(const v3di_t& position) const {
   IntColor level = { 0, 0, 0 };
   IntColor temp;
   size_t numLights = mLights.size();
-  for (size_t i = 0; i < numLights; i++) {
+  for (size_t i = 0; i < numLights; ++i) {
     temp = mLights[i]->getLevel(position);
     level.r += temp.r;
     level.g += temp.g;
@@ -133,7 +133,7 @@ void LightManager::update(WorldMap& worldMap) {
 
   // deactivate lights that are in columns that aren't loaded
   size_t numActiveLights = mLights.size();
-  for (size_t i = 0; i < numActiveLights; i++) {
+  for (size_t i = 0; i < numActiveLights; ++i) {
     if (worldMap.pickColumn(v3di_v(mLights[i]->mWorldPosition)) < 0) {
       mLights[i]->turnOff();
       mInactiveLights.push_back(mLights[i]);
@@ -151,7 +151,7 @@ void LightManager::update(WorldMap& worldMap) {
   }
   // activate lights in the mInactiveLights that are now in range
   size_t numInactiveLights = mInactiveLights.size();
-  for (size_t i = 0; i < numInactiveLights; i++) {
+  for (size_t i = 0; i < numInactiveLights; ++i) {
     if (worldMap.pickColumn(v3di_v(mInactiveLights[i]->mWorldPosition)) >= 0) {
       count++;
       mInactiveLights[i]->turnOn();
@@ -178,7 +178,7 @@ void LightManager::update(WorldMap& worldMap) {
 void LightManager::clear() {
   // clear the active lights
   if (mLights.size() > 0) {
-    for (size_t i = 0; i < mLights.size(); i++) {
+    for (size_t i = 0; i < mLights.size(); ++i) {
       if (mLights[i] != NULL) {
         delete mLights[i];
       }
@@ -188,7 +188,7 @@ void LightManager::clear() {
 
   // now for the inactive lights
   if (mInactiveLights.size() > 0) {
-    for (size_t i = 0; i < mInactiveLights.size(); i++) {
+    for (size_t i = 0; i < mInactiveLights.size(); ++i) {
       if (mInactiveLights[i] != NULL) {
         delete mInactiveLights[i];
       }
@@ -210,11 +210,11 @@ void LightManager::save(FILE* file) {
   fwrite(&totalLights, sizeof(size_t), 1, file);
 
   // active lights
-  for (size_t i = 0; i < numLights; i++) {
+  for (size_t i = 0; i < numLights; ++i) {
     mLights[i]->save(file);
   }
   // inactive lights
-  for (size_t i = 0; i < numInactiveLights; i++) {
+  for (size_t i = 0; i < numInactiveLights; ++i) {
     mInactiveLights[i]->save(file);
   }
 }
@@ -227,7 +227,7 @@ void LightManager::load(FILE* file) {
   size_t numLights = mLights.size();
   fread(&numLights, sizeof(size_t), 1, file);
   //  printf("LightManager::load(): loading %d lights\n", numLights);
-  for (size_t i = 0; i < numLights; i++) {
+  for (size_t i = 0; i < numLights; ++i) {
     WorldLight *light = new WorldLight;
     light->load(file);
     light->mHandle = mNextHandle++;

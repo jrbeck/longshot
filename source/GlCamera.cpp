@@ -219,7 +219,7 @@ int GlCamera::bounding_sphere_test(const BoundingSphere& sphere) const {
   v3d_t center = sphere.getPosition();
   double radius = sphere.getRadius();
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 6; ++i) {
     d = mPlanes[i].distToPoint(center);
     if (d < -radius) return FRUSTUM_OUTSIDE;
     if (d < radius) all_in = false;

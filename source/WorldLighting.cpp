@@ -364,7 +364,7 @@ void WorldLighting::applyLighting(
           else if (gBlockData.get(block->type)->alpha > 0.0 &&
             block->faceVisibility != 0)
           {
-            for (int i = 0; i < NUM_BLOCK_SIDES; i++) {
+            for (int i = 0; i < NUM_BLOCK_SIDES; ++i) {
               if (block->faceVisibility & gBlockSideBitmaskLookup[i]) {
                 neighborPosition = v3di_add (worldPosition, gBlockNeighborAddLookup[i]);
                 neighbor = worldMap.getBlock (neighborPosition);
