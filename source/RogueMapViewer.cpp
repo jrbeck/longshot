@@ -228,7 +228,7 @@ int RogueMapViewer::handleInput() {
         mMouseDelta.y = sdlevent.motion.yrel;
 
         mMousePos.x = sdlevent.motion.x;
-        mMousePos.y = SCREEN_H - sdlevent.motion.y;
+        mMousePos.y = gScreenH - sdlevent.motion.y;
 
         mMouseMoved = 1;
 
@@ -236,11 +236,11 @@ int RogueMapViewer::handleInput() {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       default:

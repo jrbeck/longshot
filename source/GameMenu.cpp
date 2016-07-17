@@ -164,13 +164,13 @@ int GameMenu::gameMenuChoice(bool waitForInput) {
 
     // handle the mousebuttondown event
     case SDL_MOUSEBUTTONDOWN:
-//        handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+//        handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, gScreenH - sdlevent.button.y));
       break;
 
     case SDL_MOUSEBUTTONUP:
       if (sdlevent.button.button == SDL_BUTTON_LEFT) {
-//        click = mouseUp(sdlevent.button.x / (double)SCREEN_W, ((double)SCREEN_H - sdlevent.button.y) / (double)SCREEN_H);
-        click = mouseUp((double)sdlevent.button.x / (double)SCREEN_W, (double)sdlevent.button.y / (double)SCREEN_H);
+//        click = mouseUp(sdlevent.button.x / (double)gScreenW, ((double)gScreenH - sdlevent.button.y) / (double)gScreenH);
+        click = mouseUp((double)sdlevent.button.x / (double)gScreenW, (double)sdlevent.button.y / (double)gScreenH);
       }
 
       break;

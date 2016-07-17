@@ -90,8 +90,8 @@ int GameWindow::setVideoMode(sdl_mode_info_t mode) {
 
   mCurrentMode = mode;
   // ugh ... is this really the way to do this?
-  SCREEN_W = mCurrentMode.screen_w;
-  SCREEN_H = mCurrentMode.screen_h;
+  gScreenW = mCurrentMode.screen_w;
+  gScreenH = mCurrentMode.screen_h;
 
   glViewport(0, 0, mCurrentMode.screen_w, mCurrentMode.screen_h);
   glClearColor(0, 0, 0, 1);

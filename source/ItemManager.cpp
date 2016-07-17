@@ -5,7 +5,7 @@
 #pragma warning (disable : 4996)
 
 
-ItemManager::ItemManager(GameModel *gameModel) :
+ItemManager::ItemManager(GameModel* gameModel) :
   mLastHandle(1)
 {
   mGameModel = gameModel;
@@ -44,7 +44,6 @@ void ItemManager::readPhysicsMessages() {
           mItems[itemIndex].active = false;
           itemsDestroyed++;
         }
-
         break;
 
       default:

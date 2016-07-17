@@ -74,8 +74,8 @@ void GalaxyMap::drawGalaxy(Planet *selectedPlanet) {
 
   v2d_t mouse;
 
-  mouse.x = GALACTIC_WIDTH * (mMousePos.x / SCREEN_W);
-  mouse.y = GALACTIC_HEIGHT * (1.0 - (mMousePos.y / SCREEN_H));
+  mouse.x = GALACTIC_WIDTH * (mMousePos.x / gScreenW);
+  mouse.y = GALACTIC_HEIGHT * (1.0 - (mMousePos.y / gScreenH));
 
   int nearest = 0;
   double nearestDist = v2d_dist(mouse, mGalaxy->mStarSystems[nearest]->mPosition);
@@ -134,8 +134,8 @@ void GalaxyMap::drawStarSystem(StarSystem& starSystem, Planet* selectedPlanet) {
   v2d_t starPosition = { GALACTIC_WIDTH * 0.5, GALACTIC_HEIGHT * 0.5 };
 
   v2d_t mouse;
-  mouse.x = (GALACTIC_WIDTH * (mMousePos.x / SCREEN_W)) - starPosition.x;
-  mouse.y = (GALACTIC_HEIGHT * (1.0 - (mMousePos.y / SCREEN_H))) - starPosition.y;
+  mouse.x = (GALACTIC_WIDTH * (mMousePos.x / gScreenW)) - starPosition.x;
+  mouse.y = (GALACTIC_HEIGHT * (1.0 - (mMousePos.y / gScreenH))) - starPosition.y;
 
   int hoverPlanet = -1;
   int chosenPlanet = -1;
@@ -249,8 +249,8 @@ void GalaxyMap::setUpOpenGl() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-//  glViewport(0, 0, SCREEN_W, SCREEN_H);
-//  glOrtho (0, SCREEN_W, SCREEN_H, 0, -1, 1);
+//  glViewport(0, 0, gScreenW, gScreenH);
+//  glOrtho (0, gScreenW, gScreenH, 0, -1, 1);
   glOrtho(0.0, GALACTIC_WIDTH, GALACTIC_HEIGHT, 0.0, -1.0, 1.0);
 
   glMatrixMode(GL_MODELVIEW);
@@ -324,7 +324,7 @@ int GalaxyMap::handleInput() {
         mMouseDelta.y = sdlevent.motion.yrel;
 
         mMousePos.x = sdlevent.motion.x;
-        mMousePos.y = SCREEN_H - sdlevent.motion.y;
+        mMousePos.y = gScreenH - sdlevent.motion.y;
 
         mMouseMoved = 1;
 
@@ -332,11 +332,11 @@ int GalaxyMap::handleInput() {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       case SDL_MOUSEWHEEL:

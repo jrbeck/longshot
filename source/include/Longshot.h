@@ -11,7 +11,7 @@
 #pragma once
 
 // longshot constants * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-#define SCREEN_ASPECT_RATIO    ((double)SCREEN_W / (double)SCREEN_H)
+#define SCREEN_ASPECT_RATIO    ((double)gScreenW / (double)gScreenH)
 
 #include "FileSystem.h"
 

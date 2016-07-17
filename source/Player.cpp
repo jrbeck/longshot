@@ -27,7 +27,7 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle) {
   mInclineMax = DEG2RAD(DEFAULT_INCLINE_MAX);
 
   // setup the camera
-  cam.resize_screen(SCREEN_W, SCREEN_H);
+  cam.resize_screen(gScreenW, gScreenH);
   cam.set_fov_near_far(45.0, 0.15, 500.0);
 
   // figure out where we're looking
@@ -541,7 +541,7 @@ void player_c::drawWaterOverlay() {
   // need to set up the opengl viewport
   glPushMatrix();
 
-  glViewport(0, 0, SCREEN_W, SCREEN_H);
+  glViewport(0, 0, gScreenW, gScreenH);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

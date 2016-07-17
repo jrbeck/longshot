@@ -188,9 +188,8 @@ struct melee_weapon_state_t {
   bool hasUsed;
 };
 
-extern int SCREEN_W;
-extern int SCREEN_H;
-extern bool FULLSCREEN_MODE;
+extern int gScreenW;
+extern int gScreenH;
 
 // this allows for a global default font to be used
 // WARNING: it needs to be set externally. in our case,

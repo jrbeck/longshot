@@ -19,7 +19,7 @@ void RogueViewer::setupOpenGl() {
   GLfloat color[4] = {0.1f, 0.4f, 0.9f, 0.0f};
 
   // set up the viewport
-  glViewport(0, 0, SCREEN_W, SCREEN_H);
+  glViewport(0, 0, gScreenW, gScreenH);
 
   // enable various things
   glEnable(GL_TEXTURE_2D);                // Enable 2D Texture Mapping
@@ -91,7 +91,7 @@ int RogueViewer::start() {
 
   GlCamera* cam;
 
-  mRtsCam.initializeCamera(v2di_v(SCREEN_W, SCREEN_H), 45.0, 0.1, 1024.0);
+  mRtsCam.initializeCamera(v2di_v(gScreenW, gScreenH), 45.0, 0.1, 1024.0);
 
   setupOpenGl();
 
@@ -207,7 +207,7 @@ int RogueViewer::handleInput() {
         mMouseDelta.y = sdlevent.motion.yrel;
 
         mMousePos.x = sdlevent.motion.x;
-        mMousePos.y = SCREEN_H - sdlevent.motion.y;
+        mMousePos.y = gScreenH - sdlevent.motion.y;
 
         mMouseMoved = 1;
 
@@ -215,11 +215,11 @@ int RogueViewer::handleInput() {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonDown(sdlevent.button.button, v2d_v(sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonUp(sdlevent.button.button, v2d_v(sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       default:

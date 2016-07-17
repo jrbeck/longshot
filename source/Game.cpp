@@ -135,7 +135,7 @@ GameWindow* game_c::getGameWindow() {
 }
 
 void game_c::setupOpenGl() {
-  glViewport(0, 0, SCREEN_W, SCREEN_H);
+  glViewport(0, 0, gScreenW, gScreenH);
 
   glEnable(GL_TEXTURE_2D);
 //  glEnable (GL_BLEND);

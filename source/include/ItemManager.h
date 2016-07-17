@@ -124,12 +124,12 @@ public:
   void nameGun(item_t& gun);
   size_t generateRandomGun(double dps);
 
-  void generateRandomPistol(item_t &newGun, double dps);
-  void generateRandomRifle(item_t &newGun, double dps);
-  void generateRandomShotgun(item_t &newGun, double dps);
-  void generateRandomMachineGun(item_t &newGun, double dps);
-  void generateRandomGrenadeLauncher(item_t &newGun, double dps);
-  void generateRandomRocketLauncher(item_t &newGun, double dps);
+  void generateRandomPistol(item_t& newGun, double dps);
+  void generateRandomRifle(item_t& newGun, double dps);
+  void generateRandomShotgun(item_t& newGun, double dps);
+  void generateRandomMachineGun(item_t& newGun, double dps);
+  void generateRandomGrenadeLauncher(item_t& newGun, double dps);
+  void generateRandomRocketLauncher(item_t& newGun, double dps);
 
   size_t spawnPhysicsEntityGun(double value, v3d_t position);
 

@@ -1,8 +1,7 @@
 #include "Constants.h"
 
-int SCREEN_W;
-int SCREEN_H;
-bool FULLSCREEN_MODE = (false);
+int gScreenW;
+int gScreenH;
 
 GLuint gDefaultFontTextureHandle = 0;
 

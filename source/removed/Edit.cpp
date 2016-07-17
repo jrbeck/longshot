@@ -18,7 +18,7 @@ void edit_c::setupOpenGl(void) {
 //  glClearColor (0.5f, 0.2f, 0.0f, 0.0f);  // orangey
 
   // set up the viewport
-  glViewport(0, 0, SCREEN_W, SCREEN_H);
+  glViewport(0, 0, gScreenW, gScreenH);
 
   // enable various things
   glEnable(GL_TEXTURE_2D);            // Enable 2D Texture Mapping
@@ -156,7 +156,7 @@ int edit_c::handle_input (void) {
         mouse_delta.y = sdlevent.motion.yrel;
 
         mouse_position.x = sdlevent.motion.x;
-        mouse_position.y = SCREEN_H - sdlevent.motion.y;
+        mouse_position.y = gScreenH - sdlevent.motion.y;
 
         mouse_moved = 1;
 
@@ -164,11 +164,11 @@ int edit_c::handle_input (void) {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handle_mouse_button_up (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handle_mouse_button_up (sdlevent.button.button, v2d_v (sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       default:

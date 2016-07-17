@@ -46,7 +46,6 @@ inline double get_close(double num, double delta) {
 inline double sign(double num) {
   if (num < 0.0) return -1.0;
   else if (num > 0.0) return 1.0;
-
   return 0.0;
 }
 
@@ -77,13 +76,13 @@ inline double absConstrain(double value, double limit) {
   return value;
 }
 
-//double r_num (double low, double high);
-//int r_numi (int low, int high);
-//double get_close (double num, double delta);
-//double sign (double num);
-//double lerp (double h1, double h2, double per);
-//double lerp (double a, double b, int numerator, int denominator);
-//double constrain_num (double num, double min, double max);
-unsigned long hash (const char *str);
+//double r_num(double low, double high);
+//int r_numi(int low, int high);
+//double get_close(double num, double delta);
+//double sign(double num);
+//double lerp(double h1, double h2, double per);
+//double lerp(double a, double b, int numerator, int denominator);
+//double constrain_num(double num, double min, double max);
+unsigned long hash(const char* str);
 
 #endif // MathUtil_h_

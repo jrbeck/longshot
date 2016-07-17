@@ -1049,7 +1049,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
   int axis;
 
   if (physicsEntity->type == OBJTYPE_AI_ENTITY || physicsEntity->type == OBJTYPE_PLAYER) {
-    for (size_t other = 0; other < obj.size(); other++) {
+    for (size_t other = 0; other < obj.size(); ++other) {
       otherPhysicsEntity = obj[other];
 
       if (!otherPhysicsEntity->active ||
@@ -1194,7 +1194,6 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
 
           if (r_numi(0, 5) == 3) {
             v3d_t position = v3d_add(otherPhysicsEntity->pos, v3d_scale(t0, otherPhysicsEntity->displacement));
-//            printf ("BLOOD!\n");
             createEntity(OBJTYPE_BLOOD_SPRAY, position, false);
           }
 
@@ -1203,12 +1202,10 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
 
           // tell the critter whodunnit
           phys_message_t message;
-
           message.sender = static_cast<int>(otherPhysicsEntity->owner);
           message.recipient = static_cast<int>(physicsEntity->handle);
           message.type = PHYS_MESSAGE_DAMAGE;
           message.dValue = damage;
-
           sendMessage(message);
 
           removeEntity(otherPhysicsEntity->handle);
@@ -1220,7 +1217,6 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           }
 
           collision = true;
-
           numCollisions++;
         }
       }
@@ -1241,7 +1237,6 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           sendMessage(message);
 
           collision = true;
-
           numCollisions++;
         }
       }
@@ -1271,7 +1266,6 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           removeEntity(otherPhysicsEntity->handle);
 
           collision = true;
-
           numCollisions++;
         }
       }

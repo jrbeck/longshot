@@ -96,8 +96,8 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
     }
 
     if (mLeftMouseButtonClicked) {
-      double x = mViewRect.getWidth() * mMousePos.x / SCREEN_W;
-      double y = mViewRect.getHeight() * mMousePos.y / SCREEN_H;
+      double x = mViewRect.getWidth() * mMousePos.x / gScreenW;
+      double y = mViewRect.getHeight() * mMousePos.y / gScreenH;
 
       planetPos.x = (x - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
       planetPos.z = (y - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
@@ -114,8 +114,8 @@ bool PlanetMap::chooseLocation(Planet &planet, v3d_t &planetPos) {
 
 
     // TEMPORARY * * * * * * * * *
-    double x = mViewRect.getWidth() * mMousePos.x / SCREEN_W;
-    double y = mViewRect.getHeight() * mMousePos.y / SCREEN_H;
+    double x = mViewRect.getWidth() * mMousePos.x / gScreenW;
+    double y = mViewRect.getHeight() * mMousePos.y / gScreenH;
 
     v3d_t pPos;
     pPos.x = (x - (PLANET_MAP_SIDE / 2)) * MAP_MULTIPLIER;
@@ -227,7 +227,7 @@ int PlanetMap::handleInput() {
         mMouseDelta.y = sdlevent.motion.yrel;
 
         mMousePos.x = sdlevent.motion.x;
-        mMousePos.y = SCREEN_H - sdlevent.motion.y;
+        mMousePos.y = gScreenH - sdlevent.motion.y;
 
         mMouseMoved = 1;
 
@@ -235,11 +235,11 @@ int PlanetMap::handleInput() {
 
       // handle the mousebuttondown event
       case SDL_MOUSEBUTTONDOWN:
-        handleMouseButtonDown (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonDown (sdlevent.button.button, v2d_v (sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       case SDL_MOUSEBUTTONUP:
-        handleMouseButtonUp (sdlevent.button.button, v2d_v (sdlevent.button.x, SCREEN_H - sdlevent.button.y));
+        handleMouseButtonUp (sdlevent.button.button, v2d_v (sdlevent.button.x, gScreenH - sdlevent.button.y));
         break;
 
       default:
