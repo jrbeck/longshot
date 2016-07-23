@@ -1,4 +1,4 @@
-#include "MathUtil.h"
+#include "../math/MathUtil.h"
 
 // this is Daniel J. Bernstein's hash algorithm
 // requires c string as input

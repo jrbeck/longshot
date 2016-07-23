@@ -6,14 +6,14 @@
 
 #include <gl_camera.h>
 
-#include "v3d.h"
+#include "../math/v3d.h"
 #include "sdl_util.h"
 
 #include "terrain.h"
 #include "Noise3d.h"
-#include "BoundingBox.h"
-#include "BoundingSphere.h"
-#include "AssetManager.h"
+#include "../math/BoundingBox.h"
+#include "../math/BoundingSphere.h"
+#include "../assets/AssetManager.h"
 
 
 // for the default constructor

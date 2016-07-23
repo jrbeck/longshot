@@ -15,7 +15,7 @@
 
 #include <malloc.h>
 
-#include "v2d.h"
+#include "../math/v2d.h"
 
 #include "terrain.h"
 

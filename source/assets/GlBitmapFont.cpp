@@ -1,4 +1,4 @@
-#include "GlBitmapFont.h"
+#include "../assets/GlBitmapFont.h"
 
 
 GlBitmapFont::GlBitmapFont () :

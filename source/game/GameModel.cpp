@@ -1,4 +1,4 @@
-#include "GameModel.h"
+#include "../game/GameModel.h"
 
 
 GameModel::GameModel() :

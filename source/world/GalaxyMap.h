@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "GameWindow.h"
-#include "Galaxy.h"
-#include "PlanetMap.h"
+#include "../game/GameWindow.h"
+#include "../world/Galaxy.h"
+#include "../world/PlanetMap.h"
 
 #define ZOOM_GALAXY      0
 #define ZOOM_SYSTEM      1

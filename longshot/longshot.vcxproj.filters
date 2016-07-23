@@ -296,14 +296,14 @@
     <ClCompile Include="..\source\game\GameWindow.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\game\GlCamera.cpp">
-      <Filter>source\game</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\game\LoadScreen.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
     <ClCompile Include="..\source\game\Longshot.cpp">
       <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\math\GlCamera.cpp">
+      <Filter>source\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -559,17 +559,14 @@
     <ClInclude Include="..\source\game\GameWindow.h">
       <Filter>source\game</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\game\GlCamera.h">
-      <Filter>source\game</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\game\LoadScreen.h">
       <Filter>source\game</Filter>
     </ClInclude>
     <ClInclude Include="..\source\game\Longshot.h">
       <Filter>source\game</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\headers.h">
-      <Filter>source</Filter>
+    <ClInclude Include="..\source\math\GlCamera.h">
+      <Filter>source\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

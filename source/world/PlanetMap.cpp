@@ -1,4 +1,4 @@
-#include "PlanetMap.h"
+#include "../world/PlanetMap.h"
 
 PlanetMap::PlanetMap(GameWindow* gameWindow) :
   mMenu(0),

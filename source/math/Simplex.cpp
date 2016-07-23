@@ -1,4 +1,4 @@
-#include "Simplex.h"
+#include "../math/Simplex.h"
 
 
 double grad[12][3] = {

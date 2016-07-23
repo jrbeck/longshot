@@ -25,8 +25,6 @@
 
 using namespace std;
 
-
-
 enum {
   FONT_INDEX_A,
   FONT_INDEX_ZERO = 26,
@@ -44,24 +42,21 @@ enum {
   FONT_INDEX_INVALID = 63
 };
 
-
-
 class GlBitmapFont {
 public:
-  GlBitmapFont ();
-  ~GlBitmapFont ();
+  GlBitmapFont();
+  ~GlBitmapFont();
 
   int setupFont(int glHandle, int bitmapSideLength, int charWidth, int charHeight);
 
-  GLfloat getStringWidth (const string &s) const;
-  void drawString (const GLfloat topLeft[2], const GLfloat charDimensions[2], const string &s, const GLfloat color[4]) const;
+  GLfloat getStringWidth(const string& s) const;
+  void drawString(const GLfloat topLeft[2], const GLfloat charDimensions[2], const string& s, const GLfloat color[4]) const;
 
 private:
+  void drawLetter(const GLfloat topLeft[2], const GLfloat bottomRight[2], const int charIndex, const GLfloat* color) const;
 
-  void drawLetter (const GLfloat topLeft[2], const GLfloat bottomRight[2], const int charIndex, const GLfloat *color) const;
-
-  void enterGlMode (void) const;
-  void exitGlMode (void) const;
+  void enterGlMode() const;
+  void exitGlMode() const;
 
   // members the user must set
   int mCharWidth;            // the width of an individual char cell in the image

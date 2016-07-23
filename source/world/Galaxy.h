@@ -12,8 +12,8 @@
 
 #include <vector>
 
-#include "MathUtil.h"
-#include "StarSystem.h"
+#include "../math/MathUtil.h"
+#include "../world/StarSystem.h"
 
 #define GALACTIC_WIDTH  (100)
 #define GALACTIC_HEIGHT (100)

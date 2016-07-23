@@ -19,7 +19,7 @@
 
 #include "../vendor/GL/glut.h"
 
-#include "v3d.h"
+#include "../math/v3d.h"
 
 #define WORLD_CHUNK_SIDE          (16)
 #define WORLD_CHUNK_SIDE_SQUARED  (256)

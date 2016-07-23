@@ -12,13 +12,13 @@
 
 #include <vector>
 
-#include "GameModel.h"
+#include "../game/GameModel.h"
 
-#include "Physics.h"
-#include "MathUtil.h"
-#include "ObjectLoader.h"
+#include "../physics/Physics.h"
+#include "../math/MathUtil.h"
+#include "../assets/ObjectLoader.h"
 
-#include "Constants.h"
+#include "../game/Constants.h"
 
 #define ITEM_NAME_LENGTH  64
 

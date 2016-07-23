@@ -1,4 +1,4 @@
-#include "GlCamera.h"
+#include "../math/GlCamera.h"
 
 GlCamera::GlCamera() {
   near_d = DEFAULT_NEAR;

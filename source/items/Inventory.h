@@ -12,7 +12,7 @@
 
 #include <vector>
 
-#include "Constants.h"
+#include "../game/Constants.h"
 
 class Inventory {
 public:

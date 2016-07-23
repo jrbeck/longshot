@@ -12,7 +12,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "v2d.h"
+#include "../math/v2d.h"
 
 // FIXME: use soft key mappings. preferably a data struct for easy saving.
 

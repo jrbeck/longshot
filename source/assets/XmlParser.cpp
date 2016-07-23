@@ -1,34 +1,31 @@
 #include "XmlParser.h"
 
-XmlParser::XmlParser () {
-  mInputFile = NULL;
+XmlParser::XmlParser() :
+mInputFile(NULL)
+{
 }
 
-XmlParser::~XmlParser () {
-  closeFile ();
+XmlParser::~XmlParser() {
+  closeFile();
 }
 
-int XmlParser::openFile (const char *fileName) {
-  closeFile ();
-
-  mInputFile = fopen (fileName, "rt");
-
+int XmlParser::openFile(const char* fileName) {
+  closeFile();
+  mInputFile = fopen(fileName, "rt");
   if (mInputFile == NULL) {
     return 1;
   }
-
   return 0;
 }
 
-int XmlParser::closeFile (void) {
+int XmlParser::closeFile() {
   if (mInputFile != NULL) {
-    fclose (mInputFile);
+    fclose(mInputFile);
   }
-
   return 0;
 }
 
-xml_element_t XmlParser::getNextElement (void) {
+xml_element_t XmlParser::getNextElement() {
   if (mInputFile == NULL) {
     xml_element_t ret;
     ret.type = XML_TYPE_INVALID;
@@ -45,22 +42,21 @@ xml_element_t XmlParser::getNextElement (void) {
       ungetc(c, mInputFile);
 
       if (c == '<') {
-        return readTag ();
+        return readTag();
       }
       else {
-        return readDatum ();
+        return readDatum();
       }
     }
   }
 
   xml_element_t ret;
   ret.type = XML_TYPE_INVALID;
-
   return ret;
 }
 
 // returns a tag string or signals a closure
-xml_element_t XmlParser::readTag (void) {
+xml_element_t XmlParser::readTag() {
   char c = 0;
   xml_element_t ret;
 
@@ -99,7 +95,7 @@ xml_element_t XmlParser::readTag (void) {
 }
 
 // returns a single datum as a string, or null if none exists
-xml_element_t XmlParser::readDatum (void) {
+xml_element_t XmlParser::readDatum() {
   char c;
   xml_element_t ret;
 

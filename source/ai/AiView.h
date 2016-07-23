@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include "AiEntity.h"
-#include "AssetManager.h"
-#include "MathUtil.h"
-#include "LightManager.h"
+#include "../ai/AiEntity.h"
+#include "../assets/AssetManager.h"
+#include "../math/MathUtil.h"
+#include "../world/LightManager.h"
 
 enum {
   AISKIN_DUMMY,

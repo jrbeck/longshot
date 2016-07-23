@@ -14,11 +14,11 @@
 
 #include <vector>
 
-#include "v3d.h"
+#include "../math/v3d.h"
 
-#include "AssetManager.h"
-#include "BlockTypeData.h"
-#include "WorldUtil.h"
+#include "../assets/AssetManager.h"
+#include "../world/BlockTypeData.h"
+#include "../world/WorldUtil.h"
 
 
 struct OverdrawBlock {

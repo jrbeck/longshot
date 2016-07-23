@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "DungeonTile.h"
+#include "../dungeon/DungeonTile.h"
 
 class DungeonModel {
 public:

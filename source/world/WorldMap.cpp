@@ -1,4 +1,4 @@
-#include "WorldMap.h"
+#include "../world/WorldMap.h"
 
 WorldMap::WorldMap() :
   mXWidth(0),

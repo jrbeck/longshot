@@ -14,9 +14,8 @@
 #include <vector>
 #include <sdl2/SDL_opengl.h>
 
-#include "MathUtil.h"
-
-#include "Planet.h"
+#include "../math/MathUtil.h"
+#include "../world/Planet.h"
 
 #define MIN_PLANETS    (1)
 #define MAX_PLANETS    (10)

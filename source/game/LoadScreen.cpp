@@ -1,4 +1,4 @@
-#include "LoadScreen.h"
+#include "../game/LoadScreen.h"
 
 
 float loadScreenColorLookup[NUM_LOAD_SCREEN_COLORS][3] = {

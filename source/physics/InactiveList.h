@@ -8,16 +8,14 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef InactiveList_h_
-#define InactiveList_h_
+#pragma once
 
 #include <vector>
 
-#include "v2d.h"
-#include "v3d.h"
+#include "../math/v2d.h"
+#include "../math/v3d.h"
 
-//include "AssetManager.h"
-#include "WorldMap.h"
+#include "../world/WorldMap.h"
 
 using namespace std;
 
@@ -59,8 +57,3 @@ public:
 private:
   vector <inactive_item_t> mItems;
 };
-
-
-
-
-#endif // InactiveList_h_

@@ -1,4 +1,4 @@
-#include "AiView.h"
+#include "../ai/AiView.h"
 
 AiView::AiView() {
   for (int i = 0; i < NUM_AITYPES; ++i) {
@@ -495,8 +495,7 @@ IntColor AiView::getLightValue(v3d_t position) const {
     color.b += block->uniqueLighting;
   }
   else {
-    // THIS MAKES IT FULL BRIGHT WHEN NOT IN A REAL
-    // CHUNK...
+    // THIS MAKES IT FULL BRIGHT WHEN NOT IN A REAL CHUNK...
     color.r += mWorldMap->mWorldLightingCeiling;
     color.b += mWorldMap->mWorldLightingCeiling;
     color.g += mWorldMap->mWorldLightingCeiling;

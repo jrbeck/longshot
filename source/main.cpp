@@ -4,7 +4,7 @@
 // * Longshot driver
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#include "Longshot.h"
+#include "game/Longshot.h"
 
 int main(int argc, char* argv[]);
 

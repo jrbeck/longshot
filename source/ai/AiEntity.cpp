@@ -1,4 +1,4 @@
-#include "AiEntity.h"
+#include "../ai/AiEntity.h"
 
 AiEntity::AiEntity(GameModel* gameModel) {
   mGameModel = gameModel;

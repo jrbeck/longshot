@@ -16,22 +16,21 @@
 
 #include <cmath>
 
-#include "MathUtil.h"
-#include "v2d.h"
-#include "v3d.h"
-#include "GlCamera.h"
+#include "../math/MathUtil.h"
+#include "../math/v2d.h"
+#include "../math/v3d.h"
+#include "../math/GlCamera.h"
 
-#include "GameModel.h"
+#include "../game/GameModel.h"
 
-#include "GameInput.h"
-#include "Physics.h"
-#include "GameMenu.h"
-#include "ItemManager.h"
-#include "Inventory.h"
-#include "HeadBobble.h"
+#include "../game/GameInput.h"
+#include "../physics/Physics.h"
+#include "../game/GameMenu.h"
+#include "../items/ItemManager.h"
+#include "../items/Inventory.h"
+#include "../player/HeadBobble.h"
 
-#include "LightManager.h"
-
+#include "../world/LightManager.h"
 
 // orientation defaults
 #define DEFAULT_POS_X      (30.0)
@@ -176,4 +175,3 @@ private:
 
   bool mPlacedBlock;
 };
-

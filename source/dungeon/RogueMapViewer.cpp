@@ -1,4 +1,4 @@
-#include "RogueMapViewer.h"
+#include "../dungeon/RogueMapViewer.h"
 
 RogueMapViewer::RogueMapViewer(GameWindow* gameWindow) :
   mMenu(0),

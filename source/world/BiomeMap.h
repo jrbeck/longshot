@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include "MathUtil.h"
-#include "PseudoRandom.h"
-#include "Terrain.h"
-#include "BlockTypeData.h"
+#include "../math/MathUtil.h"
+#include "../math/PseudoRandom.h"
+#include "../world/Terrain.h"
+#include "../world/BlockTypeData.h"
 
 
 struct BiomeInfo {

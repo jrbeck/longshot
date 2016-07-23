@@ -10,15 +10,15 @@
 
 #pragma once
 
-#include "GameWindow.h"
-#include "AssetManager.h"
-#include "feature/FeatureGenerator.h"
-#include "World.h"
-#include "WorldMapView.h"
+#include "../game/GameWindow.h"
+#include "../assets/AssetManager.h"
+#include "../dungeon/FeatureGenerator.h"
+#include "../world/World.h"
+#include "../world/WorldMapView.h"
 
-#include "v2d.h"
+#include "../math/v2d.h"
 
-#include "RtsCam.h"
+#include "../math/RtsCam.h"
 
 
 struct CameraState {

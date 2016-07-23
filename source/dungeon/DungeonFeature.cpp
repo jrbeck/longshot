@@ -1,4 +1,4 @@
-#include "DungeonFeature.h"
+#include "../dungeon/DungeonFeature.h"
 
 // cornerIndex = chunk index "bottom left"
 // depth = dungeon levels

@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Physics.h"
+#include "../physics/Physics.h"
 
 enum {
   OBJSKIN_ITEM,
@@ -53,4 +53,3 @@ private:
 
   v3d_t mViewPosition;
 };
-

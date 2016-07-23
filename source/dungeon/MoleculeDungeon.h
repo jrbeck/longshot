@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "DungeonUtil.h"
+#include "../dungeon/DungeonUtil.h"
 
 class MoleculeDungeon {
 public:

@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "Location.h"
-#include "WorldMap.h"
-#include "OrbitSky.h"
+#include "../world/Location.h"
+#include "../world/WorldMap.h"
+#include "../world/OrbitSky.h"
 
 class StarShip : public Location {
 public:

@@ -6,8 +6,7 @@
 // * by john beck
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef MathUtil_h_
-#define MathUtil_h_
+#pragma once
 
 #include <cstdlib>
 #include <cmath>
@@ -84,5 +83,3 @@ inline double absConstrain(double value, double limit) {
 //double lerp(double a, double b, int numerator, int denominator);
 //double constrain_num(double num, double min, double max);
 unsigned long hash(const char* str);
-
-#endif // MathUtil_h_

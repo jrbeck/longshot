@@ -1,19 +1,13 @@
-#ifndef _BlockGl_h
-#define _BlockGl_h
+#pragma once
 
 class BlockGl {
 public:
+  static void drawBlock();
 
-  static void drawBlock (void);
-
-  static void draw_block_lef (void);
-  static void draw_block_rig (void);
-  static void draw_block_top (void);
-  static void draw_block_bot (void);
-  static void draw_block_fro (void);
-  static void draw_block_bac (void);
-
+  static void draw_block_lef();
+  static void draw_block_rig();
+  static void draw_block_top();
+  static void draw_block_bot();
+  static void draw_block_fro();
+  static void draw_block_bac();
 };
-
-
-#endif // _BlockGl_h

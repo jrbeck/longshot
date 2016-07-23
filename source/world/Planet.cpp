@@ -1,4 +1,4 @@
-#include "Planet.h"
+#include "../world/Planet.h"
 
 Planet::Planet() {
 }

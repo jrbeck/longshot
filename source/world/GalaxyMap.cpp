@@ -1,4 +1,4 @@
-#include "GalaxyMap.h"
+#include "../world/GalaxyMap.h"
 
 GalaxyMap::GalaxyMap(GameWindow* gameWindow) :
   mLeftMouseButtonClicked(false),

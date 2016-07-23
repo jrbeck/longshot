@@ -29,25 +29,23 @@
 #include "../vendor/GL/glut.h"
 
 // the root/code/include directory
-#include "v2d.h"
-#include "FileSystem.h"
-
-#include "GameModel.h"
-
-#include "GameWindow.h"
-#include "GalaxyMap.h"
-#include "WorldUtil.h"
-#include "PlayerView.h"
-#include "WorldMapView.h"
-#include "AiView.h"
-#include "physics.h"
-#include "PhysicsView.h"
-#include "GameInput.h"
-#include "AssetManager.h"
-#include "MerchantView.h"
+#include "../math/v2d.h"
+#include "../game/FileSystem.h"
+#include "../game/GameModel.h"
+#include "../game/GameWindow.h"
+#include "../world/GalaxyMap.h"
+#include "../world/WorldUtil.h"
+#include "../player/PlayerView.h"
+#include "../world/WorldMapView.h"
+#include "../ai/AiView.h"
+#include "../physics/Physics.h"
+#include "../physics/PhysicsView.h"
+#include "../game/GameInput.h"
+#include "../assets/AssetManager.h"
+#include "../items/MerchantView.h"
 
 // let's try to get rid of stuff below here...
-#include "RogueMapViewer.h"
+#include "../dungeon/RogueMapViewer.h"
 
 #define SAVE_FOLDER "save"
 

@@ -1,4 +1,4 @@
-#include "SkySim.h"
+#include "../world/SkySim.h"
 
 SkySim::SkySim() :
   mCloudSim(NULL)

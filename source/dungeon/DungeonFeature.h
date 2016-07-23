@@ -10,15 +10,12 @@
 
 #pragma once
 
-#include "v2d.h"
-#include "v3d.h"
-
-#include "FeatureUtil.h"
+#include "../math/v2d.h"
+#include "../math/v3d.h"
+#include "../dungeon/FeatureUtil.h"
 #include "../dungeon/DungeonUtil.h"
 #include "../dungeon/MoleculeDungeon.h"
-
-#include "InactiveList.h"
-
+#include "../physics/InactiveList.h"
 
 class DungeonFeature {
 public:

@@ -1,4 +1,4 @@
-#include "MerchantView.h"
+#include "../items/MerchantView.h"
 
 MerchantView::MerchantView() :
   mMenu(0),

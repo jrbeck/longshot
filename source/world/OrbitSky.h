@@ -14,9 +14,9 @@
 
 #include <sdl2/SDL_opengl.h>
 
-#include "Galaxy.h"
-#include "AssetManager.h"
-#include "GlCamera.h"
+#include "../world/Galaxy.h"
+#include "../assets/AssetManager.h"
+#include "../math/GlCamera.h"
 
 
 typedef struct {

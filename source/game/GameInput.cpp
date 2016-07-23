@@ -1,4 +1,4 @@
-#include "GameInput.h"
+#include "../game/GameInput.h"
 
 GameInput::GameInput() {
   reset ();

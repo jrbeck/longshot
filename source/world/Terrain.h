@@ -8,15 +8,14 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Terrain_h_
-#define Terrain_h_
+#pragma once
 
 #include "../vendor/GL/glut.h"
 
-#include "MathUtil.h"
-#include "PseudoRandom.h"
-#include "v2d.h"
-#include "v3d.h"
+#include "../math/MathUtil.h"
+#include "../math/PseudoRandom.h"
+#include "../math/v2d.h"
+#include "../math/v3d.h"
 
 
 // defines * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -72,8 +71,3 @@ private:
   int mFieldSide;
   double *mField;
 };
-
-
-
-
-#endif // Terrain_h_

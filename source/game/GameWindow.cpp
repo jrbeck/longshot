@@ -1,4 +1,4 @@
-#include "GameWindow.h"
+#include "../game/GameWindow.h"
 
 GameWindow::GameWindow(const char* windowTitle) :
   mSdlWindow(NULL),

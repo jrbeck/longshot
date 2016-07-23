@@ -10,8 +10,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef PseudoRandom_h_
-#define PseudoRandom_h_
+#pragma once
 
 #include <cmath>
 
@@ -46,6 +45,3 @@ private:
   UINT mSeed;
   UINT mX;
 };
-
-
-#endif // PseudoRandom_h_

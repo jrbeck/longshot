@@ -1,4 +1,4 @@
-#include "StarShip.h"
+#include "../world/StarShip.h"
 
 StarShip::StarShip() :
   mOrbitSky(NULL)

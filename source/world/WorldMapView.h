@@ -15,8 +15,8 @@
 
 #pragma once
 
-#include "WorldMap.h"
-#include "WorldLighting.h"
+#include "../world/WorldMap.h"
+#include "../world/WorldLighting.h"
 
 
 enum {

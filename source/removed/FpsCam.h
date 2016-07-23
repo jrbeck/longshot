@@ -17,8 +17,8 @@
 #include "../vendor/GL/glut.h"
 
 #include "math_util.h"
-#include "v2d.h"
-#include "v3d.h"
+#include "../math/v2d.h"
+#include "../math/v3d.h"
 
 
 

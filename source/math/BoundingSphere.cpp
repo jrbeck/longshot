@@ -1,4 +1,4 @@
-#include "BoundingSphere.h"
+#include "../math/BoundingSphere.h"
 
 BoundingSphere::BoundingSphere(void) {
   mPosition = v3d_v (0.0, 0.0, 0.0);

@@ -1,4 +1,4 @@
-#include "AiManager.h"
+#include "../ai/AiManager.h"
 
 AiManager::AiManager(GameModel* gameModel) {
   mGameModel = gameModel;

@@ -50,13 +50,13 @@ public:
   SoundSystem();
   ~SoundSystem();
 
-  int initialize(void);
+  int initialize();
 
   void playSoundByHandle(int handle, int volume);
 
   int loadSound(char* fileName);
 
-  void stopAllSounds(void);
+  void stopAllSounds();
 
   // members * * * * * * * * * * * * * * * * * *
   int mAudioRate;

@@ -6,8 +6,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef XmlParser_h_
-#define XmlParser_h_
+#pragma once
 
 #include <cstdio>
 #include <cstdlib>
@@ -36,20 +35,17 @@ enum {
 class XmlParser
 {
 public:
-  XmlParser ();
-  ~XmlParser ();
+  XmlParser();
+  ~XmlParser();
 
-  int openFile (const char *fileName);
-  int closeFile (void);
+  int openFile(const char* fileName);
+  int closeFile();
 
-  xml_element_t getNextElement (void);
+  xml_element_t getNextElement();
 
 private:
-  xml_element_t readTag (void);
-  xml_element_t readDatum (void);
+  xml_element_t readTag();
+  xml_element_t readDatum();
 
-  FILE *mInputFile;
+  FILE* mInputFile;
 };
-
-
-#endif // XmlParser_h_

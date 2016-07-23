@@ -1,4 +1,4 @@
-#include "WorldMapView.h"
+#include "../world/WorldMapView.h"
 
 WorldMapView::WorldMapView() :
 mWorldMap(NULL),

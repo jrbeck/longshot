@@ -1,4 +1,4 @@
-#include "Constants.h"
+#include "../game/Constants.h"
 
 int gScreenW;
 int gScreenH;

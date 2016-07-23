@@ -10,13 +10,13 @@
 
 #pragma once
 
-#include "LoadScreen.h"
-#include "World.h"
-#include "WorldUtil.h"
-#include "RogueMap.h"
+#include "../game/LoadScreen.h"
+#include "../world/World.h"
+#include "../world/WorldUtil.h"
+#include "../dungeon/RogueMap.h"
 
-#include "FeatureUtil.h"
-#include "DungeonFeature.h"
+#include "../dungeon/FeatureUtil.h"
+#include "../dungeon/DungeonFeature.h"
 
 // this is for the worldRogueMap
 // i.e. numColumns x numColumns

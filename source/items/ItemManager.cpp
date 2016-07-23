@@ -1,4 +1,4 @@
-#include "ItemManager.h"
+#include "../items/ItemManager.h"
 
 // WARNING: maybe i should pay attention to this
 // has to do with sprintf() not being safe....

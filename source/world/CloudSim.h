@@ -8,16 +8,14 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef CloudSim_h_
-#define CloudSim_h_
+#pragma once
 
+#include "../math/MathUtil.h"
+#include "../math/GlCamera.h"
+#include "../assets/AssetManager.h"
+#include "../world/Terrain.h"
 
-#include "MathUtil.h"
-#include "GlCamera.h"
-#include "AssetManager.h"
-#include "Terrain.h"
-
-#include "v3d.h"
+#include "../math/v3d.h"
 
 
 
@@ -52,8 +50,3 @@ private:
 
   v3d_t mPosition;
 };
-
-
-
-
-#endif // CloudSim_h_

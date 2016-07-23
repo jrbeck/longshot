@@ -1,4 +1,4 @@
-#include "InactiveColumnManager.h"
+#include "../world/InactiveColumnManager.h"
 
 InactiveColumnManager::InactiveColumnManager() {
 }

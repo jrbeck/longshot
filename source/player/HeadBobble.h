@@ -10,13 +10,10 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef HeadBobble_h_
-#define HeadBobble_h_
+#pragma once
 
-
-#include "v2d.h"
-#include "v3d.h"
-
+#include "../math/v2d.h"
+#include "../math/v3d.h"
 
 enum {
   HEADBOB_ACTION_STAND,
@@ -63,7 +60,3 @@ private:
   v2d_t mUp;
   v2d_t mUpTarget;
 };
-
-
-
-#endif // HeadBobble_h_

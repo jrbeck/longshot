@@ -1,4 +1,4 @@
-#include "GameMenu.h"
+#include "../game/GameMenu.h"
 
 GLuint GameMenu::defaultTextureHandle = 0;
 

@@ -10,8 +10,7 @@
 
 #pragma once
 
-#include "World.h"
-
+#include "../world/World.h"
 
 enum {
   FG_CORNER_SW,
@@ -22,14 +21,11 @@ enum {
   FG_NUM_CORNERS
 };
 
-
-
 struct height_info_t {
   int high;
   int low;
   int avg;
 };
-
 
 class FeatureUtil {
 public:
@@ -38,5 +34,4 @@ public:
 
   static void buildSpiralStaircase(v3di_t southwestInsideCorner, int stairsPerLevel, int topHeight,
     int startCorner, WorldMap& worldMap);
-
 };

@@ -1,4 +1,4 @@
-#include "PlayerView.h"
+#include "../player/PlayerView.h"
 
 void PlayerView::drawEquipped(GameModel* gameModel, AssetManager& assetManager) {
   melee_weapon_state_t* leftHand = gameModel->player->getMeleeWeaponState(EQUIP_PRIMARY);

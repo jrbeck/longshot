@@ -1,4 +1,4 @@
-#include "OrbitSky.h"
+#include "../world/OrbitSky.h"
 
 OrbitSky::OrbitSky() {
 }

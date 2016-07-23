@@ -8,13 +8,10 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef SkySim_h_
-#define SkySim_h_
+#pragma once
 
-
-#include "v3d.h"
-#include "CloudSim.h"
-
+#include "../math/v3d.h"
+#include "../world/CloudSim.h"
 
 class SkySim {
 public:
@@ -48,6 +45,3 @@ public:
   CloudSim *mCloudSim;
 
 };
-
-
-#endif // SkySim_h_

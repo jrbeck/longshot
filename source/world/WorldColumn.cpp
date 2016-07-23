@@ -1,4 +1,4 @@
-#include "WorldColumn.h"
+#include "../world/WorldColumn.h"
 
 WorldColumn::WorldColumn() {
   clear();

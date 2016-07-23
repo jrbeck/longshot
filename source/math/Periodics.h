@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include "AssetManager.h"
+#include "../assets/AssetManager.h"
 
-#include "Simplex.h"
-#include "Terrain.h"
-#include "BiomeMap.h"
-#include "PseudoRandom.h"
+#include "../math/Simplex.h"
+#include "../world/Terrain.h"
+#include "../world/BiomeMap.h"
+#include "../math/PseudoRandom.h"
 
 
 #define WATER_LEVEL            (-1)

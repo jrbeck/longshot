@@ -1,4 +1,4 @@
-#include "DungeonUtil.h"
+#include "../dungeon/DungeonUtil.h"
 
 DungeonUtil::DungeonUtil() :
 mDungeon(0)

@@ -1,4 +1,4 @@
-#include "WorldChunk.h"
+#include "../world/WorldChunk.h"
 
 WorldChunk::WorldChunk() :
   mNumBlocks(0),

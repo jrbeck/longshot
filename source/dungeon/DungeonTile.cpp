@@ -1,4 +1,4 @@
-#include "DungeonTile.h"
+#include "../dungeon/DungeonTile.h"
 
 SelectiveDungeonTile::SelectiveDungeonTile() :
 isTypeSet(false),

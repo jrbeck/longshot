@@ -19,16 +19,14 @@
   typedef unsigned int UINT;
 #endif
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
-#include "v3d.h"
-
-#include "GameModel.h"
-
-#include "World.h"
-#include "Physics.h"
-#include "ItemManager.h"
-#include "AiEntity.h"
+#include "../math/v3d.h"
+#include "../game/GameModel.h"
+#include "../world/World.h"
+#include "../physics/Physics.h"
+#include "../items/ItemManager.h"
+#include "../ai/AiEntity.h"
 
 class AiEntity;
 

@@ -1,4 +1,4 @@
-#include "BoundingBox.h"
+#include "../math/BoundingBox.h"
 
 BoundingBox::BoundingBox() {
   setDimensions(v3d_v(1.0, 1.0, 1.0));

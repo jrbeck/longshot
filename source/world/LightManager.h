@@ -12,8 +12,8 @@
 
 #include <vector>
 
-#include "WorldMap.h"
-#include "WorldLight.h"
+#include "../world/WorldMap.h"
+#include "../world/WorldLight.h"
 
 using namespace std;
 
@@ -47,4 +47,3 @@ public:
   vector<WorldLight*> mLights;
   vector<WorldLight*> mInactiveLights;
 };
-

@@ -13,12 +13,10 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef BitmapModel_h_
-#define BitmapModel_h_
+#pragma once
 
-#include "Constants.h"
-#include "TextureRegion.h"
-
+#include "../game/Constants.h"
+#include "../assets/TextureRegion.h"
 
 struct Pixel32 {
   BYTE a;
@@ -27,11 +25,9 @@ struct Pixel32 {
   BYTE r;
 };
 
-
 #define VOXEL_SCALE_X    (0.01f)
 #define VOXEL_SCALE_Y    (-0.01f)
 #define VOXEL_SCALE_Z    (0.02f)
-
 
 class BitmapModel {
 public:
@@ -95,12 +91,7 @@ private:
     GLfloat u1, GLfloat v1,
     GLfloat u2, GLfloat v2) const;
 
-
-
 // MEMBERS * * * * * * * * * * * * *
   Texture* mTexture;
   GLuint mDisplayListHandle;
 };
-
-
-#endif // BitmapModel_h_

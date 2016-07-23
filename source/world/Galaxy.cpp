@@ -1,4 +1,4 @@
-#include "Galaxy.h"
+#include "../world/Galaxy.h"
 
 Galaxy::Galaxy() {
   mNextHandle = 1;

@@ -18,7 +18,7 @@
 
 #include "../vendor/GL/glut.h"
 
-#include "v2d.h"
+#include "../math/v2d.h"
 
 
 enum {

@@ -10,21 +10,18 @@
 
 #pragma once
 
-#include "ItemManager.h"
-#include "Player.h"
-#include "Galaxy.h"
-#include "World.h"
-#include "StarShip.h"
-#include "AiManager.h"
-
-#include "feature/FeatureGenerator.h"
-
+#include "../items/ItemManager.h"
+#include "../player/Player.h"
+#include "../world/Galaxy.h"
+#include "../world/World.h"
+#include "../world/StarShip.h"
+#include "../ai/AiManager.h"
+#include "../dungeon/FeatureGenerator.h"
 
 enum {
   LOAD_SUCCESSFUL,
   LOAD_UNSUCCESSFUL
 };
-
 
 class player_c;
 class Galaxy;
@@ -34,14 +31,12 @@ class AiManager;
 class ItemManager;
 class GameInput;
 
-
 struct GameSaveData {
   bool loadSucceeded;
   v3d_t physicsPos;
   int locationType;
   int planetHandle;
 };
-
 
 class GameModel {
 public:

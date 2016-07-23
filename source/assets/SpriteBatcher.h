@@ -9,10 +9,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef SpriteBatcher_h_
-#define SpriteBatcher_h_
+#pragma once
 
-#include "TextureRegion.h"
+#include "../assets/TextureRegion.h"
 
 class Sprite {
 public:
@@ -27,24 +26,19 @@ public:
   TextureRegion *mTextureRegion;
 };
 
-
-
 class SpriteBatcher {
 public:
-  Sprite *mSprites;
+  Sprite* mSprites;
   size_t mMaxSprites;
   size_t mNumSprites;
 
   SpriteBatcher(size_t maxSprites);
   ~SpriteBatcher();
 
-  void beginBatch(Texture *texture);
+  void beginBatch(Texture* texture);
   void endBatch();
 
-  void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, TextureRegion *textureRegion);
+  void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, TextureRegion* textureRegion);
   // this expects an angle in degrees
-  void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle, TextureRegion *textureRegion);
+  void drawSprite(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle, TextureRegion* textureRegion);
 };
-
-
-#endif // SpriteBatcher_h_

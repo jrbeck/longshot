@@ -19,10 +19,9 @@
 
 #include "../vendor/GL/glut.h"
 
-#include "v2d.h"
-#include "v3d.h"
-#include "xmlparser.h"
-
+#include "../math/v2d.h"
+#include "../math/v3d.h"
+#include "../assets/xmlparser.h"
 
 enum {
   TAG_DEPTH,
@@ -32,13 +31,12 @@ enum {
   TAG_UNDEFINED
 };
 
-
 class ObjectLoader {
 public:
   ObjectLoader();
   ~ObjectLoader();
 
-  static GLuint loadObjectToDisplayList(const char *fileName);
+  static GLuint loadObjectToDisplayList(const char* fileName);
 
 private:
   static int loadQuad(XmlParser& xmlParser);

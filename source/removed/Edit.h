@@ -11,11 +11,11 @@
 #ifndef _edit_h
 #define _edit_h
 
-#include "v2d.h"
+#include "../math/v2d.h"
 
-#include "RtsCam.h"
-#include "Terrain.h"
-#include "World.h"
+#include "../math/RtsCam.h"
+#include "../world/Terrain.h"
+#include "../world/World.h"
 
 
 

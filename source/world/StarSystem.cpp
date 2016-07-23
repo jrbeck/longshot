@@ -1,4 +1,4 @@
-#include "StarSystem.h"
+#include "../world/StarSystem.h"
 
 StarSystem::StarSystem() {
 }

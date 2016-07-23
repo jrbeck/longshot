@@ -1,4 +1,4 @@
-#include "FeatureUtil.h"
+#include "../dungeon/FeatureUtil.h"
 
 void FeatureUtil::loadWorldRegion (
   v2di_t cornerIndex,

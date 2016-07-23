@@ -16,14 +16,14 @@
 
 #include <SDL2/SDL_image.h>
 
-#include "SoundSystem.h"
-#include "LightSource.h"
-#include "ObjectLoader.h"
-#include "Constants.h"
-#include "BlockTypeData.h"
-#include "Texture.h"
-#include "TextureRegion.h"
-#include "BitmapModel.h"
+#include "../assets/SoundSystem.h"
+#include "../world/LightSource.h"
+#include "../assets/ObjectLoader.h"
+#include "../game/Constants.h"
+#include "../world/BlockTypeData.h"
+#include "../assets/Texture.h"
+#include "../assets/TextureRegion.h"
+#include "../assets/BitmapModel.h"
 
 
 // FIXME: this is hard coded for 32x32x4 textures (64x64 pixels per side) in

@@ -1,4 +1,4 @@
-#include "BiomeMap.h"
+#include "../world/BiomeMap.h"
 
 // dunno that this is really the place for this ...
 // or that this shouldn't be in an external config file somewehere

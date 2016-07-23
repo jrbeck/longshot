@@ -10,17 +10,15 @@
 
 #pragma once
 
-#include "GameWindow.h"
-#include "GameMenu.h"
-#include "Rectangle2d.h"
-#include "RogueMap.h"
+#include "../game/GameWindow.h"
+#include "../game/GameMenu.h"
+#include "../math/Rectangle2d.h"
+#include "../dungeon/RogueMap.h"
 
-#include "dungeon/DungeonUtil.h"
-#include "dungeon/MoleculeDungeon.h"
-
+#include "../dungeon/DungeonUtil.h"
+#include "../dungeon/MoleculeDungeon.h"
 
 #define ROGUE_MAP_SIDE (128)
-
 
 class RogueMapViewer {
 public:
@@ -35,11 +33,11 @@ public:
   void drawMap() const;
 
   // TODO: get this i/o junk outta here
-  int handleInput ();
-  int handleKeystroke ();
-  int handleKeyup ();
-  void handleMouseButtonDown (int button, v2d_t pos);
-  void handleMouseButtonUp (int button, v2d_t pos);
+  int handleInput();
+  int handleKeystroke();
+  int handleKeyup();
+  void handleMouseButtonDown(int button, v2d_t pos);
+  void handleMouseButtonUp(int button, v2d_t pos);
 
   void randomizeDungeon();
 

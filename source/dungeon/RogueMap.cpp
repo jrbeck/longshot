@@ -1,4 +1,4 @@
-#include "RogueMap.h"
+#include "../dungeon/RogueMap.h"
 
 RogueMap::RogueMap() {
   mMap = NULL;

@@ -9,14 +9,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef BoundingSphere_h_
-#define BoundingSphere_h_
+#pragma once
 
-#include "v3d.h"
+#include "../math/v3d.h"
 
 class BoundingSphere {
 public:
-  BoundingSphere(void);
+  BoundingSphere();
   BoundingSphere(v3d_t position, double radius);
   BoundingSphere(double x, double y, double z, double radius);
 
@@ -30,14 +29,12 @@ public:
 //  bool isPointInside (v3d_t point) const;
 
   void setPosition(v3d_t position);
-  v3d_t getPosition(void) const;
+  v3d_t getPosition() const;
 
   void setRadius(double radius);
-  double getRadius(void) const;
+  double getRadius() const;
 
 private:
   v3d_t mPosition;
   double mRadius;
 };
-
-#endif // BoundingSphere_h_

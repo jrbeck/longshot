@@ -17,7 +17,7 @@
 //#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
-#include "Constants.h"
+#include "../game/Constants.h"
 
 #define MAX_WINDOW_TITLE_LENGTH (128)
 

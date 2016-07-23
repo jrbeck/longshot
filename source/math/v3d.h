@@ -11,7 +11,7 @@
 #include <cstdio>
 #include <cmath>
 
-#include "MathUtil.h"
+#include "../math/MathUtil.h"
 
 // typedefs * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 union v3d_t {

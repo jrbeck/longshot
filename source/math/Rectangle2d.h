@@ -9,10 +9,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef Rectangle2d_h_
-#define Rectangle2d_h_
+#pragma once
 
-#include "v2d.h"
+#include "../math/v2d.h"
 
 enum {
   TEST_LESS_THAN,
@@ -41,5 +40,3 @@ public:
   v2d_t mNearCorner;
   v2d_t mFarCorner;
 };
-
-#endif // Rectangle2d_h_

@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "../game/Game.h"
 
 // WARNING: maybe i should pay attention to this
 // has to do with sprintf() not being safe....

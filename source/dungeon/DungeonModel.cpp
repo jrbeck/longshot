@@ -1,4 +1,4 @@
-#include "DungeonModel.h"
+#include "../dungeon/DungeonModel.h"
 
 DungeonModel::DungeonModel(int width, int height) {
   buffer = new DungeonTile[width * height];

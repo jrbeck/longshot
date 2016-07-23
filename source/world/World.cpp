@@ -1,4 +1,4 @@
-#include "World.h"
+#include "../world/World.h"
 
 World::World() :
   mGalaxy(NULL),

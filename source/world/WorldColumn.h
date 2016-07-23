@@ -9,16 +9,10 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef WorldColumn_h_
-#define WorldColumn_h_
+#pragma once
 
-//#include <Windows.h>
-//#include <direct.h>
-
-#include "v3d.h"
-
-#include "WorldChunk.h"
-
+#include "../math/v3d.h"
+#include "../world/WorldChunk.h"
 
 typedef struct {
   v3di_t worldIndex;
@@ -98,7 +92,3 @@ public:
 
   vector<WorldChunk*> mWorldChunks;
 };
-
-
-
-#endif // WorldColumn_h_

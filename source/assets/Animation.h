@@ -14,14 +14,12 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-#include "TextureRegion.h"
-
+#include "../assets/TextureRegion.h"
 
 enum {
   ANIMATION_LOOPING,
   ANIMATION_NONLOOPING
 };
-
 
 class Animation {
 public:

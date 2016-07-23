@@ -1,4 +1,4 @@
-#include "WorldLighting.h"
+#include "../world/WorldLighting.h"
 
 // this is only 256 * 2 * sizeof(int)
 // this is fine as long we don't thread this

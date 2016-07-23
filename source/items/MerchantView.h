@@ -8,14 +8,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef MerchantView_h_
-#define MerchantView_h_
+#pragma once
 
 #include <vector>
 
-#include "GameMenu.h"
-#include "Inventory.h"
-#include "Player.h"
+#include "../game/GameMenu.h"
+#include "../items/Inventory.h"
+#include "../player/Player.h"
 
 
 enum {
@@ -57,25 +56,24 @@ public:
 
 
   // this begins the interaction with a merchant
-  void engageMerchant(player_c &player, ItemManager &itemManager);
+  void engageMerchant(player_c& player, ItemManager& itemManager);
 
-  void setupMerchant(Merchant &merchant, ItemManager &itemManager);
+  void setupMerchant(Merchant& merchant, ItemManager& itemManager);
 
-  int update(player_c &player, ItemManager &itemManager);
+  int update(player_c& player, ItemManager& itemManager);
 
-  void setupMenu(player_c &player, ItemManager &itemManager);
-  void setupSellMenu(player_c &player, ItemManager &itemManager);
-  void setupBuyMenu(Merchant &merchant, ItemManager &itemManager);
+  void setupMenu(player_c& player, ItemManager& itemManager);
+  void setupSellMenu(player_c& player, ItemManager& itemManager);
+  void setupBuyMenu(Merchant& merchant, ItemManager& itemManager);
 
-  void addSelectedItemInfo(ItemManager &itemManager);
-  void setupInventoryList(ItemManager &itemManager);
+  void addSelectedItemInfo(ItemManager& itemManager);
+  void setupInventoryList(ItemManager& itemManager);
 
-
-  void draw(void);
+  void draw();
 
 // MEMBERS * * * * * * * * * *
 
-  GameMenu *mMenu;
+  GameMenu* mMenu;
 
   int mMode;
   int mSelectedItem;
@@ -88,8 +86,5 @@ public:
   v2d_t fontSize;
 
   // TODO: this is for testing only
-  Merchant *mMerchant;
+  Merchant* mMerchant;
 };
-
-
-#endif // MerchantView_h_

@@ -15,14 +15,14 @@
 // #include <omp.h>
 #include <sdl2/SDL_opengl.h>
 
-#include "Location.h"
-#include "v3d.h"
-#include "WorldMap.h"
-#include "Terrain.h"
-#include "AssetManager.h"
-#include "SkySim.h"
-#include "Periodics.h"
-#include "LoadScreen.h"
+#include "../world/Location.h"
+#include "../math/v3d.h"
+#include "../world/WorldMap.h"
+#include "../world/Terrain.h"
+#include "../assets/AssetManager.h"
+#include "../world/SkySim.h"
+#include "../math/Periodics.h"
+#include "../game/LoadScreen.h"
 
 
 #define NUM_PRELOADED_COLUMNS  100
@@ -86,4 +86,3 @@ private:
   bool mIsPlayerStartPosSet;
   v3d_t mPlayerStartPos;
 };
-

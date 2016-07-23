@@ -12,13 +12,13 @@
 
 #include <vector>
 
-#include "GL/glut.h"
+#include "../vendor/GL/glut.h"
 
 #include "AiSpecies.h"
-#include "WorldMap.h"
-#include "Physics.h"
-#include "ItemManager.h"
-#include "MathUtil.h"
+#include "../world/WorldMap.h"
+#include "../physics/Physics.h"
+#include "../items/ItemManager.h"
+#include "../math/MathUtil.h"
 
 #define DONT_ATTACK_PLAYER    (false)
 #define PLAYER_SPECIES        (AITYPE_HUMAN)

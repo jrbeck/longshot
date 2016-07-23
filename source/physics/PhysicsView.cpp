@@ -1,4 +1,4 @@
-#include "PhysicsView.h"
+#include "../physics/PhysicsView.h"
 
 
 PhysicsView::PhysicsView() {

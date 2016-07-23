@@ -22,8 +22,8 @@
 
 #include "../vendor/GL/glut.h"
 
-#include "AssetManager.h"
-#include "GlBitmapFont.h"
+#include "../assets/AssetManager.h"
+#include "../assets/GlBitmapFont.h"
 
 #define MENU_APPLICATION_QUIT (-2)
 

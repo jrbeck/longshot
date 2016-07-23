@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "GlCamera.h"
-#include "Galaxy.h"
-#include "LightManager.h"
+#include "../math/GlCamera.h"
+#include "../world/Galaxy.h"
+#include "../world/LightManager.h"
 
 enum {
   LOCATION_DEFAULT,

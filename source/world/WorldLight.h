@@ -8,10 +8,9 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef WorldLight_h_
-#define WorldLight_h_
+#pragma once
 
-#include "v3d.h"
+#include "../math/v3d.h"
 
 class IntColor {
 public:
@@ -77,6 +76,3 @@ public:
   v3di_t mBufferDimensions;
   IntColor* mBuffer;
 };
-
-
-#endif // WorldLight_h_

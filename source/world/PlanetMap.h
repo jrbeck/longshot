@@ -8,15 +8,13 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef PlanetMap_h_
-#define PlanetMap_h_
+#pragma once
 
-#include "GameWindow.h"
-#include "GameMenu.h"
-#include "Periodics.h"
-#include "Rectangle2d.h"
-#include "Planet.h"
-
+#include "../game/GameWindow.h"
+#include "../game/GameMenu.h"
+#include "../math/Periodics.h"
+#include "../math/Rectangle2d.h"
+#include "../world/Planet.h"
 
 #define PLANET_MAP_SIDE      512
 #define MAP_MULTIPLIER      128
@@ -62,8 +60,3 @@ public:
 
   Rectangle2d mViewRect;
 };
-
-
-
-
-#endif // PlanetMap_h_

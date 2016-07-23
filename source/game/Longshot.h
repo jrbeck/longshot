@@ -13,20 +13,15 @@
 // longshot constants * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #define SCREEN_ASPECT_RATIO    ((double)gScreenW / (double)gScreenH)
 
-#include "FileSystem.h"
-
-#include "Game.h"
-#include "GameMenu.h"
-#include "RogueViewer.h"
-
-#include "PseudoRandom.h"
-#include "GalaxyMap.h"
-#include "PlanetMap.h"
-
-#include "AssetManager.h"
-
-#include "World.h"
-
+#include "../assets/AssetManager.h"
+#include "../game/FileSystem.h"
+#include "../game/Game.h"
+#include "../game/GameMenu.h"
+#include "../math/PseudoRandom.h"
+#include "../world/RogueViewer.h"
+#include "../world/GalaxyMap.h"
+#include "../world/PlanetMap.h"
+#include "../world/World.h"
 
 // Longshot * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 class Longshot {

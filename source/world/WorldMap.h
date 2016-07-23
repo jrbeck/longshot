@@ -19,12 +19,12 @@
 
 #include <vector>
 
-#include "MathUtil.h"
+#include "../math/MathUtil.h"
 
-#include "BlockTypeData.h"
-#include "WorldColumn.h"
-#include "InactiveColumnManager.h"
-#include "OverdrawManager.h"
+#include "../world/BlockTypeData.h"
+#include "../world/WorldColumn.h"
+#include "../world/InactiveColumnManager.h"
+#include "../world/OverdrawManager.h"
 
 class WorldMap {
 private:
@@ -133,4 +133,3 @@ public:
   // WorldChunk. This is to account for digging, etc...
   Periodics* mPeriodics;
 };
-

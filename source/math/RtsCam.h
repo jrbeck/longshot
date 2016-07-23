@@ -8,8 +8,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef RtsCam_h_
-#define RtsCam_h_
+#pragma once
 
 #include <cmath>
 
@@ -20,11 +19,9 @@
   typedef unsigned int UINT;
 #endif
 
-#include "MathUtil.h"
-#include "v3d.h"
-#include "GlCamera.h"
-
-
+#include "../math/MathUtil.h"
+#include "../math/v3d.h"
+#include "../math/GlCamera.h"
 
 class rts_cam_c {
   v3d_t mPosition;  // where the camera is
@@ -44,41 +41,37 @@ class rts_cam_c {
   double mFarLimit;  // max distance from the target we can be
 
 public:
-  rts_cam_c ();
-  ~rts_cam_c ();
+  rts_cam_c();
+  ~rts_cam_c();
 
-  void initializeCamera (v2di_t screenDimensions, double FOV, double nearPlane, double farPlane);
+  void initializeCamera(v2di_t screenDimensions, double FOV, double nearPlane, double farPlane);
 
   // set with target, facing, elevation, and distance
-  int setup_cam (v3d_t t, double f, double e, double d);
+  int setup_cam(v3d_t t, double f, double e, double d);
 
   // update the camera position according to target, facing, elevation and distance
-  int updatePosition (void);
+  int updatePosition();
 
-  int constrain (void);
+  int constrain();
 
-  int pan (v2d_t a);
+  int pan(v2d_t a);
 
-  int zoom (double a);
+  int zoom(double a);
 
-  int translate (v2d_t a);
+  int translate(v2d_t a);
 
-  void changeElevation (double amount);
+  void changeElevation(double amount);
 
-  void setPosition (v3d_t position);
-  v3d_t getPosition (void) const;
+  void setPosition(v3d_t position);
+  v3d_t getPosition() const;
 
-  void setTarget (v3d_t target);
-  void setTargetAndUpdate (v3d_t target);
-  v3d_t getTarget (void) const;
+  void setTarget(v3d_t target);
+  void setTargetAndUpdate(v3d_t target);
+  v3d_t getTarget() const;
 
   // set the near and far values for the camera
-  int set_near_and_far (double n, double f);
+  int set_near_and_far(double n, double f);
 
   // use the gluLookAt () to set view at render time
-  GlCamera *gl_cam_setup (void);
+  GlCamera* gl_cam_setup();
 };
-
-
-
-#endif // RtsCam_h_

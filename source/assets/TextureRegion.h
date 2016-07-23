@@ -11,7 +11,7 @@
 #ifndef TextureRegion_h_
 #define TextureRegion_h_
 
-#include "Texture.h"
+#include "../assets/Texture.h"
 
 class TextureRegion {
 public:

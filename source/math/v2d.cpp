@@ -1,4 +1,4 @@
-#include "v2d.h"
+#include "../math/v2d.h"
 
 void v2d_print(const char* str, v2d_t a) {
   printf ("%s <%.3f, %.3f>\n", str, a.x, a.y);

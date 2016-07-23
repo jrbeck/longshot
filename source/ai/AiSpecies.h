@@ -10,9 +10,8 @@
 
 #pragma once
 
-#include "AssetManager.h"
-
-#include "AiStateMachine.h"
+#include "../assets/AssetManager.h"
+#include "../ai/AiStateMachine.h"
 
 enum {
   MOVEMENT_NONE,

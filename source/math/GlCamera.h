@@ -23,11 +23,11 @@
 
 #include <math.h>
 
-#include "v3d.h"
-#include "MathUtil.h"
-#include "Plane3d.h"
-#include "BoundingBox.h"
-#include "BoundingSphere.h"
+#include "../math/v3d.h"
+#include "../math/MathUtil.h"
+#include "../math/Plane3d.h"
+#include "../math/BoundingBox.h"
+#include "../math/BoundingSphere.h"
 
 #define PLANE_TOP  0
 #define PLANE_BOT  1

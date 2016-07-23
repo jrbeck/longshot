@@ -8,19 +8,18 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef WorldChunk_h_
-#define WorldChunk_h_
+#pragma once
 
 #include <cmath>
 
-#include "GlCamera.h"
+#include "../math/GlCamera.h"
 
-#include "v3d.h"
+#include "../math/v3d.h"
 
-#include "Periodics.h"
-#include "BoundingBox.h"
-#include "BoundingSphere.h"
-#include "AssetManager.h"
+#include "../math/Periodics.h"
+#include "../math/BoundingBox.h"
+#include "../math/BoundingSphere.h"
+#include "../assets/AssetManager.h"
 
 
 // WorldChunk * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -87,7 +86,3 @@ private:
 
   int mNumHiddenBlocks;
 };
-
-
-
-#endif // WorldChunk_h_

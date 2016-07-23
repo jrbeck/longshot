@@ -10,16 +10,14 @@
 
 #pragma once
 
-#include "v3d.h"
+#include "../math/v3d.h"
 
-#include "GameModel.h"
+#include "../game/GameModel.h"
 
-#include "WorldMap.h"
-#include "BoundingBox.h"
-#include "AssetManager.h"
-#include "inactivelist.h"
-
-
+#include "../world/WorldMap.h"
+#include "../math/BoundingBox.h"
+#include "../assets/AssetManager.h"
+#include "../physics/Inactivelist.h"
 
 //#define PHYSICS_TIME_GRANULARITY  (0.03333333)  // 30 Hz
 //#define PHYSICS_TIME_GRANULARITY  (0.01666667)  // 60 Hz

@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "v3d.h"
-#include "Constants.h"
+#include "../math/v3d.h"
+#include "../game/Constants.h"
 
 class WorldUtil {
 public:

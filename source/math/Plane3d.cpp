@@ -1,4 +1,4 @@
-#include "Plane3d.h"
+#include "../math/Plane3d.h"
 
 Plane3d::Plane3d() {
   // FIXME: this may be too expensive

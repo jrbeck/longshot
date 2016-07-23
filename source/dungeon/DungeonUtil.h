@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "v2d.h"
-#include "DungeonModel.h"
-#include "MathUtil.h"
+#include "../math/v2d.h"
+#include "../dungeon/DungeonModel.h"
+#include "../math/MathUtil.h"
 
 #define DISPLACEMENT_SCALE (0.7) // this is how the maxDisplacement changes as it recurses in drawCrookedLine
 

@@ -1,4 +1,4 @@
-#include "Periodics.h"
+#include "../math/Periodics.h"
 
 Periodics::Periodics(void) {
   mSeed = 0;

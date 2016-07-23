@@ -1,4 +1,4 @@
-#include "Inventory.h"
+#include "../items/Inventory.h"
 
 Inventory::Inventory() {
   mBackpack.resize(5);

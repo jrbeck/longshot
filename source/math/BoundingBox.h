@@ -13,8 +13,8 @@
 
 #include <algorithm>
 
-#include "v3d.h"
-#include "Rectangle2d.h"
+#include "../math/v3d.h"
+#include "../math/Rectangle2d.h"
 
 using namespace std;
 
@@ -66,4 +66,3 @@ private:
   };
 
 };
-

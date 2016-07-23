@@ -1,4 +1,4 @@
-#include <AssetManager.h>
+#include "../assets/AssetManager.h"
 
 AssetManager::AssetManager() :
   mGunTexture(0),
@@ -57,7 +57,7 @@ int AssetManager::loadAssets() {
   glNewList(mShadedBlockCallListHandle, GL_COMPILE);
     drawBlock(mGlobalLightIntensities);
   glEndList();
-  
+
   // the mace and the axe ...
   // this model type is deprecated
   // mModelDisplayListHandles[MELEETYPE_MACE] = ObjectLoader::loadObjectToDisplayList("art\\models\\mace.xml");
@@ -353,7 +353,7 @@ void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
     v3dIntensities[i].y = (double)intensities[i].y * ONE_OVER_LIGHT_LEVEL_MAX;
     v3dIntensities[i].z = (double)intensities[i].z * ONE_OVER_LIGHT_LEVEL_MAX;
   }
-  
+
   // left
   glNormal3d (-1.0, 0.0, 0.0);
 
@@ -1301,4 +1301,3 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
 
 
 */
-

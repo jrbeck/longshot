@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "../assets/Texture.h"
 
 Texture::Texture(std::string fileName) {
   mFileName = fileName;

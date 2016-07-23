@@ -1,4 +1,4 @@
-#include "WorldLight.h"
+#include "../world/WorldLight.h"
 
 WorldLight::WorldLight() :
   mBuffer(NULL)

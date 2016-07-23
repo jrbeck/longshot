@@ -1,4 +1,4 @@
-#include "AiStateMachine.h"
+#include "../ai/AiStateMachine.h"
 
 AiStateMachine::AiStateMachine() {
 }

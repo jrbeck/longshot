@@ -1,4 +1,4 @@
-#include "BitmapModel.h"
+#include "../assets/BitmapModel.h"
 
 BitmapModel::BitmapModel(TextureRegion* region) {
   mTexture = region->mTexture;

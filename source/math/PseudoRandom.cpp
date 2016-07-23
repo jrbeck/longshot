@@ -1,4 +1,4 @@
-#include "PseudoRandom.h"
+#include "../math/PseudoRandom.h"
 
 PseudoRandom::PseudoRandom() {
   setSeed(mDefaultSeed);

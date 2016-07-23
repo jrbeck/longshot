@@ -13,8 +13,7 @@
 // *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-#ifndef InactiveColumnManager_h_
-#define InactiveColumnManager_h_
+#pragma once
 
 #include <cstdio>
 #include <vector>
@@ -26,8 +25,8 @@
   typedef unsigned int UINT;
 #endif
 
-#include "v3d.h"
-#include "WorldColumn.h"
+#include "../math/v3d.h"
+#include "../world/WorldColumn.h"
 
 using namespace std;
 
@@ -103,6 +102,3 @@ public:
 private:
   vector <ColumnDatum*> mColumnData;
 };
-
-
-#endif // InactiveColumnManager_h_

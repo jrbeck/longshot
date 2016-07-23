@@ -1,4 +1,4 @@
-#include "LightManager.h"
+#include "../world/LightManager.h"
 
 
 LightManager::LightManager() :

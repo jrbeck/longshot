@@ -10,9 +10,8 @@
 
 #pragma once
 
-#include "GameWindow.h"
-#include "v2d.h"
-
+#include "../game/GameWindow.h"
+#include "../math/v2d.h"
 
 enum {
   LOAD_SCREEN_BLACK,

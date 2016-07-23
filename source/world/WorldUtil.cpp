@@ -1,4 +1,4 @@
-#include "WorldUtil.h"
+#include "../world/WorldUtil.h"
 
 v3di_t WorldUtil::getRegionIndex(const v3d_t &pos) {
   v3di_t ri;

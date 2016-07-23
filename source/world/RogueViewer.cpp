@@ -1,4 +1,4 @@
-#include "RogueViewer.h"
+#include "../world/RogueViewer.h"
 
 RogueViewer::RogueViewer(GameWindow* gameWindow) :
   mGameWindow(gameWindow),
