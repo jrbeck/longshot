@@ -92,7 +92,7 @@ void PlayerView::drawMeleeWeapon(const melee_weapon_state_t* weaponState, GLuint
   glPopMatrix();
 }
 
-void PlayerView::drawPlayerTargetBlock(player_c* player) {
+void PlayerView::drawPlayerTargetBlock(Player* player) {
   int targetFace;
   v3di_t* playerTarg = player->getTargetBlock(targetFace);
   if (playerTarg == NULL) {

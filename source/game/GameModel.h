@@ -23,7 +23,7 @@ enum {
   LOAD_UNSUCCESSFUL
 };
 
-class player_c;
+class Player;
 class Galaxy;
 class Physics;
 class Location;
@@ -59,7 +59,7 @@ public:
   int worldSeed;
   Planet* currentPlanet;
 
-  player_c* player;
+  Player* player;
   Galaxy* galaxy;
   Physics* physics;
   Location* location;

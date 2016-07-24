@@ -10,6 +10,7 @@
 
 #include <cstdio>
 #include <cmath>
+#include <memory.h>
 
 #include "../math/MathUtil.h"
 

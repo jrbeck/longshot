@@ -22,7 +22,7 @@ game_c::game_c(GameWindow* gameWindow) :
 
   mGameModel = new GameModel;
 
-  mPlayer = new player_c(mGameModel);
+  mPlayer = new Player(mGameModel);
   mGameModel->player = mPlayer;
 
   mGalaxy = new Galaxy();

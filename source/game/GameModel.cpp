@@ -22,7 +22,7 @@ GameModel::~GameModel() {
 
 
 void GameModel::save() {
-  //  player_c player;  // save
+  //  Player player;  // save
   // PLAYER * * * * * * *
   saveGameData();
 
@@ -65,7 +65,7 @@ void GameModel::save() {
 
 int GameModel::load(GameWindow* gameWindow) {
 
-  //  player_c player;  // save
+  //  Player player;  // save
   // PLAYER * * * * * * *
   GameSaveData gameSaveData = loadGameData();
   if (!gameSaveData.loadSucceeded) {

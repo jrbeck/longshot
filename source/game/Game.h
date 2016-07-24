@@ -73,7 +73,7 @@ enum {
 class game_c {
   GameModel *mGameModel;
 
-  player_c* mPlayer;
+  Player* mPlayer;
   Galaxy* mGalaxy;
   AiManager* mAiManager;
   Physics* mPhysics;

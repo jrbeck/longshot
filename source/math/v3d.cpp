@@ -4,29 +4,19 @@ void v3d_print(const char* str, v3d_t a) {
   printf("%s <%.3f, %.3f, %.3f>\n", str, a.x, a.y, a.z);
 }
 
-// return 1 if equal, 0 otherwise
 int v3d_isequal(v3d_t a, v3d_t b) {
   if (a.x == b.x && a.y == b.y && a.z == b.z) return 1;
   return 0;
 }
 
-// returns a vector of magnitude zero
 v3d_t v3d_zero() {
-  v3d_t a;
-  a.x = 0.0;
-  a.y = 0.0;
-  a.z = 0.0;
-  return a;
+  return v3d_t { 0, 0, 0 };
 }
 
-// zeroes out an existing vector
 void v3d_zero(v3d_t* a) {
-  a->x = 0.0;
-  a->y = 0.0;
-  a->z = 0.0;
+  memset(a, 0, sizeof (v3d_t));
 }
 
-// returns a v3d_t
 v3d_t v3d_v(double x, double y, double z) {
   v3d_t a;
   a.x = x;
@@ -43,12 +33,10 @@ v3d_t v3d_v(v3di_t v3di) {
   return a;
 }
 
-// returns the magnitude of the vector
 double v3d_mag(const v3d_t &a) {
   return sqrt((a.x * a.x) + (a.y * a.y) + (a.z * a.z));
 }
 
-// returns the distance between two points
 double v3d_dist(v3d_t a, v3d_t b) {
   a.x -= b.x;
   a.y -= b.y;
@@ -56,7 +44,6 @@ double v3d_dist(v3d_t a, v3d_t b) {
   return sqrt((a.x * a.x) + (a.y * a.y) + (a.z * a.z));
 }
 
-// returns the unit vector in the same direction as a
 v3d_t v3d_normalize(v3d_t a) {
   double len = sqrt((a.x * a.x) + (a.y * a.y) + (a.z * a.z));
   if (len <= 0.0) return a;
@@ -67,7 +54,6 @@ v3d_t v3d_normalize(v3d_t a) {
   return a;
 }
 
-// returns scalar * a (s is scalar, a is vector)
 v3d_t v3d_scale(v3d_t a, double scalar) {
   a.x *= scalar;
   a.y *= scalar;
@@ -82,7 +68,6 @@ v3d_t v3d_scale(double scalar, v3d_t a) {
   return a;
 }
 
-// returns a + b
 v3d_t v3d_add(v3d_t a, v3d_t b) {
   a.x += b.x;
   a.y += b.y;
@@ -90,7 +75,6 @@ v3d_t v3d_add(v3d_t a, v3d_t b) {
   return a;
 }
 
-// returns a - b
 v3d_t v3d_sub(v3d_t a, v3d_t b) {
   a.x -= b.x;
   a.y -= b.y;
@@ -98,12 +82,10 @@ v3d_t v3d_sub(v3d_t a, v3d_t b) {
   return a;
 }
 
-// returns a dot b ( |a| * |b| * cos (theta) )
 double v3d_dot(v3d_t a, v3d_t b) {
   return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
 }
 
-// returns a cross b
 v3d_t v3d_cross(v3d_t a, v3d_t b) {
   v3d_t c;
   c.x = (a.y * b.z) - (a.z * b.y);
@@ -112,7 +94,6 @@ v3d_t v3d_cross(v3d_t a, v3d_t b) {
   return c;
 }
 
-// returns the opposite vector
 v3d_t v3d_neg(v3d_t a) {
   a.x = -a.x;
   a.y = -a.y;
@@ -138,7 +119,6 @@ v3d_t v3d_project(v3d_t a, v3d_t b) {
   return p;
 }
 
-// returns the v3d that is located {percent} of the distance from a to b
 v3d_t v3d_interpolate(v3d_t a, v3d_t b, double percent) {
   v3d_t ret;
   ret.x = a.x + ((b.x - a.x) * percent);
@@ -202,22 +182,15 @@ void v3di_print(const char* str, v3di_t a) {
   printf("%s <%d, %d, %d>\n", str, a.x, a.y, a.z);
 }
 
-// return 1 if equal, 0 otherwise
 int v3di_isequal(v3di_t a, v3di_t b) {
   if (a.x == b.x && a.y == b.y && a.z == b.z) return 1;
   return 0;
 }
 
-// return a v3di_t for x, y, z
 v3di_t v3di_v(int x, int y, int z) {
-  v3di_t v;
-  v.x = x;
-  v.y = y;
-  v.z = z;
-  return v;
+  return v3di_t { x, y, z };
 }
 
-// return a v3di_t for a vector [ x  y  z ]
 v3di_t v3di_v(int* vector) {
   v3di_t v;
   v.x = vector[0];
@@ -226,7 +199,6 @@ v3di_t v3di_v(int* vector) {
   return v;
 }
 
-// constructs a v3di_t from a v3d_t
 v3di_t v3di_v(v3d_t a) {
   v3di_t v;
   v.x = (int)floor(a.x);
@@ -235,7 +207,6 @@ v3di_t v3di_v(v3d_t a) {
   return v;
 }
 
-// returns a + b
 v3di_t v3di_add(v3di_t a, v3di_t b) {
   a.x += b.x;
   a.y += b.y;
@@ -243,7 +214,6 @@ v3di_t v3di_add(v3di_t a, v3di_t b) {
   return a;
 }
 
-// returns a - b
 v3di_t v3di_sub(v3di_t a, v3di_t b) {
   a.x -= b.x;
   a.y -= b.y;
@@ -251,7 +221,6 @@ v3di_t v3di_sub(v3di_t a, v3di_t b) {
   return a;
 }
 
-// returns a(b)
 v3di_t v3di_scale(int a, v3di_t b) {
   b.x *= a;
   b.y *= a;

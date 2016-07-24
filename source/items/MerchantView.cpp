@@ -36,7 +36,7 @@ MerchantView::~MerchantView() {
   }
 }
 
-void MerchantView::engageMerchant(player_c& player, ItemManager& itemManager) {
+void MerchantView::engageMerchant(Player& player, ItemManager& itemManager) {
   if (mMerchant != 0) {
     delete mMerchant;
     mMerchant = 0;
@@ -59,7 +59,7 @@ void MerchantView::setupMerchant(Merchant& merchant, ItemManager& itemManager) {
   }
 }
 
-int MerchantView::update(player_c& player, ItemManager& itemManager) {
+int MerchantView::update(Player& player, ItemManager& itemManager) {
   int choice = mMenu->gameMenuChoice(false);
 
   switch (choice) {
@@ -137,7 +137,7 @@ int MerchantView::update(player_c& player, ItemManager& itemManager) {
   return 0;
 }
 
-void MerchantView::setupMenu(player_c& player, ItemManager& itemManager) {
+void MerchantView::setupMenu(Player& player, ItemManager& itemManager) {
   if (mMenu != 0) {
     delete mMenu;
     mMenu = 0;
@@ -161,7 +161,7 @@ void MerchantView::setupMenu(player_c& player, ItemManager& itemManager) {
   }
 }
 
-void MerchantView::setupSellMenu(player_c& player, ItemManager& itemManager) {
+void MerchantView::setupSellMenu(Player& player, ItemManager& itemManager) {
   char tempString[128];
 
   mMenu->addButton(v2d_v(0.15, 0.2), v2d_v(0.2, 0.05), fontSize,

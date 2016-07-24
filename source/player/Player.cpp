@@ -4,15 +4,15 @@
 // has to do with sprintf() not being safe....
 #pragma warning (disable : 4996)
 
-player_c::player_c(GameModel* gameModel) {
+Player::Player(GameModel* gameModel) {
   mGameModel = gameModel;
   mInventory.resizeBackpack(DEFAULT_BACKPACK_SIZE);
 }
 
-player_c::~player_c () {
+Player::~Player () {
 }
 
-int player_c::reset(size_t physicsHandle, size_t aiHandle) {
+int Player::reset(size_t physicsHandle, size_t aiHandle) {
   mStartLocationFound = false;
   mStartPosition = v3d_zero();
 
@@ -80,7 +80,7 @@ int player_c::reset(size_t physicsHandle, size_t aiHandle) {
 }
 
 // reset everything but the physics handle
-int player_c::soft_reset(v3d_t& startPosition) {
+int Player::soft_reset(v3d_t& startPosition) {
   mHeadOffset = v3d_v(0.25, 1.6, 0.25);
   mFinalHeadOffset = mHeadOffset;
   mHeadBobble.reset();
@@ -112,12 +112,12 @@ int player_c::soft_reset(v3d_t& startPosition) {
   return 0;
 }
 
-void player_c::setStartPosition(v3d_t& startPosition) {
+void Player::setStartPosition(v3d_t& startPosition) {
     mStartPosition = startPosition;
     mStartLocationFound = true;
 }
 
-void player_c::godMode() {
+void Player::godMode() {
   printf ("you naughty little stinker you...\n");
 
   // some ammo?
@@ -167,7 +167,7 @@ void player_c::godMode() {
 }
 
 // constrain the viewing angles
-int player_c::constrain_view_angles(void) {
+int Player::constrain_view_angles(void) {
   // constrain the view angle elevation
   if (mIncline < mInclineMin) mIncline = mInclineMin;
   else if (mIncline > mInclineMax) mIncline = mInclineMax;
@@ -179,51 +179,51 @@ int player_c::constrain_view_angles(void) {
   return 0;
 }
 
-v2d_t player_c::getFacingAndIncline(void) {
+v2d_t Player::getFacingAndIncline(void) {
   return v2d_v(mFacing, mIncline);
 }
 
-bool player_c::isHeadInWater(void) {
+bool Player::isHeadInWater(void) {
   return mHeadInWater;
 }
 
 // update the camera target
-void player_c::update_target(void) {
+void Player::update_target(void) {
   mLookVector = v3d_getLookVector(mFacing, mIncline);
 
   // now shift to the position
   mTarget = v3d_add(v3d_add(mFinalHeadOffset, mPos), mLookVector);
 }
 
-void player_c::set_draw_distance(double distance) {
+void Player::set_draw_distance(double distance) {
   cam.set_far(distance);
 }
 
 // change the far clipping plane distance
-void player_c::adjust_draw_distance(double amount) {
+void Player::adjust_draw_distance(double amount) {
   cam.adjust_far(amount);
 }
 
 // use the gluLookAt () to set view at render time
 // also set the frustum
-GlCamera player_c::gl_cam_setup(void) {
+GlCamera Player::gl_cam_setup(void) {
   cam.perspective();
   cam.look_at(v3d_add(mPos, mFinalHeadOffset), mTarget, up);
   return cam;
 }
 
 // return the pos vector
-v3d_t player_c::get_pos(void) {
+v3d_t Player::get_pos(void) {
   return mPos;
 }
 
 // change the camera position
-int player_c::set_pos(v3d_t a) {
+int Player::set_pos(v3d_t a) {
   mPos = a;
   return 0;
 }
 
-bool player_c::pickUpItem(item_t item, AssetManager& assetManager) {
+bool Player::pickUpItem(item_t item, AssetManager& assetManager) {
   // special items first:
   if (item.type == ITEMTYPE_AMMO_BULLET ||
     item.type == ITEMTYPE_AMMO_SLIME ||
@@ -255,14 +255,14 @@ bool player_c::pickUpItem(item_t item, AssetManager& assetManager) {
       break;
 
     default:
-      printf ("player_c::pickUpItem(): warning! unknown item type");
+      printf ("Player::pickUpItem(): warning! unknown item type");
       break;
   }
 
   return true;
 }
 
-void player_c::useEquipped(int whichEquip) {
+void Player::useEquipped(int whichEquip) {
   item_t item;
   double time = mGameModel->physics->getLastUpdateTime();
 
@@ -279,7 +279,7 @@ void player_c::useEquipped(int whichEquip) {
       break;
 
     default:
-      printf("player_c::useEquipped(): trying to use invalid equip location\n");
+      printf("Player::useEquipped(): trying to use invalid equip location\n");
       return;
   }
 
@@ -322,7 +322,7 @@ void player_c::useEquipped(int whichEquip) {
   }
 }
 
-double player_c::fireGun(item_t item, double handedness) {
+double Player::fireGun(item_t item, double handedness) {
   v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
 
   double shoulderOffset = handedness * 0.5;
@@ -346,7 +346,7 @@ double player_c::fireGun(item_t item, double handedness) {
   return mGameModel->itemManager->useGun(item.handle, shotInfo, mInventory.mAmmoCounter);
 }
 
-double player_c::useMeleeWeapon(item_t item) {
+double Player::useMeleeWeapon(item_t item) {
   v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
 
   v3d_t targAngle = v3d_normalize(v3d_sub(mTarget, world_head_pos));
@@ -362,7 +362,7 @@ double player_c::useMeleeWeapon(item_t item) {
   return mGameModel->itemManager->useMeleeWeapon(item.handle, shotInfo);
 }
 
-melee_weapon_state_t* player_c::getMeleeWeaponState(int hand) {
+melee_weapon_state_t* Player::getMeleeWeaponState(int hand) {
   melee_weapon_state_t* weaponState;
 
   if (hand == EQUIP_PRIMARY) {
@@ -386,7 +386,7 @@ melee_weapon_state_t* player_c::getMeleeWeaponState(int hand) {
   return weaponState;
 }
 
-void player_c::useBackpackItem() {
+void Player::useBackpackItem() {
   // can't use a non-item
   if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
 
@@ -409,7 +409,7 @@ void player_c::useBackpackItem() {
 }
 
 // gives the normalized walk vector
-v2d_t player_c::obtainWalkVector(v2d_t walkInput) {
+v2d_t Player::obtainWalkVector(v2d_t walkInput) {
   // get a vector pointing the way the camera is facing
   v2d_t t1 = v2d_v(cos(mFacing), sin(mFacing));
 
@@ -428,7 +428,7 @@ v2d_t player_c::obtainWalkVector(v2d_t walkInput) {
   return t1;
 }
 
-void player_c::updateTargetBlock() {
+void Player::updateTargetBlock() {
   v3d_t eye = v3d_add(mPos, mFinalHeadOffset);
 
   double rayLength = 2.75;
@@ -443,7 +443,7 @@ void player_c::updateTargetBlock() {
   }
 }
 
-v3di_t* player_c::getTargetBlock(int& targetBlockFace) {
+v3di_t* Player::getTargetBlock(int& targetBlockFace) {
   if (mIsBlockTargeted) {
     targetBlockFace = mTargetBlockFace;
     return &mTargetBlock;
@@ -451,7 +451,7 @@ v3di_t* player_c::getTargetBlock(int& targetBlockFace) {
   return NULL;
 }
 
-void player_c::updateHud() {
+void Player::updateHud() {
   mHud.clear();
 
   GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -524,7 +524,7 @@ void player_c::updateHud() {
 //    text, TEXT_JUSTIFICATION_CENTER, color, NULL);
 }
 
-void player_c::drawHud() {
+void Player::drawHud() {
   if (mHeadInWater && mVisionTint[3] > 0.0) {
     drawWaterOverlay();
   }
@@ -537,7 +537,7 @@ void player_c::drawHud() {
   }
 }
 
-void player_c::drawWaterOverlay() {
+void Player::drawWaterOverlay() {
   // need to set up the opengl viewport
   glPushMatrix();
 
@@ -572,7 +572,7 @@ void player_c::drawWaterOverlay() {
   glPopMatrix();
 }
 
-void player_c::updateCharacterSheet() {
+void Player::updateCharacterSheet() {
   mCharacterSheet.clear();
 
   static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -679,7 +679,7 @@ void player_c::updateCharacterSheet() {
   mCharacterSheet.addText(v2d_v(0.1, 0.6), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
 }
 
-bool player_c::update(AssetManager& assetManager) {
+bool Player::update(AssetManager& assetManager) {
   mLastUpdateTime = mGameModel->physics->getLastUpdateTime();
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
@@ -1120,7 +1120,7 @@ bool player_c::update(AssetManager& assetManager) {
   return escapePressed;
 }
 
-void player_c::readPhysicsMessages(AssetManager& assetManager) {
+void Player::readPhysicsMessages(AssetManager& assetManager) {
   phys_message_t message;
 
   size_t itemHandle;
@@ -1158,7 +1158,7 @@ void player_c::readPhysicsMessages(AssetManager& assetManager) {
   }
 }
 
-void player_c::placeLight() {
+void Player::placeLight() {
   if (mPlacedBlock) {
     mPlacedBlock = false;
 
@@ -1181,6 +1181,6 @@ void player_c::placeLight() {
   }
 }
 
-Inventory* player_c::getInventory(void) {
+Inventory* Player::getInventory(void) {
   return &mInventory;
 }

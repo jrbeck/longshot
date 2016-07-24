@@ -6,7 +6,6 @@
 // * the world column is a stack of WorldChunks that represents the entire volume
 // * of the world for a particular area.
 // *
-// *
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 #pragma once
@@ -17,23 +16,17 @@
 typedef struct {
   v3di_t worldIndex;
   v3di_t worldPosition;
-
   int lowestBlock;
   int highestBlock;
-
   int numChunks;
 } world_column_info_t;
-
 
 typedef struct {
   v3di_t worldIndex;
   v3di_t worldPosition;
-
   int numBlocks;
   int numWaterBlocks;
 } world_chunk_info_t;
-
-
 
 class WorldColumn {
 private:

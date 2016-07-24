@@ -56,14 +56,14 @@ public:
 
 
   // this begins the interaction with a merchant
-  void engageMerchant(player_c& player, ItemManager& itemManager);
+  void engageMerchant(Player& player, ItemManager& itemManager);
 
   void setupMerchant(Merchant& merchant, ItemManager& itemManager);
 
-  int update(player_c& player, ItemManager& itemManager);
+  int update(Player& player, ItemManager& itemManager);
 
-  void setupMenu(player_c& player, ItemManager& itemManager);
-  void setupSellMenu(player_c& player, ItemManager& itemManager);
+  void setupMenu(Player& player, ItemManager& itemManager);
+  void setupSellMenu(Player& player, ItemManager& itemManager);
   void setupBuyMenu(Merchant& merchant, ItemManager& itemManager);
 
   void addSelectedItemInfo(ItemManager& itemManager);

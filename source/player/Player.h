@@ -1,5 +1,5 @@
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * player_c
+// * Player
 // *
 // * this contains all (way too much) player related stuff:
 // * inventory
@@ -42,7 +42,6 @@
 #define DEFAULT_INCLINE_MIN    (-88.0)
 #define DEFAULT_INCLINE_MAX    (88.0)
 
-
 enum {
   EQUIP_PRIMARY,
   EQUIP_SECONDARY
@@ -51,18 +50,16 @@ enum {
 #define LEFT_HANDED  (-1.0)
 #define RIGHT_HANDED  (1.0)
 
-
-
 #define DEFAULT_BACKPACK_SIZE  (15)
 
 class ItemManager;
 struct item_t;
 class Inventory;
 
-class player_c {
+class Player {
 public:
-  player_c(GameModel* gameModel);
-  ~player_c();
+  Player(GameModel* gameModel);
+  ~Player();
 
   int reset(size_t physicsHandle, size_t aiHandle);
   int soft_reset(v3d_t& startPosition);
