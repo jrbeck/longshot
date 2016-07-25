@@ -1,14 +1,14 @@
 #include "../math/Periodics.h"
 
-Periodics::Periodics(void) {
+Periodics::Periodics() {
   mSeed = 0;
   mPrng.setSeed(mSeed);
 }
 
-Periodics::~Periodics(void) {
+Periodics::~Periodics() {
 }
 
-int Periodics::saveToDisk(FILE *file) {
+int Periodics::saveToDisk(FILE* file) {
   int errorCode = 0;
 
 /*  for (int i = 0; i < NUM_TERRAINS; ++i) {
@@ -26,7 +26,7 @@ int Periodics::saveToDisk(FILE *file) {
   return errorCode;
 }
 
-int Periodics::loadFromDisk(FILE *file) {
+int Periodics::loadFromDisk(FILE* file) {
   int errorCode = 0;
 
   fread(&mSeed, sizeof mSeed, 1, file);
@@ -162,15 +162,15 @@ BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHe
 
 
 
-  if (getPrecipitationLevel (x, z) < DESERT_MOISTURE_LEVEL) {
-    return generateDesertBlock (worldPosition, terrainHeight);
+  if (getPrecipitationLevel(x, z) < DESERT_MOISTURE_LEVEL) {
+    return generateDesertBlock(worldPosition, terrainHeight);
   }
 
-  double rValue = mRandomMap.getValueBilerp (x * 0.257, z * 0.257);
+  double rValue = mRandomMap.getValueBilerp(x * 0.257, z * 0.257);
 
   BYTE blockType;
-  double value1 = noise (x * 0.07, y * 0.07, z * 0.07);
-  double value2 = noise (x * 0.013 + (rValue * 0.05), y * 0.013 + (rValue * 0.05), z * 0.013 + (rValue * 0.05));
+  double value1 = noise(x * 0.07, y * 0.07, z * 0.07);
+  double value2 = noise(x * 0.013 + (rValue * 0.05), y * 0.013 + (rValue * 0.05), z * 0.013 + (rValue * 0.05));
 
 
 
@@ -212,11 +212,11 @@ BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHe
   }
   else { // above surface
     int positiveNoiseHeight = static_cast<int>(floor (
-      25.0 * mRandomMap.getValueBilerp (
+      25.0 * mRandomMap.getValueBilerp(
       x * 0.00321,
       z * 0.00321)));
 
-    double value = mRandomMap.getValueBilerp (x * 0.357, z * 0.357);
+    double value = mRandomMap.getValueBilerp(x * 0.357, z * 0.357);
 
     if (worldPosition.y < terrainHeight + positiveNoiseHeight &&
       worldPosition.y > WATER_LEVEL &&
@@ -246,7 +246,7 @@ BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHe
   return blockType;
 }
 
-BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight, BiomeInfo &biomeInfo) {
+BYTE Periodics::generateBlockAtWorldPosition(v3di_t worldPosition, int terrainHeight, BiomeInfo& biomeInfo) {
   double x = static_cast<double>(worldPosition.x);
   double y = static_cast<double>(worldPosition.y);
   double z = static_cast<double>(worldPosition.z);

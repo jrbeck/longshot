@@ -27,12 +27,12 @@ public:
   PseudoRandom(UINT seed);
 
   void setSeed(UINT seed);
-  UINT getSeed(void) const;
+  UINT getSeed() const;
 
-  int getNextInt(void);
+  int getNextInt();
   int getNextInt(int low, int high);
 
-  double getNextDouble(void);
+  double getNextDouble();
   double getNextDouble(double low, double high);
 
   static const UINT mDefaultSeed = 0;
