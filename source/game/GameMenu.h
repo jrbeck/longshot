@@ -27,14 +27,11 @@
 
 #define MENU_APPLICATION_QUIT (-2)
 
-
 enum {
   MENUITEM_BUTTON,
   MENUITEM_TEXT,
   NUM_MENUITEMS
 };
-
-
 
 enum {
   TEXT_JUSTIFICATION_LEFT,
@@ -42,9 +39,7 @@ enum {
   TEXT_JUSTIFICATION_RIGHT
 };
 
-
-
-struct menu_item_t {
+struct GameMenuItem {
   int type;
 
   GLfloat position[2];
@@ -61,19 +56,15 @@ struct menu_item_t {
   GLfloat backgroundColor[4];
 };
 
-
-
 class GameMenu {
 public:
-  // this is for the default font...if this is not set properly,
-  // clients are required to use setFont()
-  static void setDefaultTextureHandle(GLuint handle);
-  static GLuint defaultTextureHandle;
+  static void setDefaultTextureHandle(GLuint textureHandle);
+  static GLuint sDefaultTextureHandle;
 
   GameMenu();
   ~GameMenu();
 
-  void clear(void);
+  void clear();
 
   void setFont1(int glHandle);
 
@@ -87,11 +78,11 @@ public:
 
   int mouseUp(double x, double y);
 
-  void draw(void);
+  void draw();
 
 private:
 
-  vector <menu_item_t> mMenuItems;
+  vector <GameMenuItem> mMenuItems;
 
   GlBitmapFont mGlBitmapFont;
 };

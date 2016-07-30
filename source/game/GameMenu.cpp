@@ -1,45 +1,38 @@
 #include "../game/GameMenu.h"
 
-GLuint GameMenu::defaultTextureHandle = 0;
+GLuint GameMenu::sDefaultTextureHandle = 0;
 
-
-void GameMenu::setDefaultTextureHandle(GLuint handle) {
-  defaultTextureHandle = handle;
+void GameMenu::setDefaultTextureHandle(GLuint textureHandle) {
+  sDefaultTextureHandle = textureHandle;
 }
 
-
-GameMenu::GameMenu(void) {
-  mGlBitmapFont.setupFont(defaultTextureHandle, 128, 16, 16);
+GameMenu::GameMenu() {
+  mGlBitmapFont.setupFont(sDefaultTextureHandle, 128, 16, 16);
 }
 
-
-GameMenu::~GameMenu(void) {
+GameMenu::~GameMenu() {
   clear();
 }
 
-
-void GameMenu::clear(void) {
-  mMenuItems.clear ();
+void GameMenu::clear() {
+  mMenuItems.clear();
 }
-
 
 void GameMenu::setFont1(int glHandle) {
   mGlBitmapFont.setupFont(glHandle, 128, 16, 16);
 }
 
-
 size_t GameMenu::addButton(
   v2d_t position,
   v2d_t dimensions,
   v2d_t fontSize,
-  const char *buttonText,
+  const char* buttonText,
   int textJustification,
   int value,
-  const GLfloat *color,
-  const GLfloat *backgroundColor)
+  const GLfloat* color,
+  const GLfloat* backgroundColor)
 {
-  menu_item_t item;
-
+  GameMenuItem item;
   item.type = MENUITEM_BUTTON;
   item.position[0] = (GLfloat)position.x;
   item.position[1] = (GLfloat)position.y;
@@ -48,7 +41,6 @@ size_t GameMenu::addButton(
   item.fontSize[0] = (GLfloat)fontSize.x;
   item.fontSize[1] = (GLfloat)fontSize.y;
   item.textJustification = textJustification;
-
   item.value = value;
 
   if (color != NULL) {
@@ -84,18 +76,16 @@ size_t GameMenu::addButton(
   return mMenuItems.size() - 1;
 }
 
-
 size_t GameMenu::addText(
   v2d_t position,
   v2d_t dimensions,
   v2d_t fontSize,
-  const char *text,
+  const char* text,
   int textJustification,
-  const GLfloat *color,
-  const GLfloat *backgroundColor)
+  const GLfloat* color,
+  const GLfloat* backgroundColor)
 {
-  menu_item_t item;
-
+  GameMenuItem item;
   item.type = MENUITEM_TEXT;
   item.position[0] = (GLfloat)position.x;
   item.position[1] = (GLfloat)position.y;
@@ -104,6 +94,7 @@ size_t GameMenu::addText(
   item.fontSize[0] = (GLfloat)fontSize.x;
   item.fontSize[1] = (GLfloat)fontSize.y;
   item.textJustification = textJustification;
+  item.text = text;
 
   if (color != NULL) {
     for (int i = 0; i < 4; ++i) {
@@ -129,13 +120,10 @@ size_t GameMenu::addText(
     }
   }
 
-  item.text = text;
-
   mMenuItems.push_back(item);
 
   return mMenuItems.size() - 1;
 }
-
 
 int GameMenu::gameMenuChoice(bool waitForInput) {
   // release the mouse
@@ -187,7 +175,6 @@ int GameMenu::gameMenuChoice(bool waitForInput) {
   return mMenuItems[click].value;
 }
 
-
 int GameMenu::mouseUp(double x, double y) {
   // see if the dummy actually managed to hit something
   for (size_t i = 0; i < mMenuItems.size(); ++i) {
@@ -206,10 +193,9 @@ int GameMenu::mouseUp(double x, double y) {
   return -1;
 }
 
-
-void GameMenu::draw(void) {
+void GameMenu::draw() {
   // set up the opengl viewport
-  glPushMatrix ();
+  glPushMatrix();
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -224,7 +210,7 @@ void GameMenu::draw(void) {
   glEnable(GL_BLEND);
 
   // draw the button/text background
-  glBegin (GL_QUADS);
+  glBegin(GL_QUADS);
     for (size_t i = 0; i < mMenuItems.size(); ++i) {
       GLfloat br[2] = {
         mMenuItems[i].position[0] + mMenuItems[i].dimensions[0],
@@ -237,7 +223,7 @@ void GameMenu::draw(void) {
       glVertex2f(br[0], mMenuItems[i].position[1]);
       glVertex2f(mMenuItems[i].position[0], mMenuItems[i].position[1]);
     }
-  glEnd ();
+  glEnd();
 
   glEnable(GL_TEXTURE_2D);
 
@@ -245,34 +231,33 @@ void GameMenu::draw(void) {
   GLfloat dim[2];
 
   for (size_t i = 0; i < mMenuItems.size(); ++i) {
-
     switch (mMenuItems[i].textJustification) {
-      case TEXT_JUSTIFICATION_LEFT:
-        dim[0] = mMenuItems[i].fontSize[0] * mGlBitmapFont.getStringWidth (mMenuItems[i].text);
-        dim[1] = mMenuItems[i].fontSize[1];
+    case TEXT_JUSTIFICATION_LEFT:
+      dim[0] = mMenuItems[i].fontSize[0] * mGlBitmapFont.getStringWidth (mMenuItems[i].text);
+      dim[1] = mMenuItems[i].fontSize[1];
 
-        pos[0] = mMenuItems[i].position[0] + (0.5f * mMenuItems[i].fontSize[0]);
-        pos[1] = mMenuItems[i].position[1] + ((mMenuItems[i].dimensions[1] - dim[1]) * 0.5f);
-        break;
+      pos[0] = mMenuItems[i].position[0] + (0.5f * mMenuItems[i].fontSize[0]);
+      pos[1] = mMenuItems[i].position[1] + ((mMenuItems[i].dimensions[1] - dim[1]) * 0.5f);
+      break;
 
-      default:
-      case TEXT_JUSTIFICATION_CENTER:
-        dim[0] = mMenuItems[i].fontSize[0] * mGlBitmapFont.getStringWidth (mMenuItems[i].text);
-        dim[1] = mMenuItems[i].fontSize[1];
+    default:
+    case TEXT_JUSTIFICATION_CENTER:
+      dim[0] = mMenuItems[i].fontSize[0] * mGlBitmapFont.getStringWidth (mMenuItems[i].text);
+      dim[1] = mMenuItems[i].fontSize[1];
 
-        pos[0] = mMenuItems[i].position[0] + ((mMenuItems[i].dimensions[0] - dim[0]) * 0.5f);
-        pos[1] = mMenuItems[i].position[1] + ((mMenuItems[i].dimensions[1] - dim[1]) * 0.5f);
-        break;
+      pos[0] = mMenuItems[i].position[0] + ((mMenuItems[i].dimensions[0] - dim[0]) * 0.5f);
+      pos[1] = mMenuItems[i].position[1] + ((mMenuItems[i].dimensions[1] - dim[1]) * 0.5f);
+      break;
 
-      case TEXT_JUSTIFICATION_RIGHT:
-        GLfloat rightPos = mMenuItems[i].position[0] + mMenuItems[i].dimensions[0];
+    case TEXT_JUSTIFICATION_RIGHT:
+      GLfloat rightPos = mMenuItems[i].position[0] + mMenuItems[i].dimensions[0];
 
-        dim[0] = mMenuItems[i].fontSize[0] * mGlBitmapFont.getStringWidth (mMenuItems[i].text);
-        dim[1] = mMenuItems[i].fontSize[1];
+      dim[0] = mMenuItems[i].fontSize[0] * mGlBitmapFont.getStringWidth (mMenuItems[i].text);
+      dim[1] = mMenuItems[i].fontSize[1];
 
-        pos[0] = rightPos - (dim[0] + (0.5f * mMenuItems[i].fontSize[0]));
-        pos[1] = mMenuItems[i].position[1] + ((mMenuItems[i].dimensions[1] - dim[1]) * 0.5f);
-        break;
+      pos[0] = rightPos - (dim[0] + (0.5f * mMenuItems[i].fontSize[0]));
+      pos[1] = mMenuItems[i].position[1] + ((mMenuItems[i].dimensions[1] - dim[1]) * 0.5f);
+      break;
     }
 
     mGlBitmapFont.drawString(
@@ -286,9 +271,4 @@ void GameMenu::draw(void) {
   glEnable(GL_DEPTH_TEST);
 
   glPopMatrix();
-
-//  mGameWindow->swapBuffers();
 }
-
-
-

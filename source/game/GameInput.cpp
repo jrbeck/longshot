@@ -1,15 +1,11 @@
 #include "../game/GameInput.h"
 
 GameInput::GameInput() {
-  reset ();
+  reset();
 }
-
-
 
 GameInput::~GameInput() {
 }
-
-
 
 void GameInput::reset() {
   mMouseSensitivity = 0.004;
@@ -56,29 +52,19 @@ void GameInput::reset() {
   mToggleWorldChunkBoxes = false;
 }
 
-
-
-double GameInput::getFacingDelta (void) {
+double GameInput::getFacingDelta() {
   double ret = mFacingDelta;
-
   mFacingDelta = 0.0;
-
   return ret;
 }
 
-
-
-double GameInput::getInclinationDelta (void) {
+double GameInput::getInclinationDelta() {
   double ret = mInclinationDelta;
-
   mInclinationDelta = 0.0;
-
   return ret;
 }
 
-
-
-bool GameInput::isEscapePressed (void) {
+bool GameInput::isEscapePressed() {
   if (mEscapePressed) {
     mEscapePressed = false;
     return true;
@@ -86,9 +72,7 @@ bool GameInput::isEscapePressed (void) {
   return false;
 }
 
-
-
-bool GameInput::isWindowClosed (void) {
+bool GameInput::isWindowClosed() {
   if (mWindowClosed) {
     mWindowClosed = false;
     return true;
@@ -96,220 +80,157 @@ bool GameInput::isWindowClosed (void) {
   return false;
 }
 
-
-
-bool GameInput::isWalkingForward (void) {
+bool GameInput::isWalkingForward() {
   return mWalkForward;
 }
 
-
-
-bool GameInput::isWalkingBackward (void) {
+bool GameInput::isWalkingBackward() {
   return mWalkBackward;
 }
 
-
-
-bool GameInput::isWalkingLeft (void) {
+bool GameInput::isWalkingLeft() {
   return mWalkLeft;
 }
 
-
-
-bool GameInput::isWalkingRight (void) {
+bool GameInput::isWalkingRight() {
   return mWalkRight;
 }
 
-
-
-bool GameInput::isJumping (void) {
+bool GameInput::isJumping() {
   if (mJump) {
     mJump = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isSwimming (void) {
+bool GameInput::isSwimming() {
   return mSwim;
 }
 
-
-
-bool GameInput::isPickUpItem (void) {
+bool GameInput::isPickUpItem() {
   return mPickUpItem;
 }
 
-
-
-bool GameInput::isDroppedItem (void) {
+bool GameInput::isDroppedItem() {
   if (mDropItem) {
     mDropItem = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isUsingPrimary (void) {
+bool GameInput::isUsingPrimary() {
   return mUsePrimary;
 }
 
-
-
-bool GameInput::isUsingSecondary (void) {
+bool GameInput::isUsingSecondary() {
   return mUseSecondary;
 }
 
-
-
-bool GameInput::isClickMouse1 (void) {
+bool GameInput::isClickMouse1() {
   if (mClickMouse1) {
     mClickMouse1 = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isClickMouse2 (void) {
+bool GameInput::isClickMouse2() {
   if (mClickMouse2) {
     mClickMouse2 = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isNextGun (void) {
+bool GameInput::isNextGun() {
   if (mNextGun > 0) {
     mNextGun--;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isPreviousGun (void) {
+bool GameInput::isPreviousGun() {
   if (mPreviousGun > 0) {
     mPreviousGun--;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isSoftReset (void) {
+bool GameInput::isSoftReset() {
   if (mSoftReset) {
     mSoftReset = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isTogglePhysics (void) {
+bool GameInput::isTogglePhysics() {
   if (mTogglePhysics) {
     mTogglePhysics = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isAdvanceOneFrame (void) {
+bool GameInput::isAdvanceOneFrame() {
   if (mAdvanceOneFrame) {
     mAdvanceOneFrame = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isIncreasingDrawDistance (void) {
+bool GameInput::isIncreasingDrawDistance() {
   if (mIncreaseDrawDistance) {
     mIncreaseDrawDistance = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isDecreasingDrawDistance (void) {
+bool GameInput::isDecreasingDrawDistance() {
   if (mDecreaseDrawDistance) {
     mDecreaseDrawDistance = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isToggleCharacterSheet (void) {
+bool GameInput::isToggleCharacterSheet() {
   if (mToggleCharacterSheet) {
     mToggleCharacterSheet = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isToggleGodMode (void) {
+bool GameInput::isToggleGodMode() {
   if (mToggleGodMode) {
     mToggleGodMode = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isUseBackpackItem (void) {
+bool GameInput::isUseBackpackItem() {
   if (mUseBackpackItem) {
     mUseBackpackItem = false;
     return true;
   }
-
   return false;
 }
 
-
-
-bool GameInput::isToggleWorldChunkBoxes (void) {
+bool GameInput::isToggleWorldChunkBoxes() {
   if (mToggleWorldChunkBoxes) {
     mToggleWorldChunkBoxes = false;
     return true;
   }
-
   return false;
 }
-
-
 
 // handle an SDL_Event
 int GameInput::update() {
@@ -318,18 +239,18 @@ int GameInput::update() {
   int quit = 0;
 
   // go through all the queued events and handle each one
-  while (SDL_PollEvent (&sdlEvent) && !quit) {
+  while (SDL_PollEvent(&sdlEvent) && !quit) {
     switch (sdlEvent.type) {
       case SDL_QUIT:
         mWindowClosed = true;
         break;
 
       case SDL_KEYDOWN:
-        quit = handleKeyDownEvent (sdlEvent.key.keysym.sym);
+        quit = handleKeyDownEvent(sdlEvent.key.keysym.sym);
         break;
 
       case SDL_KEYUP:
-        handleKeyUpEvent (sdlEvent.key.keysym.sym);
+        handleKeyUpEvent(sdlEvent.key.keysym.sym);
         break;
 
       case SDL_MOUSEMOTION:
@@ -366,10 +287,8 @@ int GameInput::update() {
   return quit;
 }
 
-
-
 // deal with a key down event
-int GameInput::handleKeyDownEvent (int key) {
+int GameInput::handleKeyDownEvent(int key) {
   switch (key) {
     case SDLK_ESCAPE:  // quit
       mEscapePressed = true;
@@ -449,10 +368,8 @@ int GameInput::handleKeyDownEvent (int key) {
   return 0;
 }
 
-
-
 // deal with a key up event
-int GameInput::handleKeyUpEvent (int key) {
+int GameInput::handleKeyUpEvent(int key) {
   switch (key) {
     case SDLK_w:
       mWalkForward = false;
@@ -493,10 +410,8 @@ int GameInput::handleKeyUpEvent (int key) {
   return 0;
 }
 
-
-
 // deal with a mouse button down event
-void GameInput::handleMouseButtonDownEvent (int button) {
+void GameInput::handleMouseButtonDownEvent(int button) {
   switch (button) {
     case SDL_BUTTON_LEFT:
       mUsePrimary = true;
@@ -513,10 +428,8 @@ void GameInput::handleMouseButtonDownEvent (int button) {
   }
 }
 
-
-
 // deal with a mouse button up event
-void GameInput::handleMouseButtonUpEvent (int button) {
+void GameInput::handleMouseButtonUpEvent(int button) {
   switch (button) {
     case SDL_BUTTON_LEFT:
       mUsePrimary = false;
@@ -541,5 +454,3 @@ void GameInput::handleMouseWeelEvent(SDL_MouseWheelEvent wheelEvent) {
       mNextGun++;
   }
 }
-
-

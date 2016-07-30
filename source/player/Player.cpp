@@ -679,7 +679,7 @@ void Player::updateCharacterSheet() {
   mCharacterSheet.addText(v2d_v(0.1, 0.6), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
 }
 
-bool Player::update(AssetManager& assetManager, GameInput& gi) {
+bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
   mLastUpdateTime = mGameModel->mPhysics->getLastUpdateTime();
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
@@ -732,17 +732,17 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
   }
 
   // does the player want to mess with the draw distance?
-  if (gi.isDecreasingDrawDistance()) {
+  if (gameInput->isDecreasingDrawDistance()) {
     adjust_draw_distance(-20);
   }
-  if (gi.isIncreasingDrawDistance()) {
+  if (gameInput->isIncreasingDrawDistance()) {
     adjust_draw_distance(20);
   }
 
 
   // deal with an escape press
   bool escapePressed = false;
-  if (gi.isEscapePressed()) {
+  if (gameInput->isEscapePressed()) {
     if (mShowCharacterSheet) {
       mShowCharacterSheet = false;
     }
@@ -752,8 +752,8 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
   }
 
   // accommodate the changes in orientation
-  mFacing += gi.getFacingDelta();
-  mIncline += gi.getInclinationDelta();
+  mFacing += gameInput->getFacingDelta();
+  mIncline += gameInput->getInclinationDelta();
   constrain_view_angles();
 
   // update the camera accordingly
@@ -788,7 +788,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
     mHud.addText(v2d_v(0.00, 0.05), v2d_v(0.2, 0.04), fontSize, healthString, TEXT_JUSTIFICATION_LEFT, color, NULL);
     mHud.addText(v2d_v(0.00, 0.00), v2d_v(0.2, 0.04), fontSize, "press (f1) or (esc)", TEXT_JUSTIFICATION_LEFT, color, NULL);
 
-    if (gi.isSoftReset()) {
+    if (gameInput->isSoftReset()) {
       mMaxHealth = 100.0;
       mCurrentHealth = 100.0;
 
@@ -805,7 +805,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
 
 
   if (mShowCharacterSheet) {
-    if (gi.isClickMouse1()) {
+    if (gameInput->isClickMouse1()) {
       if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
         mInventory.swapBackPackItemIntoPrimary();
       }
@@ -813,7 +813,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
         mInventory.swapBackPackItemIntoPrimary();
       }
     }
-    if (gi.isClickMouse2()) {
+    if (gameInput->isClickMouse2()) {
       if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
         mInventory.swapBackPackItemIntoSecondary();
       }
@@ -822,7 +822,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
       }
     }
 
-    if (gi.isUseBackpackItem()) {
+    if (gameInput->isUseBackpackItem()) {
       item_t item = mGameModel->mItemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
 
       if (item.type == ITEMTYPE_HEALTHPACK) {
@@ -830,27 +830,27 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
       }
     }
 
-    if (gi.isNextGun()) {
+    if (gameInput->isNextGun()) {
       mInventory.nextBackPackItem();
     }
 
-    if (gi.isPreviousGun()) {
+    if (gameInput->isPreviousGun()) {
       mInventory.previousBackPackItem();
     }
 
     // did the player want to drop that item?
     // FIXME: destroys item!
     // this needs to create a physics item...
-    if (gi.isDroppedItem() && mInventory.mBackpack[mInventory.mSelectedBackpackItem] != 0) {
+    if (gameInput->isDroppedItem() && mInventory.mBackpack[mInventory.mSelectedBackpackItem] != 0) {
       mGameModel->mItemManager->destroyItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
   } // end mShowCharacterSheet == true
   else { // if (!mShowCharacterSheet) {
-    if (gi.isUsingPrimary()) {
+    if (gameInput->isUsingPrimary()) {
       useEquipped(EQUIP_PRIMARY);
     }
-    if (gi.isUsingSecondary()) {
+    if (gameInput->isUsingSecondary()) {
       useEquipped(EQUIP_SECONDARY);
     }
   }
@@ -861,7 +861,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
     mPlacedBlock = false;
 
     // FIXME: only works if in primary position
-    if (gi.isClickMouse1 () && mIsBlockTargeted) {
+    if (gameInput->isClickMouse1 () && mIsBlockTargeted) {
       v3di_t neighborPos = v3di_add(mTargetBlock, gBlockNeighborAddLookup[mTargetBlockFace]);
 
       BoundingBox bb (v3d_v (1.0, 1.0, 1.0), v3d_v (neighborPos));
@@ -895,7 +895,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
   }
 
   // does the player wanna pick stuff up?
-  if (gi.isPickUpItem()) {
+  if (gameInput->isPickUpItem()) {
     Message message;
     message.sender = mGameModel->mPhysics->getPlayerHandle();
     message.recipient = MAILBOX_PHYSICS;
@@ -904,7 +904,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
   }
 
   // deal with a soft reset
-  if (gi.isSoftReset()) {
+  if (gameInput->isSoftReset()) {
     soft_reset(mStartPosition);
 
     // this stuff has changed, so take note!
@@ -914,27 +914,27 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
   updateHud();
 
   // toggle the character sheet on/off according to the user input
-  if (gi.isToggleCharacterSheet()) {
+  if (gameInput->isToggleCharacterSheet()) {
     mShowCharacterSheet = !mShowCharacterSheet;
   }
 
   updateCharacterSheet();
 
-  if (gi.isToggleGodMode()) {
+  if (gameInput->isToggleGodMode()) {
     godMode();
   }
 
-  if (gi.isTogglePhysics()) mGameModel->mPhysics->togglePause();
-  if (gi.isAdvanceOneFrame()) mGameModel->mPhysics->advanceOneFrame();
+  if (gameInput->isTogglePhysics()) mGameModel->mPhysics->togglePause();
+  if (gameInput->isAdvanceOneFrame()) mGameModel->mPhysics->advanceOneFrame();
 
 
   mWalkInput = v2d_v(0.0, 0.0);
-  if (gi.isWalkingForward())    mWalkInput.y += 1.0;
-  if (gi.isWalkingBackward())  mWalkInput.y -= 1.0;
-  if (gi.isWalkingLeft())    mWalkInput.x += 1.0;
-  if (gi.isWalkingRight())    mWalkInput.x -= 1.0;
+  if (gameInput->isWalkingForward())    mWalkInput.y += 1.0;
+  if (gameInput->isWalkingBackward())  mWalkInput.y -= 1.0;
+  if (gameInput->isWalkingLeft())    mWalkInput.x += 1.0;
+  if (gameInput->isWalkingRight())    mWalkInput.x -= 1.0;
 
-  bool isJumping = gi.isJumping();
+  bool isJumping = gameInput->isJumping();
 
   if (physicsEntity->worldViscosity < 0.01) {
     mInWater = false;
@@ -981,7 +981,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
 
   /*
     // FLYING * * * * * * * * *
-    if (gi.isUsingSecondary () && !phys.isHandleOnGround (mPhysicsHandle)) {
+    if (gameInput->isUsingSecondary () && !phys.isHandleOnGround (mPhysicsHandle)) {
       // glide
       v3d_t liftVector = v3d_v (0.0, 0.0, 0.0);
 
@@ -1091,7 +1091,7 @@ bool Player::update(AssetManager& assetManager, GameInput& gi) {
 
       swimForce = v3d_add(swimForce, force);
     }
-    if (gi.isSwimming()) {
+    if (gameInput->isSwimming()) {
       // 'up' force
       double mag = 1500.0 * (sin(mLastUpdateTime * 10.0) + 1.5);
       mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), v3d_v(0.0, mag, 0.0));

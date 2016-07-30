@@ -227,20 +227,15 @@ void game_c::initializeWorldViews() {
 }
 
 void game_c::gameLoop() {
-  printf("game_c::gameLoop() - begin\n");
-
-  unsigned int ticks = SDL_GetTicks();
   int frame = 0;
   int blocks_drawn = 0;
-
+  unsigned int ticks = SDL_GetTicks();
   mLastUpdateTime = (double)ticks / 1000.0;
-
   mGameState = GAMESTATE_PLAY;
 
   int quit = 0;
   bool escapePressed = false;
 
-  // the main loop
   while (quit == 0) {
     escapePressed = update();
 
@@ -296,7 +291,7 @@ void game_c::gameLoop() {
       printf("avg frame: %10.3fms\n", (double)delta_t / (double)frame);
       frame = 0;
       blocks_drawn = 0;
-      ticks = SDL_GetTicks ();
+      ticks = SDL_GetTicks();
 
       printf("num phys: %d\n", mNumPhysicsObjects);
       printf("num ai: %d\n", mNumAiObjects);
@@ -305,13 +300,9 @@ void game_c::gameLoop() {
     }
 
     // rescue single processor machines
-//    SDL_Delay(1);
+    // SDL_Delay(1);
   }
-
-  printf("game_c::gameLoop() - done\n");
 }
-
-
 
 int game_c::handleMenuChoice(int menuChoice) {
   GalaxyMap* galaxyMap;
@@ -411,7 +402,7 @@ bool game_c::update() {
   while (mLastUpdateTime < ticks) {
     mNumPhysicsObjects = mGameModel->mPhysics->update(mLastUpdateTime, mAssetManager);
 
-    escapePressed = mGameModel->mPlayer->update(mAssetManager, *mGameInput) || escapePressed;
+    escapePressed = mGameModel->mPlayer->update(mAssetManager, mGameInput) || escapePressed;
     if (escapePressed) {
       return escapePressed;
     }

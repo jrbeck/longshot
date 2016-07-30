@@ -106,7 +106,7 @@ public:
 
   void updateCharacterSheet();
 
-  bool update(AssetManager& assetManager, GameInput& gi);
+  bool update(AssetManager& assetManager, GameInput* gi);
 
   void readPhysicsMessages(AssetManager& assetManager);
 
