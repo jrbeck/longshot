@@ -5,14 +5,13 @@
 #pragma warning (disable : 4996)
 
 game_c::game_c(GameWindow* gameWindow) :
-  // mGalaxy(NULL),
   mGameModel(NULL),
   mAiView(NULL),
   mPhysicsView(NULL),
   mMerchantView(NULL),
   mMenu(NULL)
 {
-  printf("game_c constructor ----------------\n");
+  printf("game_c::game_c ----------------\n");
   mLastUpdateTime = 0.0;
 
   mGameWindow = gameWindow;
@@ -25,6 +24,7 @@ game_c::game_c(GameWindow* gameWindow) :
 }
 
 game_c::~game_c() {
+  printf("game_c::~game_c ----------------\n");
   if (mGameInput != NULL) {
     delete mGameInput;
   }
@@ -44,7 +44,6 @@ game_c::~game_c() {
     delete mGameModel;
   }
 
-  printf("you must set my assets free!\n");
   mAssetManager.freeAssets();
 }
 

@@ -69,6 +69,7 @@ int AssetManager::loadAssets() {
 }
 
 void AssetManager::freeAssets() {
+  printf("you must set my assets free!\n");
   if (mTerrainTextureHandle != 0) {
     glDeleteTextures(1, &mTerrainTextureHandle);
     mTerrainTextureHandle = 0;
@@ -184,7 +185,8 @@ int AssetManager::loadTexture(const char* filename, GLuint* texture_handle) {
     0,
     textureFormat,
     GL_UNSIGNED_BYTE,
-    surface->pixels);
+    surface->pixels
+  );
 
   SDL_FreeSurface(surface);
   return 0;
@@ -199,11 +201,11 @@ GLuint AssetManager::loadImg(const char* fileName) {
 }
 
 void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPosition) {
-  mDirectionalLights[0].setDirection (sunPosition);
-  mDirectionalLights[1].setDirection (moonPosition);
+  mDirectionalLights[0].setDirection(sunPosition);
+  mDirectionalLights[1].setDirection(moonPosition);
 
   for (size_t i = 0; i < 6; ++i) {
-    mGlobalLightIntensities[i] = v3d_zero ();
+    mGlobalLightIntensities[i] = v3d_zero();
   }
 
   for (size_t light = 0; light < mDirectionalLights.size(); light++) {
@@ -216,46 +218,46 @@ void AssetManager::setDirectionalLightPositions(v3d_t sunPosition, v3d_t moonPos
     mGlobalLightIntensities[BLOCK_SIDE_LEF] =
       v3d_add (mGlobalLightIntensities[BLOCK_SIDE_LEF],
       mDirectionalLights[light].
-      computeDirectionalLightIntensity (v3d_v (-1.0, 0.0, 0.0), isTheSun));
+      computeDirectionalLightIntensity(v3d_v(-1.0, 0.0, 0.0), isTheSun));
 
     mGlobalLightIntensities[BLOCK_SIDE_RIG] =
       v3d_add (mGlobalLightIntensities[BLOCK_SIDE_RIG],
       mDirectionalLights[light].
-      computeDirectionalLightIntensity (v3d_v (1.0, 0.0, 0.0), isTheSun));
+      computeDirectionalLightIntensity(v3d_v(1.0, 0.0, 0.0), isTheSun));
 
     mGlobalLightIntensities[BLOCK_SIDE_TOP] =
       v3d_add (mGlobalLightIntensities[BLOCK_SIDE_TOP],
       mDirectionalLights[light].
-      computeDirectionalLightIntensity (v3d_v (0.0, 1.0, 0.0), isTheSun));
+      computeDirectionalLightIntensity(v3d_v(0.0, 1.0, 0.0), isTheSun));
 
     mGlobalLightIntensities[BLOCK_SIDE_BOT] =
       v3d_add (mGlobalLightIntensities[BLOCK_SIDE_BOT],
       mDirectionalLights[light].
-      computeDirectionalLightIntensity (v3d_v (0.0, -1.0, 0.0), isTheSun));
+      computeDirectionalLightIntensity(v3d_v(0.0, -1.0, 0.0), isTheSun));
 
     mGlobalLightIntensities[BLOCK_SIDE_BAC] =
       v3d_add (mGlobalLightIntensities[BLOCK_SIDE_BAC],
       mDirectionalLights[light].
-      computeDirectionalLightIntensity (v3d_v (0.0, 0.0, -1.0), isTheSun));
+      computeDirectionalLightIntensity(v3d_v(0.0, 0.0, -1.0), isTheSun));
 
     mGlobalLightIntensities[BLOCK_SIDE_FRO] =
       v3d_add (mGlobalLightIntensities[BLOCK_SIDE_FRO],
       mDirectionalLights[light].
-      computeDirectionalLightIntensity (v3d_v (0.0, 0.0, 1.0), isTheSun));
+      computeDirectionalLightIntensity(v3d_v(0.0, 0.0, 1.0), isTheSun));
 
   }
-//  mGlobalLightIntensities[BLOCK_SIDE_LEF] = v3d_v (1, 1, 1);
-//  mGlobalLightIntensities[BLOCK_SIDE_RIG] = v3d_zero ();
-//  mGlobalLightIntensities[BLOCK_SIDE_BOT] = v3d_zero ();
-//  mGlobalLightIntensities[BLOCK_SIDE_TOP] = v3d_zero ();
-//  mGlobalLightIntensities[BLOCK_SIDE_BAC] = v3d_zero ();
-//  mGlobalLightIntensities[BLOCK_SIDE_FRO] = v3d_zero ();
+//  mGlobalLightIntensities[BLOCK_SIDE_LEF] = v3d_v(1, 1, 1);
+//  mGlobalLightIntensities[BLOCK_SIDE_RIG] = v3d_zero();
+//  mGlobalLightIntensities[BLOCK_SIDE_BOT] = v3d_zero();
+//  mGlobalLightIntensities[BLOCK_SIDE_TOP] = v3d_zero();
+//  mGlobalLightIntensities[BLOCK_SIDE_BAC] = v3d_zero();
+//  mGlobalLightIntensities[BLOCK_SIDE_FRO] = v3d_zero();
 
   // create the display list
   // WARNING: assumes the display list handle was obtained (loadAssets) previously
 
-  glNewList (mShadedBlockCallListHandle, GL_COMPILE);
-    drawBlock (mGlobalLightIntensities);
+  glNewList(mShadedBlockCallListHandle, GL_COMPILE);
+    drawBlock(mGlobalLightIntensities);
   glEndList();
 }
 
@@ -268,84 +270,84 @@ GLuint AssetManager::getShadedBlockCallListHandle() const {
 }
 
 // draw a block
-void AssetManager::drawBlock (const v3d_t *intensities) const {
-  glBegin (GL_QUADS);
+void AssetManager::drawBlock(const v3d_t *intensities) const {
+  glBegin(GL_QUADS);
     // left
-    glNormal3d (-1.0, 0.0, 0.0);
+    glNormal3d(-1.0, 0.0, 0.0);
 
-    glColor4d (intensities[BLOCK_SIDE_LEF].x,
+    glColor4d(intensities[BLOCK_SIDE_LEF].x,
       intensities[BLOCK_SIDE_LEF].y,
       intensities[BLOCK_SIDE_LEF].z, 1.0);
 
-    glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-    glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
-    glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
-    glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
+    glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+    glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
+    glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
+    glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
 
     // right
-    glNormal3d (1.0, 0.0, 0.0);
+    glNormal3d(1.0, 0.0, 0.0);
 
-    glColor4d (intensities[BLOCK_SIDE_RIG].x,
+    glColor4d(intensities[BLOCK_SIDE_RIG].x,
       intensities[BLOCK_SIDE_RIG].y,
       intensities[BLOCK_SIDE_RIG].z, 1.0);
 
-    glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-    glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
-    glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-    glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
+    glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+    glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
+    glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+    glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
 
     // top
-    glNormal3d (0.0, 1.0, 0.0);
+    glNormal3d(0.0, 1.0, 0.0);
 
-    glColor4d (intensities[BLOCK_SIDE_TOP].x,
+    glColor4d(intensities[BLOCK_SIDE_TOP].x,
       intensities[BLOCK_SIDE_TOP].y,
       intensities[BLOCK_SIDE_TOP].z, 1.0);
 
-    glTexCoord2f (0.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
-    glTexCoord2f (0.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
-    glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-    glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+    glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
+    glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
+    glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+    glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 
     // bottom
-    glNormal3d (0.0, -1.0, 0.0);
+    glNormal3d(0.0, -1.0, 0.0);
 
-    glColor4d (intensities[BLOCK_SIDE_BOT].x,
+    glColor4d(intensities[BLOCK_SIDE_BOT].x,
       intensities[BLOCK_SIDE_BOT].y,
       intensities[BLOCK_SIDE_BOT].z, 1.0);
 
-    glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-    glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-    glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
-    glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
+    glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+    glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+    glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
+    glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
 
     // front
-    glNormal3d (0.0, 0.0, 1.0);
+    glNormal3d(0.0, 0.0, 1.0);
 
-    glColor4d (intensities[BLOCK_SIDE_FRO].x,
+    glColor4d(intensities[BLOCK_SIDE_FRO].x,
       intensities[BLOCK_SIDE_FRO].y,
       intensities[BLOCK_SIDE_FRO].z, 1.0);
 
-    glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
-    glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
-    glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-    glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
+    glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
+    glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
+    glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+    glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
 
     // back
-    glNormal3d (0.0, 0.0, -1.0);
+    glNormal3d(0.0, 0.0, -1.0);
 
-    glColor4d (intensities[BLOCK_SIDE_BAC].x,
+    glColor4d(intensities[BLOCK_SIDE_BAC].x,
       intensities[BLOCK_SIDE_BAC].y,
       intensities[BLOCK_SIDE_BAC].z, 1.0);
 
-    glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-    glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-    glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
-    glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
-  glEnd ();
+    glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+    glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+    glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
+    glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
+  glEnd();
 }
 
 // expects v3d_t intensities[8] - one for each corner
-void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
+void AssetManager::drawBlock2(const v3di_t intensities[8]) const {
   v3d_t v3dIntensities[NUM_BOX_CORNERS];
 
   for (int i = 0; i < NUM_BOX_CORNERS; ++i) {
@@ -355,143 +357,143 @@ void AssetManager::drawBlock2 (const v3di_t intensities[8]) const {
   }
 
   // left
-  glNormal3d (-1.0, 0.0, 0.0);
+  glNormal3d(-1.0, 0.0, 0.0);
 
-  glColor4d (v3dIntensities[BOX_CORNER_LBB].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LBB].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities[BOX_CORNER_LBB].y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities[BOX_CORNER_LBB].z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
 
-  glColor4d (v3dIntensities[BOX_CORNER_LBF].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LBF].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities[BOX_CORNER_LBF].y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities[BOX_CORNER_LBF].z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
 
-  glColor4d (v3dIntensities[BOX_CORNER_LTF].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LTF].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities[BOX_CORNER_LTF].y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities[BOX_CORNER_LTF].z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
 
-  glColor4d (v3dIntensities[BOX_CORNER_LTB].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LTB].x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities[BOX_CORNER_LTB].y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities[BOX_CORNER_LTB].z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
 
   // right
-  glNormal3d (1.0, 0.0, 0.0);
+  glNormal3d(1.0, 0.0, 0.0);
 
-  glColor4d (v3dIntensities[BOX_CORNER_RBB].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RBB].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities[BOX_CORNER_RBB].y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities[BOX_CORNER_RBB].z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
 
-  glColor4d (v3dIntensities[BOX_CORNER_RTB].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RTB].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities[BOX_CORNER_RTB].y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities[BOX_CORNER_RTB].z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 
-  glColor4d (v3dIntensities[BOX_CORNER_RTF].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RTF].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities[BOX_CORNER_RTF].y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities[BOX_CORNER_RTF].z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
 
-  glColor4d (v3dIntensities[BOX_CORNER_RBF].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RBF].x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities[BOX_CORNER_RBF].y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities[BOX_CORNER_RBF].z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
 
   // top
-  glNormal3d (0.0, 1.0, 0.0);
+  glNormal3d(0.0, 1.0, 0.0);
 
-  glColor4d (v3dIntensities[BOX_CORNER_LTB].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LTB].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities[BOX_CORNER_LTB].y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities[BOX_CORNER_LTB].z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
 
-  glColor4d (v3dIntensities[BOX_CORNER_LTF].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LTF].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities[BOX_CORNER_LTF].y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities[BOX_CORNER_LTF].z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
 
-  glColor4d (v3dIntensities[BOX_CORNER_RTF].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RTF].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities[BOX_CORNER_RTF].y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities[BOX_CORNER_RTF].z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
 
-  glColor4d (v3dIntensities[BOX_CORNER_RTB].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RTB].x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities[BOX_CORNER_RTB].y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities[BOX_CORNER_RTB].z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 
   // bottom
-  glNormal3d (0.0, -1.0, 0.0);
+  glNormal3d(0.0, -1.0, 0.0);
 
-  glColor4d (v3dIntensities[BOX_CORNER_LBB].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LBB].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities[BOX_CORNER_LBB].y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities[BOX_CORNER_LBB].z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
 
-  glColor4d (v3dIntensities[BOX_CORNER_RBB].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RBB].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities[BOX_CORNER_RBB].y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities[BOX_CORNER_RBB].z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
 
-  glColor4d (v3dIntensities[BOX_CORNER_RBF].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RBF].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities[BOX_CORNER_RBF].y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities[BOX_CORNER_RBF].z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
 
-  glColor4d (v3dIntensities[BOX_CORNER_LBF].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LBF].x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities[BOX_CORNER_LBF].y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities[BOX_CORNER_LBF].z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
 
   // front
-  glNormal3d (0.0, 0.0, 1.0);
+  glNormal3d(0.0, 0.0, 1.0);
 
 
-  glColor4d (v3dIntensities[BOX_CORNER_LBF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LBF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities[BOX_CORNER_LBF].y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities[BOX_CORNER_LBF].z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
 
-  glColor4d (v3dIntensities[BOX_CORNER_RBF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RBF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities[BOX_CORNER_RBF].y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities[BOX_CORNER_RBF].z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
 
-  glColor4d (v3dIntensities[BOX_CORNER_RTF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RTF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities[BOX_CORNER_RTF].y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities[BOX_CORNER_RTF].z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
 
-  glColor4d (v3dIntensities[BOX_CORNER_LTF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities[BOX_CORNER_LTF].x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities[BOX_CORNER_LTF].y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities[BOX_CORNER_LTF].z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
 
   // back
-  glNormal3d (0.0, 0.0, -1.0);
+  glNormal3d(0.0, 0.0, -1.0);
 
-  glColor4d (v3dIntensities[BOX_CORNER_RBB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glColor4d(v3dIntensities[BOX_CORNER_RBB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities[BOX_CORNER_RBB].y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities[BOX_CORNER_RBB].z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBB]);  // RBB
-  glColor4d (v3dIntensities[BOX_CORNER_LBB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glColor4d(v3dIntensities[BOX_CORNER_LBB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities[BOX_CORNER_LBB].y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities[BOX_CORNER_LBB].z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBB]);  // LBB
-  glColor4d (v3dIntensities[BOX_CORNER_LTB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glColor4d(v3dIntensities[BOX_CORNER_LTB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities[BOX_CORNER_LTB].y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities[BOX_CORNER_LTB].z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
-  glColor4d (v3dIntensities[BOX_CORNER_RTB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glColor4d(v3dIntensities[BOX_CORNER_RTB].x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities[BOX_CORNER_RTB].y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities[BOX_CORNER_RTB].z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
 
-void AssetManager::drawBlock3 (int r, int g, int b) const {
+void AssetManager::drawBlock3(int r, int g, int b) const {
   GLfloat color[4] = {
     (GLfloat)r * ONE_OVER_LIGHT_LEVEL_MAX,
     (GLfloat)g * ONE_OVER_LIGHT_LEVEL_MAX,
@@ -503,46 +505,46 @@ void AssetManager::drawBlock3 (int r, int g, int b) const {
   glColor4fv(color);
 
     // left
-  glNormal3d (-1.0, 0.0, 0.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBF]);  // LBF
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTF]);  // LTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glNormal3d(-1.0, 0.0, 0.0);
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
 
   // right
-  glNormal3d (1.0, 0.0, 0.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glNormal3d(1.0, 0.0, 0.0);
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
 
   // top
-  glNormal3d (0.0, 1.0, 0.0);
-  glTexCoord2f (0.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
-  glTexCoord2f (0.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTF]);  // LTF
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glNormal3d(0.0, 1.0, 0.0);
+  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 
   // bottom
-  glNormal3d (0.0, -1.0, 0.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBF]);  // RBF
-  glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glNormal3d(0.0, -1.0, 0.0);
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
 
   // front
-  glNormal3d (0.0, 0.0, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBF]);  // LBF
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBF]);  // RBF
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTF]);  // LTF
+  glNormal3d(0.0, 0.0, 1.0);
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTF]);  // LTF
 
   // back
-  glNormal3d (0.0, 0.0, -1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner_centered[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_LTB]);  // LTB
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner_centered[BOX_CORNER_RTB]);  // RTB
+  glNormal3d(0.0, 0.0, -1.0);
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner_centered[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner_centered[BOX_CORNER_RTB]);  // RTB
 }
 
 void AssetManager::drawBlockWithFace(v3di_t intensities) const {
@@ -553,220 +555,220 @@ void AssetManager::drawBlockWithFace(v3di_t intensities) const {
   v3dIntensities.z = (double)intensities.z * ONE_OVER_LIGHT_LEVEL_MAX;
 
   // left - BACK
-  glNormal3d (-1.0, 0.0, 0.0);
+  glNormal3d(-1.0, 0.0, 0.0);
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_LEF].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_LEF].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_LEF].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
 
   // right - FACE
-  glNormal3d (1.0, 0.0, 0.0);
+  glNormal3d(1.0, 0.0, 0.0);
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (0.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_RIG].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_RIG].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_RIG].z, 1.0);
-  glTexCoord2f (0.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.0f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
 
   // top
-  glNormal3d (0.0, 1.0, 0.0);
+  glNormal3d(0.0, 1.0, 0.0);
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_TOP].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_TOP].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_TOP].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 
   // bottom
-  glNormal3d (0.0, -1.0, 0.0);
+  glNormal3d(0.0, -1.0, 0.0);
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BOT].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BOT].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BOT].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
 
   // front - right
-  glNormal3d (0.0, 0.0, 1.0);
+  glNormal3d(0.0, 0.0, 1.0);
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_FRO].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_FRO].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_FRO].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
 
   // back - left
-  glNormal3d (0.0, 0.0, -1.0);
+  glNormal3d(0.0, 0.0, -1.0);
 
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
-  glColor4d (v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
+  glColor4d(v3dIntensities.x * mGlobalLightIntensities[BLOCK_SIDE_BAC].x,
     v3dIntensities.y * mGlobalLightIntensities[BLOCK_SIDE_BAC].y,
     v3dIntensities.z * mGlobalLightIntensities[BLOCK_SIDE_BAC].z, 1.0);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 }
 
-void AssetManager::drawBlankBlock (void) {
+void AssetManager::drawBlankBlock() {
   // left
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
 
   // right
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
 
   // top
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
-  glTexCoord2f (0.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
-  glTexCoord2f (0.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
+  glTexCoord2f(0.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 
   // bottom
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
-  glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
 
   // front
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
 
   // back
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 }
 
 void AssetManager::drawBlockFace(int whichFace, const GLfloat intensities[4]) const {
-//  glBegin (GL_QUADS);
+//  glBegin(GL_QUADS);
 
   switch (whichFace) {
     case BLOCK_SIDE_LEF:
-      drawBlockFaceLeft (intensities);
+      drawBlockFaceLeft(intensities);
       break;
     case BLOCK_SIDE_RIG:
-      drawBlockFaceRight (intensities);
+      drawBlockFaceRight(intensities);
       break;
     case BLOCK_SIDE_TOP:
-      drawBlockFaceTop (intensities);
+      drawBlockFaceTop(intensities);
       break;
     case BLOCK_SIDE_BOT:
-      drawBlockFaceBottom (intensities);
+      drawBlockFaceBottom(intensities);
       break;
     case BLOCK_SIDE_FRO:
-      drawBlockFaceFront (intensities);
+      drawBlockFaceFront(intensities);
       break;
     case BLOCK_SIDE_BAC:
-      drawBlockFaceBack (intensities);
+      drawBlockFaceBack(intensities);
       break;
   }
 
-//  glEnd ();
+//  glEnd();
 }
 
 void AssetManager::drawBlockFaceLeft(const GLfloat intensities[4]) const {
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
-  glColor4fv (intensities);
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
+  glColor4fv(intensities);
 
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
 }
 
 void AssetManager::drawBlockFaceRight (const GLfloat intensities[4]) const {
@@ -790,33 +792,33 @@ void AssetManager::drawBlockFaceTop (const GLfloat intensities[4]) const {
 }
 
 void AssetManager::drawBlockFaceBottom (const GLfloat intensities[4]) const {
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
-  glColor4fv (intensities);
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
+  glColor4fv(intensities);
 
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (0.5f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
-  glTexCoord2f (1.0f, 1.0f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(0.5f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 1.0f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
 }
 
 void AssetManager::drawBlockFaceFront (const GLfloat intensities[4]) const {
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
-  glColor4fv (intensities);
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
+  glColor4fv(intensities);
 
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBF]);  // LBF
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBF]);  // RBF
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTF]);  // RTF
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTF]);  // LTF
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBF]);  // LBF
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBF]);  // RBF
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTF]);  // RTF
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTF]);  // LTF
 }
 
 void AssetManager::drawBlockFaceBack (const GLfloat intensities[4]) const {
-  glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
-  glColor4fv (intensities);
+  glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
+  glColor4fv(intensities);
 
-  glTexCoord2f (0.5f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_RBB]);  // RBB
-  glTexCoord2f (1.0f, 0.5f); glVertex3fv (cube_corner[BOX_CORNER_LBB]);  // LBB
-  glTexCoord2f (1.0f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_LTB]);  // LTB
-  glTexCoord2f (0.5f, 0.0f); glVertex3fv (cube_corner[BOX_CORNER_RTB]);  // RTB
+  glTexCoord2f(0.5f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_RBB]);  // RBB
+  glTexCoord2f(1.0f, 0.5f); glVertex3fv(cube_corner[BOX_CORNER_LBB]);  // LBB
+  glTexCoord2f(1.0f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_LTB]);  // LTB
+  glTexCoord2f(0.5f, 0.0f); glVertex3fv(cube_corner[BOX_CORNER_RTB]);  // RTB
 }
 
 GLuint AssetManager::getTerrainTextureHandle() const {
@@ -866,20 +868,20 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
     intensities[1] = faceLighting[BLOCK_SIDE_LEF][1];
     intensities[2] = faceLighting[BLOCK_SIDE_LEF][2];
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3fv(npos);  // LBB
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
     glVertex3f(npos[0], npos[1], fpos[2]);  // LBF
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT, textureY + 0.0f);
     glVertex3f(npos[0], fpos[1], fpos[2]);  // LTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3f(npos[0], fpos[1], npos[2]);  // LTB
   }
 
@@ -891,20 +893,20 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
     intensities[1] = faceLighting[BLOCK_SIDE_RIG][1];
     intensities[2] = faceLighting[BLOCK_SIDE_RIG][2];
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
     glVertex3f(fpos[0], npos[1], npos[2]);  // RBB
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT, textureY + 0.0f);
     glVertex3f(fpos[0], fpos[1], npos[2]);  // RTB
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3fv(fpos);  // RTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3f(fpos[0], npos[1], fpos[2]);  // RBF
   }
 
@@ -916,36 +918,36 @@ void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) c
     intensities[1] = faceLighting[BLOCK_SIDE_TOP][1];
     intensities[2] = faceLighting[BLOCK_SIDE_TOP][2];
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
 
-    glTexCoord2f (textureX + 0.0f, textureY + 0.0f);
+    glTexCoord2f(textureX + 0.0f, textureY + 0.0f);
     glVertex3f(npos[0], fpos[1], npos[2]);  // LTB
 
-    glTexCoord2f (textureX + 0.0f, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + 0.0f, textureY + TEX_MULT_HALF);
     glVertex3f(npos[0], fpos[1], fpos[2]);  // LTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3fv(fpos);  // RTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3f(fpos[0], fpos[1], npos[2]);  // RTB
 
     // draw the underside of the water surface
     if (gBlockData.get(block.type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-      glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
+      glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
 
-      glTexCoord2f (textureX + 0.0f, textureY + 0.0f);
+      glTexCoord2f(textureX + 0.0f, textureY + 0.0f);
       glVertex3f(npos[0], fpos[1], npos[2]);  // LTB
 
-      glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+      glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
       glVertex3f(fpos[0], fpos[1], npos[2]);  // RTB
 
-      glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+      glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
       glVertex3fv(fpos);  // RTF
 
-      glTexCoord2f (textureX + 0.0f, textureY + TEX_MULT_HALF);
+      glTexCoord2f(textureX + 0.0f, textureY + TEX_MULT_HALF);
       glVertex3f(npos[0], fpos[1], fpos[2]);  // LTF
     }
   }
@@ -1076,8 +1078,8 @@ void AssetManager::drawPlantBlock(v3di_t worldPosition, const block_t& block) co
 
 /*
 
-void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) const {
-  GLfloat blockAlpha = gBlockData.get (block.type).alpha;
+void AssetManager::drawBlock(GLfloat height, v3di_t pos, const block_t &block) const {
+  GLfloat blockAlpha = gBlockData.get(block.type).alpha;
 
   if (blockAlpha <= 0.0) return;
   if (block.faceVisibility == 0) return;
@@ -1122,20 +1124,20 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
     intensities[2] = faceLighting[BLOCK_SIDE_LEF][2] *
       static_cast<GLfloat>(mGlobalLightIntensities[BLOCK_SIDE_LEF].z);
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_LEF]);
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
-    glVertex3fv (npos);  // LBB
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glVertex3fv(npos);  // LBB
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
     glVertex3f (npos[0], npos[1], fpos[2]);  // LBF
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT, textureY + 0.0f);
     glVertex3f (npos[0], fpos[1], fpos[2]);  // LTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3f (npos[0], fpos[1], npos[2]);  // LTB
   }
 
@@ -1150,20 +1152,20 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
     intensities[2] = faceLighting[BLOCK_SIDE_RIG][2] *
       static_cast<GLfloat>(mGlobalLightIntensities[BLOCK_SIDE_RIG].z);
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_RIG]);
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
     glVertex3f (fpos[0], npos[1], npos[2]);  // RBB
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT, textureY + 0.0f);
     glVertex3f (fpos[0], fpos[1], npos[2]);  // RTB
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
-    glVertex3fv (fpos);  // RTF
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glVertex3fv(fpos);  // RTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3f (fpos[0], npos[1], fpos[2]);  // RBF
   }
 
@@ -1178,36 +1180,36 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
     intensities[2] = faceLighting[BLOCK_SIDE_TOP][2] *
       static_cast<GLfloat>(mGlobalLightIntensities[BLOCK_SIDE_TOP].z);
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_TOP]);
 
-    glTexCoord2f (textureX + 0.0f, textureY + 0.0f);
+    glTexCoord2f(textureX + 0.0f, textureY + 0.0f);
     glVertex3f (npos[0], fpos[1], npos[2]);  // LTB
 
-    glTexCoord2f (textureX + 0.0f, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + 0.0f, textureY + TEX_MULT_HALF);
     glVertex3f (npos[0], fpos[1], fpos[2]);  // LTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
-    glVertex3fv (fpos);  // RTF
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glVertex3fv(fpos);  // RTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3f (fpos[0], fpos[1], npos[2]);  // RTB
 
     // draw the underside of the water surface
     if (block.type == globalWaterBlockType) {
-      glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
+      glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
 
-      glTexCoord2f (textureX + 0.0f, textureY + 0.0f);
+      glTexCoord2f(textureX + 0.0f, textureY + 0.0f);
       glVertex3f (npos[0], fpos[1], npos[2]);  // LTB
 
-      glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+      glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
       glVertex3f (fpos[0], fpos[1], npos[2]);  // RTB
 
-      glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
-      glVertex3fv (fpos);  // RTF
+      glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+      glVertex3fv(fpos);  // RTF
 
-      glTexCoord2f (textureX + 0.0f, textureY + TEX_MULT_HALF);
+      glTexCoord2f(textureX + 0.0f, textureY + TEX_MULT_HALF);
       glVertex3f (npos[0], fpos[1], fpos[2]);  // LTF
     }
   }
@@ -1223,20 +1225,20 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
     intensities[2] = faceLighting[BLOCK_SIDE_BOT][2] *
       static_cast<GLfloat>(mGlobalLightIntensities[BLOCK_SIDE_BOT].z);
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BOT]);
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
-    glVertex3fv (npos);  // LBB
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glVertex3fv(npos);  // LBB
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3f (fpos[0], npos[1], npos[2]);  // RBB
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT);
     glVertex3f (fpos[0], npos[1], fpos[2]);  // RBF
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT);
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT);
     glVertex3f (npos[0], npos[1], fpos[2]);  // LBF
   }
 
@@ -1252,20 +1254,20 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
     intensities[2] = faceLighting[BLOCK_SIDE_FRO][2] *
       static_cast<GLfloat>(mGlobalLightIntensities[BLOCK_SIDE_FRO].z);
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_FRO]);
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3f (npos[0], npos[1], fpos[2]);  // LBF
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
     glVertex3f (fpos[0], npos[1], fpos[2]);  // RBF
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + 0.0f);
-    glVertex3fv (fpos);  // RTF
+    glTexCoord2f(textureX + TEX_MULT, textureY + 0.0f);
+    glVertex3fv(fpos);  // RTF
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3f (npos[0], fpos[1], fpos[2]);  // LTF
   }
 
@@ -1281,20 +1283,20 @@ void AssetManager::drawBlock (GLfloat height, v3di_t pos, const block_t &block) 
     intensities[2] = faceLighting[BLOCK_SIDE_BAC][2] *
       static_cast<GLfloat>(mGlobalLightIntensities[BLOCK_SIDE_BAC].z);
 
-    glColor4fv (intensities);
+    glColor4fv(intensities);
 
-    glNormal3iv (gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
+    glNormal3iv(gCubeFaceNormalLookup[BLOCK_SIDE_BAC]);
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + TEX_MULT_HALF);
     glVertex3f (fpos[0], npos[1], npos[2]);  // RBB
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + TEX_MULT_HALF);
-    glVertex3fv (npos);  // LBB
+    glTexCoord2f(textureX + TEX_MULT, textureY + TEX_MULT_HALF);
+    glVertex3fv(npos);  // LBB
 
-    glTexCoord2f (textureX + TEX_MULT, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT, textureY + 0.0f);
     glVertex3f (npos[0], fpos[1], npos[2]);  // LTB
 
-    glTexCoord2f (textureX + TEX_MULT_HALF, textureY + 0.0f);
+    glTexCoord2f(textureX + TEX_MULT_HALF, textureY + 0.0f);
     glVertex3f (fpos[0], fpos[1], npos[2]);  // RTB
   }
 }

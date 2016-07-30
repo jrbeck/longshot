@@ -44,7 +44,7 @@
 #include "../assets/AssetManager.h"
 #include "../items/MerchantView.h"
 
-// let's try to get rid of stuff below here...
+// let's try to get rid of includes below here...
 #include "../dungeon/RogueMapViewer.h"
 
 #define SAVE_FOLDER "save"
@@ -72,13 +72,7 @@ enum {
 
 class game_c {
   GameModel* mGameModel;
-
-  // Player* mPlayer;
-  // Galaxy* mGalaxy;
-  // AiManager* mAiManager;
-  // Physics* mPhysics;
   GameInput* mGameInput;
-  // ItemManager* mItemManager;
 
   AssetManager mAssetManager;
 
