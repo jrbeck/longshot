@@ -14,7 +14,8 @@
 
 #include "../vendor/GL/glut.h"
 
-#include "AiSpecies.h"
+#include "../game/MessageBus.h"
+#include "../ai/AiSpecies.h"
 #include "../world/WorldMap.h"
 #include "../physics/Physics.h"
 #include "../items/ItemManager.h"
@@ -23,8 +24,8 @@
 #define DONT_ATTACK_PLAYER    (false)
 #define PLAYER_SPECIES        (AITYPE_HUMAN)
 
-extern class Physics;
-extern struct PhysicsEntity;
+class Physics;
+struct PhysicsEntity;
 
 class AiEntity {
 public:

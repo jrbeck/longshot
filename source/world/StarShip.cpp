@@ -20,9 +20,7 @@ StarShip::~StarShip() {
   }
 }
 
-
-
-int StarShip::initialize(FILE *file, Galaxy *galaxy, int planetHandle) {
+int StarShip::initialize(FILE* file, Galaxy* galaxy, int planetHandle) {
   printf("StarShip::initialize(): entry\n");
   if (mWorldMap != NULL) {
     delete mWorldMap;
@@ -36,7 +34,6 @@ int StarShip::initialize(FILE *file, Galaxy *galaxy, int planetHandle) {
   }
   mLightManager = new LightManager();
 
-
   // FIXME: setup the 'sun' and 'moon' positions
   if (mOrbitSky != NULL) {
     delete mOrbitSky;
@@ -45,7 +42,6 @@ int StarShip::initialize(FILE *file, Galaxy *galaxy, int planetHandle) {
   //  assetManager.setDirectionalLightPositions(v3d_v(0, 100, 0), v3d_v(0, -100, 0));
   //  mSkySim->initialize(mPlayerStartPos);
   mOrbitSky->setOrbit(*galaxy, planetHandle);
-
 
   // make sure the WorldMap is looking at the same area that we
   // are, and that the columns are clear
@@ -61,29 +57,25 @@ int StarShip::initialize(FILE *file, Galaxy *galaxy, int planetHandle) {
   return 0;
 }
 
-
 void StarShip::save(FILE *file) {
   mWorldMap->save(file);
   mLightManager->save(file);
 }
 
-
 void StarShip::load(FILE *file) {
+  printf("loading starship\n");
   mWorldMap->load(file);
   mLightManager->load(file);
 }
-
 
 int StarShip::update(v3d_t playerPosition) {
   mLightManager->update(*mWorldMap);
   return 0;
 }
 
-
 void StarShip::draw(GlCamera &cam) {
   mOrbitSky->draw(cam, v3d_v(0.0, 0.0, 0.0));
 }
-
 
 void StarShip::initWorldColumns(bool clearColumns) {
   int halfWorld = WORLD_MAP_SIDE / 2;
@@ -135,8 +127,6 @@ void StarShip::initWorldColumns(bool clearColumns) {
     }
   }
 }
-
-
 
 void StarShip::generateShip() {
   printf("generating starship\n");
@@ -205,13 +195,8 @@ void StarShip::generateShip() {
   mLightManager->addLight(v3d_v(20.0, 4.0, 20.0), 10.0, color, *mWorldMap);
   mLightManager->addLight(v3d_v(5.0, 4.0, 7.0), 10.0, color, *mWorldMap);
   mLightManager->addLight(v3d_v(20.0, 4.0, 7.0), 10.0, color, *mWorldMap);
-
-
 }
 
-
-v3d_t StarShip::getStartPosition(void) {
+v3d_t StarShip::getStartPosition() {
   return v3d_v(12.5, 1.1, 50.0);
 }
-
-

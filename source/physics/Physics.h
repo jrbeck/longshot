@@ -11,31 +11,28 @@
 #pragma once
 
 #include "../math/v3d.h"
-
 #include "../game/GameModel.h"
-
 #include "../world/WorldMap.h"
 #include "../math/BoundingBox.h"
 #include "../assets/AssetManager.h"
 #include "../physics/Inactivelist.h"
 
-//#define PHYSICS_TIME_GRANULARITY  (0.03333333)  // 30 Hz
-//#define PHYSICS_TIME_GRANULARITY  (0.01666667)  // 60 Hz
-#define PHYSICS_TIME_GRANULARITY  (0.01111111)  // 90 Hz
-//#define PHYSICS_TIME_GRANULARITY  (0.00833333)  // 120 Hz
-
+//#define PHYSICS_TIME_GRANULARITY (0.03333333)  // 30 Hz
+//#define PHYSICS_TIME_GRANULARITY (0.01666667)  // 60 Hz
+#define PHYSICS_TIME_GRANULARITY (0.01111111)  // 90 Hz
+//#define PHYSICS_TIME_GRANULARITY (0.00833333)  // 120 Hz
 
 // physics defaults
-//#define DEFAULT_GRAVITY      (-9.80665)
-#define DEFAULT_GRAVITY      (-15.0)
-#define DEFAULT_FRICTION    (1.0)
-#define DEFAULT_AIR_RESISTANCE  (0.01)
-#define DEFAULT_AIR_WALK    (2.0)
-#define DEFAULT_WALK_ACC    (50.0)
-#define DEFAULT_JUMP_ACC    (250.0)
-#define DEFAULT_MASS      (80.0)
+//#define DEFAULT_GRAVITY (-9.80665)
+#define DEFAULT_GRAVITY (-15.0)
+#define DEFAULT_FRICTION (1.0)
+#define DEFAULT_AIR_RESISTANCE (0.01)
+#define DEFAULT_AIR_WALK (2.0)
+#define DEFAULT_WALK_ACC (50.0)
+#define DEFAULT_JUMP_ACC (250.0)
+#define DEFAULT_MASS (80.0)
 
-#define EPSILON          (0.0001)
+#define EPSILON (0.0001)
 
 
 
@@ -106,41 +103,6 @@ struct PhysicsEntity {
   double explosionForce;
 };
 
-
-
-enum {
-  PHYS_MESSAGE_DAMAGE,
-  PHYS_MESSAGE_ITEMGRAB,
-  PHYS_MESSAGE_ITEM_DESTROYED,
-  PHYS_MESSAGE_SPAWN_CREATURE,
-  PHYS_MESSAGE_PLAYERPICKUPITEMS,
-  PHYS_MESSAGE_ITEMGRABBED,
-  PHYS_MESSAGE_ADJUSTHEALTH,
-
-  NUM_PHYS_MESSSAGES
-};
-
-
-#define MAILBOX_PHYSICS        (-1)
-#define MAILBOX_ITEMMANAGER    (-2)
-#define MAILBOX_AIMANAGER      (-3)
-
-
-typedef struct {
-  int sender;
-  int recipient;
-
-  int type;
-
-  int iValue;
-  int iValue2;
-
-  double dValue;
-
-  v3d_t vec3;
-} phys_message_t;
-
-
 class GameModel;
 
 // Physics * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -148,9 +110,6 @@ class Physics {
 public:
   Physics(GameModel* gameModel);
   ~Physics();
-
-  void reset();
-  void clear();
 
   vector<PhysicsEntity*>* getEntityVector();
 
@@ -191,6 +150,8 @@ public:
   void setOwner(size_t handle, size_t owner);
   void setItemHandleAndType(size_t handle, size_t itemHandle, int itemType);
 
+  void readMail();
+
   // * * * * * * * * UPDATE
   int update(double time, AssetManager& assetManager);
   void updateEntity(size_t index);
@@ -226,12 +187,6 @@ public:
 
   size_t getPlayerHandle() const;
 
-  // is this stuff for real?
-  void readMail();
-  void sendMessage(const phys_message_t& message);
-  int getNextMessage(int recipient, phys_message_t* message);
-  void clearMailBox(int recipient);
-
   vector<size_t> getAllItemHandles() const;
 
 private:
@@ -256,8 +211,6 @@ private:
 
   double mGravity;
   double mFriction;
-
-  vector<phys_message_t> mMessages;
 
   // FIXME: hacks
 

@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "../game/MessageBus.h"
 #include "../items/ItemManager.h"
 #include "../player/Player.h"
 #include "../world/Galaxy.h"
@@ -30,6 +31,7 @@ class Location;
 class AiManager;
 class ItemManager;
 class GameInput;
+class MessageBus;
 
 struct GameSaveData {
   bool loadSucceeded;
@@ -51,19 +53,20 @@ public:
   void saveLocation();
 
   void initializePlanet(bool resetPlayer, v3d_t* startPos, bool createFeatures, GameWindow* gameWindow);
-  void initializeSpaceShip(bool resetPlayer);
+  void initializeStarShip(bool resetPlayer);
   void resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer);
 
+  // TODO: eliminate the need for this
   void destroyItemsOwnedByPhysicsAndAi();
 
-  int worldSeed;
-  Planet* currentPlanet;
+  int mWorldSeed;
+  Planet* mCurrentPlanet;
 
-  Player* player;
-  Galaxy* galaxy;
-  Physics* physics;
-  Location* location;
-  AiManager* aiManager;
-  ItemManager* itemManager;
-  GameInput* gameInput;
+  Player* mPlayer;
+  Galaxy* mGalaxy;
+  Physics* mPhysics;
+  Location* mLocation;
+  AiManager* mAiManager;
+  ItemManager* mItemManager;
+  MessageBus* mMessageBus;
 };

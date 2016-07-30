@@ -28,16 +28,16 @@ int ItemManager::update() {
 }
 
 void ItemManager::readPhysicsMessages() {
-  phys_message_t message;
+  Message message;
 
   int itemsDestroyed = 0;
 
   size_t itemHandle;
   int itemIndex;
 
-  while (mGameModel->physics->getNextMessage(MAILBOX_ITEMMANAGER, &message)) {
+  while (mGameModel->mMessageBus->getNextMessage(MAILBOX_ITEM_MANAGER, &message)) {
     switch (message.type) {
-      case PHYS_MESSAGE_ITEM_DESTROYED:
+      case MESSAGE_ITEM_DESTROYED:
         itemHandle = message.iValue;
         itemIndex = getIndexFromHandle(itemHandle);
         if (itemIndex >= 0) {
@@ -490,8 +490,8 @@ void ItemManager::generateRandomRocketLauncher(item_t& newGun, double dps) {
 
 size_t ItemManager::spawnPhysicsEntityGun(double value, v3d_t position) {
   size_t itemHandle = generateRandomGun(value);
-  PhysicsEntity* physicsEntity = mGameModel->physics->createEntity(OBJTYPE_ITEM, position, false);
-  mGameModel->physics->setItemHandleAndType(physicsEntity->handle, itemHandle, getItemType(itemHandle));
+  PhysicsEntity* physicsEntity = mGameModel->mPhysics->createEntity(OBJTYPE_ITEM, position, false);
+  mGameModel->mPhysics->setItemHandleAndType(physicsEntity->handle, itemHandle, getItemType(itemHandle));
   return itemHandle;
 }
 
@@ -504,17 +504,16 @@ bool ItemManager::useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHan
     return false;
   }
 
-  phys_message_t message;
+  Message message;
   switch (item.type) {
     case ITEMTYPE_HEALTHPACK:
-      message.sender = MAILBOX_ITEMMANAGER;
+      message.sender = MAILBOX_ITEM_MANAGER;
       message.recipient = MAILBOX_PHYSICS;
-      message.type = PHYS_MESSAGE_ADJUSTHEALTH;
+      message.type = MESSAGE_ADJUSTHEALTH;
       message.iValue = physicsHandle;
       message.dValue = item.value1;
+      mGameModel->mMessageBus->sendMessage(message);
 
-      // tell the physics about this
-      mGameModel->physics->sendMessage(message);
       destroyItem(itemHandle);
       return true;
 
@@ -538,7 +537,7 @@ void ItemManager::useRocketPack(
 
   // check if in water
   // FIXME: check to see if head is in water??
-  PhysicsEntity *physicsEntity = mGameModel->physics->getEntityByHandle(physicsHandle);
+  PhysicsEntity *physicsEntity = mGameModel->mPhysics->getEntityByHandle(physicsHandle);
   if (physicsEntity->worldViscosity > 0.0) {
     return;
   }
@@ -546,7 +545,7 @@ void ItemManager::useRocketPack(
   // handle 'air walking'
   v2d_t walk_force_2d = v2d_scale(walkVector, 300.0);
   v3d_t force = v3d_v(walk_force_2d.x, 0.0, walk_force_2d.y);
-  mGameModel->physics->add_force(physicsHandle, force);
+  mGameModel->mPhysics->add_force(physicsHandle, force);
 
   // now for the real deal
   double rocketForce = item.value1;
@@ -557,20 +556,20 @@ void ItemManager::useRocketPack(
     double diff = v3d_mag(physicsEntity->vel) - topSpeed;
     double thrustModifier = -rocketForce * diff / taperLength;
     v3d_t drag = v3d_scale(v3d_normalize(physicsEntity->vel), thrustModifier);
-    mGameModel->physics->add_force(physicsHandle, drag);
+    mGameModel->mPhysics->add_force(physicsHandle, drag);
   }
 
   v3d_t normalizedForce = v3d_normalize(movementForce);
   movementForce = v3d_scale(rocketForce, normalizedForce);
-  mGameModel->physics->add_force(physicsHandle, movementForce);
+  mGameModel->mPhysics->add_force(physicsHandle, movementForce);
 
   // how about some smoke...
   if (r_numi(0, 10) > 5) {
     v3d_t smokePosition;
-    smokePosition = mGameModel->physics->getCenter(physicsEntity->handle);
+    smokePosition = mGameModel->mPhysics->getCenter(physicsEntity->handle);
     smokePosition.y -= 0.8;
     v3d_t force = v3d_v(r_num(-10.0, 10.0), r_num(-100.0, -50.0), r_num(-10.0, 10.0));
-    mGameModel->physics->createEntity(OBJTYPE_SMOKE, smokePosition, force, true);
+    mGameModel->mPhysics->createEntity(OBJTYPE_SMOKE, smokePosition, force, true);
   }
 }
 
@@ -635,7 +634,7 @@ double ItemManager::useGun(size_t itemHandle, const shot_info_t& shotInfo) {
       bulletType = mItems[itemIndex].bulletType;
     }
 
-    PhysicsEntity* projectileEntity = mGameModel->physics->createEntity(bulletType, shotInfo.position, shotForce, true);
+    PhysicsEntity* projectileEntity = mGameModel->mPhysics->createEntity(bulletType, shotInfo.position, shotForce, true);
     projectileEntity->owner = shotInfo.ownerPhysicsHandle;
     projectileEntity->impactDamage = mItems[itemIndex].bulletDamage;
     projectileEntity->explosionForce = mItems[itemIndex].explosionForce;
@@ -647,7 +646,7 @@ double ItemManager::useGun(size_t itemHandle, const shot_info_t& shotInfo) {
   }
 
   if (mItems[itemIndex].shotSound >= 0) {
-    mGameModel->physics->addSoundEvent(mItems[itemIndex].shotSound, shotInfo.position);
+    mGameModel->mPhysics->addSoundEvent(mItems[itemIndex].shotSound, shotInfo.position);
   }
 
   return shotInfo.time + mItems[itemIndex].shotDelay;
@@ -663,14 +662,14 @@ double ItemManager::useMeleeWeapon(size_t itemHandle, const shot_info_t& shotInf
   for (int i = 0; i < 1; ++i) {
     v3d_t finalAngle = shotInfo.angle;
     int bulletType = OBJTYPE_MELEE_ATTACK;
-    PhysicsEntity* projectileEntity = mGameModel->physics->createEntity(bulletType, shotInfo.position, true);
+    PhysicsEntity* projectileEntity = mGameModel->mPhysics->createEntity(bulletType, shotInfo.position, true);
     projectileEntity->owner = shotInfo.ownerPhysicsHandle;
     projectileEntity->impactDamage = mItems[itemIndex].bulletDamage;
     projectileEntity->acc = v3d_scale(shotInfo.angle, mItems[itemIndex].explosionForce);
   }
 
 //  if (mItems[itemIndex].shotSound >= 0) {
-  mGameModel->physics->addSoundEvent(SOUND_SWOOSH, shotInfo.position);
+  mGameModel->mPhysics->addSoundEvent(SOUND_SWOOSH, shotInfo.position);
 //  }
 
   return shotInfo.time + mItems[itemIndex].shotDelay;

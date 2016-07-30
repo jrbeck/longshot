@@ -1,21 +1,21 @@
 #include "../player/PlayerView.h"
 
 void PlayerView::drawEquipped(GameModel* gameModel, AssetManager& assetManager) {
-  melee_weapon_state_t* leftHand = gameModel->player->getMeleeWeaponState(EQUIP_PRIMARY);
-  melee_weapon_state_t* rightHand = gameModel->player->getMeleeWeaponState(EQUIP_SECONDARY);
+  melee_weapon_state_t* leftHand = gameModel->mPlayer->getMeleeWeaponState(EQUIP_PRIMARY);
+  melee_weapon_state_t* rightHand = gameModel->mPlayer->getMeleeWeaponState(EQUIP_SECONDARY);
 
   drawEquipped(leftHand, LEFT_HANDED, gameModel, assetManager);
   drawEquipped(rightHand, RIGHT_HANDED, gameModel, assetManager);
 }
 
 void PlayerView::drawEquipped(const melee_weapon_state_t* weaponState, double handedness, GameModel* gameModel, AssetManager& assetManager) {
-  item_t item = gameModel->itemManager->getItem(weaponState->weaponHandle);
+  item_t item = gameModel->mItemManager->getItem(weaponState->weaponHandle);
 
   if (item.type == ITEMTYPE_MELEE_ONE_HANDED &&
     weaponState->swingTime >= 0.0 &&
     weaponState->swingTime <= 0.4)
   {
-    GLuint modelDisplayListHandle = assetManager.mModelDisplayListHandles[gameModel->itemManager->getItem(weaponState->weaponHandle).gunType];
+    GLuint modelDisplayListHandle = assetManager.mModelDisplayListHandles[gameModel->mItemManager->getItem(weaponState->weaponHandle).gunType];
     drawMeleeWeapon(weaponState, modelDisplayListHandle);
   }
   else if (item.type == ITEMTYPE_GUN_ONE_HANDED) {

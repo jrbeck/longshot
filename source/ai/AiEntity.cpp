@@ -21,7 +21,7 @@ AiEntity::AiEntity(GameModel* gameModel) {
 }
 
 void AiEntity::update() {
-  Physics& physics = *mGameModel->physics;
+  Physics& physics = *mGameModel->mPhysics;
   // this has to be non-NULL since AiManager::update() checks before calling this.
   // all the same...
   mPhysicsEntity = physics.getEntityByHandle(mPhysicsHandle);
@@ -46,15 +46,15 @@ void AiEntity::update() {
     // turn inventory items into phys entities
     for (int i = 0; i < AI_INVENTORY_SIZE; ++i) {
       if (mInventory[i] > 0) {
-        item_t item = mGameModel->itemManager->getItem(mInventory[i]);
+        item_t item = mGameModel->mItemManager->getItem(mInventory[i]);
         if (item.type == ITEMTYPE_GUN_ONE_HANDED && r_numi(0, 10) < 3) {
-          mGameModel->itemManager->destroyItem(mInventory[i]);
+          mGameModel->mItemManager->destroyItem(mInventory[i]);
         } else {
           v3d_t itemForce = v3d_random(20.0);
           itemForce.y = 10.0;
           PhysicsEntity* itemPhysicsEntity = physics.createEntity(OBJTYPE_ITEM, mWorldPosition, itemForce, true);
           if (itemPhysicsEntity != NULL) {
-            physics.setItemHandleAndType(itemPhysicsEntity->handle, mInventory[i], mGameModel->itemManager->getItemType(mInventory[i]));
+            physics.setItemHandleAndType(itemPhysicsEntity->handle, mInventory[i], mGameModel->mItemManager->getItemType(mInventory[i]));
           }
         }
 
@@ -65,7 +65,7 @@ void AiEntity::update() {
     return;
   }
 
-  double time = mGameModel->physics->getLastUpdateTime();
+  double time = mGameModel->mPhysics->getLastUpdateTime();
 
   // is it time to think yet?
   if (mNextUpdateTime < time) {
@@ -90,9 +90,9 @@ void AiEntity::update() {
     // now shoot'm if you got'm!
     v3d_t targetPosition = mTargetPhysicsEntity->boundingBox.getCenterPosition();
 
-    bool hasLineOfSight = mGameModel->location->getWorldMap()->lineOfSight(mWorldPosition, targetPosition);
+    bool hasLineOfSight = mGameModel->mLocation->getWorldMap()->lineOfSight(mWorldPosition, targetPosition);
     if (mTargetPhysicsEntity->type != OBJTYPE_TIGER_BAIT && hasLineOfSight) {
-      if (mInventory[0] > 0 && mGameModel->itemManager->getItem(mInventory[0]).type == ITEMTYPE_GUN_ONE_HANDED) {
+      if (mInventory[0] > 0 && mGameModel->mItemManager->getItem(mInventory[0]).type == ITEMTYPE_GUN_ONE_HANDED) {
         couldHaveFiredGun = true;
       }
 
@@ -208,14 +208,14 @@ bool AiEntity::testCondition(int condition) {
 void AiEntity::readMail() {
   // lets read some mail
   // FIXME: this needs to be different for each type
-  phys_message_t message;
+  Message message;
 
-  Physics& physics = *mGameModel->physics;
-  while (physics.getNextMessage (static_cast<int>(mPhysicsHandle), &message)) {
+  Physics& physics = *mGameModel->mPhysics;
+  while (mGameModel->mMessageBus->getNextMessage(static_cast<int>(mPhysicsHandle), &message)) {
 //    printf ("message: to: %d, from: %d\n", message.recipient, message.sender);
 
     switch (message.type) {
-    case PHYS_MESSAGE_DAMAGE:
+    case MESSAGE_DAMAGE:
       if (message.sender != mPhysicsHandle && message.sender != MAILBOX_PHYSICS) {
         if (physics.getIndexFromHandle(message.sender) >= 0) {
           if (physics.getEntityByHandle(message.sender)->aiType == AITYPE_PLAYER && mType == PLAYER_SPECIES) {
@@ -250,14 +250,14 @@ void AiEntity::readMail() {
 }
 
 void AiEntity::updatePlayer() {
-  Physics& physics = *mGameModel->physics;
+  Physics& physics = *mGameModel->mPhysics;
   mPhysicsEntity = physics.getEntityByHandle(mPhysicsHandle);
   mWorldPosition = physics.getCenter(mPhysicsHandle);
 }
 
 void AiEntity::updateBalloon() {
   v3d_t movementForce = v3d_zero();
-  Physics& physics = *mGameModel->physics;
+  Physics& physics = *mGameModel->mPhysics;
   double time = physics.getLastUpdateTime();
 
   if (mPhysicsEntity->worldViscosity > 0.0) {
@@ -287,14 +287,14 @@ void AiEntity::updateBalloon() {
     {
       double sin2 = (2.0 * sin(time));
       desiredHeight = targetPosition.y + 14.0 + sin2;
-      double height2 = mGameModel->location->getWorldMap()->mPeriodics->getTerrainHeight(mWorldPosition.x, mWorldPosition.z) + 10.0 + sin2;
+      double height2 = mGameModel->mLocation->getWorldMap()->mPeriodics->getTerrainHeight(mWorldPosition.x, mWorldPosition.z) + 10.0 + sin2;
       if (height2 > desiredHeight) {
         desiredHeight = height2;
       }
     }
     else {
       // this is so that when floaters fight they don't just keep flying higher
-      desiredHeight = mGameModel->location->getWorldMap()->mPeriodics->getTerrainHeight(mWorldPosition.x, mWorldPosition.z) + 10.0 + (2.0 * sin(time));
+      desiredHeight = mGameModel->mLocation->getWorldMap()->mPeriodics->getTerrainHeight(mWorldPosition.x, mWorldPosition.z) + 10.0 + (2.0 * sin(time));
     }
 
     double delta = mWorldPosition.y - desiredHeight;
@@ -362,7 +362,7 @@ void AiEntity::updateBalloon() {
 
 void AiEntity::updateHopper() {
   v3d_t movementForce = v3d_zero();
-  Physics& physics = *mGameModel->physics;
+  Physics& physics = *mGameModel->mPhysics;
   double time = physics.getLastUpdateTime();
 
   if (mPhysicsEntity->health < 0.0) {
@@ -448,7 +448,7 @@ void AiEntity::updateTarget() {
   mTargetPhysicsEntity = NULL;
 
   if (mTargetPhysicsHandle != 0) {
-    mTargetPhysicsEntity = mGameModel->physics->getEntityByHandle(mTargetPhysicsHandle);
+    mTargetPhysicsEntity = mGameModel->mPhysics->getEntityByHandle(mTargetPhysicsHandle);
 
     // get rid of current target if dead
     if (mTargetPhysicsEntity == NULL) {
@@ -469,9 +469,9 @@ void AiEntity::aquireTarget() {
   double minDistance = 100000.0;
   int minHandle = -1;
 
-  Physics& physics = *mGameModel->physics;
-  vector<AiEntity*>& aiEntities = *mGameModel->aiManager->getEntities();
-  WorldMap& worldMap = *mGameModel->location->getWorldMap();
+  Physics& physics = *mGameModel->mPhysics;
+  vector<AiEntity*>& aiEntities = *mGameModel->mAiManager->getEntities();
+  WorldMap& worldMap = *mGameModel->mLocation->getWorldMap();
 
   // try to find target
   for (size_t j = 0; j < aiEntities.size(); j++) {
@@ -535,11 +535,11 @@ void AiEntity::aquireTarget() {
 }
 
 bool AiEntity::useWeapon() {
-  double time = mGameModel->physics->getLastUpdateTime();
+  double time = mGameModel->mPhysics->getLastUpdateTime();
   if (mInventory[0] == 0) return false;
   if (mNextShotTime > time) return false;
 
-  item_t item = mGameModel->itemManager->getItem(mInventory[0]);
+  item_t item = mGameModel->mItemManager->getItem(mInventory[0]);
   if (item.type != ITEMTYPE_GUN_ONE_HANDED) {
     return false;
   }
@@ -557,7 +557,7 @@ bool AiEntity::useWeapon() {
   shotInfo.position = mWorldPosition;
   shotInfo.time = time;
 
-  mNextShotTime = mGameModel->itemManager->useGun(mInventory[0], shotInfo);
+  mNextShotTime = mGameModel->mItemManager->useGun(mInventory[0], shotInfo);
 
   return true;
 }

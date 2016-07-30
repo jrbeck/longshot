@@ -305,6 +305,9 @@
     <ClCompile Include="..\source\math\GlCamera.cpp">
       <Filter>source\math</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\game\MessageBus.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\ai\AiEntity.h">
@@ -567,6 +570,9 @@
     </ClInclude>
     <ClInclude Include="..\source\math\GlCamera.h">
       <Filter>source\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game\MessageBus.h">
+      <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

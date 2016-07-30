@@ -23,6 +23,7 @@
 
 #include "../math/v3d.h"
 #include "../game/GameModel.h"
+#include "../game/MessageBus.h"
 #include "../world/World.h"
 #include "../physics/Physics.h"
 #include "../items/ItemManager.h"

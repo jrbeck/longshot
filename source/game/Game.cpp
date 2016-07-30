@@ -5,7 +5,8 @@
 #pragma warning (disable : 4996)
 
 game_c::game_c(GameWindow* gameWindow) :
-  mGalaxy(NULL),
+  // mGalaxy(NULL),
+  mGameModel(NULL),
   mAiView(NULL),
   mPhysicsView(NULL),
   mMerchantView(NULL),
@@ -20,45 +21,12 @@ game_c::game_c(GameWindow* gameWindow) :
   mAssetManager.loadAssets();
   printf("\n%6d: assets loaded\n", SDL_GetTicks());
 
-  mGameModel = new GameModel;
-
-  mPlayer = new Player(mGameModel);
-  mGameModel->player = mPlayer;
-
-  mGalaxy = new Galaxy();
-  mGameModel->galaxy = mGalaxy;
-
-  mPhysics = new Physics(mGameModel);
-  mGameModel->physics = mPhysics;
-
-  mAiManager = new AiManager(mGameModel);
-  mGameModel->aiManager = mAiManager;
-
-  mItemManager = new ItemManager(mGameModel);
-  mGameModel->itemManager = mItemManager;
-
   mGameInput = new GameInput;
-  mGameModel->gameInput = mGameInput;
 }
 
 game_c::~game_c() {
   if (mGameInput != NULL) {
     delete mGameInput;
-  }
-  if (mAiManager != NULL) {
-    delete mAiManager;
-  }
-  if (mItemManager != NULL) {
-    delete mItemManager;
-  }
-  if (mPhysics != NULL) {
-    delete mPhysics;
-  }
-  if (mPlayer != NULL) {
-    delete mPlayer;
-  }
-  if (mGalaxy != NULL) {
-    delete mGalaxy;
   }
   if (mAiView != NULL) {
     delete mAiView;
@@ -114,8 +82,8 @@ void game_c::loadShipMenu() {
   mMenu->addButton(v2d_v(0.80, 0.15), v2d_v(0.2, 0.1), fontSize, "back to game", TEXT_JUSTIFICATION_CENTER, GAMEMENU_BACKTOGAME, color, bgColor);
   mMenu->addButton(v2d_v(0.80, 0.3), v2d_v(0.2, 0.1), fontSize, "quit to menu", TEXT_JUSTIFICATION_CENTER, GAMEMENU_EXITGAME, color, bgColor);
 
-  if (mGameModel->currentPlanet != NULL) {
-    sprintf(mPlanetNameString, "orbiting planet: %d", mGameModel->currentPlanet->mHandle);
+  if (mGameModel->mCurrentPlanet != NULL) {
+    sprintf(mPlanetNameString, "orbiting planet: %d", mGameModel->mCurrentPlanet->mHandle);
   }
   else {
     sprintf(mPlanetNameString, "orbiting planet: NULL");
@@ -173,13 +141,15 @@ void game_c::setupOpenGl() {
 int game_c::enterGameMode(bool createNewWorld) {
   printf ("\n%6d: entered GAME mode ----------------\n", SDL_GetTicks());
 
+  mGameModel = new GameModel;
+
   // create a new game or load an old one
   if (createNewWorld) {
     printf("game_c::enterGameMode(): new game\n");
     FileSystem::deleteAllFilesInFolder(SAVE_FOLDER);
 
-    mGameModel->currentPlanet = mGalaxy->mStarSystems[0]->mPlanets[0];
-    mGameModel->initializeSpaceShip(true);
+    mGameModel->mCurrentPlanet = mGameModel->mGalaxy->mStarSystems[0]->mPlanets[0];
+    mGameModel->initializeStarShip(true);
   }
   else {
     printf("game_c::enterGameMode(): loading game\n");
@@ -187,7 +157,7 @@ int game_c::enterGameMode(bool createNewWorld) {
   }
 
   // load the appropriate menu for the location
-  if (mGameModel->location->getType() == LOCATION_SHIP) {
+  if (mGameModel->mLocation->getType() == LOCATION_SHIP) {
     loadShipMenu();
   }
   else {
@@ -203,50 +173,46 @@ int game_c::enterGameMode(bool createNewWorld) {
   setupOpenGl();
 
   mAssetManager.mSoundSystem.initialize();
+  // FIXME: wtf is this??
   mAssetManager.mSoundSystem.loadSound("cow");
   // mAssetManager.mSoundSystem.playSoundByHandle(SOUND_AMBIENT, 64);
 
   gameLoop();
 
+  mAssetManager.mSoundSystem.stopAllSounds();
+
   // FIXME: this is temporary ... since we aren't
   // saving the AI, we need to eliminate their items
   mGameModel->destroyItemsOwnedByPhysicsAndAi();
 
-  // save the current game state
   mGameModel->save();
-
-  // DONE WITH THIS ROUND FOLKS * * * * * * *
-  mAiManager->clear();
-  mItemManager->clear();
-  mPhysics->clear();
-
-  mAssetManager.mSoundSystem.stopAllSounds();
+  delete mGameModel;
+  mGameModel = NULL;
 
   printf("%6d: exiting GAME mode ----------------\n\n", SDL_GetTicks());
-  printf("world seed: %d\n", mGameModel->worldSeed);
 
   return 0;
 }
 
 void game_c::initializeWorldViews() {
   // we need to give it an ambient light color
-  printf("PLANET: %d\n", mGameModel->currentPlanet->mHandle);
+  printf("PLANET: %d\n", mGameModel->mCurrentPlanet->mHandle);
 
   IntColor sunColor;
-  if (mGameModel->location->getType() == LOCATION_SHIP && false) {
+  if (mGameModel->mLocation->getType() == LOCATION_SHIP && false) {
     sunColor.r = LIGHT_LEVEL_MAX;
     sunColor.g = LIGHT_LEVEL_MAX;
     sunColor.b = LIGHT_LEVEL_MAX;
   }
   else {
-    GLfloat* starColor = mGameModel->galaxy->getStarSystemByHandle(mGameModel->currentPlanet->mHandle)->mStarColor;
+    GLfloat* starColor = mGameModel->mGalaxy->getStarSystemByHandle(mGameModel->mCurrentPlanet->mHandle)->mStarColor;
     sunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
     sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
   }
 
-  mWorldMapView.setWorldMap(mGameModel->location->getWorldMap(), sunColor);
+  mWorldMapView.setWorldMap(mGameModel->mLocation->getWorldMap(), sunColor);
 
   // physics
   if (mPhysicsView != NULL) {
@@ -277,19 +243,12 @@ void game_c::gameLoop() {
 
   // the main loop
   while (quit == 0) {
-    // advance the state of the game model
     escapePressed = update();
 
-    // draw after updates are all completed
     draw();
 
-    // take care of the input/menu
     if (mGameState == GAMESTATE_PLAY) {
       mGameInput->update();
-
-      if (escapePressed) {
-        quit = 1;
-      }
     }
     else if (mGameState == GAMESTATE_MENU) {
       int menuChoice = mMenu->gameMenuChoice(false);
@@ -300,7 +259,7 @@ void game_c::gameLoop() {
       quit = handleMenuChoice(menuChoice);
     }
     else if (mGameState == GAMESTATE_MERCHANT) {
-      if (mMerchantView->update(*mPlayer, *mItemManager) != 0) {
+      if (mMerchantView->update(*mGameModel->mPlayer, *mGameModel->mItemManager) != 0) {
         delete mMerchantView;
         mMerchantView = NULL;
         mGameState = GAMESTATE_MENU;
@@ -308,28 +267,26 @@ void game_c::gameLoop() {
     }
 
     // player hit 'esc' in play mode, switch to menu
-    if (quit == 1) {
+    if (escapePressed && mGameState == GAMESTATE_PLAY) {
       mGameState = GAMESTATE_MENU;
       // release the mouse
       SDL_SetRelativeMouseMode(SDL_FALSE);
       SDL_ShowCursor(1);
-      quit = 0;
     }
 
     // update the world
-    // FIXME: this should be done in update ()
+    // FIXME: this should be done in update()
     // being done here ties it to the framerate
-    mGameModel->location->update(mPhysics->getCenter(mGameModel->physics->getPlayerHandle()));
+    mGameModel->mLocation->update(mGameModel->mPhysics->getCenter(mGameModel->mPhysics->getPlayerHandle()));
 
     // HACK * * * * * * *
-    mPlayer->placeLight();
+    mGameModel->mPlayer->placeLight(mGameInput);
 
-    mWorldMapView.update(mAssetManager, *mGameModel->location->getLightManager());
+    mWorldMapView.update(mAssetManager, *mGameModel->mLocation->getLightManager());
 
     if (mGameInput->isToggleWorldChunkBoxes()) {
       mWorldMapView.toggleShowWorldChunkBoxes();
     }
-
 
     // do some frames per second calculating
     unsigned int delta_t = SDL_GetTicks() - ticks;
@@ -372,9 +329,9 @@ int game_c::handleMenuChoice(int menuChoice) {
 
   case GAMEMENU_SHIP:
     // ignore if we're already on the ship
-    if (mGameModel->location->getType() != LOCATION_SHIP) {
+    if (mGameModel->mLocation->getType() != LOCATION_SHIP) {
       mGameModel->saveLocation();
-      mGameModel->initializeSpaceShip(false);
+      mGameModel->initializeStarShip(false);
       initializeWorldViews();
       // load the appropriate menu
       loadShipMenu();
@@ -383,17 +340,17 @@ int game_c::handleMenuChoice(int menuChoice) {
 
   case GAMEMENU_GALAXY_MAP:
     galaxyMap = new GalaxyMap(mGameWindow);
-    galaxyMap->enterViewMode(mGalaxy, mGameModel->currentPlanet);
+    galaxyMap->enterViewMode(mGameModel->mGalaxy, mGameModel->mCurrentPlanet);
 
     if (galaxyMap->mResult.action == ACTION_WARP) {
-      mGameModel->currentPlanet = galaxyMap->mResult.planet;
-      printf("-----------\nwarp to world: %d\n", mGameModel->currentPlanet->mHandle);
+      mGameModel->mCurrentPlanet = galaxyMap->mResult.planet;
+      printf("-----------\nwarp to world: %d\n", mGameModel->mCurrentPlanet->mHandle);
 
       // need to reload this to reflect the change in orbit
       loadShipMenu();
 
       // change our orbit location
-      static_cast<StarShip*>(mGameModel->location)->mOrbitSky->setOrbit(*mGalaxy, mGameModel->currentPlanet->mHandle);
+      static_cast<StarShip*>(mGameModel->mLocation)->mOrbitSky->setOrbit(*mGameModel->mGalaxy, mGameModel->mCurrentPlanet->mHandle);
     }
     delete galaxyMap;
 
@@ -403,7 +360,7 @@ int game_c::handleMenuChoice(int menuChoice) {
     // make a planet map for the player to choose a location
     planetMap = new PlanetMap(mGameWindow);
 
-    if (planetMap->chooseLocation(*mGameModel->currentPlanet, planetPos)) {
+    if (planetMap->chooseLocation(*mGameModel->mCurrentPlanet, planetPos)) {
       mGameModel->saveLocation();
 
       // now deal with the new planet
@@ -417,7 +374,6 @@ int game_c::handleMenuChoice(int menuChoice) {
     }
     delete planetMap;
 
-
     break;
   case GAMEMENU_DUNGEON_MAP:
     rogueMapViewer = new RogueMapViewer(mGameWindow);
@@ -428,7 +384,7 @@ int game_c::handleMenuChoice(int menuChoice) {
 
   case GAMEMENU_MERCHANT:
     mMerchantView = new MerchantView();
-    mMerchantView->engageMerchant(*mPlayer, *mItemManager);
+    mMerchantView->engageMerchant(*mGameModel->mPlayer, *mGameModel->mItemManager);
     mGameState = GAMESTATE_MERCHANT;
     return 0;
 
@@ -449,35 +405,29 @@ int game_c::handleMenuChoice(int menuChoice) {
   return 0;
 }
 
-
-// update the game model
 bool game_c::update() {
-  double cur_time = (double)SDL_GetTicks() / 1000.0;
+  double ticks = (double)SDL_GetTicks() / 1000.0;
   bool escapePressed = false;
 
-  while (mLastUpdateTime < cur_time) {
-    // update the physics objects
-    mNumPhysicsObjects = mPhysics->update(mLastUpdateTime, mAssetManager);
+  while (mLastUpdateTime < ticks) {
+    mNumPhysicsObjects = mGameModel->mPhysics->update(mLastUpdateTime, mAssetManager);
 
-    // apply the player physics/update with input
-    escapePressed = mPlayer->update(mAssetManager) || escapePressed;
-    // FIXME: this is done like this so that the player
-    // can catch an escape press (i.e. to get out of the
-    // character sheet). this should be done differently
+    escapePressed = mGameModel->mPlayer->update(mAssetManager, *mGameInput) || escapePressed;
     if (escapePressed) {
       return escapePressed;
     }
 
-    mAiManager->setPlayerFacingAndIncline(mPlayer->getFacingAndIncline());
+    mGameModel->mAiManager->setPlayerFacingAndIncline(mGameModel->mPlayer->getFacingAndIncline());
 
-    mNumAiObjects = mAiManager->update();
-    mNumItems = mItemManager->update();
+    mNumAiObjects = mGameModel->mAiManager->update();
+
+    mNumItems = mGameModel->mItemManager->update();
 
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
   }
 
   // this updates colors/transparencies...
-  mPhysicsView->update(mPhysics->getEntityVector(), mLastUpdateTime);
+  mPhysicsView->update(mGameModel->mPhysics->getEntityVector(), mLastUpdateTime);
 
   return escapePressed;
 }
@@ -485,32 +435,31 @@ bool game_c::update() {
 
 // draw the game world
 int game_c::draw() {
-  // clear the buffer before drawing to it
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // get the camera from the player's perspective
-  GlCamera cam = mPlayer->gl_cam_setup();
+  GlCamera cam = mGameModel->mPlayer->gl_cam_setup();
 
   // we need this for the billboard sprites
   mPhysicsView->setViewPosition(cam.getPosition());
 
   // draw the stars and stuff
-  mGameModel->location->draw(cam);
+  mGameModel->mLocation->draw(cam);
 
   mWorldMapView.drawSolidBlocks(cam, mAssetManager);
-  mPhysicsView->drawSolidEntities(mPhysics->getEntityVector(), *mGameModel->location->getWorldMap(), mAssetManager);
-  PlayerView::drawPlayerTargetBlock(mPlayer);
+  mPhysicsView->drawSolidEntities(mGameModel->mPhysics->getEntityVector(), *mGameModel->mLocation->getWorldMap(), mAssetManager);
+  PlayerView::drawPlayerTargetBlock(mGameModel->mPlayer);
   PlayerView::drawEquipped(mGameModel, mAssetManager);
   mAiView->draw(mGameModel);
 
   // draw the transparent physics objs
-  bool playerHeadInWater = mPlayer->isHeadInWater();
-  mPhysicsView->drawTransparentEntities(mPhysics->getEntityVector(), mAssetManager, !playerHeadInWater);
+  bool playerHeadInWater = mGameModel->mPlayer->isHeadInWater();
+  mPhysicsView->drawTransparentEntities(mGameModel->mPhysics->getEntityVector(), mAssetManager, !playerHeadInWater);
   mWorldMapView.drawLiquidBlocks(cam, mAssetManager);
-  mPhysicsView->drawTransparentEntities(mPhysics->getEntityVector(), mAssetManager, playerHeadInWater);
+  mPhysicsView->drawTransparentEntities(mGameModel->mPhysics->getEntityVector(), mAssetManager, playerHeadInWater);
 
   // draw the hud
-  mPlayer->drawHud();
+  mGameModel->mPlayer->drawHud();
 
   if (mGameState == GAMESTATE_MENU) {
     mMenu->draw();

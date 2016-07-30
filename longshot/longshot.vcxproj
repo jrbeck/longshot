@@ -129,6 +129,7 @@
     <ClCompile Include="..\source\game\GameWindow.cpp" />
     <ClCompile Include="..\source\game\LoadScreen.cpp" />
     <ClCompile Include="..\source\game\Longshot.cpp" />
+    <ClCompile Include="..\source\game\MessageBus.cpp" />
     <ClCompile Include="..\source\items\Inventory.cpp" />
     <ClCompile Include="..\source\items\ItemManager.cpp" />
     <ClCompile Include="..\source\items\MerchantView.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="..\source\game\GameWindow.h" />
     <ClInclude Include="..\source\game\LoadScreen.h" />
     <ClInclude Include="..\source\game\Longshot.h" />
+    <ClInclude Include="..\source\game\MessageBus.h" />
     <ClInclude Include="..\source\items\Inventory.h" />
     <ClInclude Include="..\source\items\ItemManager.h" />
     <ClInclude Include="..\source\items\MerchantView.h" />

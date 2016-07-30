@@ -1,7 +1,18 @@
 #include "../physics/Physics.h"
 
 
-Physics::Physics(GameModel* gameModel) {
+Physics::Physics(GameModel* gameModel) :
+  mLastUpdateTime(0.0),
+  mPaused(false),
+  mAdvanceOneFrame(false),
+  mGravity(DEFAULT_GRAVITY),
+  mFriction(DEFAULT_FRICTION),
+  mNumSoundEvents(0),
+  mLastEntityHandle(0),
+  mEntityAdded(false),
+  mPlayerHandle(0),
+  mGotPickupMessage(false)
+{
   mGameModel = gameModel;
 
   // * * * * * * * * * * * * * * * * * * *
@@ -11,38 +22,9 @@ Physics::Physics(GameModel* gameModel) {
 #include "phys_entity_types.hack"
   // * * * * * * * * * * * * * * * * * * *
   // * * * * * * * * * * * * * * * * * * *
-
-  reset();
 }
 
 Physics::~Physics() {
-  clear();
-}
-
-void Physics::reset() {
-  clear();
-
-  mLastUpdateTime = 0.0;
-
-  mPaused = false;
-  mAdvanceOneFrame = false;
-
-  mGravity = DEFAULT_GRAVITY;
-  mFriction = DEFAULT_FRICTION;
-
-  mNumSoundEvents = 0;
-}
-
-void Physics::clear() {
-  obj.clear();
-
-  mLastEntityHandle = 0;
-  mEntityAdded = false;
-
-  mPlayerHandle = 0;
-
-  mMessages.clear();
-  mGotPickupMessage = false;
 }
 
 vector <PhysicsEntity*>* Physics::getEntityVector() {
@@ -95,7 +77,7 @@ void Physics::manageEntitiesList() {
   for (size_t i = 0; i < numObjs; ++i) {
     if (!obj[i]->active) {
       // clear out the ol' mailbox
-      clearMailBox((int)obj[i]->handle);
+      mGameModel->mMessageBus->clearMailBox((int)obj[i]->handle);
       delete obj[i];
       size_t lastIndex = numObjs - 1;
       if (i == lastIndex) { obj.pop_back(); }
@@ -333,6 +315,33 @@ void Physics::setItemHandleAndType(size_t handle, size_t itemHandle, int itemTyp
   }
 }
 
+void Physics::readMail() {
+  Message message;
+  int index;
+
+  while (mGameModel->mMessageBus->getNextMessage(MAILBOX_PHYSICS, &message)) {
+    switch (message.type) {
+    case MESSAGE_PLAYERPICKUPITEMS:
+      mGotPickupMessage = true;
+      break;
+
+    case MESSAGE_ITEMGRABBED:
+      removeEntity(message.iValue2);
+      break;
+
+    case MESSAGE_ADJUSTHEALTH:
+      index = getIndexFromHandle(message.iValue);
+      if (index >= 0) {
+        obj[index]->health += message.dValue;
+      }
+      break;
+
+    default:
+      break;
+    }
+  }
+}
+
 // apply the physics
 int Physics::update(double time, AssetManager& assetManager) {
   readMail();
@@ -434,7 +443,7 @@ void Physics::updateEntity(size_t index) {
       isIntersectingPlant(index))
     {
       v3di_t pos = v3di_v(physicsEntity->boundingBox.getCenterPosition());
-      mGameModel->location->getWorldMap()->clearBlock(pos);
+      mGameModel->mLocation->getWorldMap()->clearBlock(pos);
       expireEntity(index);
       return;
     }
@@ -510,11 +519,11 @@ void Physics::updateEntity(size_t index) {
     break;
 
   case OBJTYPE_AI_ENTITY:
-    physicsEntity->health += mGameModel->location->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
+    physicsEntity->health += mGameModel->mLocation->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
     break;
 
   case OBJTYPE_PLAYER:
-    physicsEntity->health += mGameModel->location->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
+    physicsEntity->health += mGameModel->mLocation->getWorldMap()->getHealthEffects(physicsEntity->boundingBox);
     break;
 
   default:
@@ -570,11 +579,11 @@ void Physics::expireEntity(size_t index) {
     break;
 
   case OBJTYPE_ITEM:
-    phys_message_t message;
-    message.recipient = MAILBOX_ITEMMANAGER;
-    message.type = PHYS_MESSAGE_ITEM_DESTROYED;
+    Message message;
+    message.recipient = MAILBOX_ITEM_MANAGER;
+    message.type = MESSAGE_ITEM_DESTROYED;
     message.iValue = (int)physicsEntity->itemHandle;
-    sendMessage(message);
+    mGameModel->mMessageBus->sendMessage(message);
     break;
 
   case OBJTYPE_MONSTER_SPAWNER: // what a hack!
@@ -582,15 +591,15 @@ void Physics::expireEntity(size_t index) {
 
     // check if close enough to player
     if (v3d_dist(pos, getEntityByHandle(mPlayerHandle)->pos) < 100.0 &&
-      !mGameModel->location->getWorldMap()->lineOfSight(pos, getEntityByHandle(mPlayerHandle)->boundingBox.getCenterPosition()))
+      !mGameModel->mLocation->getWorldMap()->lineOfSight(pos, getEntityByHandle(mPlayerHandle)->boundingBox.getCenterPosition()))
     {
-      phys_message_t message;
+      Message message;
       message.sender = MAILBOX_PHYSICS;
-      message.recipient = MAILBOX_AIMANAGER;
-      message.type = PHYS_MESSAGE_SPAWN_CREATURE;
+      message.recipient = MAILBOX_AI_MANAGER;
+      message.type = MESSAGE_SPAWN_CREATURE;
       pos.y += 1.5;
       message.vec3 = pos;
-      sendMessage(message);
+      mGameModel->mMessageBus->sendMessage(message);
     }
 
     physicsEntity->expirationTime += physicsEntity->lifespan;
@@ -852,7 +861,7 @@ void Physics::displaceObject(size_t index) {
   // update the inWater status
 //  if (obj[index].type == OBJTYPE_PLAYER ||
 //    obj[index].type == OBJTYPE_AI_ENTITY) {
-  physicsEntity->worldViscosity = mGameModel->location->getWorldMap()->getViscosity(physicsEntity->boundingBox);
+  physicsEntity->worldViscosity = mGameModel->mLocation->getWorldMap()->getViscosity(physicsEntity->boundingBox);
 //  }
 
 //  if (obj[index].handle == mPlayerHandle) printf ("on ground: %d\n", obj[index].on_ground);
@@ -882,7 +891,7 @@ bool Physics::updateOnGroundStatus(size_t index) {
 //    printf("y: %d, %f\n", y, nc.y - floor (nc.y));
 //  }
 
-  WorldMap& worldMap = *mGameModel->location->getWorldMap();
+  WorldMap& worldMap = *mGameModel->mLocation->getWorldMap();
   for (int z = static_cast<int>(floor(nc.z)); z <= static_cast<int>(floor(fc.z)); z++) {
     for (int x = static_cast<int>(floor(nc.x)); x <= static_cast<int>(floor(fc.x)); x++) {
       if (worldMap.isSolidBlock(v3di_v(x, y, z))) {
@@ -1109,12 +1118,12 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
               otherPhysicsEntity->health -= damage;
 
               // tell the critter whodunnit
-              phys_message_t message;
+              Message message;
               message.sender = static_cast<int>(physicsEntity->handle);
               message.recipient = static_cast<int>(otherPhysicsEntity->handle);
-              message.type = PHYS_MESSAGE_DAMAGE;
+              message.type = MESSAGE_DAMAGE;
               message.dValue = damage;
-              sendMessage (message);
+              mGameModel->mMessageBus->sendMessage(message);
             }
             else if ((physicsEntity->aiType != AITYPE_HOPPER ||
               physicsEntity->type == OBJTYPE_PLAYER) &&
@@ -1125,12 +1134,12 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
               physicsEntity->health -= damage;
 
               // tell the critter whodunnit
-              phys_message_t message;
+              Message message;
               message.sender = static_cast<int>(otherPhysicsEntity->handle);
               message.recipient = static_cast<int>(physicsEntity->handle);
-              message.type = PHYS_MESSAGE_DAMAGE;
+              message.type = MESSAGE_DAMAGE;
               message.dValue = damage;
-              sendMessage (message);
+              mGameModel->mMessageBus->sendMessage(message);
             }
           }
         }
@@ -1143,8 +1152,8 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
             difference = v3d_normalize(difference);
             difference = v3d_scale(120.0, difference);
 
-            add_force (otherPhysicsEntity->handle, difference);
-            add_force (physicsEntity->handle, v3d_neg(difference));
+            add_force(otherPhysicsEntity->handle, difference);
+            add_force(physicsEntity->handle, v3d_neg(difference));
           }
           else {
             physicsEntity->displacement = v3d_scale(t0 * 0.99, physicsEntity->displacement);
@@ -1201,12 +1210,12 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           physicsEntity->health -= damage;
 
           // tell the critter whodunnit
-          phys_message_t message;
+          Message message;
           message.sender = static_cast<int>(otherPhysicsEntity->owner);
           message.recipient = static_cast<int>(physicsEntity->handle);
-          message.type = PHYS_MESSAGE_DAMAGE;
+          message.type = MESSAGE_DAMAGE;
           message.dValue = damage;
-          sendMessage(message);
+          mGameModel->mMessageBus->sendMessage(message);
 
           removeEntity(otherPhysicsEntity->handle);
 
@@ -1229,12 +1238,12 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           physicsEntity->health -= damage;
 
           // tell the critter whodunnit
-          phys_message_t message;
+          Message message;
           message.sender = static_cast<int>(otherPhysicsEntity->owner);
           message.recipient = static_cast<int>(physicsEntity->handle);
-          message.type = PHYS_MESSAGE_DAMAGE;
+          message.type = MESSAGE_DAMAGE;
           message.dValue = damage;
-          sendMessage(message);
+          mGameModel->mMessageBus->sendMessage(message);
 
           collision = true;
           numCollisions++;
@@ -1256,12 +1265,12 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           physicsEntity->health -= damage;
 
           // tell the critter whodunnit
-          phys_message_t message;
+          Message message;
           message.sender = static_cast<int>(otherPhysicsEntity->owner);
           message.recipient = static_cast<int>(physicsEntity->handle);
-          message.type = PHYS_MESSAGE_DAMAGE;
+          message.type = MESSAGE_DAMAGE;
           message.dValue = damage;
-          sendMessage(message);
+          mGameModel->mMessageBus->sendMessage(message);
 
           removeEntity(otherPhysicsEntity->handle);
 
@@ -1278,12 +1287,12 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           physicsEntity->health -= damage;
 
           // tell the critter whodunnit
-          phys_message_t message;
+          Message message;
           message.sender = static_cast<int>(otherPhysicsEntity->owner);
           message.recipient = static_cast<int>(physicsEntity->handle);
-          message.type = PHYS_MESSAGE_DAMAGE;
+          message.type = MESSAGE_DAMAGE;
           message.dValue = damage;
-          sendMessage (message);
+          mGameModel->mMessageBus->sendMessage(message);
 
           // knockback
           add_force(physicsEntity->handle, otherPhysicsEntity->acc);
@@ -1295,13 +1304,13 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
       else if (mGotPickupMessage && physicsEntity->type == OBJTYPE_PLAYER && otherPhysicsEntity->type == OBJTYPE_ITEM) {
         if (sweepObjects(index, other, t0, t1, axis)) {
           // try to pick up the object
-          phys_message_t message;
+          Message message;
           message.sender = MAILBOX_PHYSICS;
           message.recipient = static_cast<int>(physicsEntity->handle);
-          message.type = PHYS_MESSAGE_ITEMGRAB;
+          message.type = MESSAGE_ITEMGRAB;
           message.iValue = static_cast<int>(otherPhysicsEntity->itemHandle);
           message.iValue2 = otherPhysicsEntity->handle;
-          sendMessage(message);
+          mGameModel->mMessageBus->sendMessage(message);
 
           collision = true;
           numCollisions++;
@@ -1342,7 +1351,6 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
   return 0;
 } // END: clipDisplacementAgainstOtherObjects ()
 
-
 void Physics::add_force(size_t handle, const v3d_t& force) {
   int index = getIndexFromHandle(handle);
   if (index != -1) {
@@ -1351,7 +1359,6 @@ void Physics::add_force(size_t handle, const v3d_t& force) {
     physicsEntity->applyPhysics = true;
   }
 }
-
 
 void Physics::clip_displacement_against_world(size_t index) {
   PhysicsEntity* physicsEntity = obj[index];
@@ -1384,7 +1391,7 @@ void Physics::clip_displacement_against_world(size_t index) {
   // FIXME: this is a horribly inefficient way of doing this.
   // it also fails if the velocity is too high.
   // your mom.
-  WorldMap& worldMap = *mGameModel->location->getWorldMap();
+  WorldMap& worldMap = *mGameModel->mLocation->getWorldMap();
   for (i.z = (int)floor( nc.z - 1.0 ); i.z <= (int)floor( fc.z + 1.0 ); i.z++) {
     for (i.y = y_start; i.y <= (int)floor(fc.y + 1.0); i.y++) {
       for (i.x = (int)floor(nc.x - 1.0); i.x <= (int)floor(fc.x + 1.0); i.x++) {
@@ -1601,9 +1608,8 @@ void Physics::clip_displacement_against_world(size_t index) {
   } // z
 }
 
-
 bool Physics::isIntersectingPlant(size_t index) const {
-  block_t* block = mGameModel->location->getWorldMap()->getBlock(obj[index]->boundingBox.getCenterPosition());
+  block_t* block = mGameModel->mLocation->getWorldMap()->getBlock(obj[index]->boundingBox.getCenterPosition());
   if (block == NULL) return false;
   if (gBlockData.get(block->type)->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
     return true;
@@ -1611,13 +1617,10 @@ bool Physics::isIntersectingPlant(size_t index) const {
   return false;
 }
 
-
 // return the on_ground flag for an object
 bool Physics::isIndexOnGround(size_t index) const {
   return obj[index]->on_ground;
 }
-
-
 
 // return the on_ground flag for an object
 bool Physics::isHandleOnGround(size_t handle) const {
@@ -1628,14 +1631,12 @@ bool Physics::isHandleOnGround(size_t handle) const {
   return false;
 }
 
-
 void Physics::grenadeExplosion(size_t index) {
   PhysicsEntity* physicsEntity = obj[index];
   PhysicsEntity* newPhysicsEntity = NULL;
   v3d_t centerPosition = physicsEntity->boundingBox.getCenterPosition ();
 
   addSoundEvent (SOUND_GRENADE_EXPLOSION, centerPosition);
-
 
   for (int i = 0; i < physicsEntity->numParticles; ++i) {
     v3d_t randomPosition = v3d_add(centerPosition, v3d_random (0.5));
@@ -1646,10 +1647,9 @@ void Physics::grenadeExplosion(size_t index) {
     }
   }
 
-
   if (physicsEntity->explosionForce > 2500.0) {
     double clearRadius = (physicsEntity->explosionForce - 2500.0) * 0.001;
-    mGameModel->location->getWorldMap()->clearSphere(centerPosition, clearRadius);
+    mGameModel->mLocation->getWorldMap()->clearSphere(centerPosition, clearRadius);
   }
 
   newPhysicsEntity = createEntity(OBJTYPE_EXPLOSION, centerPosition, true);
@@ -1660,9 +1660,6 @@ void Physics::grenadeExplosion(size_t index) {
     newPhysicsEntity->explosionForce = physicsEntity->explosionForce;
   }
 }
-
-
-
 
 void Physics::spawnExplosion(const v3d_t& pos, size_t numParticles) {
   addSoundEvent (SOUND_GRENADE_EXPLOSION, pos);
@@ -1676,7 +1673,7 @@ void Physics::spawnExplosion(const v3d_t& pos, size_t numParticles) {
     createEntity(OBJTYPE_NAPALM, v3d_add(pos, v3d_random(r_num(0.5, 0.6))), true);
   }
 
-  mGameModel->location->getWorldMap()->clearSphere(pos, 2.5);
+  mGameModel->mLocation->getWorldMap()->clearSphere(pos, 2.5);
 
   PhysicsEntity* newPhysicsEntity = createEntity(OBJTYPE_EXPLOSION, pos, true);
   // FIXME: hack!
@@ -1707,7 +1704,7 @@ void Physics::plasmaBombExplode(const v3d_t& pos, size_t numParticles) {
     newPhysicsEntity = createEntity(OBJTYPE_PLASMA_SPARK, pos, true);
 
     if (newPhysicsEntity != NULL) {
-      if (!mGameModel->location->getWorldMap()->isBoundingBoxEmpty(newPhysicsEntity->boundingBox)) {
+      if (!mGameModel->mLocation->getWorldMap()->isBoundingBoxEmpty(newPhysicsEntity->boundingBox)) {
         newPhysicsEntity->active = false;
       }
       else {
@@ -1738,7 +1735,6 @@ v3d_t Physics::getRadialForce(const v3d_t& pos, const v3d_t& center, double forc
   return v3d_scale(magnitude, v3d_normalize(diff));
 }
 
-
 int Physics::addSoundEvent(int type, const v3d_t& position) {
   double distanceToPlayer = v3d_dist(getCenter(mPlayerHandle), position);
 
@@ -1762,7 +1758,6 @@ int Physics::addSoundEvent(int type, const v3d_t& position) {
   return 1;
 }
 
-
 void Physics::playSoundEvents(AssetManager& assetManager) {
   for (int i = 0; i < mNumSoundEvents; ++i) {
     assetManager.mSoundSystem.playSoundByHandle(mSoundEvents[i], mSoundVolumes[i]);
@@ -1772,80 +1767,6 @@ void Physics::playSoundEvents(AssetManager& assetManager) {
 
 size_t Physics::getPlayerHandle() const {
   return mPlayerHandle;
-}
-
-void Physics::readMail() {
-  phys_message_t message;
-  int index;
-
-  while (getNextMessage(MAILBOX_PHYSICS, &message)) {
-    switch (message.type) {
-    case PHYS_MESSAGE_PLAYERPICKUPITEMS:
-      mGotPickupMessage = true;
-      break;
-
-    case PHYS_MESSAGE_ITEMGRABBED:
-      removeEntity(message.iValue2);
-      break;
-
-    case PHYS_MESSAGE_ADJUSTHEALTH:
-      index = getIndexFromHandle(message.iValue);
-
-      if (index >= 0) {
-        obj[index]->health += message.dValue;
-      }
-      break;
-
-    default:
-      break;
-    }
-  }
-}
-
-
-void Physics::sendMessage(const phys_message_t& message) {
-  mMessages.push_back(message);
-}
-
-
-int Physics::getNextMessage(int recipient, phys_message_t* message) {
-  for (size_t i = 0; i < mMessages.size(); ++i) {
-    if (mMessages[i].recipient == recipient) {
-      *message = mMessages[i];
-      size_t lastMessage = mMessages.size() - 1;
-
-      // get rid of this message
-      if (i == lastMessage) {
-        mMessages.pop_back();
-      }
-      else {
-        swap(mMessages[i], mMessages[lastMessage]);
-        mMessages.pop_back();
-        i--;
-      }
-      return 1;
-    }
-  }
-
-  return 0;
-}
-
-void Physics::clearMailBox(int recipient) {
-  for (size_t i = 0; i < mMessages.size(); ++i) {
-    if (mMessages[i].recipient == recipient) {
-      size_t lastMessage = mMessages.size() - 1;
-
-      // get rid of this message
-      if (i == lastMessage) {
-        mMessages.pop_back();
-      }
-      else {
-        swap(mMessages[i], mMessages[lastMessage]);
-        mMessages.pop_back();
-        i--;
-      }
-    }
-  }
 }
 
 vector<size_t> Physics::getAllItemHandles() const {

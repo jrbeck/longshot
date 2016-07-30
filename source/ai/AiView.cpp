@@ -51,12 +51,12 @@ void AiView::freeAssets() {
 }
 
 void AiView::draw(GameModel* gameModel) {
-  mWorldMap = gameModel->location->getWorldMap();
-  mLightManager = gameModel->location->getLightManager();
+  mWorldMap = gameModel->mLocation->getWorldMap();
+  mLightManager = gameModel->mLocation->getLightManager();
 
   glEnable(GL_TEXTURE_2D);
 
-  vector<AiEntity *>* aiEntities = gameModel->aiManager->getEntities();
+  vector<AiEntity *>* aiEntities = gameModel->mAiManager->getEntities();
 
   size_t numEntities = aiEntities->size();
   for (size_t i = 0; i < numEntities; ++i) {

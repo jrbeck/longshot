@@ -71,14 +71,14 @@ enum {
 };
 
 class game_c {
-  GameModel *mGameModel;
+  GameModel* mGameModel;
 
-  Player* mPlayer;
-  Galaxy* mGalaxy;
-  AiManager* mAiManager;
-  Physics* mPhysics;
+  // Player* mPlayer;
+  // Galaxy* mGalaxy;
+  // AiManager* mAiManager;
+  // Physics* mPhysics;
   GameInput* mGameInput;
-  ItemManager* mItemManager;
+  // ItemManager* mItemManager;
 
   AssetManager mAssetManager;
 

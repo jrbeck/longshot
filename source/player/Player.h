@@ -106,12 +106,12 @@ public:
 
   void updateCharacterSheet();
 
-  bool update(AssetManager& assetManager);
+  bool update(AssetManager& assetManager, GameInput& gi);
 
   void readPhysicsMessages(AssetManager& assetManager);
 
   // HACK
-  void placeLight();
+  void placeLight(GameInput* gameInput);
   Inventory* getInventory();
 
   GlCamera cam;
