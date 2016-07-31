@@ -152,7 +152,6 @@ public:
   BlockTypeDataContainer();
 
   BlockTypeData* get(int type);
-
 };
 
 

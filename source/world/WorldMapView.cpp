@@ -1,13 +1,13 @@
 #include "../world/WorldMapView.h"
 
-WorldMapView::WorldMapView() :
-mWorldMap(NULL),
-mColumnInfo(NULL)
+WorldMapView::WorldMapView(AssetManager* assetManager, GameModel* gameModel) :
+  mAssetManager(NULL),
+  mWorldMap(NULL),
+  mColumnInfo(NULL),
+  mDrawChunkBoxes(false)
 {
-  mSunColor.r = LIGHT_LEVEL_MAX;
-  mSunColor.g = LIGHT_LEVEL_MAX;
-  mSunColor.b = LIGHT_LEVEL_MAX;
-  mDrawChunkBoxes = false;
+  mAssetManager = assetManager;
+  setGameModel(gameModel);
 }
 
 WorldMapView::~WorldMapView() {
@@ -16,7 +16,7 @@ WorldMapView::~WorldMapView() {
   }
 }
 
-void WorldMapView::setWorldMap(WorldMap* worldMap, IntColor& sunColor) {
+void WorldMapView::setGameModel(GameModel* gameModel) {
   // we'll delete this no matter what since it calls the
   // destructors, otherwise, we'll leak memory in opengl in
   // the display lists
@@ -25,8 +25,8 @@ void WorldMapView::setWorldMap(WorldMap* worldMap, IntColor& sunColor) {
     mColumnInfo = NULL;
   }
 
-  mWorldMap = worldMap;
-  if (worldMap == NULL) {
+  mWorldMap = gameModel->mLocation->getWorldMap();
+  if (mWorldMap == NULL) {
     printf("WorldMapView::setWorldMap(): error: NULL worldMap\n");
     return;
   }
@@ -44,15 +44,29 @@ void WorldMapView::setWorldMap(WorldMap* worldMap, IntColor& sunColor) {
     return;
   }
 
-  // now for the ambient light color
-  mSunColor = sunColor;
+  setSunColor(gameModel);
+}
+
+void WorldMapView::setSunColor(GameModel* gameModel) {
+  if (gameModel->mLocation->getType() == LOCATION_SHIP && false) {
+    mSunColor.r = LIGHT_LEVEL_MAX;
+    mSunColor.g = LIGHT_LEVEL_MAX;
+    mSunColor.b = LIGHT_LEVEL_MAX;
+  }
+  else {
+    GLfloat* starColor = gameModel->mGalaxy->getStarSystemByHandle(gameModel->mCurrentPlanet->mHandle)->mStarColor;
+    mSunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    mSunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    mSunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
+    mSunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
+  }
 }
 
 void WorldMapView::toggleShowWorldChunkBoxes() {
   mDrawChunkBoxes = !mDrawChunkBoxes;
 }
 
-void WorldMapView::update(AssetManager& assetManager, const LightManager& lightManager) {
+void WorldMapView::update(const LightManager& lightManager) {
   // FIXME: do we really need to do this every update?
   // actually this is dangerous unless we reset
   // mNumColumns since the size may have changed
@@ -94,7 +108,7 @@ void WorldMapView::update(AssetManager& assetManager, const LightManager& lightM
     if (num != mNumColumns) {
       WorldLighting::createShadowVolume(lastColumn, *mWorldMap);
       WorldLighting::applyLighting(lastColumn, *mWorldMap, lightManager, mSunColor);
-      generateDisplayLists(lastColumn, assetManager);
+      generateDisplayLists(lastColumn);
     }
     lastColumn = (lastColumn + 1) % mNumColumns;
   }
@@ -124,12 +138,12 @@ void WorldMapView::update(AssetManager& assetManager, const LightManager& lightM
   // generate display lists
   for (int columnIndex = 0; columnIndex < mNumColumns; columnIndex++) {
     if (mWorldMap->mColumns[columnIndex].mNeedDisplayList) {
-      generateDisplayLists(columnIndex, assetManager);
+      generateDisplayLists(columnIndex);
     }
   }
 }
 
-void WorldMapView::generateDisplayLists(int columnIndex, const AssetManager &assetManager) {
+void WorldMapView::generateDisplayLists(int columnIndex) {
   int numChunks = mWorldMap->mColumns[columnIndex].mWorldChunks.size();
   if (numChunks == 0) {
     //    printf("WorldMapView::generateDisplayLists(): error: no chunks in this column\n");
@@ -153,11 +167,11 @@ void WorldMapView::generateDisplayLists(int columnIndex, const AssetManager &ass
 
     // create the lists
     glNewList(handle + DISPLAY_LIST_SOLID, GL_COMPILE);
-    drawSolidForDisplayList(*mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex], assetManager);
+    drawSolidForDisplayList(*mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]);
     glEndList();
 
     glNewList(handle + DISPLAY_LIST_LIQUID, GL_COMPILE);
-    drawLiquidForDisplayList(*mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex], assetManager);
+    drawLiquidForDisplayList(*mWorldMap->mColumns[columnIndex].mWorldChunks[chunkIndex]);
     glEndList();
 
     glNewList(handle + DISPLAY_LIST_CHUNK_BOX, GL_COMPILE);
@@ -180,7 +194,7 @@ void WorldMapView::deleteDisplayLists(int columnIndex) {
 }
 
 // draw the blocks for the display list
-void WorldMapView::drawSolidForDisplayList(const WorldChunk &chunk, const AssetManager &assetManager) const {
+void WorldMapView::drawSolidForDisplayList(const WorldChunk &chunk) const {
   v3di_t relativePosition;
   int blockIndex = 0;
   const block_t *blocks = chunk.getBlocks();
@@ -200,10 +214,10 @@ void WorldMapView::drawSolidForDisplayList(const WorldChunk &chunk, const AssetM
           gBlockData.get(block.type)->solidityType != BLOCK_SOLIDITY_TYPE_LIQUID)
         {
           if (gBlockData.get(block.type)->solidityType == BLOCK_SOLIDITY_TYPE_PLANT) {
-            assetManager.drawPlantBlock(worldPosition, block);
+            mAssetManager->drawPlantBlock(worldPosition, block);
           }
           else {
-            assetManager.drawBlock(1.0f, worldPosition, block);
+            mAssetManager->drawBlock(1.0f, worldPosition, block);
           }
         }
 
@@ -218,7 +232,7 @@ void WorldMapView::drawSolidForDisplayList(const WorldChunk &chunk, const AssetM
   glEnd();
 }
 
-void WorldMapView::drawLiquidForDisplayList(const WorldChunk &chunk, const AssetManager &assetManager) const {
+void WorldMapView::drawLiquidForDisplayList(const WorldChunk &chunk) const {
   if (chunk.mNumWaterBlocks == 0) {
     return;
   }
@@ -243,10 +257,10 @@ void WorldMapView::drawLiquidForDisplayList(const WorldChunk &chunk, const Asset
         {
           // this little hack makes a 10cm 'lip' of ground around the water surface
           if (block.faceVisibility & gBlockSideBitmaskLookup[BLOCK_SIDE_TOP]) {
-            assetManager.drawBlock(0.9f, worldPosition, block);
+            mAssetManager->drawBlock(0.9f, worldPosition, block);
           }
           else {
-            assetManager.drawBlock(1.0f, worldPosition, block);
+            mAssetManager->drawBlock(1.0f, worldPosition, block);
           }
         }
 
@@ -313,13 +327,13 @@ void WorldMapView::drawChunkBoxForDisplayList(v3di_t worldPosition) const {
 }
 
 // this actually renders the display lists
-void WorldMapView::drawSolidBlocks(const GlCamera &camera, const AssetManager &assetManager) const {
+void WorldMapView::drawSolidBlocks(const GlCamera& camera) const {
   //  glDisable (GL_TEXTURE_2D);
   glEnable(GL_BLEND);
   glAlphaFunc(GL_GREATER, 0.9f);
   glEnable(GL_ALPHA_TEST);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glBindTexture(GL_TEXTURE_2D, assetManager.getTerrainTextureHandle());
+  glBindTexture(GL_TEXTURE_2D, mAssetManager->getTerrainTextureHandle());
 
   GLuint handle;
   for (int columnIndex = 0; columnIndex < mNumColumns; columnIndex++) {
@@ -338,7 +352,7 @@ void WorldMapView::drawSolidBlocks(const GlCamera &camera, const AssetManager &a
   }
 
   if (mDrawChunkBoxes) {
-    drawChunkBoxes(camera, assetManager);
+    drawChunkBoxes(camera);
   }
 
   glDisable(GL_ALPHA_TEST);
@@ -346,12 +360,12 @@ void WorldMapView::drawSolidBlocks(const GlCamera &camera, const AssetManager &a
   //  glEnable (GL_TEXTURE_2D);
 }
 
-void WorldMapView::drawLiquidBlocks(const GlCamera &camera, const AssetManager &assetManager) const {
+void WorldMapView::drawLiquidBlocks(const GlCamera &camera) const {
   //  glDisable (GL_TEXTURE_2D);
   glDepthMask(GL_FALSE);
   glEnable(GL_BLEND);
 
-  glBindTexture(GL_TEXTURE_2D, assetManager.getTerrainTextureHandle());
+  glBindTexture(GL_TEXTURE_2D, mAssetManager->getTerrainTextureHandle());
 
   GLuint handle;
   for (int columnIndex = 0; columnIndex < mNumColumns; columnIndex++) {
@@ -375,7 +389,7 @@ void WorldMapView::drawLiquidBlocks(const GlCamera &camera, const AssetManager &
   //  glEnable (GL_TEXTURE_2D);
 }
 
-void WorldMapView::drawChunkBoxes(const GlCamera &camera, const AssetManager &assetManager) const {
+void WorldMapView::drawChunkBoxes(const GlCamera &camera) const {
   glDisable(GL_TEXTURE_2D);
 
   GLuint handle;

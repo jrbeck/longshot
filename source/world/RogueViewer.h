@@ -15,9 +15,7 @@
 #include "../dungeon/FeatureGenerator.h"
 #include "../world/World.h"
 #include "../world/WorldMapView.h"
-
 #include "../math/v2d.h"
-
 #include "../math/RtsCam.h"
 
 
@@ -25,8 +23,6 @@ struct CameraState {
   v3d_t position;
   v3d_t target;
 };
-
-
 
 enum {
   VIZ_MODE_MODEL,
@@ -40,7 +36,7 @@ enum {
 
 class RogueViewer {
 private:
-  GameWindow *mGameWindow;
+  GameWindow* mGameWindow;
   rts_cam_c mRtsCam;
 
   SDL_Event sdlevent;
@@ -54,19 +50,20 @@ private:
 
   World mWorld;
   WorldMap mWorldMap;
-  WorldMapView mWorldMapView;
-  AssetManager mAssetManager;
+  WorldMapView* mWorldMapView;
+  AssetManager* mAssetManager;
+  GameModel* mGameModel;
   RogueMap mRogueMap;
 
 public:
-  RogueViewer(GameWindow* gameWindow);
+  RogueViewer(GameWindow* gameWindow, AssetManager* assetManager, GameModel* gameModel);
   ~RogueViewer();
 
   void setupOpenGl();
 
   int start();
 
-  v3d_t findStartPosition(WorldMap &worldMap);
+  v3d_t findStartPosition(WorldMap& worldMap);
 
   // TODO: get this i/o junk outta here
   int handleInput();

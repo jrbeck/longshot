@@ -16,7 +16,6 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
   mStartLocationFound = false;
   mStartPosition = v3d_zero();
 
-  // set up the head displacement
   mHeadOffset = v3d_v(0.25, 1.6, 0.25);
   mFinalHeadOffset = mHeadOffset;
 
@@ -26,15 +25,7 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
   mInclineMin = DEG2RAD(DEFAULT_INCLINE_MIN);
   mInclineMax = DEG2RAD(DEFAULT_INCLINE_MAX);
 
-  // setup the camera
-  cam.resize_screen(gScreenW, gScreenH);
-  cam.set_fov_near_far(45.0, 0.15, 500.0);
-
-  // figure out where we're looking
   update_target();
-
-  // set up to be straight up
-  up = v3d_v(0, 1, 0);
 
   mLastUpdateTime = 0.0;
   mNextShotTimePrimary = 0.0;
@@ -66,11 +57,6 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
 
     mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->createItem(blockItem);
   }
-
-  mVisionTint[0] = 0.0;
-  mVisionTint[1] = 0.0;
-  mVisionTint[2] = 0.0;
-  mVisionTint[3] = 0.0;
 
   mShowCharacterSheet = false;
 
@@ -167,7 +153,7 @@ void Player::godMode() {
 }
 
 // constrain the viewing angles
-int Player::constrain_view_angles(void) {
+int Player::constrain_view_angles() {
   // constrain the view angle elevation
   if (mIncline < mInclineMin) mIncline = mInclineMin;
   else if (mIncline > mInclineMax) mIncline = mInclineMax;
@@ -179,51 +165,45 @@ int Player::constrain_view_angles(void) {
   return 0;
 }
 
-v2d_t Player::getFacingAndIncline(void) {
+v2d_t Player::getFacingAndIncline() {
   return v2d_v(mFacing, mIncline);
 }
 
-bool Player::isHeadInWater(void) {
+bool Player::isHeadInWater() {
   return mHeadInWater;
 }
 
-// update the camera target
-void Player::update_target(void) {
+v3d_t Player::getLookTarget() const {
+  return mLookTarget;
+}
+
+void Player::update_target() {
   mLookVector = v3d_getLookVector(mFacing, mIncline);
-
-  // now shift to the position
-  mTarget = v3d_add(v3d_add(mFinalHeadOffset, mPos), mLookVector);
+  mLookTarget = v3d_add(v3d_add(mFinalHeadOffset, mPos), mLookVector);
 }
 
-void Player::set_draw_distance(double distance) {
-  cam.set_far(distance);
-}
-
-// change the far clipping plane distance
-void Player::adjust_draw_distance(double amount) {
-  cam.adjust_far(amount);
-}
-
-// use the gluLookAt () to set view at render time
-// also set the frustum
-GlCamera Player::gl_cam_setup(void) {
-  cam.perspective();
-  cam.look_at(v3d_add(mPos, mFinalHeadOffset), mTarget, up);
-  return cam;
-}
-
-// return the pos vector
-v3d_t Player::get_pos(void) {
+v3d_t Player::get_pos() const {
   return mPos;
 }
 
-// change the camera position
 int Player::set_pos(v3d_t a) {
   mPos = a;
   return 0;
 }
 
-bool Player::pickUpItem(item_t item, AssetManager& assetManager) {
+v3d_t Player::getHeadPosition() const {
+  return v3d_add(mFinalHeadOffset, mPos);
+}
+
+int Player::getHeadPostionBlockType() const {
+  return mHeadPostionBlockType;
+}
+
+double Player::getCurrentHealth() const {
+  return mCurrentHealth;
+}
+
+bool Player::pickUpItem(item_t item, AssetManager* assetManager) {
   // special items first:
   if (item.type == ITEMTYPE_AMMO_BULLET ||
     item.type == ITEMTYPE_AMMO_SLIME ||
@@ -231,7 +211,7 @@ bool Player::pickUpItem(item_t item, AssetManager& assetManager) {
     item.type == ITEMTYPE_AMMO_NAPALM)
   {
     mInventory.mAmmoCounter[item.ammoType] += item.quantity;
-    assetManager.mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
+    assetManager->mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
     return true;
   }
 
@@ -247,11 +227,11 @@ bool Player::pickUpItem(item_t item, AssetManager& assetManager) {
 
   switch (item.type) {
     case ITEMTYPE_HEALTHPACK:
-      assetManager.mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
+      assetManager->mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
       break;
 
     case ITEMTYPE_GUN_ONE_HANDED:
-      assetManager.mSoundSystem.playSoundByHandle(SOUND_PISTOL_RELOAD, 192);
+      assetManager->mSoundSystem.playSoundByHandle(SOUND_PISTOL_RELOAD, 192);
       break;
 
     default:
@@ -323,14 +303,14 @@ void Player::useEquipped(int whichEquip) {
 }
 
 double Player::fireGun(item_t item, double handedness) {
-  v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
+  v3d_t world_head_pos = getHeadPosition();
 
   double shoulderOffset = handedness * 0.5;
   double gunMuzzleOffset = 0.65;
   v3d_t gunMuzzle = v3d_scale(shoulderOffset, v3d_normalize(v3d_cross(mLookVector, v3d_v(0.0, 1.0, 0.0))));
   gunMuzzle = v3d_add(v3d_scale(gunMuzzleOffset, mLookVector), gunMuzzle);
 
-  v3d_t temp = v3d_sub(mTarget, world_head_pos);
+  v3d_t temp = v3d_sub(mLookTarget, world_head_pos);
   v3d_t targAngle = v3d_normalize(temp);
 
   v3d_t pos = v3d_v(world_head_pos.x + temp.x + gunMuzzle.x,
@@ -347,9 +327,9 @@ double Player::fireGun(item_t item, double handedness) {
 }
 
 double Player::useMeleeWeapon(item_t item) {
-  v3d_t world_head_pos = v3d_add(mFinalHeadOffset, mPos);
+  v3d_t world_head_pos = getHeadPosition();
 
-  v3d_t targAngle = v3d_normalize(v3d_sub(mTarget, world_head_pos));
+  v3d_t targAngle = v3d_normalize(v3d_sub(mLookTarget, world_head_pos));
   v3d_t displacement = v3d_scale(targAngle, 1.5);
   v3d_t pos = v3d_add(world_head_pos, displacement);
 
@@ -433,7 +413,7 @@ void Player::updateTargetBlock() {
 
   double rayLength = 2.75;
 
-  v3d_t finalTarget = v3d_add(eye, v3d_scale(rayLength, v3d_normalize(v3d_sub(mTarget, eye))));
+  v3d_t finalTarget = v3d_add(eye, v3d_scale(rayLength, v3d_normalize(v3d_sub(mLookTarget, eye))));
 
   if (mGameModel->mLocation->getWorldMap()->rayCastSolidBlock(eye, finalTarget, mTargetBlock, mTargetBlockFace)) {
     mIsBlockTargeted = true;
@@ -451,278 +431,28 @@ v3di_t* Player::getTargetBlock(int& targetBlockFace) {
   return NULL;
 }
 
-void Player::updateHud() {
-  mHud.clear();
-
-  GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-  v2d_t fontSize = { 0.01f, 0.02f };
-
-  static char text[64];
-
-  // let's give some indication of health status
-  static char healthString[50];
-  sprintf(healthString, "health %.0f\0", mCurrentHealth);
-  mHud.addText(v2d_v(0.4, 0.0), v2d_v(0.2, 0.05), fontSize, healthString, TEXT_JUSTIFICATION_CENTER, color, NULL);
-
-  // display the primary equip
-  if (mInventory.mPrimaryItem != 0) {
-    item_t currentEquip = mGameModel->mItemManager->getItem(mInventory.mPrimaryItem);
-    sprintf(text, "%s\0", currentEquip.name);
-    mHud.addText(v2d_v(0.0, 0.0), v2d_v(0.2, 0.05), fontSize, text, TEXT_JUSTIFICATION_LEFT, color, NULL);
-
-    // display the ammo
-    switch (currentEquip.type) {
-      case ITEMTYPE_GUN_ONE_HANDED:
-        sprintf(text, "ammo: %lu\0", mInventory.mAmmoCounter[currentEquip.ammoType]);
-        mHud.addText(v2d_v(0.0, 0.05), v2d_v(0.2, 0.05), fontSize, text, TEXT_JUSTIFICATION_LEFT, color, NULL);
-        break;
-    }
-  }
-  else {
-    sprintf(text, "nothing equipped\0");
-    mHud.addText(v2d_v(0.0, 0.0), v2d_v(0.2, 0.05), fontSize, text, TEXT_JUSTIFICATION_LEFT, color, NULL);
-  }
-
-
-  // display the secondary equip
-  if (mInventory.mSecondaryItem != 0) {
-    item_t currentEquip = mGameModel->mItemManager->getItem(mInventory.mSecondaryItem);
-    sprintf (text, "%s\0", currentEquip.name);
-    mHud.addText (v2d_v (0.8, 0.0), v2d_v (0.2, 0.05), fontSize,
-      text, TEXT_JUSTIFICATION_RIGHT, color, NULL);
-
-    // display the ammo
-    switch (currentEquip.type) {
-      case ITEMTYPE_GUN_ONE_HANDED:
-        sprintf (text, "ammo: %lu\0", mInventory.mAmmoCounter[currentEquip.ammoType]);
-        mHud.addText (v2d_v (0.8, 0.05), v2d_v (0.2, 0.05), fontSize,
-          text, TEXT_JUSTIFICATION_RIGHT, color, NULL);
-        break;
-
-      default:
-        break;
-    }
-  }
-  else {
-    sprintf(text, "nothing equipped\0");
-    mHud.addText(v2d_v(0.8, 0.0), v2d_v(0.2, 0.05), fontSize, text, TEXT_JUSTIFICATION_RIGHT, color, NULL);
-  }
-
-  // well this seems a bit random to be finding right here...
-  fontSize = v2d_v(0.01f, 0.01f);
-
-  // crosshair? ha!
-  static char crossHair[2] = "x";
-
-  color[3] = 0.75f;
-  mHud.addText(v2d_v (0.495, 0.5), v2d_v (0.01, 0.01), fontSize, crossHair, TEXT_JUSTIFICATION_CENTER, color, NULL);
-
-
-  // player position
-//  sprintf(text, "%.4f, %.4f, %.4f", mPos.x, mPos.y, mPos.z);
-//  mHud.addText (v2d_v(0.4, 0.1), v2d_v(0.2, 0.05), fontSize,
-//    text, TEXT_JUSTIFICATION_CENTER, color, NULL);
-}
-
-void Player::drawHud() {
-  if (mHeadInWater && mVisionTint[3] > 0.0) {
-    drawWaterOverlay();
-  }
-
-  if (mShowCharacterSheet) {
-    mCharacterSheet.draw();
-  }
-  else {
-    mHud.draw();
-  }
-}
-
-void Player::drawWaterOverlay() {
-  // need to set up the opengl viewport
-  glPushMatrix();
-
-  glViewport(0, 0, gScreenW, gScreenH);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-
-  glOrtho(0, 1, 1, 0, -1, 1);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  glDisable(GL_TEXTURE_2D);
-  glEnable(GL_BLEND);
-  glDisable(GL_DEPTH_TEST);
-
-  //glColor4f(0.1f, 0.1f, 0.5f, 0.5f);
-  glColor4fv(mVisionTint);
-
-  glBegin(GL_QUADS);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, 0.0f, 0.0f);
-  glEnd();
-
-  glEnable(GL_DEPTH_TEST);
-  glDisable(GL_BLEND);
-  glEnable(GL_TEXTURE_2D);
-
-  glPopMatrix();
-}
-
-void Player::updateCharacterSheet() {
-  mCharacterSheet.clear();
-
-  static GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-  static GLfloat color2[4] = { 0.8f, 0.6f, 0.2f, 1.0f };
-//  static GLfloat colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.6f};
-  static GLfloat selectedColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-
-  static v2d_t fontSize = { 0.015f, 0.03f };
-
-  // equipped
-  mCharacterSheet.addText(v2d_v(0.1, 0.2), v2d_v(0.3, 0.05), fontSize, "primary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
-  if (mInventory.mPrimaryItem != 0) {
-    item_t item = mGameModel->mItemManager->getItem(mInventory.mPrimaryItem);
-    if (item.type != ITEMTYPE_UNDEFINED) {
-      mCharacterSheet.addText(v2d_v(0.1, 0.25), v2d_v(0.3, 0.05), fontSize, item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
-    }
-  }
-  else {
-    mCharacterSheet.addText(v2d_v(0.1, 0.25), v2d_v(0.3, 0.05), fontSize, "---", TEXT_JUSTIFICATION_CENTER, color, NULL);
-  }
-
-  mCharacterSheet.addText(v2d_v(0.1, 0.3), v2d_v(0.3, 0.05), fontSize, "secondary", TEXT_JUSTIFICATION_CENTER, color2, NULL);
-  if (mInventory.mSecondaryItem != 0) {
-    item_t item = mGameModel->mItemManager->getItem(mInventory.mSecondaryItem);
-    if (item.type != ITEMTYPE_UNDEFINED) {
-      mCharacterSheet.addText(v2d_v(0.1, 0.35), v2d_v(0.3, 0.05), fontSize, item.name, TEXT_JUSTIFICATION_CENTER, color, NULL);
-    }
-  }
-  else {
-    mCharacterSheet.addText(v2d_v(0.1, 0.35), v2d_v(0.3, 0.05), fontSize, "---", TEXT_JUSTIFICATION_CENTER, color, NULL);
-  }
-
-  // ammo
-  v2d_t tl, dimensions;
-  double buttonHeight = (0.9 - 0.7) / static_cast<double>(NUM_AMMO_TYPES);
-  char ammoString[50];
-
-  for (size_t i = 0; i < NUM_AMMO_TYPES; ++i) {
-    tl = v2d_v(0.1, lerp(0.7, 0.9 - buttonHeight, i, NUM_AMMO_TYPES));
-//    br = v2d_v (0.4, lerp (0.7 + (buttonHeight * 0.9), 0.9, i, NUM_AMMO_TYPES));;
-    dimensions.x = 0.3;
-    dimensions.y = buttonHeight * 0.9;
-
-    // FIXME: switch in a for loop? show some class man!
-    switch (i) {
-      case AMMO_BULLET:
-        sprintf(ammoString, "bullets: %lu\0", mInventory.mAmmoCounter[i]);
-        break;
-      case AMMO_SLIME:
-        sprintf(ammoString, "slime: %lu\0", mInventory.mAmmoCounter[i]);
-        break;
-      case AMMO_PLASMA:
-        sprintf(ammoString, "plasma: %lu\0", mInventory.mAmmoCounter[i]);
-        break;
-      case AMMO_NAPALM:
-        sprintf(ammoString, "napalm: %lu\0", mInventory.mAmmoCounter[i]);
-        break;
-      default:
-        sprintf(ammoString, "undefined: %lu\0", mInventory.mAmmoCounter[i]);
-        break;
-    }
-
-    mCharacterSheet.addText(tl, dimensions, fontSize, ammoString, TEXT_JUSTIFICATION_LEFT, color, NULL);
-  }
-
-
-  // inventory
-  mCharacterSheet.addText(v2d_v(0.5, 0.2), v2d_v(0.4, 0.1), fontSize, "inventory:", TEXT_JUSTIFICATION_CENTER, color2, NULL);
-
-  buttonHeight = (0.9 - 0.3) / static_cast<double>(mInventory.mBackpack.size());
-  GLfloat *itemColor;
-
-  for (size_t i = 0; i < mInventory.mBackpack.size(); ++i) {
-    tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mInventory.mBackpack.size()));
-//    br = v2d_v (0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mInventory.mBackpack.size()));;
-    dimensions.x = 0.4;
-    dimensions.y = buttonHeight * 0.9;
-
-    if (i == mInventory.mSelectedBackpackItem) {
-      itemColor = selectedColor;
-    }
-    else {
-      itemColor = color;
-    }
-
-    if (mInventory.mBackpack[i] != 0) {
-      item_t item = mGameModel->mItemManager->getItem(mInventory.mBackpack[i]);
-      if (item.type != ITEMTYPE_UNDEFINED) {
-        mCharacterSheet.addText(tl, dimensions, fontSize, item.name, TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
-      }
-    }
-    else {
-      mCharacterSheet.addText(tl, dimensions, fontSize, "---", TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
-    }
-  }
-
-  // let's give some indication of health status
-  static char tempString[50];
-  sprintf(tempString, "health %.0f\0", mCurrentHealth);
-  mCharacterSheet.addText(v2d_v(0.1, 0.1), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
-
-  // money money money
-  sprintf(tempString, "credits %d\0", mInventory.mCredits);
-  mCharacterSheet.addText(v2d_v(0.1, 0.6), v2d_v(0.2, 0.04), fontSize, tempString, TEXT_JUSTIFICATION_LEFT, color, NULL);
-}
-
-bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
+bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
   mLastUpdateTime = mGameModel->mPhysics->getLastUpdateTime();
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
   PhysicsEntity *physicsEntity = mGameModel->mPhysics->getEntityByHandle(mGameModel->mPhysics->getPlayerHandle());
-  // get position from physics
+  // update position from physics
+  // FIXME: this is a little flaky ... why not just use the source?
   mPos = physicsEntity->pos;
+  readPhysicsMessages(assetManager);
 
   // FIXME: this isn't quite right, perhaps the near clip plane needs to be compensated
   // for (vertically) to head pos
-  block_t *block = mGameModel->mLocation->getWorldMap()->getBlock(v3d_add(mFinalHeadOffset, mPos));
-  int blockType;
+  block_t *block = mGameModel->mLocation->getWorldMap()->getBlock(getHeadPosition());
+  // FIXME: doing this here feels a little wrong
   if (block == NULL) {
-    // default to BLOCK_TYPE_AIR
-    blockType = BLOCK_TYPE_AIR;
+    mHeadPostionBlockType = BLOCK_TYPE_AIR;
   }
   else {
-//    blockType = worldMap.getBlock(v3d_add (mFinalHeadOffset, mPos))->type;
-    blockType = block->type;
+    mHeadPostionBlockType = block->type;
   }
 
-  if (gBlockData.get(blockType)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-    if (!mHeadInWater) {
-      // entering water
-      if (gBlockData.get(blockType)->visionTint[3] > 0.0f) {
-        mVisionTint[0] = gBlockData.get(blockType)->visionTint[0];
-        mVisionTint[1] = gBlockData.get(blockType)->visionTint[1];
-        mVisionTint[2] = gBlockData.get(blockType)->visionTint[2];
-        mVisionTint[3] = gBlockData.get(blockType)->visionTint[3];
-      }
-      adjust_draw_distance(-450.0);
-    }
-    mHeadInWater = true;
-  }
-  else {
-    if (mHeadInWater) {
-      // leaving water
-      adjust_draw_distance(450.0);
-      mVisionTint[3] = 0.0f;
-    }
-    mHeadInWater = false;
-  }
-
-  readPhysicsMessages(assetManager);
+  mHeadInWater = gBlockData.get(mHeadPostionBlockType)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID;
 
   // deal with the health
   mCurrentHealth = physicsEntity->health;
@@ -732,12 +462,13 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
   }
 
   // does the player want to mess with the draw distance?
-  if (gameInput->isDecreasingDrawDistance()) {
-    adjust_draw_distance(-20);
-  }
-  if (gameInput->isIncreasingDrawDistance()) {
-    adjust_draw_distance(20);
-  }
+  // FIXME: this sheeit is temporarily borkened
+  // if (gameInput->isDecreasingDrawDistance()) {
+  //   adjust_draw_distance(-20);
+  // }
+  // if (gameInput->isIncreasingDrawDistance()) {
+  //   adjust_draw_distance(20);
+  // }
 
 
   // deal with an escape press
@@ -769,24 +500,13 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
 //    printf ("dead\n");
 
     if (!deathScreamUttered) {
-      assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_DEATH, 112);
+      assetManager->mSoundSystem.playSoundByHandle(SOUND_HUMAN_DEATH, 112);
       deathScreamUttered = true;
 
       // put the player close to the ground
       // FIXME: this needs to be formalized
       mFinalHeadOffset = v3d_v(0.25, 0.2, 0.25);
     }
-
-    mHud.clear();
-
-    // let's give some indication of health status
-    char healthString[50];
-    float color[] = {1.0f, 1.0f, 1.0f, 0.8f};
-    v2d_t fontSize = { 0.01f, 0.02f };
-
-    sprintf(healthString, "health: %.0f\0", mCurrentHealth);
-    mHud.addText(v2d_v(0.00, 0.05), v2d_v(0.2, 0.04), fontSize, healthString, TEXT_JUSTIFICATION_LEFT, color, NULL);
-    mHud.addText(v2d_v(0.00, 0.00), v2d_v(0.2, 0.04), fontSize, "press (f1) or (esc)", TEXT_JUSTIFICATION_LEFT, color, NULL);
 
     if (gameInput->isSoftReset()) {
       mMaxHealth = 100.0;
@@ -824,7 +544,6 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
 
     if (gameInput->isUseBackpackItem()) {
       item_t item = mGameModel->mItemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
-
       if (item.type == ITEMTYPE_HEALTHPACK) {
         useBackpackItem();
       }
@@ -911,15 +630,6 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
     physicsEntity = mGameModel->mPhysics->getEntityByHandle(mGameModel->mPhysics->getPlayerHandle());
   }
 
-  updateHud();
-
-  // toggle the character sheet on/off according to the user input
-  if (gameInput->isToggleCharacterSheet()) {
-    mShowCharacterSheet = !mShowCharacterSheet;
-  }
-
-  updateCharacterSheet();
-
   if (gameInput->isToggleGodMode()) {
     godMode();
   }
@@ -946,7 +656,7 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
       mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), force);
 
       if (r_numi(0, 16) == 3) {
-        assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_JUMP, 72);
+        assetManager->mSoundSystem.playSoundByHandle(SOUND_HUMAN_JUMP, 72);
       }
     }
 
@@ -959,7 +669,7 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
         walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 2500.0);
 
         if (mLastUpdateTime > (mLastFootStep + 0.6) && v3d_mag(physicsEntity->vel) > 0.2) {
-          assetManager.mSoundSystem.playSoundByHandle(SOUND_FOOTSTEP, r_numi (32, 56));
+          assetManager->mSoundSystem.playSoundByHandle(SOUND_FOOTSTEP, r_numi (32, 56));
           mLastFootStep = mLastUpdateTime + r_num(0.0, 0.2);
         }
 
@@ -1049,7 +759,7 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
   }
   else { // in water
     if (mInWater == false) {
-      assetManager.mSoundSystem.playSoundByHandle(SOUND_SPLASH_MEDIUM, 72);
+      assetManager->mSoundSystem.playSoundByHandle(SOUND_SPLASH_MEDIUM, 72);
     }
     mInWater = true;
 
@@ -1101,7 +811,6 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
     mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), swimForce);
   }
 
-  // now we know what the player is doing, so let's update this
   mHeadBobble.update(headBobbleAction, mLastUpdateTime);
 
   v3d_t headBobbleOffset = mHeadBobble.getOffset();
@@ -1114,39 +823,35 @@ bool Player::update(AssetManager& assetManager, GameInput* gameInput) {
   return escapePressed;
 }
 
-void Player::readPhysicsMessages(AssetManager& assetManager) {
+void Player::readPhysicsMessages(AssetManager* assetManager) {
   Message message;
 
   size_t itemHandle;
   bool gotItem;
 
   while (mGameModel->mMessageBus->getNextMessage((int)mGameModel->mPhysics->getPlayerHandle(), &message)) {
-//    printf ("player message: to: %d, from: %d\n", message.recipient, message.sender);
-
     switch (message.type) {
-      case MESSAGE_DAMAGE:
-        if (message.dValue >= 1.0 &&  mCurrentHealth > 0.0) {
-          assetManager.mSoundSystem.playSoundByHandle(SOUND_HUMAN_PAIN, 96);
-        }
-        break;
+    case MESSAGE_DAMAGE:
+      if (message.dValue >= 1.0 &&  mCurrentHealth > 0.0) {
+        assetManager->mSoundSystem.playSoundByHandle(SOUND_HUMAN_PAIN, 96);
+      }
+      break;
 
-      case MESSAGE_ITEMGRAB:
-        itemHandle = message.iValue;
+    case MESSAGE_ITEMGRAB:
+      itemHandle = message.iValue;
 
-        gotItem = pickUpItem(mGameModel->mItemManager->getItem(itemHandle), assetManager);
+      gotItem = pickUpItem(mGameModel->mItemManager->getItem(itemHandle), assetManager);
 
-        if (gotItem) {
-          message.sender = mGameModel->mPhysics->getPlayerHandle();
-          message.recipient = MAILBOX_PHYSICS;
-          message.type = MESSAGE_ITEMGRABBED;
-//          message.iValue2 = message.iValue2;
-          mGameModel->mMessageBus->sendMessage(message);
-        }
+      if (gotItem) {
+        message.sender = mGameModel->mPhysics->getPlayerHandle();
+        message.recipient = MAILBOX_PHYSICS;
+        message.type = MESSAGE_ITEMGRABBED;
+        mGameModel->mMessageBus->sendMessage(message);
+      }
 
-        break;
-
-      default:
-        break;
+      break;
+    default:
+      break;
     }
   }
 }
@@ -1174,6 +879,6 @@ void Player::placeLight(GameInput* gameInput) {
   }
 }
 
-Inventory* Player::getInventory(void) {
+Inventory* Player::getInventory() {
   return &mInventory;
 }

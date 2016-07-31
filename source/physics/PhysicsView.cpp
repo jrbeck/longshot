@@ -55,7 +55,7 @@ void PhysicsView::update(vector<PhysicsEntity*>* physicsEntities, double time) {
   }
 }
 
-void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
+void PhysicsView::setEntityColor(PhysicsEntity& entity, double time) {
   float age = 1.0f - (GLfloat)((entity.expirationTime - time) / entity.lifespan);
   if (age > 1.0f) {
     age = 1.0f;
@@ -113,7 +113,7 @@ void PhysicsView::setEntityColor(PhysicsEntity &entity, double time) {
   }
 }
 
-void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager& assetManager) {
+void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager* assetManager) {
 //  glDisable (GL_TEXTURE_2D);
 //  glEnable (GL_COLOR_MATERIAL);
 
@@ -148,8 +148,8 @@ void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, Wor
         //glTranslated (nc.x, nc.y, nc.z);
         //glScaled (dim.x * 15.0, dim.y * 15.0, dim.z * 15.0);
         //glColor3f(1.0f, 1.0f, 1.0f);
-        //assetManager.mGunBitmapModel->bindTexture();
-        //assetManager.mGunBitmapModel->draw();
+        //assetManager->mGunBitmapModel->bindTexture();
+        //assetManager->mGunBitmapModel->draw();
         //glPopMatrix();
 
         // BILLBOARD
@@ -165,7 +165,7 @@ void PhysicsView::drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, Wor
 
 
 
-void PhysicsView::drawTransparentEntities(vector<PhysicsEntity*>* physicsEntities, AssetManager& assetManager, bool inWater) {
+void PhysicsView::drawTransparentEntities(vector<PhysicsEntity*>* physicsEntities, AssetManager* assetManager, bool inWater) {
   //glBindTexture (GL_TEXTURE_2D, 0);
   glDisable(GL_TEXTURE_2D);
   glEnable(GL_COLOR_MATERIAL);
@@ -227,7 +227,7 @@ void PhysicsView::drawEntity(const PhysicsEntity& entity) {
 
 
 
-void PhysicsView::drawTextured(const PhysicsEntity &entity, WorldMap &worldMap, AssetManager &assetManager) {
+void PhysicsView::drawTextured(const PhysicsEntity& entity, WorldMap& worldMap, AssetManager* assetManager) {
   if (entity.type == OBJTYPE_AI_ENTITY ||
     entity.type == OBJTYPE_PLAYER)
   {
@@ -256,12 +256,12 @@ void PhysicsView::drawTextured(const PhysicsEntity &entity, WorldMap &worldMap, 
       glTranslated(center.x, center.y, center.z);
       glScaled(5.0 * dimensions.x, 5.0 * dimensions.y, 5.0 * dimensions.z);
       glRotated(angle, 0.0, 1.0, 0.0);
-      glTranslated((double)assetManager.mGunBitmapModel->mWidth * -0.5 * VOXEL_SCALE_X,
-        (double)assetManager.mGunBitmapModel->mHeight * -0.5 * VOXEL_SCALE_Y,
+      glTranslated((double)assetManager->mGunBitmapModel->mWidth * -0.5 * VOXEL_SCALE_X,
+        (double)assetManager->mGunBitmapModel->mHeight * -0.5 * VOXEL_SCALE_Y,
         0.0);
 
-      assetManager.mGunBitmapModel->bindTexture();
-      assetManager.mGunBitmapModel->draw();
+      assetManager->mGunBitmapModel->bindTexture();
+      assetManager->mGunBitmapModel->draw();
     }
     else {
       glTranslated(center.x, center.y, center.z);
@@ -323,7 +323,7 @@ void PhysicsView::drawTextured(const PhysicsEntity &entity, WorldMap &worldMap, 
   glPopMatrix ();
 }
 
-void PhysicsView::drawLitBox(v3d_t nearCorner, v3d_t farCorner, WorldMap& worldMap, AssetManager& assetManager) {
+void PhysicsView::drawLitBox(v3d_t nearCorner, v3d_t farCorner, WorldMap& worldMap, AssetManager* assetManager) {
   nearCorner.x += 0.001;
   nearCorner.y += 0.001;
   nearCorner.z += 0.001;
@@ -594,7 +594,7 @@ void PhysicsView::drawLitBox(v3d_t nearCorner, v3d_t farCorner, WorldMap& worldM
 
 
   glBegin (GL_QUADS);
-    assetManager.drawBlock2(worldLights);
+    assetManager->drawBlock2(worldLights);
   glEnd ();
 }
 

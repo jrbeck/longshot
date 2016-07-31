@@ -143,7 +143,7 @@ void World::setStartPosition(v3d_t pos) {
   mIsPlayerStartPosSet = true;
 }
 
-void World::draw(GlCamera& cam) {
+void World::drawEnvironment(GlCamera& cam) {
   mSkySim->draw(cam, mPlayerPosition);
 }
 

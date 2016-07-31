@@ -27,7 +27,7 @@ public:
   virtual int initialize(FILE* file, Galaxy* galaxy, int planetHandle) = 0;
   virtual void save(FILE* file) = 0;
   virtual int update(v3d_t playerPosition) = 0;
-  virtual void draw(GlCamera& cam) = 0;
+  virtual void drawEnvironment(GlCamera& cam) = 0;
   virtual int getType() { return mType; }
   WorldMap* getWorldMap() { return mWorldMap; }
   LightManager* getLightManager() { return mLightManager; }

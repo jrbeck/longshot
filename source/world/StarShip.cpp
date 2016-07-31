@@ -73,7 +73,7 @@ int StarShip::update(v3d_t playerPosition) {
   return 0;
 }
 
-void StarShip::draw(GlCamera &cam) {
+void StarShip::drawEnvironment(GlCamera &cam) {
   mOrbitSky->draw(cam, v3d_v(0.0, 0.0, 0.0));
 }
 

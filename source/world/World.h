@@ -39,8 +39,7 @@ public:
   void load(FILE *file);
   // updates the columns that are loaded in a WorldMap
   int update(v3d_t playerPosition);
-  // basically draw the stars'n stuff
-  void draw(GlCamera &cam);
+  void drawEnvironment(GlCamera &cam);
   // finds a start position that is conducive to the player within a
   // certain area of land
   v3d_t getStartPosition(void);

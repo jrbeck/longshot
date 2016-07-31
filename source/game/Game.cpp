@@ -5,8 +5,11 @@
 #pragma warning (disable : 4996)
 
 game_c::game_c(GameWindow* gameWindow) :
+  mAssetManager(NULL),
   mGameModel(NULL),
+  mPlayerView(NULL),
   mAiView(NULL),
+  mWorldMapView(NULL),
   mPhysicsView(NULL),
   mMerchantView(NULL),
   mMenu(NULL)
@@ -17,7 +20,8 @@ game_c::game_c(GameWindow* gameWindow) :
   mGameWindow = gameWindow;
 
   printf("loading assets\n");
-  mAssetManager.loadAssets();
+  mAssetManager = new AssetManager();
+  mAssetManager->loadAssets();
   printf("\n%6d: assets loaded\n", SDL_GetTicks());
 
   mGameInput = new GameInput;
@@ -28,8 +32,14 @@ game_c::~game_c() {
   if (mGameInput != NULL) {
     delete mGameInput;
   }
+  if (mPlayerView != NULL) {
+    delete mPlayerView;
+  }
   if (mAiView != NULL) {
     delete mAiView;
+  }
+  if (mWorldMapView != NULL) {
+    delete mWorldMapView;
   }
   if (mPhysicsView != NULL) {
     delete mPhysicsView;
@@ -43,8 +53,9 @@ game_c::~game_c() {
   if (mGameModel != NULL) {
     delete mGameModel;
   }
-
-  mAssetManager.freeAssets();
+  if (mAssetManager != NULL) {
+    delete mAssetManager;
+  }
 }
 
 void game_c::loadPlanetMenu() {
@@ -171,14 +182,14 @@ int game_c::enterGameMode(bool createNewWorld) {
 
   setupOpenGl();
 
-  mAssetManager.mSoundSystem.initialize();
+  mAssetManager->mSoundSystem.initialize();
   // FIXME: wtf is this??
-  mAssetManager.mSoundSystem.loadSound("cow");
-  // mAssetManager.mSoundSystem.playSoundByHandle(SOUND_AMBIENT, 64);
+  mAssetManager->mSoundSystem.loadSound("cow");
+  // mAssetManager->mSoundSystem.playSoundByHandle(SOUND_AMBIENT, 64);
 
   gameLoop();
 
-  mAssetManager.mSoundSystem.stopAllSounds();
+  mAssetManager->mSoundSystem.stopAllSounds();
 
   // FIXME: this is temporary ... since we aren't
   // saving the AI, we need to eliminate their items
@@ -194,32 +205,23 @@ int game_c::enterGameMode(bool createNewWorld) {
 }
 
 void game_c::initializeWorldViews() {
-  // we need to give it an ambient light color
   printf("PLANET: %d\n", mGameModel->mCurrentPlanet->mHandle);
 
-  IntColor sunColor;
-  if (mGameModel->mLocation->getType() == LOCATION_SHIP && false) {
-    sunColor.r = LIGHT_LEVEL_MAX;
-    sunColor.g = LIGHT_LEVEL_MAX;
-    sunColor.b = LIGHT_LEVEL_MAX;
+  if (mWorldMapView != NULL) {
+    delete mWorldMapView;
   }
-  else {
-    GLfloat* starColor = mGameModel->mGalaxy->getStarSystemByHandle(mGameModel->mCurrentPlanet->mHandle)->mStarColor;
-    sunColor.r = (int)((starColor[0] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
-    sunColor.g = (int)((starColor[1] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
-    sunColor.b = (int)((starColor[2] + 0.5f) * (GLfloat)LIGHT_LEVEL_MAX);
-    sunColor.constrain(LIGHT_LEVEL_MIN, LIGHT_LEVEL_MAX);
+  mWorldMapView = new WorldMapView(mAssetManager, mGameModel);
+
+  if (mPlayerView != NULL) {
+    delete mPlayerView;
   }
+  mPlayerView = new PlayerView(mGameModel, mAssetManager);
 
-  mWorldMapView.setWorldMap(mGameModel->mLocation->getWorldMap(), sunColor);
-
-  // physics
   if (mPhysicsView != NULL) {
     delete mPhysicsView;
   }
   mPhysicsView = new PhysicsView();
 
-  // ai
   if (mAiView != NULL) {
     delete mAiView;
   }
@@ -276,10 +278,10 @@ void game_c::gameLoop() {
     // HACK * * * * * * *
     mGameModel->mPlayer->placeLight(mGameInput);
 
-    mWorldMapView.update(mAssetManager, *mGameModel->mLocation->getLightManager());
+    mWorldMapView->update(*mGameModel->mLocation->getLightManager());
 
     if (mGameInput->isToggleWorldChunkBoxes()) {
-      mWorldMapView.toggleShowWorldChunkBoxes();
+      mWorldMapView->toggleShowWorldChunkBoxes();
     }
 
     // do some frames per second calculating
@@ -428,28 +430,26 @@ int game_c::draw() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // get the camera from the player's perspective
-  GlCamera cam = mGameModel->mPlayer->gl_cam_setup();
+  GlCamera camera = mPlayerView->glCamSetup();
 
   // we need this for the billboard sprites
-  mPhysicsView->setViewPosition(cam.getPosition());
+  mPhysicsView->setViewPosition(camera.getPosition());
 
-  // draw the stars and stuff
-  mGameModel->mLocation->draw(cam);
+  mGameModel->mLocation->drawEnvironment(camera);
 
-  mWorldMapView.drawSolidBlocks(cam, mAssetManager);
+  mWorldMapView->drawSolidBlocks(camera);
   mPhysicsView->drawSolidEntities(mGameModel->mPhysics->getEntityVector(), *mGameModel->mLocation->getWorldMap(), mAssetManager);
-  PlayerView::drawPlayerTargetBlock(mGameModel->mPlayer);
-  PlayerView::drawEquipped(mGameModel, mAssetManager);
+  mPlayerView->drawPlayerTargetBlock();
+  mPlayerView->drawEquipped();
   mAiView->draw(mGameModel);
 
   // draw the transparent physics objs
   bool playerHeadInWater = mGameModel->mPlayer->isHeadInWater();
   mPhysicsView->drawTransparentEntities(mGameModel->mPhysics->getEntityVector(), mAssetManager, !playerHeadInWater);
-  mWorldMapView.drawLiquidBlocks(cam, mAssetManager);
+  mWorldMapView->drawLiquidBlocks(camera);
   mPhysicsView->drawTransparentEntities(mGameModel->mPhysics->getEntityVector(), mAssetManager, playerHeadInWater);
 
-  // draw the hud
-  mGameModel->mPlayer->drawHud();
+  mPlayerView->drawHud();
 
   if (mGameState == GAMESTATE_MENU) {
     mMenu->draw();

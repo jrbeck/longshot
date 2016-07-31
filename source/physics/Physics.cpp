@@ -343,7 +343,7 @@ void Physics::readMail() {
 }
 
 // apply the physics
-int Physics::update(double time, AssetManager& assetManager) {
+int Physics::update(double time, AssetManager* assetManager) {
   readMail();
   bool timeAdvanced;
   if (!mPaused || (mPaused && mAdvanceOneFrame)) {
@@ -374,6 +374,7 @@ int Physics::update(double time, AssetManager& assetManager) {
       obj[index]->vel = v3d_zero();
     }
   }
+
   // now clip against the other objects
   for (size_t index = 0; index < numEntities; index++) {
     if (obj[index]->active == false || obj[index]->queued) {
@@ -384,6 +385,7 @@ int Physics::update(double time, AssetManager& assetManager) {
       clipDisplacementAgainstOtherObjects(index);
     }
   }
+
   // now we can move them
   for (size_t index = 0; index < numEntities; index++) {
     if (obj[index]->active == false || obj[index]->queued) {
@@ -391,12 +393,10 @@ int Physics::update(double time, AssetManager& assetManager) {
     }
 
     if (!mPaused || (mAdvanceOneFrame || obj[index]->handle == mPlayerHandle)) {
-      // now move that shizzat
       displaceObject(index);
     }
   }
 
-  // clean up the object list if possible
   manageEntitiesList();
   mAdvanceOneFrame = false;
 
@@ -404,7 +404,6 @@ int Physics::update(double time, AssetManager& assetManager) {
     addQueuedEntities();
   }
 
-  // play the sounds
   playSoundEvents(assetManager);
 
   return (int)obj.size();
@@ -1758,9 +1757,9 @@ int Physics::addSoundEvent(int type, const v3d_t& position) {
   return 1;
 }
 
-void Physics::playSoundEvents(AssetManager& assetManager) {
+void Physics::playSoundEvents(AssetManager* assetManager) {
   for (int i = 0; i < mNumSoundEvents; ++i) {
-    assetManager.mSoundSystem.playSoundByHandle(mSoundEvents[i], mSoundVolumes[i]);
+    assetManager->mSoundSystem.playSoundByHandle(mSoundEvents[i], mSoundVolumes[i]);
   }
   mNumSoundEvents = 0;
 }

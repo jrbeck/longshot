@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "../game/GameModel.h"
 #include "../world/WorldMap.h"
 #include "../world/WorldLighting.h"
 
@@ -52,30 +53,30 @@ public:
 
 class WorldMapView {
 public:
-  WorldMapView();
+  WorldMapView(AssetManager* assetManager, GameModel* gameModel);
   ~WorldMapView();
 
-  // this will reset everything and prepare it for a new map
-  void setWorldMap(WorldMap *worldMap, IntColor &sunColor);
-  void toggleShowWorldChunkBoxes(void);
+  void toggleShowWorldChunkBoxes();
 
-  // this will destroy the inactive display lists and
-  // generate the new display lists
-  void update(AssetManager &assetManager, const LightManager &lightManager);
+  void update(const LightManager& lightManager);
 
-  void generateDisplayLists(int columnIndex, const AssetManager &assetManager);
-  void deleteDisplayLists(int columnIndex);
-  void drawSolidForDisplayList(const WorldChunk &chunk, const AssetManager &assetManager) const;
-  void drawLiquidForDisplayList(const WorldChunk &chunk, const AssetManager &assetManager) const;
-  void drawChunkBoxForDisplayList(v3di_t worldPosition) const;
-
-  void drawSolidBlocks(const GlCamera &camera, const AssetManager &assetManager) const;
-  void drawLiquidBlocks(const GlCamera &camera, const AssetManager &assetManager) const;
-  void drawChunkBoxes(const GlCamera &camera, const AssetManager &assetManager) const;
+  void drawSolidBlocks(const GlCamera& camera) const;
+  void drawLiquidBlocks(const GlCamera& camera) const;
+  void drawChunkBoxes(const GlCamera& camera) const;
 
 private:
-  WorldMap *mWorldMap;
-  ColumnViewInfo *mColumnInfo;
+  void setGameModel(GameModel* gameModel);
+  void setSunColor(GameModel* gameModel);
+
+  void generateDisplayLists(int columnIndex);
+  void deleteDisplayLists(int columnIndex);
+  void drawSolidForDisplayList(const WorldChunk& chunk) const;
+  void drawLiquidForDisplayList(const WorldChunk& chunk) const;
+  void drawChunkBoxForDisplayList(v3di_t worldPosition) const;
+
+  AssetManager* mAssetManager;
+  WorldMap* mWorldMap;
+  ColumnViewInfo* mColumnInfo;
 
   // these are derived from mWorldMap
   int mWorldMapSideX;
@@ -86,4 +87,3 @@ private:
 
   IntColor mSunColor;
 };
-

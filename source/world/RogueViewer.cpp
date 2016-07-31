@@ -1,10 +1,13 @@
 #include "../world/RogueViewer.h"
 
-RogueViewer::RogueViewer(GameWindow* gameWindow) :
+RogueViewer::RogueViewer(GameWindow* gameWindow, AssetManager* assetManager, GameModel* gameModel) :
   mGameWindow(gameWindow),
+  mAssetManager(assetManager),
+  mGameModel(gameModel),
+  mWorldMapView(NULL),
   mVizMode(0)
 {
-//  mGameWindow = gameWindow;
+  mWorldMapView = new WorldMapView(assetManager, gameModel);
 
   for (int i = 0; i < NUM_VIZ_MODES; ++i) {
     mCameraStates[i].position = v3d_v(50.0, 50.0, 50.0);
@@ -13,10 +16,13 @@ RogueViewer::RogueViewer(GameWindow* gameWindow) :
 }
 
 RogueViewer::~RogueViewer() {
+  if (mWorldMapView != NULL) {
+    delete mWorldMapView;
+  }
 }
 
 void RogueViewer::setupOpenGl() {
-  GLfloat color[4] = {0.1f, 0.4f, 0.9f, 0.0f};
+  GLfloat color[4] = { 0.1f, 0.4f, 0.9f, 0.0f };
 
   // set up the viewport
   glViewport(0, 0, gScreenW, gScreenH);
@@ -67,7 +73,7 @@ int RogueViewer::start() {
 
   mRogueMap.resize(64, 64);
 
-  mAssetManager.loadAssets();
+  mAssetManager->loadAssets();
 //  mWorld.randomizePeriodics(0);
 //  mWorld.initialize(0, NULL);
 
@@ -86,8 +92,8 @@ int RogueViewer::start() {
   int frame = 0, quit = 0, blocks_drawn = 0;
 
   // change the mouse mode
-//  SDL_WM_GrabInput (SDL_GRAB_OFF);
-//  SDL_ShowCursor (1);
+//  SDL_WM_GrabInput(SDL_GRAB_OFF);
+//  SDL_ShowCursor(1);
 
   GlCamera* cam;
 
@@ -105,8 +111,8 @@ int RogueViewer::start() {
     switch (mVizMode) {
       case VIZ_MODE_MODEL:
         // draw the model
-        mWorldMapView.drawSolidBlocks(*cam, mAssetManager);
-        mWorldMapView.drawLiquidBlocks(*cam, mAssetManager);
+        mWorldMapView->drawSolidBlocks(*cam);
+        mWorldMapView->drawLiquidBlocks(*cam);
         break;
 
       case VIZ_MODE_ROGUE:
@@ -114,11 +120,11 @@ int RogueViewer::start() {
         break;
 
 //      case VIZ_MODE_WORLD:
-//      mWorld.update (mRtsCam.getTarget (), mAssetManager);
+//      mWorld.update(mRtsCam.getTarget(), mAssetManager);
 
       // draw the world
-//      mWorld.drawLand (cam2, mAssetManager);
-//      mWorld.drawWater (cam2, mAssetManager);
+//      mWorld.drawLand(cam2, mAssetManager);
+//      mWorld.drawWater(cam2, mAssetManager);
 
         break;
     }
@@ -142,7 +148,7 @@ int RogueViewer::start() {
   }
 
   // clean up a bit
-  mAssetManager.freeAssets();
+  mAssetManager->freeAssets();
 
   printf("%6d: exiting rogue_viz ----------------\n", SDL_GetTicks());
   return 0;
@@ -165,8 +171,8 @@ v3d_t RogueViewer::findStartPosition(WorldMap& worldMap) {
     pos.z = r_num(-limit, limit) + searchPos.y;
 
     // FIXME: this was changed (to: pos.y = 0.0) when Periodics were being removed from
-    // WorldMap... i.e. 0.0 is jus a random number!!
-//    pos.y = worldMap.getTerrainHeight (static_cast<int>(pos.x), static_cast<int>(pos.z)) + 2.0;
+    // WorldMap... i.e. 0.0 is just a random number!!
+//    pos.y = worldMap.getTerrainHeight(static_cast<int>(pos.x), static_cast<int>(pos.z)) + 2.0;
     pos.y = 0.0;
     if (pos.y > 1.0 && pos.y < 20.0) break;
     if (numAttempts++ > 10000) break;
@@ -307,7 +313,7 @@ void RogueViewer::handleMouseButtonUp(int button, v2d_t pos) {
 /*  if (*mode == MODE_PLAYER) {
     switch (button) {
       case SDL_BUTTON_RIGHT:
-        player->add_input_event (INPUT_TYPE_ROCKET_UP, 1.0);
+        player->add_input_event(INPUT_TYPE_ROCKET_UP, 1.0);
         break;
     }
   }*/
@@ -347,23 +353,23 @@ void RogueViewer::generateNewMap() {
 
     // FIXME: this was commented out when Periodics was removed from WorldMap
     // it will generate NOTHING without this
-//    FeatureGenerator::createForViewer (startLocation, 0, mWorldMap);
+//    FeatureGenerator::createForViewer(startLocation, 0, mWorldMap);
 
     // prepare for viewing
     for (int i = 0; i < mWorldMap.mNumColumns; ++i) {
       // FIXME: this was commented out when createShadowVolume
       // got an option for a cloud cover...
-//      WorldLighting::createShadowVolume (i, mWorldMap);
+//      WorldLighting::createShadowVolume(i, mWorldMap);
     }
     for (int i = 0; i < mWorldMap.mNumColumns; ++i) {
       mWorldMap.updateBlockVisibility(i);
       // FIXME: this was commented out when LightmManager was required
       // it will generate NOTHING without this
-//      WorldLighting::applyLighting (i, mWorldMap);
+//      WorldLighting::applyLighting(i, mWorldMap);
     }
     // FIXME: this was commented out when LightmManager was required
     // it will generate NOTHING without this
-//    mWorldMapView.update(mAssetManager, false);
+//    mWorldMapView->update(mAssetManager, false);
 
 
     // we'll just re-use this variable
@@ -377,12 +383,12 @@ void RogueViewer::generateNewMap() {
     mRogueMap.clear();
     mRogueMap.random_room(500, 6, 6);
     mRogueMap.random_room(501, 6, 6);
-//    mRogueMap.random_room (502, 6, 6);
-//    mRogueMap.random_room (503, 6, 6);
-//    mRogueMap.random_room (504, 6, 6);
+//    mRogueMap.random_room(502, 6, 6);
+//    mRogueMap.random_room(503, 6, 6);
+//    mRogueMap.random_room(504, 6, 6);
 
     mRogueMap.randomize(false, 6);
-//    mRogueMap.grow_paths ();
+//    mRogueMap.grow_paths();
 
     v3d_t rogueTarget = {
       (double)mRogueMap.getWidth() * 0.5,

@@ -74,18 +74,15 @@ public:
   v2d_t getFacingAndIncline();
   bool isHeadInWater();
 
-  int set_target(v3d_t a);
+  v3d_t getLookTarget() const;
 
-  void set_draw_distance(double distance);
-  void adjust_draw_distance(double amount);
-
-  // use the gluLookAt () to set view at render time
-  GlCamera gl_cam_setup();
-
-  v3d_t get_pos();
+  v3d_t get_pos() const;
   int set_pos(v3d_t a);
+  v3d_t getHeadPosition() const;
+  int getHeadPostionBlockType() const;
+  double getCurrentHealth() const;
 
-  bool pickUpItem(item_t item, AssetManager& assetManager);
+  bool pickUpItem(item_t item, AssetManager* assetManager);
 
   void useEquipped(int whichEquip);
   double fireGun(item_t item, double handedness);
@@ -100,38 +97,25 @@ public:
   void updateTargetBlock();
   v3di_t* getTargetBlock(int& targetBlockFace);
 
-  void updateHud();
-  void drawHud();
-  void drawWaterOverlay();
+  bool update(AssetManager* assetManager, GameInput* gi);
 
-  void updateCharacterSheet();
-
-  bool update(AssetManager& assetManager, GameInput* gi);
-
-  void readPhysicsMessages(AssetManager& assetManager);
+  void readPhysicsMessages(AssetManager* assetManager);
 
   // HACK
   void placeLight(GameInput* gameInput);
   Inventory* getInventory();
 
-  GlCamera cam;
-
 private:
   GameModel* mGameModel;
 
-  GameMenu mHud;
-
-  GameMenu mCharacterSheet;
   bool mShowCharacterSheet;
 
-  v3d_t mPos;      // where the 'feet' are
+  v3d_t mPos;
+  v3d_t mHeadOffset;
+  v3d_t mFinalHeadOffset;
+  HeadBobble mHeadBobble;
 
-  v3d_t mHeadOffset;      // where's the noggin relative to the phys position
-  v3d_t mFinalHeadOffset;    // where is it after all is considered
-  HeadBobble mHeadBobble;    // something to consider
-
-  v3d_t mTarget;      // where the camera is pointed
-  v3d_t up;        // the 'up' vector for the camera
+  v3d_t mLookTarget;
   v3d_t mLookVector;
 
   bool mIsBlockTargeted;
@@ -162,8 +146,7 @@ private:
 
   bool mInWater;
   bool mHeadInWater;
-
-  GLfloat mVisionTint[4];
+  int mHeadPostionBlockType;
 
   double mFacing;      // the angle on the x-z plane off the positive x-axis
   double mIncline;    // the angle on the vertical plane off the x-z plane intersection...

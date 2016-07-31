@@ -39,12 +39,12 @@ public:
   void update(vector<PhysicsEntity*>* physicsEntities, double time);
   void setEntityColor(PhysicsEntity& entity, double time);
 
-  void drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager& assetManager);
-  void drawTransparentEntities(vector<PhysicsEntity*>* physicsEntities, AssetManager& assetManager, bool inWater);
+  void drawSolidEntities(vector<PhysicsEntity*>* physicsEntities, WorldMap& worldMap, AssetManager* assetManager);
+  void drawTransparentEntities(vector<PhysicsEntity*>* physicsEntities, AssetManager* assetManager, bool inWater);
 
   void drawEntity(const PhysicsEntity& entity);
-  void drawTextured(const PhysicsEntity& entity, WorldMap& worldMap, AssetManager& assetManager);
-  void drawLitBox(v3d_t nearCorner, v3d_t farCorner, WorldMap& worldMap, AssetManager& assetManager);
+  void drawTextured(const PhysicsEntity& entity, WorldMap& worldMap, AssetManager* assetManager);
+  void drawLitBox(v3d_t nearCorner, v3d_t farCorner, WorldMap& worldMap, AssetManager* assetManager);
   void drawBillBoard(v3d_t pos);
 
 private:

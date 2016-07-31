@@ -153,7 +153,7 @@ public:
   void readMail();
 
   // * * * * * * * * UPDATE
-  int update(double time, AssetManager& assetManager);
+  int update(double time, AssetManager* assetManager);
   void updateEntity(size_t index);
   void expireEntity(size_t index);
 
@@ -183,7 +183,7 @@ public:
   v3d_t getRadialForce(const v3d_t& pos, const v3d_t& center, double force, double radius) const;
 
   int addSoundEvent(int type, const v3d_t& position);
-  void playSoundEvents(AssetManager& assetManager);
+  void playSoundEvents(AssetManager* assetManager);
 
   size_t getPlayerHandle() const;
 

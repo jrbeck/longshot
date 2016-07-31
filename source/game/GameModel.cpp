@@ -296,11 +296,9 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
 
   // FIXME: this is really a hack...
   if (mLocation->getType() == LOCATION_SHIP) {
-    mPlayer->set_draw_distance(500.0);
     mAiManager->setMaxCritters(0);
   }
   else {
-    mPlayer->set_draw_distance(r_num(150.0, 500.0));
     mAiManager->setMaxCritters(20);
   }
 

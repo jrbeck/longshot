@@ -140,12 +140,12 @@ int Longshot::loop() {
         reloadMenu();
         break;
 
-      case PROGRAM_MODE_ROGUE:
-        printf("menu choice: rogue_viz\n");
-        mRogueViewer = new RogueViewer(mGameWindow);
-        mRogueViewer->start();
-        delete mRogueViewer;
-        break;
+      // case PROGRAM_MODE_ROGUE:
+      //   printf("menu choice: rogue_viz\n");
+      //   mRogueViewer = new RogueViewer(mGameWindow, );
+      //   mRogueViewer->start();
+      //   delete mRogueViewer;
+      //   break;
 
       case MENU_APPLICATION_QUIT:
       case PROGRAM_QUIT:

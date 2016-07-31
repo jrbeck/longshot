@@ -24,7 +24,7 @@ public:
   void save(FILE* file);
   void load(FILE* file);
   int update(v3d_t playerPosition);
-  void draw(GlCamera& cam);
+  void drawEnvironment(GlCamera& cam);
   v3d_t getStartPosition(void);
 
   void initWorldColumns(bool clearColumns);

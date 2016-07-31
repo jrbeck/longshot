@@ -74,10 +74,11 @@ class game_c {
   GameModel* mGameModel;
   GameInput* mGameInput;
 
-  AssetManager mAssetManager;
+  AssetManager* mAssetManager;
 
+  PlayerView* mPlayerView;
   AiView* mAiView;
-  WorldMapView mWorldMapView;
+  WorldMapView* mWorldMapView;
   PhysicsView* mPhysicsView;
   MerchantView* mMerchantView;
 
