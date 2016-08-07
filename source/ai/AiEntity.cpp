@@ -237,7 +237,7 @@ void AiEntity::readMail() {
 
       }
       else {
-        printf ("AiEntity::readMail(): hurt myself!\n");
+        printf("AiEntity::readMail(): hurt myself!\n");
       }
 
       mCurrentHealth -= static_cast<float>(message.dValue);
