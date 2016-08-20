@@ -8,6 +8,7 @@ game_c::game_c(GameWindow* gameWindow) :
   mAssetManager(NULL),
   mGameModel(NULL),
   mPlayerView(NULL),
+  mPlayerController(NULL),
   mAiView(NULL),
   mWorldMapView(NULL),
   mPhysicsView(NULL),
@@ -34,6 +35,9 @@ game_c::~game_c() {
   }
   if (mPlayerView != NULL) {
     delete mPlayerView;
+  }
+  if (mPlayerController != NULL) {
+    delete mPlayerController;
   }
   if (mAiView != NULL) {
     delete mAiView;
@@ -176,6 +180,10 @@ int game_c::enterGameMode(bool createNewWorld) {
 
   initializeWorldViews();
 
+  // FIXME: maybe this should rely on the mPlayerView so the it doesn't have to
+  // happen after initializeWorldViews()
+  mPlayerController = new PlayerController(mGameModel, mPlayerView);
+
   // grab the cursor
   SDL_SetRelativeMouseMode(SDL_TRUE);
   SDL_ShowCursor(0);
@@ -236,11 +244,12 @@ void game_c::gameLoop() {
   mGameState = GAMESTATE_PLAY;
 
   int quit = 0;
-  bool escapePressed = false;
+  bool escapePressed;
 
   while (quit == 0) {
-    escapePressed = update();
-
+    handleInput();
+    escapePressed = mGameInput->isEscapePressed();
+    update();
     draw();
 
     if (mGameState == GAMESTATE_PLAY) {
@@ -397,17 +406,21 @@ int game_c::handleMenuChoice(int menuChoice) {
   return 0;
 }
 
-bool game_c::update() {
+void game_c::handleInput() {
+  mPlayerController->update(mGameInput);
+}
+
+void game_c::update() {
   double ticks = (double)SDL_GetTicks() / 1000.0;
-  bool escapePressed = false;
 
   while (mLastUpdateTime < ticks) {
+    v3d_print("sdf", mGameModel->mPlayer->get_pos());
+
+
     mNumPhysicsObjects = mGameModel->mPhysics->update(mLastUpdateTime, mAssetManager);
 
-    escapePressed = mGameModel->mPlayer->update(mAssetManager, mGameInput) || escapePressed;
-    if (escapePressed) {
-      return escapePressed;
-    }
+    mGameModel->mPlayer->update(&mPlayerController->mMovementInput, mAssetManager);
+    mPlayerView->update();
 
     mGameModel->mAiManager->setPlayerFacingAndIncline(mGameModel->mPlayer->getFacingAndIncline());
 
@@ -418,21 +431,14 @@ bool game_c::update() {
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
   }
 
-  // this updates colors/transparencies...
   mPhysicsView->update(mGameModel->mPhysics->getEntityVector(), mLastUpdateTime);
-
-  return escapePressed;
 }
 
-
-// draw the game world
 int game_c::draw() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // get the camera from the player's perspective
   GlCamera camera = mPlayerView->glCamSetup();
 
-  // we need this for the billboard sprites
   mPhysicsView->setViewPosition(camera.getPosition());
 
   mGameModel->mLocation->drawEnvironment(camera);

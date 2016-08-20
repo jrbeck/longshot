@@ -30,6 +30,12 @@ PlayerView::~PlayerView() {
   }
 }
 
+void PlayerView::update() {
+  updateHud();
+  updateVisionTint();
+  updateCharacterSheet();
+}
+
 void PlayerView::drawEquipped() {
   drawEquipped(mGameModel->mPlayer->getMeleeWeaponState(EQUIP_PRIMARY), LEFT_HANDED);
   drawEquipped(mGameModel->mPlayer->getMeleeWeaponState(EQUIP_SECONDARY), RIGHT_HANDED);
@@ -209,19 +215,10 @@ void PlayerView::updateVisionTint() {
 void PlayerView::updateHud() {
   mHud->clear();
 
-  // // toggle the character sheet on/off according to the user input
-  // if (gameInput->isToggleCharacterSheet()) {
-  //   mShowCharacterSheet = !mShowCharacterSheet;
-  // }
-  //
-  updateCharacterSheet();
-
-  updateVisionTint();
-
-  if (mGameModel->mPlayer->getCurrentHealth() <= 0.0f) {
+  if (mGameModel->mPlayer->isDead()) {
     showDeadPlayerHud();
   }
-  else { // NOT DEAD
+  else {
     showLivePlayerHud();
   }
 
@@ -230,12 +227,6 @@ void PlayerView::updateHud() {
   static char crossHair[2] = "x";
   float color[] = {1.0f, 1.0f, 1.0f, 0.75f};
   mHud->addText(v2d_v(0.495, 0.5), v2d_v(0.01, 0.01), fontSize, crossHair, TEXT_JUSTIFICATION_CENTER, color, NULL);
-
-
-  // player position
-//  sprintf(text, "%.4f, %.4f, %.4f", mPos.x, mPos.y, mPos.z);
-//  mHud->addText (v2d_v(0.4, 0.1), v2d_v(0.2, 0.05), fontSize,
-//    text, TEXT_JUSTIFICATION_CENTER, color, NULL);
 }
 
 void PlayerView::showDeadPlayerHud() {
@@ -305,12 +296,13 @@ void PlayerView::showLivePlayerHud() {
 }
 
 void PlayerView::drawHud() {
-  updateHud();
+  // updateHud();
 
   if (mVisionTint[3] > 0.0) {
     drawWaterOverlay();
   }
 
+  // if (mShowCharacterSheet) {
   if (mShowCharacterSheet) {
     mCharacterSheet->draw();
   }

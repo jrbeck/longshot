@@ -36,6 +36,7 @@
 #include "../world/GalaxyMap.h"
 #include "../world/WorldUtil.h"
 #include "../player/PlayerView.h"
+#include "../player/PlayerController.h"
 #include "../world/WorldMapView.h"
 #include "../ai/AiView.h"
 #include "../physics/Physics.h"
@@ -77,6 +78,7 @@ class game_c {
   AssetManager* mAssetManager;
 
   PlayerView* mPlayerView;
+  PlayerController* mPlayerController;
   AiView* mAiView;
   WorldMapView* mWorldMapView;
   PhysicsView* mPhysicsView;
@@ -112,6 +114,7 @@ public:
 
   void gameLoop();
   int handleMenuChoice(int menuChoice);
-  bool update();
+  void handleInput();
+  void update();
   int draw();
 };

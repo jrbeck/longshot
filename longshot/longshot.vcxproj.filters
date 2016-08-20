@@ -308,6 +308,9 @@
     <ClCompile Include="..\source\game\MessageBus.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\player\PlayerController.cpp">
+      <Filter>source\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\ai\AiEntity.h">
@@ -573,6 +576,9 @@
     </ClInclude>
     <ClInclude Include="..\source\game\MessageBus.h">
       <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\player\PlayerController.h">
+      <Filter>source\player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

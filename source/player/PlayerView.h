@@ -19,6 +19,8 @@ public:
   PlayerView(GameModel* gameModel, AssetManager* assetManager);
   ~PlayerView();
 
+  void update();
+
   void drawEquipped();
   void drawEquipped(const melee_weapon_state_t* weaponState, double handedness);
   void drawEquippedGun(const melee_weapon_state_t* weaponState, double handedness, BitmapModel* model);
@@ -39,8 +41,9 @@ public:
   void setDrawDistance(double distance);
   void adjustDrawDistance(double amount);
 
-  // use the gluLookAt() to set view at render time
   GlCamera glCamSetup();
+
+  bool mShowCharacterSheet;
 
 private:
   GameModel* mGameModel;
@@ -53,5 +56,4 @@ private:
   bool mHeadPostionBlockType;
   GLfloat mVisionTint[4];
 
-  bool mShowCharacterSheet;
 };

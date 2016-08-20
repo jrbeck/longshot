@@ -25,7 +25,7 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
   mInclineMin = DEG2RAD(DEFAULT_INCLINE_MIN);
   mInclineMax = DEG2RAD(DEFAULT_INCLINE_MAX);
 
-  update_target();
+  updateCameraTarget();
 
   mLastUpdateTime = 0.0;
   mNextShotTimePrimary = 0.0;
@@ -58,8 +58,6 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
     mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->createItem(blockItem);
   }
 
-  mShowCharacterSheet = false;
-
   mPlacedBlock = false;
 
   return 0;
@@ -90,12 +88,18 @@ int Player::soft_reset(v3d_t& startPosition) {
 
   mLastFootStep = -1.0;
 
-  mShowCharacterSheet = false;
-
   memset(&mMeleeStatePrimary, 0, sizeof (melee_weapon_state_t));
   memset(&mMeleeStateSecondary, 0, sizeof (melee_weapon_state_t));
 
   return 0;
+}
+
+void Player::HACK_resurrect() {
+  mMaxHealth = 100.0;
+  mCurrentHealth = 100.0;
+  mGameModel->mPhysics->setHealth(mGameModel->mPhysics->getPlayerHandle(), 100.0);
+  mFinalHeadOffset = mHeadOffset;
+  deathScreamUttered = false;
 }
 
 void Player::setStartPosition(v3d_t& startPosition) {
@@ -152,17 +156,17 @@ void Player::godMode() {
   }
 }
 
-// constrain the viewing angles
-int Player::constrain_view_angles() {
-  // constrain the view angle elevation
+bool Player::isDead() {
+  return mCurrentHealth <= 0.0;
+}
+
+void Player::constrainViewAngles() {
   if (mIncline < mInclineMin) mIncline = mInclineMin;
   else if (mIncline > mInclineMax) mIncline = mInclineMax;
 
   // this is ugly, but really shouldn't ever be a problem
   while (mFacing > MY_2PI) mFacing -= MY_2PI;
   while (mFacing < 0) mFacing += MY_2PI;
-
-  return 0;
 }
 
 v2d_t Player::getFacingAndIncline() {
@@ -177,7 +181,15 @@ v3d_t Player::getLookTarget() const {
   return mLookTarget;
 }
 
-void Player::update_target() {
+void Player::updateOrientation(double facingDelta, double inclineDelta) {
+  mFacing += facingDelta;
+  mIncline += inclineDelta;
+  constrainViewAngles();
+  updateCameraTarget();
+  updateTargetBlock();
+}
+
+void Player::updateCameraTarget() {
   mLookVector = v3d_getLookVector(mFacing, mIncline);
   mLookTarget = v3d_add(v3d_add(mFinalHeadOffset, mPos), mLookVector);
 }
@@ -431,7 +443,9 @@ v3di_t* Player::getTargetBlock(int& targetBlockFace) {
   return NULL;
 }
 
-bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
+void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
+  mWalkInput = movementInput->walkInput;
+
   mLastUpdateTime = mGameModel->mPhysics->getLastUpdateTime();
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
@@ -439,7 +453,7 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
   // update position from physics
   // FIXME: this is a little flaky ... why not just use the source?
   mPos = physicsEntity->pos;
-  readPhysicsMessages(assetManager);
+  readMessages(assetManager);
 
   // FIXME: this isn't quite right, perhaps the near clip plane needs to be compensated
   // for (vertically) to head pos
@@ -461,45 +475,9 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
     mGameModel->mPhysics->setHealth(mGameModel->mPhysics->getPlayerHandle(), mCurrentHealth);
   }
 
-  // does the player want to mess with the draw distance?
-  // FIXME: this sheeit is temporarily borkened
-  // if (gameInput->isDecreasingDrawDistance()) {
-  //   adjust_draw_distance(-20);
-  // }
-  // if (gameInput->isIncreasingDrawDistance()) {
-  //   adjust_draw_distance(20);
-  // }
-
-
-  // deal with an escape press
-  bool escapePressed = false;
-  if (gameInput->isEscapePressed()) {
-    if (mShowCharacterSheet) {
-      mShowCharacterSheet = false;
-    }
-    else {
-      escapePressed = true;
-    }
-  }
-
-  // accommodate the changes in orientation
-  mFacing += gameInput->getFacingDelta();
-  mIncline += gameInput->getInclinationDelta();
-  constrain_view_angles();
-
-  // update the camera accordingly
-  update_target();
-
-  // check if there's a block that the player is looking at and close to
-  updateTargetBlock();
-
-
-  // * * * * * * begin dead section * * * * * * * * * * *
-  // if dead, player can't do any more
-  if (mCurrentHealth <= 0.0) {
-//    printf ("dead\n");
-
+  if (isDead()) {
     if (!deathScreamUttered) {
+      // TODO: extract into handleDeath()
       assetManager->mSoundSystem.playSoundByHandle(SOUND_HUMAN_DEATH, 112);
       deathScreamUttered = true;
 
@@ -508,98 +486,10 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
       mFinalHeadOffset = v3d_v(0.25, 0.2, 0.25);
     }
 
-    if (gameInput->isSoftReset()) {
-      mMaxHealth = 100.0;
-      mCurrentHealth = 100.0;
-
-      mGameModel->mPhysics->setHealth(mGameModel->mPhysics->getPlayerHandle(), 100.0);
-
-      mFinalHeadOffset = mHeadOffset;
-
-      deathScreamUttered = false;
-    }
-
-    return escapePressed;
+    return;
   }
-  // * * * * * * end dead section * * * * * * * * * * *
-
-
-  if (mShowCharacterSheet) {
-    if (gameInput->isClickMouse1()) {
-      if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
-        mInventory.swapBackPackItemIntoPrimary();
-      }
-      else {
-        mInventory.swapBackPackItemIntoPrimary();
-      }
-    }
-    if (gameInput->isClickMouse2()) {
-      if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] == 0) {
-        mInventory.swapBackPackItemIntoSecondary();
-      }
-      else {
-        mInventory.swapBackPackItemIntoSecondary();
-      }
-    }
-
-    if (gameInput->isUseBackpackItem()) {
-      item_t item = mGameModel->mItemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
-      if (item.type == ITEMTYPE_HEALTHPACK) {
-        useBackpackItem();
-      }
-    }
-
-    if (gameInput->isNextGun()) {
-      mInventory.nextBackPackItem();
-    }
-
-    if (gameInput->isPreviousGun()) {
-      mInventory.previousBackPackItem();
-    }
-
-    // did the player want to drop that item?
-    // FIXME: destroys item!
-    // this needs to create a physics item...
-    if (gameInput->isDroppedItem() && mInventory.mBackpack[mInventory.mSelectedBackpackItem] != 0) {
-      mGameModel->mItemManager->destroyItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
-      mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
-    }
-  } // end mShowCharacterSheet == true
-  else { // if (!mShowCharacterSheet) {
-    if (gameInput->isUsingPrimary()) {
-      useEquipped(EQUIP_PRIMARY);
-    }
-    if (gameInput->isUsingSecondary()) {
-      useEquipped(EQUIP_SECONDARY);
-    }
-  }
-
-/*
-  // HACK TO PLACE BLOCKS * * * * * *
-  if (mPlacedBlock) {
-    mPlacedBlock = false;
-
-    // FIXME: only works if in primary position
-    if (gameInput->isClickMouse1 () && mIsBlockTargeted) {
-      v3di_t neighborPos = v3di_add(mTargetBlock, gBlockNeighborAddLookup[mTargetBlockFace]);
-
-      BoundingBox bb (v3d_v (1.0, 1.0, 1.0), v3d_v (neighborPos));
-
-      // FIXME: hack that makes it easier for the player to place some
-      // blocks. Could result in a player being inside a block.
-      bb.scale (0.998);
-      bb.translate (v3d_v (0.001, 0.001, 0.001));
-
-      if (!bb.isIntersecting (phys.getEntityByHandle (mPhysicsHandle)->boundingBox)) {
-//        worldMap.fillSphere (v3d_v (neighborPos), 3.0, BLOCK_TYPE_GREEN_STAR_TILE, 0);
-        worldMap.setBlockType (neighborPos, BLOCK_TYPE_GREEN_STAR_TILE);
-      }
-    }
-  }
-*/
 
   // FIXME: should really call something like: WorldMap::damageBlock()...
-  // snap to it!
   if (mMeleeStatePrimary.hasUsed) {
     if (mIsBlockTargeted) {
       mGameModel->mLocation->getWorldMap()->clearBlock(mTargetBlock);
@@ -613,46 +503,12 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
     mMeleeStateSecondary.hasUsed = false;
   }
 
-  // does the player wanna pick stuff up?
-  if (gameInput->isPickUpItem()) {
-    Message message;
-    message.sender = mGameModel->mPhysics->getPlayerHandle();
-    message.recipient = MAILBOX_PHYSICS;
-    message.type = MESSAGE_PLAYERPICKUPITEMS;
-    mGameModel->mMessageBus->sendMessage(message);
-  }
-
-  // deal with a soft reset
-  if (gameInput->isSoftReset()) {
-    soft_reset(mStartPosition);
-
-    // this stuff has changed, so take note!
-    physicsEntity = mGameModel->mPhysics->getEntityByHandle(mGameModel->mPhysics->getPlayerHandle());
-  }
-
-  if (gameInput->isToggleGodMode()) {
-    godMode();
-  }
-
-  if (gameInput->isTogglePhysics()) mGameModel->mPhysics->togglePause();
-  if (gameInput->isAdvanceOneFrame()) mGameModel->mPhysics->advanceOneFrame();
-
-
-  mWalkInput = v2d_v(0.0, 0.0);
-  if (gameInput->isWalkingForward())    mWalkInput.y += 1.0;
-  if (gameInput->isWalkingBackward())  mWalkInput.y -= 1.0;
-  if (gameInput->isWalkingLeft())    mWalkInput.x += 1.0;
-  if (gameInput->isWalkingRight())    mWalkInput.x -= 1.0;
-
-  bool isJumping = gameInput->isJumping();
-
   if (physicsEntity->worldViscosity < 0.01) {
     mInWater = false;
 
     // jump from ground
-    if (isJumping && mGameModel->mPhysics->isHandleOnGround(mGameModel->mPhysics->getPlayerHandle())) {
+    if (movementInput->isJumping && mGameModel->mPhysics->isHandleOnGround(mGameModel->mPhysics->getPlayerHandle())) {
       v3d_t force = v3d_v(0.0, 45000.0, 0.0);
-
       mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), force);
 
       if (r_numi(0, 16) == 3) {
@@ -683,17 +539,11 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
       mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), force);
     }
 
-  /*  if (isJumping && !phys.isHandleOnGround (mPhysicsHandle)) {
-      v3d_t force = v3d_v (0.0, 33000.0, 0.0);
-
-      phys.add_force (mPhysicsHandle, force);
-    }*/
-
   /*
     // FLYING * * * * * * * * *
-    if (gameInput->isUsingSecondary () && !phys.isHandleOnGround (mPhysicsHandle)) {
+    if (gameInput->isUsingSecondary() && !phys.isHandleOnGround(mPhysicsHandle)) {
       // glide
-      v3d_t liftVector = v3d_v (0.0, 0.0, 0.0);
+      v3d_t liftVector = v3d_v(0.0, 0.0, 0.0);
 
       v3d_t velocity = physEntity.vel;
 
@@ -701,11 +551,11 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
         velocity.y = 0;
       }
 
-      double speed = v3d_mag (velocity);
+      double speed = v3d_mag(velocity);
 
       if (speed > 0.0) {
 
-        v2d_t walkVector = walk_vec (walk);
+        v2d_t walkVector = walk_vec(walk);
 
         double liftMagnitude = 80.0 * speed;
 
@@ -722,10 +572,10 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
         v3d_t tempVec = mLookVector;
         tempVec.y -= 1.0;
 
-        liftVector = v3d_cross (mLookVector, tempVec);
-        liftVector = v3d_cross (mLookVector, liftVector);
+        liftVector = v3d_cross(mLookVector, tempVec);
+        liftVector = v3d_cross(mLookVector, liftVector);
 
-        v3d_t normalizedForce = v3d_normalize (liftVector);
+        v3d_t normalizedForce = v3d_normalize(liftVector);
 
   //      if (walkVector.y < 0.0) {
   //        normalizedForce.x = -normalizedForce.x;
@@ -736,21 +586,21 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
           normalizedForce.x += 0.5 * walkVector.x;
           normalizedForce.z += 0.5 * walkVector.y;
 
-          v3d_t thrustVector = v3d_v (0.0, 500.0, 0.0);
+          v3d_t thrustVector = v3d_v(0.0, 500.0, 0.0);
 
-          phys.add_force (mPhysicsHandle, thrustVector);
+          phys.add_force(mPhysicsHandle, thrustVector);
         }
 
-        liftVector = v3d_normalize (normalizedForce);
+        liftVector = v3d_normalize(normalizedForce);
 
-        liftVector = v3d_scale (liftMagnitude, liftVector);
+        liftVector = v3d_scale(liftMagnitude, liftVector);
 
-  //      printf ("lift: %6.6f\n", liftMagnitude);
-  //      v3d_print ("liftVector", liftVector);
-  //      v3d_print ("normalizedForce", normalizedForce);
-  //      v3d_print ("physEntity.vel", physEntity.vel);
+  //      printf("lift: %6.6f\n", liftMagnitude);
+  //      v3d_print("liftVector", liftVector);
+  //      v3d_print("normalizedForce", normalizedForce);
+  //      v3d_print("physEntity.vel", physEntity.vel);
 
-        phys.add_force (mPhysicsHandle, liftVector);
+        phys.add_force(mPhysicsHandle, liftVector);
       }
     }
     // end FLYING
@@ -765,7 +615,7 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
 
     v3d_t swimForce = v3d_zero();
 
-    if (physicsEntity->on_ground && isJumping) {
+    if (physicsEntity->on_ground && movementInput->isJumping) {
       mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), v3d_v(0.0, 4000.0, 0.0));
     }
 
@@ -801,7 +651,7 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
 
       swimForce = v3d_add(swimForce, force);
     }
-    if (gameInput->isSwimming()) {
+    if (movementInput->isSwimming) {
       // 'up' force
       double mag = 1500.0 * (sin(mLastUpdateTime * 10.0) + 1.5);
       mGameModel->mPhysics->add_force(mGameModel->mPhysics->getPlayerHandle(), v3d_v(0.0, mag, 0.0));
@@ -819,11 +669,9 @@ bool Player::update(AssetManager* assetManager, GameInput* gameInput) {
     headBobbleOffset.y,
     headBobbleOffset.x * sin(mFacing) + headBobbleOffset.z * cos(mFacing) };
   mFinalHeadOffset = v3d_add(mHeadOffset, rotatedHeadBobble);
-
-  return escapePressed;
 }
 
-void Player::readPhysicsMessages(AssetManager* assetManager) {
+void Player::readMessages(AssetManager* assetManager) {
   Message message;
 
   size_t itemHandle;

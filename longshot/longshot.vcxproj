@@ -151,6 +151,7 @@
     <ClCompile Include="..\source\physics\PhysicsView.cpp" />
     <ClCompile Include="..\source\player\HeadBobble.cpp" />
     <ClCompile Include="..\source\player\Player.cpp" />
+    <ClCompile Include="..\source\player\PlayerController.cpp" />
     <ClCompile Include="..\source\player\PlayerView.cpp" />
     <ClCompile Include="..\source\world\BiomeMap.cpp" />
     <ClCompile Include="..\source\world\BlockTypeData.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="..\source\physics\PhysicsView.h" />
     <ClInclude Include="..\source\player\HeadBobble.h" />
     <ClInclude Include="..\source\player\Player.h" />
+    <ClInclude Include="..\source\player\PlayerController.h" />
     <ClInclude Include="..\source\player\PlayerView.h" />
     <ClInclude Include="..\source\vendor\GL\freeglut.h" />
     <ClInclude Include="..\source\vendor\GL\freeglut_ext.h" />

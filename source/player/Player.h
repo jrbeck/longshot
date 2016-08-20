@@ -56,6 +56,12 @@ class ItemManager;
 struct item_t;
 class Inventory;
 
+struct MovementInput {
+  v2d_t walkInput;
+  bool isJumping;
+  bool isSwimming;
+};
+
 class Player {
 public:
   Player(GameModel* gameModel);
@@ -63,13 +69,15 @@ public:
 
   int reset(size_t physicsHandle, size_t aiHandle);
   int soft_reset(v3d_t& startPosition);
+  void HACK_resurrect();
   void setStartPosition(v3d_t& startPosition);
 
   void godMode();
+  bool isDead();
 
-  // update the camera target
-  void update_target();
-  int constrain_view_angles();
+  void updateOrientation(double facingDelta, double inclineDelta);
+  void updateCameraTarget();
+  void constrainViewAngles();
 
   v2d_t getFacingAndIncline();
   bool isHeadInWater();
@@ -97,9 +105,9 @@ public:
   void updateTargetBlock();
   v3di_t* getTargetBlock(int& targetBlockFace);
 
-  bool update(AssetManager* assetManager, GameInput* gi);
+  void update(MovementInput* movementInput, AssetManager* assetManager);
 
-  void readPhysicsMessages(AssetManager* assetManager);
+  void readMessages(AssetManager* assetManager);
 
   // HACK
   void placeLight(GameInput* gameInput);
@@ -107,8 +115,6 @@ public:
 
 private:
   GameModel* mGameModel;
-
-  bool mShowCharacterSheet;
 
   v3d_t mPos;
   v3d_t mHeadOffset;
