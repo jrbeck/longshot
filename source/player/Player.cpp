@@ -181,9 +181,9 @@ v3d_t Player::getLookTarget() const {
   return mLookTarget;
 }
 
-void Player::updateOrientation(double facingDelta, double inclineDelta) {
+void Player::updateOrientation(double facingDelta, double inclinationDelta) {
   mFacing += facingDelta;
-  mIncline += inclineDelta;
+  mIncline += inclinationDelta;
   constrainViewAngles();
   updateCameraTarget();
   updateTargetBlock();
@@ -303,7 +303,7 @@ void Player::useEquipped(int whichEquip) {
     mPlacedBlock = true;
   }
   else {
-    if (mGameModel->mItemManager->useItem(obtainWalkVector(mWalkInput), item.handle, mGameModel->mPhysics->getPlayerHandle())) {
+    if (mGameModel->mItemManager->useItem(computeWalkVector(mWalkInput), item.handle, mGameModel->mPhysics->getPlayerHandle())) {
       if (whichEquip == EQUIP_PRIMARY) {
         mInventory.mPrimaryItem = 0;
       }
@@ -325,9 +325,11 @@ double Player::fireGun(item_t item, double handedness) {
   v3d_t temp = v3d_sub(mLookTarget, world_head_pos);
   v3d_t targAngle = v3d_normalize(temp);
 
-  v3d_t pos = v3d_v(world_head_pos.x + temp.x + gunMuzzle.x,
-            world_head_pos.y + temp.y - 0.35 + gunMuzzle.y,
-            world_head_pos.z + temp.z + gunMuzzle.z);
+  v3d_t pos = v3d_v(
+    world_head_pos.x + temp.x + gunMuzzle.x,
+    world_head_pos.y + temp.y - 0.35 + gunMuzzle.y,
+    world_head_pos.z + temp.z + gunMuzzle.z
+  );
 
   shot_info_t shotInfo;
   shotInfo.angle = targAngle;
@@ -393,38 +395,23 @@ void Player::useBackpackItem() {
     break;
   default:
     printf("player using item\n");
-    if (mGameModel->mItemManager->useItem(obtainWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mGameModel->mPhysics->getPlayerHandle())) {
+    if (mGameModel->mItemManager->useItem(computeWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mGameModel->mPhysics->getPlayerHandle())) {
       mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
     }
     break;
   }
 }
 
-// gives the normalized walk vector
-v2d_t Player::obtainWalkVector(v2d_t walkInput) {
-  // get a vector pointing the way the camera is facing
-  v2d_t t1 = v2d_v(cos(mFacing), sin(mFacing));
-
-  v2d_t t_fb; // translation, forward or back
-  v2d_t t_lr; // translation, left and right
-
-  // this is the forward-backward translation
-  t_fb = v2d_scale(t1, walkInput.y);
-
-  // this is the side-side translation
-  t_lr = v2d_scale(v2d_normal(t1), walkInput.x);
-
-  // get the new position
-  t1 = v2d_normalize(v2d_add(t_fb, t_lr));
-
-  return t1;
+v2d_t Player::computeWalkVector(v2d_t walkInput) {
+  v2d_t facingVector = v2d_v(cos(mFacing), sin(mFacing));
+  v2d_t foreBackTranslation = v2d_scale(facingVector, walkInput.y);
+  v2d_t strafeTranslation = v2d_scale(v2d_normal(facingVector), walkInput.x);
+  return v2d_normalize(v2d_add(foreBackTranslation, strafeTranslation));
 }
 
 void Player::updateTargetBlock() {
   v3d_t eye = v3d_add(mPos, mFinalHeadOffset);
-
   double rayLength = 2.75;
-
   v3d_t finalTarget = v3d_add(eye, v3d_scale(rayLength, v3d_normalize(v3d_sub(mLookTarget, eye))));
 
   if (mGameModel->mLocation->getWorldMap()->rayCastSolidBlock(eye, finalTarget, mTargetBlock, mTargetBlockFace)) {
@@ -443,13 +430,13 @@ v3di_t* Player::getTargetBlock(int& targetBlockFace) {
   return NULL;
 }
 
-void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
+void Player::applyMovementInput(MovementInput* movementInput, AssetManager* assetManager) {
   mWalkInput = movementInput->walkInput;
 
   mLastUpdateTime = mGameModel->mPhysics->getLastUpdateTime();
   int headBobbleAction = HEADBOB_ACTION_STAND;
 
-  PhysicsEntity *physicsEntity = mGameModel->mPhysics->getEntityByHandle(mGameModel->mPhysics->getPlayerHandle());
+  PhysicsEntity* physicsEntity = mGameModel->mPhysics->getEntityByHandle(mGameModel->mPhysics->getPlayerHandle());
   // update position from physics
   // FIXME: this is a little flaky ... why not just use the source?
   mPos = physicsEntity->pos;
@@ -457,7 +444,7 @@ void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
 
   // FIXME: this isn't quite right, perhaps the near clip plane needs to be compensated
   // for (vertically) to head pos
-  block_t *block = mGameModel->mLocation->getWorldMap()->getBlock(getHeadPosition());
+  block_t* block = mGameModel->mLocation->getWorldMap()->getBlock(getHeadPosition());
   // FIXME: doing this here feels a little wrong
   if (block == NULL) {
     mHeadPostionBlockType = BLOCK_TYPE_AIR;
@@ -522,7 +509,7 @@ void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
 
       // player on ground
       if (mGameModel->mPhysics->isHandleOnGround(mGameModel->mPhysics->getPlayerHandle())) {
-        walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 2500.0);
+        walk_force_2d = v2d_scale(computeWalkVector(mWalkInput), 2500.0);
 
         if (mLastUpdateTime > (mLastFootStep + 0.6) && v3d_mag(physicsEntity->vel) > 0.2) {
           assetManager->mSoundSystem.playSoundByHandle(SOUND_FOOTSTEP, r_numi (32, 56));
@@ -532,7 +519,7 @@ void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
         headBobbleAction = HEADBOB_ACTION_WALK_FORWARD;
       }
       else {  // player not on ground
-        walk_force_2d = v2d_scale(obtainWalkVector(mWalkInput), 300.0);
+        walk_force_2d = v2d_scale(computeWalkVector(mWalkInput), 300.0);
       }
 
       v3d_t force = v3d_v(walk_force_2d.x, 0.0, walk_force_2d.y);
@@ -620,7 +607,7 @@ void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
     }
 
     if (v2d_mag(mWalkInput) > EPSILON) {
-      v2d_t walkVector = obtainWalkVector(mWalkInput);
+      v2d_t walkVector = computeWalkVector(mWalkInput);
       v3d_t force = v3d_zero();
 
       if (mWalkInput.y > 0.0) { // w is pressed
@@ -667,8 +654,11 @@ void Player::update(MovementInput* movementInput, AssetManager* assetManager) {
   v3d_t rotatedHeadBobble = {
     headBobbleOffset.x * cos(mFacing) - headBobbleOffset.z * sin(mFacing),
     headBobbleOffset.y,
-    headBobbleOffset.x * sin(mFacing) + headBobbleOffset.z * cos(mFacing) };
+    headBobbleOffset.x * sin(mFacing) + headBobbleOffset.z * cos(mFacing)
+  };
   mFinalHeadOffset = v3d_add(mHeadOffset, rotatedHeadBobble);
+
+  updateOrientation(movementInput->facingDelta, movementInput->inclinationDelta);
 }
 
 void Player::readMessages(AssetManager* assetManager) {

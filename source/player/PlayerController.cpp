@@ -39,8 +39,6 @@ void PlayerController::update(GameInput* gameInput) {
     handleItemUsage();
   }
 
-  mPlayer->updateOrientation(mGameInput->getFacingDelta(), mGameInput->getInclinationDelta());
-
   if (mPlayer->isDead()) {
     handleDeadPlayerInput();
     return;
@@ -177,6 +175,9 @@ void PlayerController::updateMovementInput() {
   if (mGameInput->isWalkingRight()) {
     mMovementInput.walkInput.x -= 1.0;
   }
+
+  mMovementInput.facingDelta = mGameInput->getFacingDelta();
+  mMovementInput.inclinationDelta = mGameInput->getInclinationDelta();
 
   mMovementInput.isJumping = mGameInput->isJumping();
   mMovementInput.isSwimming = mGameInput->isSwimming();

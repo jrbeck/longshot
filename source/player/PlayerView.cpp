@@ -1,14 +1,12 @@
 #include "../player/PlayerView.h"
 
 PlayerView::PlayerView(GameModel* gameModel, AssetManager* assetManager) :
-  mGameModel(NULL),
-  mAssetManager(NULL),
+  mGameModel(gameModel),
+  mAssetManager(assetManager),
   mHud(NULL),
   mCharacterSheet(NULL),
   mShowCharacterSheet(false)
 {
-  mGameModel = gameModel;
-  mAssetManager = assetManager;
   mHud = new GameMenu;
   mCharacterSheet = new GameMenu;
 
@@ -127,28 +125,28 @@ void PlayerView::drawMeleeWeapon(const melee_weapon_state_t* weaponState, GLuint
 
 void PlayerView::drawPlayerTargetBlock() {
   int targetFace;
-  v3di_t* playerTarg = mGameModel->mPlayer->getTargetBlock(targetFace);
-  if (playerTarg == NULL) {
+  v3di_t* playerTargetBlock = mGameModel->mPlayer->getTargetBlock(targetFace);
+  if (playerTargetBlock == NULL) {
     return;
   }
 
-  v3d_t nearCorner = v3d_v(*playerTarg);
+  v3d_t nearCorner = v3d_v(*playerTargetBlock);
   v3d_t farCorner = v3d_add(nearCorner, v3d_v(1.01, 1.01, 1.01));
   nearCorner = v3d_add(nearCorner, v3d_v(-0.01, -0.01, -0.01));
 
   /*
-  v3d_t nearCorner2 = v3d_v (*playerTarg);
+  v3d_t nearCorner2 = v3d_v(*playerTargetBlock);
   GLfloat faceColor[4] = { 0.5, 0.0, 0.0, 0.5 };
 
   // draw the targeted face
 
-  glPushMatrix ();
-  glTranslated (nearCorner2.x, nearCorner2.y, nearCorner2.z);
+  glPushMatrix();
+  glTranslated(nearCorner2.x, nearCorner2.y, nearCorner2.z);
 
-  glBegin (GL_QUADS);
-  mAssetManager.drawBlockFace (targetFace, faceColor);
-  glEnd ();
-  glPopMatrix ();
+  glBegin(GL_QUADS);
+  mAssetManager.drawBlockFace(targetFace, faceColor);
+  glEnd();
+  glPopMatrix();
   */
 
   glEnable(GL_TEXTURE_2D);
@@ -225,13 +223,13 @@ void PlayerView::updateHud() {
   // TODO: move this crosshair biz outta here
   v2d_t fontSize = { 0.01f, 0.01f };
   static char crossHair[2] = "x";
-  float color[] = {1.0f, 1.0f, 1.0f, 0.75f};
+  float color[] = { 1.0f, 1.0f, 1.0f, 0.75f };
   mHud->addText(v2d_v(0.495, 0.5), v2d_v(0.01, 0.01), fontSize, crossHair, TEXT_JUSTIFICATION_CENTER, color, NULL);
 }
 
 void PlayerView::showDeadPlayerHud() {
   char healthString[50];
-  float color[] = {1.0f, 1.0f, 1.0f, 0.8f};
+  float color[] = { 1.0f, 1.0f, 1.0f, 0.8f };
   v2d_t fontSize = { 0.01f, 0.02f };
 
   sprintf(healthString, "health: %.0f\0", mGameModel->mPlayer->getCurrentHealth());
@@ -296,13 +294,10 @@ void PlayerView::showLivePlayerHud() {
 }
 
 void PlayerView::drawHud() {
-  // updateHud();
-
   if (mVisionTint[3] > 0.0) {
     drawWaterOverlay();
   }
 
-  // if (mShowCharacterSheet) {
   if (mShowCharacterSheet) {
     mCharacterSheet->draw();
   }
@@ -312,7 +307,6 @@ void PlayerView::drawHud() {
 }
 
 void PlayerView::drawWaterOverlay() {
-  // need to set up the opengl viewport
   glPushMatrix();
 
   glViewport(0, 0, gScreenW, gScreenH);

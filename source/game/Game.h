@@ -28,7 +28,6 @@
 #include <GL/glu.h>
 #include "../vendor/GL/glut.h"
 
-// the root/code/include directory
 #include "../math/v2d.h"
 #include "../game/FileSystem.h"
 #include "../game/GameModel.h"
@@ -114,7 +113,7 @@ public:
 
   void gameLoop();
   int handleMenuChoice(int menuChoice);
-  void handleInput();
+  void updateControllers();
   void update();
   int draw();
 };

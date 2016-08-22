@@ -180,10 +180,6 @@ int game_c::enterGameMode(bool createNewWorld) {
 
   initializeWorldViews();
 
-  // FIXME: maybe this should rely on the mPlayerView so the it doesn't have to
-  // happen after initializeWorldViews()
-  mPlayerController = new PlayerController(mGameModel, mPlayerView);
-
   // grab the cursor
   SDL_SetRelativeMouseMode(SDL_TRUE);
   SDL_ShowCursor(0);
@@ -234,6 +230,12 @@ void game_c::initializeWorldViews() {
     delete mAiView;
   }
   mAiView = new AiView();
+
+  // FIXME: this is stupid
+  if (mPlayerController != NULL) {
+    delete mPlayerController;
+  }
+  mPlayerController = new PlayerController(mGameModel, mPlayerView);
 }
 
 void game_c::gameLoop() {
@@ -247,9 +249,17 @@ void game_c::gameLoop() {
   bool escapePressed;
 
   while (quit == 0) {
-    handleInput();
+    updateControllers();
+    mGameModel->mPlayer->applyMovementInput(&mPlayerController->mMovementInput, mAssetManager);
+
+    // FIXME: this masks the doing of interface stuff in the PlayerController
     escapePressed = mGameInput->isEscapePressed();
+    mGameModel->mAiManager->setPlayerFacingAndIncline(mGameModel->mPlayer->getFacingAndIncline());
+
     update();
+
+    mPhysicsView->update(mGameModel->mPhysics->getEntityVector(), mLastUpdateTime);
+    mPlayerView->update();
     draw();
 
     if (mGameState == GAMESTATE_PLAY) {
@@ -274,7 +284,6 @@ void game_c::gameLoop() {
     // player hit 'esc' in play mode, switch to menu
     if (escapePressed && mGameState == GAMESTATE_PLAY) {
       mGameState = GAMESTATE_MENU;
-      // release the mouse
       SDL_SetRelativeMouseMode(SDL_FALSE);
       SDL_ShowCursor(1);
     }
@@ -329,12 +338,10 @@ int game_c::handleMenuChoice(int menuChoice) {
     return 2;
 
   case GAMEMENU_SHIP:
-    // ignore if we're already on the ship
     if (mGameModel->mLocation->getType() != LOCATION_SHIP) {
       mGameModel->saveLocation();
       mGameModel->initializeStarShip(false);
       initializeWorldViews();
-      // load the appropriate menu
       loadShipMenu();
     }
     break;
@@ -350,38 +357,31 @@ int game_c::handleMenuChoice(int menuChoice) {
       // need to reload this to reflect the change in orbit
       loadShipMenu();
 
-      // change our orbit location
       static_cast<StarShip*>(mGameModel->mLocation)->mOrbitSky->setOrbit(*mGameModel->mGalaxy, mGameModel->mCurrentPlanet->mHandle);
     }
     delete galaxyMap;
-
     break;
 
   case GAMEMENU_PLANET_MAP:
-    // make a planet map for the player to choose a location
     planetMap = new PlanetMap(mGameWindow);
 
     if (planetMap->chooseLocation(*mGameModel->mCurrentPlanet, planetPos)) {
       mGameModel->saveLocation();
-
-      // now deal with the new planet
       mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
       initializeWorldViews();
-      // load the appropriate menu
       loadPlanetMenu();
 
       // HACK - need better timekeeping
       mLastUpdateTime = (double)SDL_GetTicks() / 1000.0;
     }
     delete planetMap;
-
     break;
+
   case GAMEMENU_DUNGEON_MAP:
     rogueMapViewer = new RogueMapViewer(mGameWindow);
     rogueMapViewer->startViewer();
     delete rogueMapViewer;
     break;
-
 
   case GAMEMENU_MERCHANT:
     mMerchantView = new MerchantView();
@@ -394,7 +394,6 @@ int game_c::handleMenuChoice(int menuChoice) {
   }
 
   mGameState = GAMESTATE_PLAY;
-  // capture the mouse
   SDL_SetRelativeMouseMode(SDL_TRUE);
   SDL_ShowCursor(0);
 
@@ -406,7 +405,7 @@ int game_c::handleMenuChoice(int menuChoice) {
   return 0;
 }
 
-void game_c::handleInput() {
+void game_c::updateControllers() {
   mPlayerController->update(mGameInput);
 }
 
@@ -414,24 +413,12 @@ void game_c::update() {
   double ticks = (double)SDL_GetTicks() / 1000.0;
 
   while (mLastUpdateTime < ticks) {
-    v3d_print("sdf", mGameModel->mPlayer->get_pos());
-
-
     mNumPhysicsObjects = mGameModel->mPhysics->update(mLastUpdateTime, mAssetManager);
-
-    mGameModel->mPlayer->update(&mPlayerController->mMovementInput, mAssetManager);
-    mPlayerView->update();
-
-    mGameModel->mAiManager->setPlayerFacingAndIncline(mGameModel->mPlayer->getFacingAndIncline());
-
     mNumAiObjects = mGameModel->mAiManager->update();
-
     mNumItems = mGameModel->mItemManager->update();
 
     mLastUpdateTime += PHYSICS_TIME_GRANULARITY;
   }
-
-  mPhysicsView->update(mGameModel->mPhysics->getEntityVector(), mLastUpdateTime);
 }
 
 int game_c::draw() {

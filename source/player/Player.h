@@ -58,6 +58,8 @@ class Inventory;
 
 struct MovementInput {
   v2d_t walkInput;
+  double facingDelta;
+  double inclinationDelta;
   bool isJumping;
   bool isSwimming;
 };
@@ -75,7 +77,7 @@ public:
   void godMode();
   bool isDead();
 
-  void updateOrientation(double facingDelta, double inclineDelta);
+  void updateOrientation(double facingDelta, double inclinationDelta);
   void updateCameraTarget();
   void constrainViewAngles();
 
@@ -100,12 +102,12 @@ public:
 
   void useBackpackItem();
 
-  v2d_t obtainWalkVector(v2d_t walkInput);
+  v2d_t computeWalkVector(v2d_t walkInput);
 
   void updateTargetBlock();
   v3di_t* getTargetBlock(int& targetBlockFace);
 
-  void update(MovementInput* movementInput, AssetManager* assetManager);
+  void applyMovementInput(MovementInput* movementInput, AssetManager* assetManager);
 
   void readMessages(AssetManager* assetManager);
 
@@ -154,10 +156,10 @@ private:
   bool mHeadInWater;
   int mHeadPostionBlockType;
 
-  double mFacing;      // the angle on the x-z plane off the positive x-axis
+  double mFacing;     // the angle on the x-z plane off the positive x-axis
   double mIncline;    // the angle on the vertical plane off the x-z plane intersection...
-  double mInclineMin;    // upper constraint for incline angle
-  double mInclineMax;    // lower constraint for incline angle
+  double mInclineMin; // upper constraint for incline angle
+  double mInclineMax; // lower constraint for incline angle
 
   bool mPlacedBlock;
 };
