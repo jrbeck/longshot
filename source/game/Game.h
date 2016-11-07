@@ -1,13 +1,3 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * game_c
-// *
-// * this contains the main game loop
-// *
-// *
-// *
-// *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 #pragma once
 
 // the main include directory
@@ -29,20 +19,18 @@
 #include "../vendor/GL/glut.h"
 
 #include "../math/v2d.h"
+#include "../game/Constants.h"
 #include "../game/FileSystem.h"
+#include "../game/GameInput.h"
 #include "../game/GameModel.h"
+#include "../game/GameView.h"
 #include "../game/GameWindow.h"
+#include "../items/MerchantView.h"
 #include "../world/GalaxyMap.h"
 #include "../world/WorldUtil.h"
-#include "../player/PlayerView.h"
 #include "../player/PlayerController.h"
-#include "../world/WorldMapView.h"
-#include "../ai/AiView.h"
 #include "../physics/Physics.h"
-#include "../physics/PhysicsView.h"
-#include "../game/GameInput.h"
 #include "../assets/AssetManager.h"
-#include "../items/MerchantView.h"
 
 // let's try to get rid of includes below here...
 #include "../dungeon/RogueMapViewer.h"
@@ -51,41 +39,36 @@
 
 #define OUTPUT_FRAME_STATS (false)
 
-enum {
-  GAMESTATE_PLAY,
-  GAMESTATE_MENU,
-  GAMESTATE_MERCHANT
-};
-
-enum {
-  GAMEMENU_BACKTOGAME,
-  GAMEMENU_EXITGAME,
-
-  GAMEMENU_SHIP,
-  GAMEMENU_GALAXY_MAP,
-  GAMEMENU_PLANET_MAP,
-
-  GAMEMENU_DUNGEON_MAP,
-
-  GAMEMENU_MERCHANT
-};
-
 class game_c {
+public:
+  game_c(GameWindow* gameWindow);
+  ~game_c();
+
+  int run(bool createNewWorld);
+
+private:
+  void setup(bool createNewWorld);
+  void teardown();
+
+  void gameLoop();
+  int handleMenuChoice(int menuChoice);
+  void updateControllers();
+  void update();
+  int draw();
+
+  void XXXpostLoactionInitializeSetup();
+
   GameModel* mGameModel;
   GameInput* mGameInput;
+  GameView* mGameView;
+  MerchantView* mMerchantView;
 
   AssetManager* mAssetManager;
 
-  PlayerView* mPlayerView;
   PlayerController* mPlayerController;
-  AiView* mAiView;
-  WorldMapView* mWorldMapView;
-  PhysicsView* mPhysicsView;
-  MerchantView* mMerchantView;
 
   double mLastUpdateTime;
 
-  GameMenu* mMenu;
   int mGameState;
 
   int mNumPhysicsObjects;
@@ -93,27 +76,4 @@ class game_c {
   int mNumItems;
 
   GameWindow* mGameWindow;
-
-  // HACKS
-  char mPlanetNameString[100];
-
-public:
-  game_c(GameWindow* gameWindow);
-  ~game_c();
-
-  void loadPlanetMenu();
-  void loadShipMenu();
-
-  GameWindow* getGameWindow();
-  void setupOpenGl();
-
-  int enterGameMode(bool createNewWorld);
-
-  void initializeWorldViews();
-
-  void gameLoop();
-  int handleMenuChoice(int menuChoice);
-  void updateControllers();
-  void update();
-  int draw();
 };

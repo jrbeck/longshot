@@ -8,10 +8,9 @@ public:
 
   void update(GameInput* gameInput);
 
-  MovementInput mMovementInput;
+  MovementInput* getMovementInput();
 
 private:
-  void handleInventoryInput();
   void handleItemUsage();
   void handleDeadPlayerInput();
   void updateMovementInput();
@@ -20,4 +19,5 @@ private:
   GameModel* mGameModel;
   Player* mPlayer;
   PlayerView* mPlayerView;
+  MovementInput mMovementInput;
 };

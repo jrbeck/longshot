@@ -9,7 +9,6 @@ PlayerController::PlayerController(GameModel* gameModel, PlayerView* playerView)
 
 PlayerController::~PlayerController() {}
 
-
 void PlayerController::update(GameInput* gameInput) {
   mGameInput = gameInput;
 
@@ -78,48 +77,8 @@ void PlayerController::update(GameInput* gameInput) {
   updateMovementInput();
 }
 
-void PlayerController::handleInventoryInput() {
-  Inventory* inventory = mPlayer->getInventory();
-
-  if (mGameInput->isClickMouse1()) {
-    if (inventory->mBackpack[inventory->mSelectedBackpackItem] == 0) {
-      inventory->swapBackPackItemIntoPrimary();
-    }
-    else {
-      inventory->swapBackPackItemIntoPrimary();
-    }
-  }
-  if (mGameInput->isClickMouse2()) {
-    if (inventory->mBackpack[inventory->mSelectedBackpackItem] == 0) {
-      inventory->swapBackPackItemIntoSecondary();
-    }
-    else {
-      inventory->swapBackPackItemIntoSecondary();
-    }
-  }
-
-  if (mGameInput->isUseBackpackItem()) {
-    item_t item = mGameModel->mItemManager->getItem(inventory->mBackpack[inventory->mSelectedBackpackItem]);
-    if (item.type == ITEMTYPE_HEALTHPACK) {
-      mPlayer->useBackpackItem();
-    }
-  }
-
-  if (mGameInput->isNextGun()) {
-    inventory->nextBackPackItem();
-  }
-
-  if (mGameInput->isPreviousGun()) {
-    inventory->previousBackPackItem();
-  }
-
-  // did the player want to drop that item?
-  // FIXME: destroys item!
-  // this needs to create a physics item...
-  if (mGameInput->isDroppedItem() && inventory->mBackpack[inventory->mSelectedBackpackItem] != 0) {
-    mGameModel->mItemManager->destroyItem(inventory->mBackpack[inventory->mSelectedBackpackItem]);
-    inventory->mBackpack[inventory->mSelectedBackpackItem] = 0;
-  }
+MovementInput* PlayerController::getMovementInput() {
+  return &mMovementInput;
 }
 
 void PlayerController::handleItemUsage() {
@@ -143,19 +102,19 @@ void PlayerController::handleDeadPlayerInput() {
 //       mPlacedBlock = false;
 //
 //       // FIXME: only works if in primary position
-//       if (mGameInput->isClickMouse1 () && mIsBlockTargeted) {
+//       if (mGameInput->isClickMouse1() && mIsBlockTargeted) {
 //         v3di_t neighborPos = v3di_add(mTargetBlock, gBlockNeighborAddLookup[mTargetBlockFace]);
 //
-//         BoundingBox bb (v3d_v (1.0, 1.0, 1.0), v3d_v (neighborPos));
+//         BoundingBox bb(v3d_v(1.0, 1.0, 1.0), v3d_v(neighborPos));
 //
 //         // FIXME: hack that makes it easier for the player to place some
 //         // blocks. Could result in a player being inside a block.
-//         bb.scale (0.998);
-//         bb.translate (v3d_v (0.001, 0.001, 0.001));
+//         bb.scale(0.998);
+//         bb.translate(v3d_v(0.001, 0.001, 0.001));
 //
-//         if (!bb.isIntersecting (phys.getEntityByHandle (mPhysicsHandle)->boundingBox)) {
-//           // worldMap.fillSphere (v3d_v (neighborPos), 3.0, BLOCK_TYPE_GREEN_STAR_TILE, 0);
-//           worldMap.setBlockType (neighborPos, BLOCK_TYPE_GREEN_STAR_TILE);
+//         if (!bb.isIntersecting(phys.getEntityByHandle(mPhysicsHandle)->boundingBox)) {
+//           // worldMap.fillSphere(v3d_v(neighborPos), 3.0, BLOCK_TYPE_GREEN_STAR_TILE, 0);
+//           worldMap.setBlockType(neighborPos, BLOCK_TYPE_GREEN_STAR_TILE);
 //         }
 //       }
 //     }

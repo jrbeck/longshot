@@ -1,21 +1,11 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * MerchantView
-// *
-// * desc:
-// *
-// *
-// *
-// *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 #pragma once
 
 #include <vector>
 
 #include "../game/GameMenu.h"
 #include "../items/Inventory.h"
+#include "../items/ItemContainer.h"
 #include "../player/Player.h"
-
 
 enum {
   MERCHANT_MODE_SELL,
@@ -33,58 +23,61 @@ enum {
   MERCHANT_BUTTON_ITEM_BEGIN = 100
 };
 
-
+#define MERCHANT_INVENTORY_SIZE 8
 
 // TODO: move this into it's own header/cpp files
 class Merchant {
 public:
-  void save(FILE *file);
-  void load(FILE *file);
 
-  vector<size_t> mInventoryList;
+  ItemContainer* getInventory() { return mInventory; }
 
+  // void save(FILE *file);
+  // void load(FILE *file);
+
+private:
   size_t mCredits;
+  ItemContainer* mInventory;
 };
-
 
 
 
 class MerchantView {
 public:
-  MerchantView();
+  MerchantView(Player* player, ItemManager* itemManager);
   ~MerchantView();
 
+  void engageMerchant();
+  void setupMerchant(Merchant* merchant);
 
-  // this begins the interaction with a merchant
-  void engageMerchant(Player& player, ItemManager& itemManager);
-
-  void setupMerchant(Merchant& merchant, ItemManager& itemManager);
-
-  int update(Player& player, ItemManager& itemManager);
-
-  void setupMenu(Player& player, ItemManager& itemManager);
-  void setupSellMenu(Player& player, ItemManager& itemManager);
-  void setupBuyMenu(Merchant& merchant, ItemManager& itemManager);
-
-  void addSelectedItemInfo(ItemManager& itemManager);
-  void setupInventoryList(ItemManager& itemManager);
-
+  int update();
   void draw();
 
-// MEMBERS * * * * * * * * * *
+  void setupMenu();
+  void setupSellMenu();
+  void setupBuyMenu();
+
+  void addSelectedItemInfo();
+  void setupInventoryList();
+
+private:
+  void loadItemHandles(const ItemContainer* itemContainer);
+  void switchMode(int mode);
+  void sellSelectedItem();
+  void buySelectedItem();
+
+  Player* mPlayer;
+  ItemManager* mItemManager;
+  Merchant* mMerchant;
 
   GameMenu* mMenu;
 
   int mMode;
-  int mSelectedItem;
 
-  vector<size_t> tempList;
+  int mSelectedItemIndex;
+  vector<size_t> mItemHandles;
 
   GLfloat colorWhite[4];
   GLfloat colorBackground[4];
   GLfloat colorSelection[4];
   v2d_t fontSize;
-
-  // TODO: this is for testing only
-  Merchant* mMerchant;
 };

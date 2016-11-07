@@ -16,9 +16,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
-
-#define NUM_CHANNELS 32
-
+#define NUM_AUDIO_CHANNELS 32
 
 enum {
   SOUND_AMBIENT,
@@ -44,21 +42,17 @@ enum {
   NUM_SOUNDS
 };
 
-
 class SoundSystem {
 public:
   SoundSystem();
   ~SoundSystem();
 
   int initialize();
-
   void playSoundByHandle(int handle, int volume);
-
-  int loadSound(char* fileName);
-
+  int loadSounds();
   void stopAllSounds();
 
-  // members * * * * * * * * * * * * * * * * * *
+private:
   int mAudioRate;
   Uint16 mAudioFormat;
   int mAudioChannels;

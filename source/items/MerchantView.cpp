@@ -1,10 +1,12 @@
 #include "../items/MerchantView.h"
 
-MerchantView::MerchantView() :
-  mMenu(0),
+MerchantView::MerchantView(Player* player, ItemManager* itemManager) :
+  mPlayer(player),
+  mItemManager(itemManager),
+  mMenu(NULL),
   mMode(MERCHANT_MODE_SELL),
-  mSelectedItem(-1),
-  mMerchant(0)
+  mSelectedItemIndex(-1),
+  mMerchant(NULL)
 {
   // FIXME: aww...c'mon...
   colorWhite[0] = 1.0f;
@@ -22,122 +24,84 @@ MerchantView::MerchantView() :
   colorSelection[2] = 0.0f;
   colorSelection[3] = 1.0f;
 
-
   fontSize.x = 0.015f;
   fontSize.y = 0.03f;
 }
 
 MerchantView::~MerchantView() {
-  if (mMenu != 0) {
+  if (mMenu != NULL) {
     delete mMenu;
   }
-  if (mMerchant != 0) {
+  if (mMerchant != NULL) {
     delete mMerchant;
   }
 }
 
-void MerchantView::engageMerchant(Player& player, ItemManager& itemManager) {
-  if (mMerchant != 0) {
+void MerchantView::engageMerchant() {
+  if (mMerchant != NULL) {
     delete mMerchant;
-    mMerchant = 0;
+    mMerchant = NULL;
   }
   mMerchant = new Merchant();
 
   printf("MerchantView::engageMerchant(): setup merchant\n");
-  setupMerchant(*mMerchant, itemManager);
+  setupMerchant(mMerchant);
   printf("MerchantView::engageMerchant(): setup menu\n");
-  setupMenu(player, itemManager);
+  setupMenu();
 }
 
-void MerchantView::setupMerchant(Merchant& merchant, ItemManager& itemManager) {
+void MerchantView::setupMerchant(Merchant* merchant) {
+  merchant->getInventory()->resize(MERCHANT_INVENTORY_SIZE);
+  merchant->getInventory()->clear();
 
-  merchant.mInventoryList.clear();
-
-  for (size_t i = 0; i < 8; ++i) {
-    size_t handle = itemManager.generateRandomGun(r_num(1.0, 7.0));
-    merchant.mInventoryList.push_back(handle);
+  for (size_t i = 0; i < MERCHANT_INVENTORY_SIZE; ++i) {
+    size_t handle = mItemManager->generateRandomGun(r_num(1.0, 7.0));
+    merchant->getInventory()->addItem(handle);
   }
 }
 
-int MerchantView::update(Player& player, ItemManager& itemManager) {
+int MerchantView::update() {
   int choice = mMenu->gameMenuChoice(false);
 
   switch (choice) {
   case MERCHANT_BUTTON_END_TRANSACTION:
-    // TODO: for now, just destroy the placeholder merchant's
-    // inventory
-    for (size_t i = 0; i < mMerchant->mInventoryList.size(); ++i) {
-      itemManager.destroyItem(mMerchant->mInventoryList[i]);
+    for (size_t i = 0; i < mMerchant->getInventory()->size(); ++i) {
+      int itemHandle = mMerchant->getInventory()->getItemInSlot(i);
+      mItemManager->destroyItem(itemHandle);
     }
     return 1;
 
   case MERCHANT_BUTTON_SELL_MODE:
-    if (mMode != MERCHANT_MODE_SELL) {
-      mMode = MERCHANT_MODE_SELL;
-      mSelectedItem = -1;
-      setupMenu(player, itemManager);
-    }
+    switchMode(MERCHANT_MODE_SELL);
     break;
 
   case MERCHANT_BUTTON_BUY_MODE:
-    if (mMode != MERCHANT_MODE_BUY) {
-      mMode = MERCHANT_MODE_BUY;
-      mSelectedItem = -1;
-      setupMenu(player, itemManager);
-    }
+    switchMode(MERCHANT_MODE_BUY);
     break;
 
   case MERCHANT_BUTTON_SELL:
-    if (mSelectedItem >= 0) {
-      Inventory *inv = player.getInventory();
-      for (int i = 0; i < inv->mBackpack.size(); ++i) {
-        if (inv->mBackpack[i] == tempList[mSelectedItem]) {
-          // remove from backpack
-          inv->mBackpack[i] = 0;
-          // destroy the item
-          // FIXME: this should probably be added to the merchant's
-          // inventory
-          itemManager.destroyItem(tempList[mSelectedItem]);
-          mSelectedItem = -1;
-          setupMenu(player, itemManager);
-          return 0;
-        }
-      }
-    }
+    sellSelectedItem();
     break;
 
   case MERCHANT_BUTTON_BUY:
-    if (mSelectedItem >= 0) {
-      Inventory *inv = player.getInventory();
-      for (int i = 0; i < inv->mBackpack.size(); ++i) {
-        if (inv->mBackpack[i] == 0) {
-          // put in backpack
-          inv->mBackpack[i] = tempList[mSelectedItem];
-          // remove from seller's inventory
-          for (size_t j = 0; j < mMerchant->mInventoryList.size(); j++) {
-            if (mMerchant->mInventoryList[j] == tempList[mSelectedItem]) {
-              mMerchant->mInventoryList[j] = 0;
-            }
-          }
-          mSelectedItem = -1;
-          setupMenu(player, itemManager);
-          return 0;
-        }
-      }
-    }
+    buySelectedItem();
     break;
   }
 
   // check to see if the player clicked on an item
   if (choice >= MERCHANT_BUTTON_ITEM_BEGIN) {
-    mSelectedItem = choice - MERCHANT_BUTTON_ITEM_BEGIN;
-    setupMenu(player, itemManager);
+    mSelectedItemIndex = choice - MERCHANT_BUTTON_ITEM_BEGIN;
+    setupMenu();
   }
 
   return 0;
 }
 
-void MerchantView::setupMenu(Player& player, ItemManager& itemManager) {
+void MerchantView::draw() {
+  mMenu->draw();
+}
+
+void MerchantView::setupMenu() {
   if (mMenu != 0) {
     delete mMenu;
     mMenu = 0;
@@ -151,19 +115,17 @@ void MerchantView::setupMenu(Player& player, ItemManager& itemManager) {
     "end transaction", TEXT_JUSTIFICATION_CENTER, MERCHANT_BUTTON_END_TRANSACTION, colorWhite, colorBackground);
 
   // clear the inventory list
-  tempList.clear();
+  mItemHandles.clear();
 
   if (mMode == MERCHANT_MODE_SELL) {
-    setupSellMenu(player, itemManager);
+    setupSellMenu();
   }
   else {
-    setupBuyMenu(*mMerchant, itemManager);
+    setupBuyMenu();
   }
 }
 
-void MerchantView::setupSellMenu(Player& player, ItemManager& itemManager) {
-  char tempString[128];
-
+void MerchantView::setupSellMenu() {
   mMenu->addButton(v2d_v(0.15, 0.2), v2d_v(0.2, 0.05), fontSize,
     "sell mode", TEXT_JUSTIFICATION_CENTER, MERCHANT_BUTTON_SELL_MODE, colorWhite, colorSelection);
 
@@ -173,22 +135,12 @@ void MerchantView::setupSellMenu(Player& player, ItemManager& itemManager) {
   mMenu->addButton(v2d_v(0.1, 0.85), v2d_v(0.3, 0.05), fontSize,
     "sell item", TEXT_JUSTIFICATION_CENTER, MERCHANT_BUTTON_SELL, colorWhite, colorBackground);
 
-  // show info about selected item
-  addSelectedItemInfo(itemManager);
-
-  // setup the MerchantView list from the player's backpack
-  Inventory *inventory = player.getInventory();
-  for (size_t i = 0; i < inventory->mBackpack.size(); ++i) {
-    if (inventory->mBackpack[i] != 0) {
-      tempList.push_back(inventory->mBackpack[i]);
-    }
-  }
-
-  // add the buttons for the player's inventory
-  setupInventoryList(itemManager);
+  addSelectedItemInfo();
+  loadItemHandles(mPlayer->getInventory()->getBackpack());
+  setupInventoryList();
 }
 
-void MerchantView::setupBuyMenu(Merchant& merchant, ItemManager& itemManager) {
+void MerchantView::setupBuyMenu() {
   mMenu->addButton(v2d_v(0.15, 0.2), v2d_v(0.2, 0.05), fontSize,
     "sell mode", TEXT_JUSTIFICATION_CENTER, MERCHANT_BUTTON_SELL_MODE, colorWhite, colorBackground);
 
@@ -198,26 +150,17 @@ void MerchantView::setupBuyMenu(Merchant& merchant, ItemManager& itemManager) {
   mMenu->addButton(v2d_v(0.1, 0.85), v2d_v(0.3, 0.05), fontSize,
     "purchase item", TEXT_JUSTIFICATION_CENTER, MERCHANT_BUTTON_BUY, colorWhite, colorBackground);
 
-  // show info about selected item
-  addSelectedItemInfo(itemManager);
-
-  // setup the MerchantView list from the merchant's inventory
-  for (size_t i = 0; i < mMerchant->mInventoryList.size(); ++i) {
-    if (mMerchant->mInventoryList[i] != 0) {
-      tempList.push_back(mMerchant->mInventoryList[i]);
-    }
-  }
-
-  // add the buttons for the merchant's inventory
-  setupInventoryList(itemManager);
+  addSelectedItemInfo();
+  loadItemHandles(mMerchant->getInventory());
+  setupInventoryList();
 }
 
-void MerchantView::addSelectedItemInfo(ItemManager& itemManager) {
+void MerchantView::addSelectedItemInfo() {
   char tempString[128];
 
   // show details for the selected item
-  if (mSelectedItem >= 0) {
-    item_t item = itemManager.getItem(tempList[mSelectedItem]);
+  if (mSelectedItemIndex >= 0) {
+    item_t item = mItemManager->getItem(mItemHandles[mSelectedItemIndex]);
 
     mMenu->addText(v2d_v(0.05, 0.3), v2d_v(0.4, 0.05), fontSize,
       item.name, TEXT_JUSTIFICATION_CENTER, colorWhite, colorBackground);
@@ -259,19 +202,19 @@ void MerchantView::addSelectedItemInfo(ItemManager& itemManager) {
   }
 }
 
-void MerchantView::setupInventoryList(ItemManager& itemManager) {
-  double buttonHeight = (0.875 - 0.175) / static_cast<double>(tempList.size());
+void MerchantView::setupInventoryList() {
+  double buttonHeight = (0.875 - 0.175) / static_cast<double>(mItemHandles.size());
   v2d_t tl, dimensions;
 
-  for (size_t i = 0; i < tempList.size(); ++i) {
-    tl = v2d_v (0.55, lerp (0.175, 0.875 - buttonHeight, i, tempList.size()));
+  for (size_t i = 0; i < mItemHandles.size(); ++i) {
+    tl = v2d_v (0.55, lerp (0.175, 0.875 - buttonHeight, i, mItemHandles.size()));
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9; // 0.9 is the TOTAL HEIGHT
 
-    item_t item = itemManager.getItem(tempList[i]);
+    item_t item = mItemManager->getItem(mItemHandles[i]);
     if (item.type != ITEMTYPE_UNDEFINED) {
       GLfloat *bgColor;
-      if (i == mSelectedItem) {
+      if (i == mSelectedItemIndex) {
         bgColor = colorSelection;
       }
       else {
@@ -284,6 +227,46 @@ void MerchantView::setupInventoryList(ItemManager& itemManager) {
   }
 }
 
-void MerchantView::draw(void) {
-  mMenu->draw();
+void MerchantView::loadItemHandles(const ItemContainer* itemContainer) {
+  size_t itemContainerSize = itemContainer->size();
+  mItemHandles.resize(itemContainerSize, 0);
+  for (size_t i = 0; i < itemContainerSize; ++i) {
+    size_t itemHandle = itemContainer->getItemInSlot(i);
+    if (itemHandle != 0) {
+      mItemHandles.push_back(itemHandle);
+    }
+  }
+}
+
+void MerchantView::switchMode(int mode) {
+  if (mMode == mode) {
+    return;
+  }
+  mMode = mode;
+  mSelectedItemIndex = -1;
+  setupMenu();
+}
+
+void MerchantView::sellSelectedItem() {
+  if (mSelectedItemIndex < 0) {
+    return;
+  }
+  bool itemWasRemovedFromBackpack = mPlayer->getInventory()->getBackpack()->removeItem(mItemHandles[mSelectedItemIndex]);
+  if (itemWasRemovedFromBackpack) {
+    mItemManager->destroyItem(mItemHandles[mSelectedItemIndex]);
+  }
+  mSelectedItemIndex = -1;
+  setupMenu();
+}
+
+void MerchantView::buySelectedItem() {
+  if (mSelectedItemIndex < 0) {
+    return;
+  }
+  bool itemWasAddedToBackpack = mPlayer->getInventory()->getBackpack()->addItem(mItemHandles[mSelectedItemIndex]);
+  if (itemWasAddedToBackpack) {
+    mMerchant->getInventory()->removeItem(mItemHandles[mSelectedItemIndex]);
+    mSelectedItemIndex = -1;
+    setupMenu();
+  }
 }

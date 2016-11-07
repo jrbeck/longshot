@@ -126,11 +126,13 @@
     <ClCompile Include="..\source\game\GameInput.cpp" />
     <ClCompile Include="..\source\game\GameMenu.cpp" />
     <ClCompile Include="..\source\game\GameModel.cpp" />
+    <ClCompile Include="..\source\game\GameView.cpp" />
     <ClCompile Include="..\source\game\GameWindow.cpp" />
     <ClCompile Include="..\source\game\LoadScreen.cpp" />
     <ClCompile Include="..\source\game\Longshot.cpp" />
     <ClCompile Include="..\source\game\MessageBus.cpp" />
     <ClCompile Include="..\source\items\Inventory.cpp" />
+    <ClCompile Include="..\source\items\ItemContainer.cpp" />
     <ClCompile Include="..\source\items\ItemManager.cpp" />
     <ClCompile Include="..\source\items\MerchantView.cpp" />
     <ClCompile Include="..\source\main.cpp" />
@@ -149,7 +151,9 @@
     <ClCompile Include="..\source\physics\InactiveList.cpp" />
     <ClCompile Include="..\source\physics\Physics.cpp" />
     <ClCompile Include="..\source\physics\PhysicsView.cpp" />
+    <ClCompile Include="..\source\player\CharacterSheetView.cpp" />
     <ClCompile Include="..\source\player\HeadBobble.cpp" />
+    <ClCompile Include="..\source\player\HudView.cpp" />
     <ClCompile Include="..\source\player\Player.cpp" />
     <ClCompile Include="..\source\player\PlayerController.cpp" />
     <ClCompile Include="..\source\player\PlayerView.cpp" />
@@ -213,11 +217,13 @@
     <ClInclude Include="..\source\game\GameInput.h" />
     <ClInclude Include="..\source\game\GameMenu.h" />
     <ClInclude Include="..\source\game\GameModel.h" />
+    <ClInclude Include="..\source\game\GameView.h" />
     <ClInclude Include="..\source\game\GameWindow.h" />
     <ClInclude Include="..\source\game\LoadScreen.h" />
     <ClInclude Include="..\source\game\Longshot.h" />
     <ClInclude Include="..\source\game\MessageBus.h" />
     <ClInclude Include="..\source\items\Inventory.h" />
+    <ClInclude Include="..\source\items\ItemContainer.h" />
     <ClInclude Include="..\source\items\ItemManager.h" />
     <ClInclude Include="..\source\items\MerchantView.h" />
     <ClInclude Include="..\source\math\BoundingBox.h" />
@@ -235,7 +241,9 @@
     <ClInclude Include="..\source\physics\InactiveList.h" />
     <ClInclude Include="..\source\physics\Physics.h" />
     <ClInclude Include="..\source\physics\PhysicsView.h" />
+    <ClInclude Include="..\source\player\CharacterSheetView.h" />
     <ClInclude Include="..\source\player\HeadBobble.h" />
+    <ClInclude Include="..\source\player\HudView.h" />
     <ClInclude Include="..\source\player\Player.h" />
     <ClInclude Include="..\source\player\PlayerController.h" />
     <ClInclude Include="..\source\player\PlayerView.h" />

@@ -1,13 +1,3 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * PlayerView
-// *
-// * desc:
-// *
-// *
-// *
-// *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 #pragma once
 
 #include "../math/MathUtil.h"
@@ -28,32 +18,23 @@ public:
 
   void drawPlayerTargetBlock();
 
-  void updateHud();
-  void showDeadPlayerHud();
-  void showLivePlayerHud();
   void drawHud();
 
   void updateVisionTint();
   void drawWaterOverlay();
-
-  void updateCharacterSheet();
 
   void setDrawDistance(double distance);
   void adjustDrawDistance(double amount);
 
   GlCamera glCamSetup();
 
-  bool mShowCharacterSheet;
-
 private:
   GameModel* mGameModel;
   AssetManager* mAssetManager;
-  GameMenu* mHud;
-  GameMenu* mCharacterSheet;
 
   GlCamera mCamera;
 
   bool mHeadPostionBlockType;
   GLfloat mVisionTint[4];
-
+  v3d_t mUpVector;
 };

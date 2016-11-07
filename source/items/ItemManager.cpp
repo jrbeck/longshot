@@ -528,16 +528,12 @@ bool ItemManager::useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHan
   return false;
 }
 
-void ItemManager::useRocketPack(
-  v2d_t walkVector,
-  size_t itemHandle,
-  size_t physicsHandle)
-{
+void ItemManager::useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle) {
   item_t item = getItem(itemHandle);
 
   // check if in water
   // FIXME: check to see if head is in water??
-  PhysicsEntity *physicsEntity = mGameModel->mPhysics->getEntityByHandle(physicsHandle);
+  PhysicsEntity* physicsEntity = mGameModel->mPhysics->getEntityByHandle(physicsHandle);
   if (physicsEntity->worldViscosity > 0.0) {
     return;
   }
@@ -573,11 +569,7 @@ void ItemManager::useRocketPack(
   }
 }
 
-double ItemManager::useGun(
-  size_t itemHandle,
-  const shot_info_t& shotInfo,
-  size_t* ammoCounter)
-{
+double ItemManager::useGun(size_t itemHandle, const shot_info_t& shotInfo, size_t* ammoCounter){
   int itemIndex = getIndexFromHandle(itemHandle);
 
   if (mItems[itemIndex].type != ITEMTYPE_GUN_ONE_HANDED && mItems[itemIndex].type != ITEMTYPE_GUN_TWO_HANDED) {

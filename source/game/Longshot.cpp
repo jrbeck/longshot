@@ -124,12 +124,13 @@ int Longshot::loop() {
       case PROGRAM_MODE_NEW_GAME:
         printf("menu choice: new game\n");
         mGame = new game_c(mGameWindow);
-        mGame->enterGameMode(true);
+        mGame->run(true);
         break;
+
       case PROGRAM_MODE_LOAD_GAME:
         printf("menu choice: load game\n");
         mGame = new game_c(mGameWindow);
-        mGame->enterGameMode(false);
+        mGame->run(false);
         break;
 
       case PROGRAM_MODE_TOGGLE_FULLSCREEN:

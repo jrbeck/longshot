@@ -33,6 +33,7 @@ AssetManager::~AssetManager() {
 }
 
 int AssetManager::loadAssets() {
+  printf("loading assets\n");
   if (loadTexture("art/32_terrain.png", &mTerrainTextureHandle) == 0) {
     mNumTexturesLoaded++;
   }

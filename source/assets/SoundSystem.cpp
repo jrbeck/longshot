@@ -1,6 +1,5 @@
 #include "../assets/SoundSystem.h"
 
-
 SoundSystem::SoundSystem() {
   mAudioRate = 44100;
   mAudioFormat = MIX_DEFAULT_FORMAT;
@@ -11,7 +10,6 @@ SoundSystem::SoundSystem() {
     mWav[i] = NULL;
   }
 }
-
 
 SoundSystem::~SoundSystem() {
   printf("SoundSystem::~SoundSystem: unloading sounds (%d)\n", NUM_SOUNDS);
@@ -28,7 +26,6 @@ SoundSystem::~SoundSystem() {
   Mix_CloseAudio();
 }
 
-
 int SoundSystem::initialize() {
   // load support for the OGG and MOD sample/music formats
   int flags = MIX_INIT_OGG; // | MIX_INIT_MOD;
@@ -39,16 +36,14 @@ int SoundSystem::initialize() {
     // handle error
   }
 
-
   if (Mix_OpenAudio(mAudioRate, mAudioFormat, mAudioChannels, mChunkSize)) {
     printf("SoundSystem::initialize(): Mix_OpenAudio() failed\n");
     return 1;
   }
 
-  Mix_AllocateChannels(NUM_CHANNELS);
+  Mix_AllocateChannels(NUM_AUDIO_CHANNELS);
   return 0;
 }
-
 
 void SoundSystem::playSoundByHandle(int handle, int volume) {
   if (mWav[handle] != NULL) {
@@ -69,9 +64,8 @@ void SoundSystem::playSoundByHandle(int handle, int volume) {
   }
 }
 
-
-int SoundSystem::loadSound(char* fileName) {
-  printf("SoundSystem::loadSound(): loading sounds (%d)\n", NUM_SOUNDS);
+int SoundSystem::loadSounds() {
+  printf("SoundSystem::loadSounds(): loading sounds (%d)\n", NUM_SOUNDS);
   //  mWav[SOUND_AMBIENT] = Mix_LoadWAV ("sounds/not by john/ambient.ogg");
   mWav[SOUND_PISTOL] = Mix_LoadWAV("sounds/tgc/gun_pistol.ogg");
   mWav[SOUND_MACHINE_GUN] = Mix_LoadWAV("sounds/jb/machine_gun.ogg");
@@ -110,9 +104,6 @@ int SoundSystem::loadSound(char* fileName) {
   return 0;
 }
 
-
 void SoundSystem::stopAllSounds() {
   Mix_HaltChannel(-1);
 }
-
-

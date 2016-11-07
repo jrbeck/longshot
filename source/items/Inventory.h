@@ -1,29 +1,16 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * Inventory
-// *
-// * this is as inventory container for a player.
-// * it contains info about equipped gear as well as backpack inventory.
-// * the items are just handles to items contained in an ItemManager
-// *
-// *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 #pragma once
 
 #include <vector>
 
+#include "../items/ItemContainer.h"
 #include "../game/Constants.h"
 
 class Inventory {
 public:
-  Inventory();
+  Inventory(size_t backpackSize);
   ~Inventory();
 
   void clear();
-
-  void resizeBackpack(int newSize);
-
-  int getNextFreeBackpackSlot();
 
   bool swapBackPackItemIntoPrimary();
   bool swapBackPackItemIntoSecondary();
@@ -31,14 +18,16 @@ public:
   void nextBackPackItem();
   void previousBackPackItem();
 
+  ItemContainer* getBackpack();
+
   void save(FILE* file);
   void load(FILE* file);
-
 
   // MEMBERS * * * * * * * * * * * *
   size_t mCredits;
 
-  std::vector<size_t> mBackpack;
+  ItemContainer* mBackpack;
+  size_t mSelectedBackpackItemSlot;
 
   size_t mPrimaryItem;
   size_t mSecondaryItem;
@@ -49,6 +38,4 @@ public:
   size_t mTorsoGear;
 
   size_t mAmmoCounter[NUM_AMMO_TYPES];
-
-  size_t mSelectedBackpackItem;
 };
