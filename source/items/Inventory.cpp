@@ -60,6 +60,10 @@ ItemContainer* Inventory::getBackpack() {
   return mBackpack;
 }
 
+size_t Inventory::getSelectedBackpackItemHandle() const {
+  return mBackpack->getItemInSlot(mSelectedBackpackItemSlot);
+}
+
 void Inventory::save(FILE* file) {
   fwrite(&mCredits, sizeof (size_t), 1, file);
   fwrite(&mPrimaryItem, sizeof (size_t), 1, file);

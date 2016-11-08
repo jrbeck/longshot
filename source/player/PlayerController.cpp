@@ -21,27 +21,30 @@ void PlayerController::update(GameInput* gameInput) {
   //   adjust_draw_distance(20);
   // }
 
-  if (mGameInput->isToggleCharacterSheet()) {
-    mPlayerView->mShowCharacterSheet = !mPlayerView->mShowCharacterSheet;
-  }
+  // if (mGameInput->isToggleCharacterSheet()) {
+  //   mPlayerView->mShowCharacterSheet = !mPlayerView->mShowCharacterSheet;
+  // }
+  //
+  // if (mPlayerView->mShowCharacterSheet) {
+  //   if (mGameInput->isEscapePressed()) {
+  //     mPlayerView->mShowCharacterSheet = false;
+  //   }
+  // }
+  //
+  // if (mPlayerView->mShowCharacterSheet) {
+  //   handleInventoryInput();
+  // }
+  // else {
+  //   handleItemUsage();
+  // }
 
-  if (mPlayerView->mShowCharacterSheet) {
-    if (mGameInput->isEscapePressed()) {
-      mPlayerView->mShowCharacterSheet = false;
-    }
-  }
-
-  if (mPlayerView->mShowCharacterSheet) {
-    handleInventoryInput();
-  }
-  else {
-    handleItemUsage();
-  }
+  printf("in the loop\n");
 
   if (mPlayer->isDead()) {
     handleDeadPlayerInput();
     return;
   }
+  printf("in the loop\n");
 
 
   // does the player wanna pick stuff up?

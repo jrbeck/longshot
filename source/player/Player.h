@@ -1,17 +1,3 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * Player
-// *
-// * this contains all (way too much) player related stuff:
-// * inventory
-// * camera info
-// * movement
-// *
-// * etc...
-// *
-// *
-// *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 #pragma once
 
 #include <cmath>
@@ -145,7 +131,7 @@ private:
   double mNextShotTimePrimary;
   double mNextShotTimeSecondary;
 
-  Inventory mInventory;
+  Inventory* mInventory;
 
   melee_weapon_state_t mMeleeStatePrimary;
   melee_weapon_state_t mMeleeStateSecondary;

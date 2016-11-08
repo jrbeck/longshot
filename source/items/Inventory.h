@@ -19,6 +19,7 @@ public:
   void previousBackPackItem();
 
   ItemContainer* getBackpack();
+  size_t getSelectedBackpackItemHandle() const;
 
   void save(FILE* file);
   void load(FILE* file);

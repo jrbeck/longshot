@@ -1,6 +1,7 @@
 #include "HudView.h"
 
-HudView::HudView() :
+HudView::HudView(GameModel* gameModel) :
+  mGameModel(gameModel),
   mHud(new GameMenu)
 {
 }
@@ -11,7 +12,7 @@ HudView::~HudView() {
   }
 }
 
-void draw() {
+void HudView::draw() {
   // if (mVisionTint[3] > 0.0) {
   //   drawWaterOverlay();
   // }

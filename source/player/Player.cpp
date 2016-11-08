@@ -4,12 +4,16 @@
 // has to do with sprintf() not being safe....
 #pragma warning (disable : 4996)
 
-Player::Player(GameModel* gameModel) {
-  mGameModel = gameModel;
-  mInventory.resizeBackpack(DEFAULT_BACKPACK_SIZE);
+Player::Player(GameModel* gameModel) :
+  mGameModel(gameModel)
+{
+  mInventory = new Inventory(DEFAULT_BACKPACK_SIZE);
 }
 
 Player::~Player () {
+  if (mInventory != NULL) {
+    delete mInventory;
+  }
 }
 
 int Player::reset(size_t physicsHandle, size_t aiHandle) {
@@ -31,31 +35,27 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
   mNextShotTimePrimary = 0.0;
   mNextShotTimeSecondary = 0.0;
 
-  mInventory.clear();
+  mInventory->clear();
 
   // give the man a pointy stick
-  int inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle >= 0) {
-    mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->generateRandomGun(1.0);
+  if (!mInventory->getBackpack()->isFull()) {
+    mInventory->getBackpack()->addItem(mGameModel->mItemManager->generateRandomGun(1.0));
   }
 
   // melee weapon
-  inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle >= 0) {
-    mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->generateRandomMeleeWeapon(3.0);
+  if (!mInventory->getBackpack()->isFull()) {
+    mInventory->getBackpack()->addItem(mGameModel->mItemManager->generateRandomMeleeWeapon(3.0));
   }
 
   // block
-  inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle >= 0) {
+  if (!mInventory->getBackpack()->isFull()) {
     item_t blockItem;
     memset(&blockItem, 0, sizeof (item_t));
-
     blockItem.active = true;
     blockItem.type = ITEMTYPE_WORLD_BLOCK;
     strcpy(blockItem.name, "blocker");
 
-    mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->createItem(blockItem);
+    mInventory->getBackpack()->addItem(mGameModel->mItemManager->createItem(blockItem));
   }
 
   mPlacedBlock = false;
@@ -112,14 +112,13 @@ void Player::godMode() {
 
   // some ammo?
   for (int i = 0; i < NUM_AMMO_TYPES; ++i) {
-    mInventory.mAmmoCounter[i] = 10000;
+    mInventory->mAmmoCounter[i] = 10000;
   }
 
   // how bout a couple a nice shooters
   item_t gun;
 
-  int inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle >= 0) {
+  if (!mInventory->getBackpack()->isFull()) {
     mGameModel->mItemManager->generateRandomRocketLauncher(gun, 1.5);
     gun.type = ITEMTYPE_GUN_ONE_HANDED;
     gun.bulletType = OBJTYPE_LIVE_BULLET;
@@ -127,32 +126,28 @@ void Player::godMode() {
     gun.explosionForce = 5000.0; // * 0.2;
     mGameModel->mItemManager->nameGun(gun);
 
-    mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->createItem(gun);
+    mInventory->getBackpack()->addItem(mGameModel->mItemManager->createItem(gun));
   }
 
   // okay one more...
-  inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle >= 0) {
+  if (!mInventory->getBackpack()->isFull()) {
     mGameModel->mItemManager->generateRandomRocketLauncher(gun, 3.0);
 //    gun.bulletType = OBJTYPE_NAPALM;
 //    gun.ammoType = AMMO_NAPALM;
-
     gun.bulletType = OBJTYPE_SLIME;
     gun.ammoType = AMMO_SLIME;
-
     gun.explosionForce = 5000.0 * 0.2;
     mGameModel->mItemManager->nameGun(gun);
 
-    mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->createItem(gun);
+    mInventory->getBackpack()->addItem(mGameModel->mItemManager->createItem(gun));
   }
 
   // and the rocket pack
-  inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle >= 0) {
+  if (!mInventory->getBackpack()->isFull()) {
     gun.type = ITEMTYPE_ROCKET_PACK;
     gun.value1 = 2000.0;
     sprintf(gun.name, "rocket pack");
-    mInventory.mBackpack[inventoryHandle] = mGameModel->mItemManager->createItem(gun);
+    mInventory->getBackpack()->addItem(mGameModel->mItemManager->createItem(gun));
   }
 }
 
@@ -222,19 +217,18 @@ bool Player::pickUpItem(item_t item, AssetManager* assetManager) {
     item.type == ITEMTYPE_AMMO_PLASMA ||
     item.type == ITEMTYPE_AMMO_NAPALM)
   {
-    mInventory.mAmmoCounter[item.ammoType] += item.quantity;
+    mInventory->mAmmoCounter[item.ammoType] += item.quantity;
     assetManager->mSoundSystem.playSoundByHandle(SOUND_HEALTHPACK, 192);
     return true;
   }
 
   // now for inventory items
-  int inventoryHandle = mInventory.getNextFreeBackpackSlot();
-  if (inventoryHandle < 0) {
+  if (mInventory->getBackpack()->isFull()) {
     printf("inventory full!\n");
     return false;
   }
   else {
-    mInventory.mBackpack[inventoryHandle] = item.handle;
+    mInventory->getBackpack()->addItem(item.handle);
   }
 
   switch (item.type) {
@@ -261,13 +255,13 @@ void Player::useEquipped(int whichEquip) {
   switch (whichEquip) {
     case EQUIP_PRIMARY:
       // can't use a non-item
-      if (mInventory.mPrimaryItem <= 0) return;
-      item = mGameModel->mItemManager->getItem(mInventory.mPrimaryItem);
+      if (mInventory->mPrimaryItem <= 0) return;
+      item = mGameModel->mItemManager->getItem(mInventory->mPrimaryItem);
       break;
 
     case EQUIP_SECONDARY:
-      if (mInventory.mSecondaryItem <= 0) return;
-      item = mGameModel->mItemManager->getItem(mInventory.mSecondaryItem);
+      if (mInventory->mSecondaryItem <= 0) return;
+      item = mGameModel->mItemManager->getItem(mInventory->mSecondaryItem);
       break;
 
     default:
@@ -305,10 +299,10 @@ void Player::useEquipped(int whichEquip) {
   else {
     if (mGameModel->mItemManager->useItem(computeWalkVector(mWalkInput), item.handle, mGameModel->mPhysics->getPlayerHandle())) {
       if (whichEquip == EQUIP_PRIMARY) {
-        mInventory.mPrimaryItem = 0;
+        mInventory->mPrimaryItem = 0;
       }
       else {
-        mInventory.mSecondaryItem = 0;
+        mInventory->mSecondaryItem = 0;
       }
     }
   }
@@ -337,7 +331,7 @@ double Player::fireGun(item_t item, double handedness) {
   shotInfo.position = pos;
   shotInfo.time = mGameModel->mPhysics->getLastUpdateTime();
 
-  return mGameModel->mItemManager->useGun(item.handle, shotInfo, mInventory.mAmmoCounter);
+  return mGameModel->mItemManager->useGun(item.handle, shotInfo, mInventory->mAmmoCounter);
 }
 
 double Player::useMeleeWeapon(item_t item) {
@@ -361,12 +355,12 @@ melee_weapon_state_t* Player::getMeleeWeaponState(int hand) {
 
   if (hand == EQUIP_PRIMARY) {
     weaponState = &mMeleeStatePrimary;
-    weaponState->weaponHandle = mInventory.mPrimaryItem;
+    weaponState->weaponHandle = mInventory->mPrimaryItem;
     weaponState->swingTime = mLastUpdateTime - mMeleeStatePrimary.swingStart;
   }
   else {
     weaponState = &mMeleeStateSecondary;
-    weaponState->weaponHandle = mInventory.mSecondaryItem;
+    weaponState->weaponHandle = mInventory->mSecondaryItem;
     weaponState->swingTime = mLastUpdateTime - mMeleeStateSecondary.swingStart;
   }
 
@@ -382,9 +376,10 @@ melee_weapon_state_t* Player::getMeleeWeaponState(int hand) {
 
 void Player::useBackpackItem() {
   // can't use a non-item
-  if (mInventory.mBackpack[mInventory.mSelectedBackpackItem] <= 0) return;
+  size_t selectedBackpackItemHandle = mInventory->getSelectedBackpackItemHandle();
+  if (selectedBackpackItemHandle <= 0) return;
 
-  item_t item = mGameModel->mItemManager->getItem(mInventory.mBackpack[mInventory.mSelectedBackpackItem]);
+  item_t item = mGameModel->mItemManager->getItem(selectedBackpackItemHandle);
 
   switch (item.type) {
   case ITEMTYPE_UNDEFINED:
@@ -395,8 +390,8 @@ void Player::useBackpackItem() {
     break;
   default:
     printf("player using item\n");
-    if (mGameModel->mItemManager->useItem(computeWalkVector(mWalkInput), mInventory.mBackpack[mInventory.mSelectedBackpackItem], mGameModel->mPhysics->getPlayerHandle())) {
-      mInventory.mBackpack[mInventory.mSelectedBackpackItem] = 0;
+    if (mGameModel->mItemManager->useItem(computeWalkVector(mWalkInput), selectedBackpackItemHandle, mGameModel->mPhysics->getPlayerHandle())) {
+      mInventory->getBackpack()->removeItem(selectedBackpackItemHandle);
     }
     break;
   }
@@ -718,5 +713,5 @@ void Player::placeLight(GameInput* gameInput) {
 }
 
 Inventory* Player::getInventory() {
-  return &mInventory;
+  return mInventory;
 }

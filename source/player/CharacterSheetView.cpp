@@ -1,6 +1,7 @@
 #include "CharacterSheetView.h"
 
-CharacterSheetView::CharacterSheetView() :
+CharacterSheetView::CharacterSheetView(GameModel* gameModel) :
+  mGameModel(gameModel),
   mCharacterSheet(NULL)
 {
   mCharacterSheet = new GameMenu;
@@ -86,24 +87,24 @@ void CharacterSheetView::update() {
   // inventory
   mCharacterSheet->addText(v2d_v(0.5, 0.2), v2d_v(0.4, 0.1), fontSize, "inventory:", TEXT_JUSTIFICATION_CENTER, color2, NULL);
 
-  buttonHeight = (0.9 - 0.3) / static_cast<double>(mGameModel->mPlayer->getInventory()->mBackpack.size());
+  buttonHeight = (0.9 - 0.3) / static_cast<double>(mGameModel->mPlayer->getInventory()->getBackpack()->size());
   GLfloat* itemColor;
 
-  for (size_t i = 0; i < mGameModel->mPlayer->getInventory()->mBackpack.size(); ++i) {
-    tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mGameModel->mPlayer->getInventory()->mBackpack.size()));
-//    br = v2d_v(0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mGameModel->mPlayer->getInventory()->mBackpack.size()));;
+  for (size_t i = 0; i < mGameModel->mPlayer->getInventory()->getBackpack()->size(); ++i) {
+    tl = v2d_v(0.5, lerp(0.3, 0.9 - buttonHeight, i, mGameModel->mPlayer->getInventory()->getBackpack()->size()));
+//    br = v2d_v(0.9, lerp (0.3 + (buttonHeight * 0.9), 0.9, i, mGameModel->mPlayer->getInventory()->getBackpack()->size()));;
     dimensions.x = 0.4;
     dimensions.y = buttonHeight * 0.9;
 
-    if (i == mGameModel->mPlayer->getInventory()->mSelectedBackpackItem) {
+    if (i == mGameModel->mPlayer->getInventory()->mSelectedBackpackItemSlot) {
       itemColor = selectedColor;
     }
     else {
       itemColor = color;
     }
 
-    if (mGameModel->mPlayer->getInventory()->mBackpack[i] != 0) {
-      item_t item = mGameModel->mItemManager->getItem(mGameModel->mPlayer->getInventory()->mBackpack[i]);
+    if (mGameModel->mPlayer->getInventory()->getBackpack()->getItemInSlot(i) != 0) {
+      item_t item = mGameModel->mItemManager->getItem(mGameModel->mPlayer->getInventory()->getBackpack()->getItemInSlot(i));
       if (item.type != ITEMTYPE_UNDEFINED) {
         mCharacterSheet->addText(tl, dimensions, fontSize, item.name, TEXT_JUSTIFICATION_LEFT, itemColor, NULL);
       }
@@ -124,7 +125,8 @@ void CharacterSheetView::update() {
 }
 
 void CharacterSheetView::handleInput(GameInput* gameInput) {
-  Inventory* inventory = mPlayer->getInventory();
+  Inventory* inventory = mGameModel->mPlayer->getInventory();
+  int selectedItemHandle = inventory->getBackpack()->getItemInSlot(inventory->mSelectedBackpackItemSlot);
 
   if (gameInput->isClickMouse1()) {
     inventory->swapBackPackItemIntoPrimary();
@@ -134,9 +136,9 @@ void CharacterSheetView::handleInput(GameInput* gameInput) {
   }
 
   if (gameInput->isUseBackpackItem()) {
-    item_t item = mGameModel->mItemManager->getItem(inventory->mBackpack[inventory->mSelectedBackpackItem]);
+    item_t item = mGameModel->mItemManager->getItem(selectedItemHandle);
     if (item.type == ITEMTYPE_HEALTHPACK) {
-      mPlayer->useBackpackItem();
+      mGameModel->mPlayer->useBackpackItem();
     }
   }
 
@@ -151,8 +153,8 @@ void CharacterSheetView::handleInput(GameInput* gameInput) {
   // did the player want to drop that item?
   // FIXME: destroys item!
   // this needs to create a physics item...
-  if (gameInput->isDroppedItem() && inventory->mBackpack[inventory->mSelectedBackpackItem] != 0) {
-    mGameModel->mItemManager->destroyItem(inventory->mBackpack[inventory->mSelectedBackpackItem]);
-    inventory->mBackpack[inventory->mSelectedBackpackItem] = 0;
+  if (gameInput->isDroppedItem() && selectedItemHandle != 0) {
+    mGameModel->mItemManager->destroyItem(selectedItemHandle);
+    inventory->getBackpack()->removeItem(selectedItemHandle);
   }
 }
