@@ -38,14 +38,10 @@ void PlayerController::update(GameInput* gameInput) {
   //   handleItemUsage();
   // }
 
-  printf("in the loop\n");
-
   if (mPlayer->isDead()) {
     handleDeadPlayerInput();
     return;
   }
-  printf("in the loop\n");
-
 
   // does the player wanna pick stuff up?
   if (mGameInput->isPickUpItem()) {

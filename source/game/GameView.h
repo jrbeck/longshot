@@ -3,7 +3,6 @@
 #include "../game/Constants.h"
 #include "../player/PlayerView.h"
 #include "../player/CharacterSheetView.h"
-#include "../player/HudView.h"
 #include "../world/WorldMapView.h"
 #include "../ai/AiView.h"
 #include "../physics/PhysicsView.h"
@@ -40,7 +39,6 @@ private:
   GameMenu* mMenu;
 
   CharacterSheetView* mCharacterSheetView;
-  HudView* mHudView;
   AiView* mAiView;
   WorldMapView* mWorldMapView;
   PhysicsView* mPhysicsView;

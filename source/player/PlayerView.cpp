@@ -5,6 +5,8 @@ PlayerView::PlayerView(GameModel* gameModel, AssetManager* assetManager) :
   mAssetManager(assetManager),
   mUpVector(v3d_v(0, 1, 0))
 {
+  mHudView = new HudView(gameModel);
+
   mCamera.resize_screen(gScreenW, gScreenH);
   mCamera.set_fov_near_far(45.0, 0.15, 500.0);
   setDrawDistance(500.0);
@@ -14,7 +16,11 @@ PlayerView::PlayerView(GameModel* gameModel, AssetManager* assetManager) :
   mVisionTint[3] = 0.0;
 }
 
-PlayerView::~PlayerView() {}
+PlayerView::~PlayerView() {
+  if (mHudView != NULL) {
+    delete mHudView;
+  }
+}
 
 void PlayerView::update() {
   updateVisionTint();
@@ -180,8 +186,7 @@ void PlayerView::drawPlayerTargetBlock() {
 }
 
 void PlayerView::drawHud() {
-  // TODO:
-  // mHudView()->draw();
+  mHudView->draw();
 }
 
 void PlayerView::updateVisionTint() {

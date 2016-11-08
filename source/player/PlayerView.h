@@ -3,6 +3,7 @@
 #include "../math/MathUtil.h"
 #include "../assets/AssetManager.h"
 #include "../game/GameModel.h"
+#include "../player/HudView.h"
 
 class PlayerView {
 public:
@@ -32,6 +33,7 @@ private:
   GameModel* mGameModel;
   AssetManager* mAssetManager;
 
+  HudView* mHudView;
   GlCamera mCamera;
 
   bool mHeadPostionBlockType;

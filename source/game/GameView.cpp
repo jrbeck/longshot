@@ -6,7 +6,6 @@ GameView::GameView(GameModel *gameModel, AssetManager* assetManager) :
   mAssetManager(assetManager),
   mPlayerView(NULL),
   mCharacterSheetView(NULL),
-  mHudView(NULL),
   mAiView(NULL),
   mWorldMapView(NULL),
   mPhysicsView(NULL),
@@ -20,9 +19,6 @@ GameView::~GameView() {
   }
   if (mCharacterSheetView != NULL) {
     delete mCharacterSheetView;
-  }
-  if (mHudView != NULL) {
-    delete mHudView;
   }
   if (mAiView != NULL) {
     delete mAiView;

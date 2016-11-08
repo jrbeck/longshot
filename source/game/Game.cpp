@@ -74,6 +74,9 @@ void game_c::setup(bool createNewWorld) {
   else {
     printf("game_c::enterGameMode(): loading game\n");
     mGameModel->load(mGameWindow);
+    mGameView->initializeForLocation();
+
+    XXXpostLoactionInitializeSetup();
   }
 }
 
@@ -112,11 +115,8 @@ void game_c::gameLoop() {
 
     update();
 
-    printf("after game view\n");
     mGameView->update(mLastUpdateTime);
-    printf("after game view\n");
     mGameView->draw(mGameState, mMerchantView);
-    printf("after game view\n");
 
     // should this be in GameView??
     mGameWindow->swapBuffers();
@@ -284,11 +284,9 @@ void game_c::XXXpostLoactionInitializeSetup() {
   if (mPlayerController != NULL) {
     delete mPlayerController;
   }
-  printf("making PC * * * * * * * * * * * * * * * * * * * * * *\n");
 
   mPlayerController = new PlayerController(mGameModel, mGameView->mPlayerView);
 
   // HACK - need better timekeeping
   mLastUpdateTime = (double)SDL_GetTicks() / 1000.0;
-
 }
