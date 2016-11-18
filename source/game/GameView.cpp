@@ -1,9 +1,10 @@
 #include "GameView.h"
 
 
-GameView::GameView(GameModel *gameModel, AssetManager* assetManager) :
+GameView::GameView(GameModel *gameModel, AssetManager* assetManager, GameWindow* gameWindow) :
   mGameModel(gameModel),
   mAssetManager(assetManager),
+  mGameWindow(gameWindow),
   mPlayerView(NULL),
   mCharacterSheetView(NULL),
   mAiView(NULL),
@@ -49,6 +50,9 @@ void GameView::initializeForLocation() {
   SDL_ShowCursor(0);
 
   setupOpenGl();
+
+  mGameWindow->swapBuffers();
+
 }
 
 void GameView::update(double lastUpdateTime) {

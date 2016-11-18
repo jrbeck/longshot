@@ -59,7 +59,7 @@ void game_c::setup(bool createNewWorld) {
   mAssetManager->mSoundSystem.loadSounds();
   // mAssetManager->mSoundSystem.playSoundByHandle(SOUND_AMBIENT, 64);
 
-  mGameView = new GameView(mGameModel, mAssetManager);
+  mGameView = new GameView(mGameModel, mAssetManager, mGameWindow);
 
   if (createNewWorld) {
     printf("game_c::enterGameMode(): new game\n");
@@ -278,14 +278,12 @@ void game_c::update() {
 
 void game_c::XXXpostLoactionInitializeSetup() {
   // TODO: move this into GameView?
-  mGameWindow->swapBuffers();
 
   // FIXME: this is stupid
   if (mPlayerController != NULL) {
     delete mPlayerController;
   }
-
-  mPlayerController = new PlayerController(mGameModel, mGameView->mPlayerView);
+  mPlayerController = new PlayerController(mGameModel);
 
   // HACK - need better timekeeping
   mLastUpdateTime = (double)SDL_GetTicks() / 1000.0;

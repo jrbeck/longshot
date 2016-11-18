@@ -1,9 +1,8 @@
 #include "../player/Player.h"
-#include "../player/PlayerView.h"
 
 class PlayerController {
 public:
-  PlayerController(GameModel* gameModel, PlayerView* playerView);
+  PlayerController(GameModel* gameModel);
   ~PlayerController();
 
   void update(GameInput* gameInput);
@@ -18,6 +17,5 @@ private:
   GameInput* mGameInput;
   GameModel* mGameModel;
   Player* mPlayer;
-  PlayerView* mPlayerView;
   MovementInput mMovementInput;
 };

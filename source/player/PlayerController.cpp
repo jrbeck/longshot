@@ -1,8 +1,7 @@
 #include "PlayerController.h"
 
-PlayerController::PlayerController(GameModel* gameModel, PlayerView* playerView) :
-  mGameModel(gameModel),
-  mPlayerView(playerView)
+PlayerController::PlayerController(GameModel* gameModel) :
+  mGameModel(gameModel)
 {
   mPlayer = mGameModel->mPlayer;
 }

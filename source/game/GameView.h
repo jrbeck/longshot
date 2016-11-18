@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../game/Constants.h"
+#include "../game/GameWindow.h"
 #include "../player/PlayerView.h"
 #include "../player/CharacterSheetView.h"
 #include "../world/WorldMapView.h"
@@ -11,7 +12,7 @@
 
 class GameView {
 public:
-  GameView::GameView(GameModel *gameModel, AssetManager* assetManager);
+  GameView::GameView(GameModel *gameModel, AssetManager* assetManager, GameWindow* gameWindow);
   GameView::~GameView();
 
   void initializeForLocation();
@@ -35,6 +36,7 @@ private:
 
   GameModel* mGameModel;
   AssetManager* mAssetManager;
+  GameWindow* mGameWindow;
 
   GameMenu* mMenu;
 
