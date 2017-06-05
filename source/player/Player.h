@@ -41,14 +41,7 @@ enum {
 class ItemManager;
 struct item_t;
 class Inventory;
-
-struct MovementInput {
-  v2d_t walkInput;
-  double facingDelta;
-  double inclinationDelta;
-  bool isJumping;
-  bool isSwimming;
-};
+struct PhysicsEntity;
 
 class Player {
 public:
@@ -60,9 +53,12 @@ public:
   void HACK_resurrect();
   void setStartPosition(v3d_t& startPosition);
 
+  PhysicsEntity* getPhysicsEntity();
+
   void godMode();
   bool isDead();
 
+  void update(AssetManager* assetManager);
   void updateOrientation(double facingDelta, double inclinationDelta);
   void updateCameraTarget();
   void constrainViewAngles();
@@ -73,14 +69,14 @@ public:
   v3d_t getLookTarget() const;
 
   v3d_t get_pos() const;
-  int set_pos(v3d_t a);
   v3d_t getHeadPosition() const;
+  void updateHeadPositionBlockInfo();
   int getHeadPostionBlockType() const;
   double getCurrentHealth() const;
 
   bool pickUpItem(item_t item, AssetManager* assetManager);
 
-  void useEquipped(int whichEquip);
+  void useEquipped(int whichEquip, const v2d_t* walkInput);
   double fireGun(item_t item, double handedness);
   double useMeleeWeapon(item_t item);
 
@@ -88,12 +84,10 @@ public:
 
   void useBackpackItem();
 
-  v2d_t computeWalkVector(v2d_t walkInput);
+  v2d_t computeWalkVector(v2d_t walkInput) const;
 
   void updateTargetBlock();
   v3di_t* getTargetBlock(int& targetBlockFace);
-
-  void applyMovementInput(MovementInput* movementInput, AssetManager* assetManager);
 
   void readMessages(AssetManager* assetManager);
 
@@ -103,8 +97,8 @@ public:
 
 private:
   GameModel* mGameModel;
+  PhysicsEntity* mPhysicsEntity;
 
-  v3d_t mPos;
   v3d_t mHeadOffset;
   v3d_t mFinalHeadOffset;
   HeadBobble mHeadBobble;
@@ -135,8 +129,6 @@ private:
 
   melee_weapon_state_t mMeleeStatePrimary;
   melee_weapon_state_t mMeleeStateSecondary;
-
-  v2d_t mWalkInput;
 
   bool mInWater;
   bool mHeadInWater;

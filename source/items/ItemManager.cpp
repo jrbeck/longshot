@@ -496,7 +496,7 @@ size_t ItemManager::spawnPhysicsEntityGun(double value, v3d_t position) {
 }
 
 // returns whether or not the item was destroyed
-bool ItemManager::useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle) {
+bool ItemManager::useItem(size_t itemHandle, size_t physicsHandle) {
   item_t item = getItem(itemHandle);
 
   if (item.type == ITEMTYPE_UNDEFINED) {
@@ -516,10 +516,6 @@ bool ItemManager::useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHan
 
       destroyItem(itemHandle);
       return true;
-
-    case ITEMTYPE_ROCKET_PACK:
-      useRocketPack(walkVector, itemHandle, physicsHandle);
-      return false;
 
     default:
       break;

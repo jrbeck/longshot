@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <SDL2/SDL_opengl.h>
+
 #include "../game/Constants.h"
 #include "../assets/TextureRegion.h"
 

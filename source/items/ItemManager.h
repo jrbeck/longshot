@@ -1,13 +1,3 @@
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-// * ItemManager
-// *
-// * this manages the items in the game. it is an awkward interface between the users
-// * and the used items and the physics engine, etc...
-// *
-// *
-// *
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
 #pragma once
 
 #include <vector>
@@ -133,7 +123,7 @@ public:
 
   size_t spawnPhysicsEntityGun(double value, v3d_t position);
 
-  bool useItem(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
+  bool useItem(size_t itemHandle, size_t physicsHandle);
   void useRocketPack(v2d_t walkVector, size_t itemHandle, size_t physicsHandle);
 
   double useGun(size_t itemHandle, const shot_info_t& shotInfo, size_t* ammoCounter);

@@ -12,7 +12,7 @@ BitmapModel::BitmapModel(TextureRegion* region) {
   glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &textureWidth);
   glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &textureHeight);
 
-  Pixel32 *pixelData = new Pixel32[textureWidth * textureHeight];
+  Pixel32* pixelData = new Pixel32[textureWidth * textureHeight];
 
   glGetTexImage(
     GL_TEXTURE_2D,

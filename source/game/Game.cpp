@@ -107,7 +107,6 @@ void game_c::gameLoop() {
 
   while (quit == 0) {
     updateControllers();
-    mGameModel->mPlayer->applyMovementInput(mPlayerController->getMovementInput(), mAssetManager);
 
     // FIXME: this masks the doing of interface stuff in the PlayerController
     escapePressed = mGameInput->isEscapePressed();
@@ -268,6 +267,7 @@ void game_c::update() {
 
   while (mLastUpdateTime < ticks) {
     mNumPhysicsObjects = mGameModel->mPhysics->update(mLastUpdateTime, mAssetManager);
+    mGameModel->mPlayer->update(mAssetManager);
     mNumAiObjects = mGameModel->mAiManager->update();
     mNumItems = mGameModel->mItemManager->update();
 
