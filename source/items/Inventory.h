@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdio>
 #include <vector>
 
 #include "../items/ItemContainer.h"

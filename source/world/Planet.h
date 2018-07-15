@@ -11,7 +11,7 @@
 #pragma once
 
 #include <cmath>
-#include <sdl2/SDL_opengl.h>
+#include <SDL2/SDL_opengl.h>
 
 #include "../math/v2d.h"
 

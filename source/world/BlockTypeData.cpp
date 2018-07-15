@@ -1,4 +1,4 @@
-#include "blocktypedata.h"
+#include "BlockTypeData.h"
 
 // this is the instantiation
 // FIXME: this can't be kosher

@@ -12,7 +12,7 @@
 
 #include <vector>
 
-#include <sdl2/SDL_opengl.h>
+#include <SDL2/SDL_opengl.h>
 
 #include "../world/Galaxy.h"
 #include "../assets/AssetManager.h"

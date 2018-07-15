@@ -12,8 +12,8 @@
 
 class GameView {
 public:
-  GameView::GameView(GameModel *gameModel, AssetManager* assetManager, GameWindow* gameWindow);
-  GameView::~GameView();
+  GameView(GameModel *gameModel, AssetManager* assetManager, GameWindow* gameWindow);
+  ~GameView();
 
   void initializeForLocation();
   void update(double lastUpdateTime);

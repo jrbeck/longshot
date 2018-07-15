@@ -12,7 +12,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <sdl2/SDL_opengl.h>
+#include <SDL2/SDL_opengl.h>
 
 #include "../math/MathUtil.h"
 #include "../world/Planet.h"

@@ -5,7 +5,7 @@
 #include "../world/WorldMap.h"
 #include "../math/BoundingBox.h"
 #include "../assets/AssetManager.h"
-#include "../physics/Inactivelist.h"
+#include "../physics/InactiveList.h"
 
 //#define PHYSICS_TIME_GRANULARITY (0.03333333)  // 30 Hz
 //#define PHYSICS_TIME_GRANULARITY (0.01666667)  // 60 Hz

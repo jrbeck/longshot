@@ -21,7 +21,7 @@
 
 #include "../math/v2d.h"
 #include "../math/v3d.h"
-#include "../assets/xmlparser.h"
+#include "../assets/XmlParser.h"
 
 enum {
   TAG_DEPTH,

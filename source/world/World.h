@@ -13,7 +13,7 @@
 #pragma once
 
 // #include <omp.h>
-#include <sdl2/SDL_opengl.h>
+#include <SDL2/SDL_opengl.h>
 
 #include "../world/Location.h"
 #include "../math/v3d.h"
