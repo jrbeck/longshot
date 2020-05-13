@@ -25,7 +25,7 @@ echo "$(tput setaf 7)$(tput setab 4)building $(tput setaf 0)####################
 # g++ source/*.cpp source/dungeon/*.cpp source/feature/*.cpp -Wall -I source -I source/include -I /opt/X11/include -I /users/jbeck/src/include -l SDL2 -framework SDL2_mixer -framework SDL2_image -framework SDL2_ttf -framework OpenGL -o Release/longshot
 
 # fedora 28
-g++ -w -Isource -Isource/include -I /users/jbeck/workspace/include -lSDL2 -lGLEW -lGL \
+g++ -w -Isource -Isource/include -lSDL2 -lSDL2_image -lSDL2_mixer -lGLEW -lGL -lGLU \
   source/main.cpp \
   source/ai/*.cpp \
   source/assets/*.cpp \

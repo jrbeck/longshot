@@ -56,7 +56,7 @@ private:
   void update();
   int draw();
 
-  void XXXpostLoactionInitializeSetup();
+  void XXXpostLocationInitializeSetup();
 
   GameModel* mGameModel;
   GameInput* mGameInput;

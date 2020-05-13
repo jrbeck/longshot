@@ -13,6 +13,8 @@
 *.la
 *.a
 
+/build
+
 /Debug
 /Release
 

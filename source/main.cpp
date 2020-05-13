@@ -6,8 +6,6 @@
 
 #include "game/Longshot.h"
 
-int main(int argc, char* argv[]);
-
 // program entry point
 int main(int argc, char* argv[]) {
   Longshot* longshot;

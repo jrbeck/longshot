@@ -69,14 +69,14 @@ void game_c::setup(bool createNewWorld) {
     mGameModel->initializeStarShip(true);
     mGameView->initializeForLocation();
 
-    XXXpostLoactionInitializeSetup();
+    XXXpostLocationInitializeSetup();
   }
   else {
     printf("game_c::enterGameMode(): loading game\n");
     mGameModel->load(mGameWindow);
     mGameView->initializeForLocation();
 
-    XXXpostLoactionInitializeSetup();
+    XXXpostLocationInitializeSetup();
   }
 }
 
@@ -107,9 +107,9 @@ void game_c::gameLoop() {
 
   while (quit == 0) {
     updateControllers();
-
     // FIXME: this masks the doing of interface stuff in the PlayerController
     escapePressed = mGameInput->isEscapePressed();
+
     mGameModel->mAiManager->setPlayerFacingAndIncline(mGameModel->mPlayer->getFacingAndIncline());
 
     update();
@@ -150,6 +150,8 @@ void game_c::gameLoop() {
     // FIXME: this should be done in update()
     // being done here ties it to the framerate
     mGameModel->mLocation->update(mGameModel->mPhysics->getCenter(mGameModel->mPhysics->getPlayerHandle()));
+
+    // v3d_print("pPos", mGameModel->mPhysics->getCenter(mGameModel->mPhysics->getPlayerHandle()));
 
     // HACK * * * * * * *
     mGameModel->mPlayer->placeLight(mGameInput);
@@ -198,7 +200,7 @@ int game_c::handleMenuChoice(int menuChoice) {
       mGameModel->saveLocation();
       mGameModel->initializeStarShip(false);
       mGameView->initializeForLocation();
-      XXXpostLoactionInitializeSetup();
+      XXXpostLocationInitializeSetup();
     }
     break;
 
@@ -225,7 +227,7 @@ int game_c::handleMenuChoice(int menuChoice) {
       mGameModel->saveLocation();
       mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
       mGameView->initializeForLocation();
-      XXXpostLoactionInitializeSetup();
+      XXXpostLocationInitializeSetup();
     }
     delete planetMap;
     break;
@@ -276,7 +278,7 @@ void game_c::update() {
 }
 
 
-void game_c::XXXpostLoactionInitializeSetup() {
+void game_c::XXXpostLocationInitializeSetup() {
   // TODO: move this into GameView?
 
   // FIXME: this is stupid

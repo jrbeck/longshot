@@ -23,6 +23,7 @@ PlayerView::~PlayerView() {
 }
 
 void PlayerView::update() {
+  mGameModel->mPlayer->updateCameraTarget();
   updateVisionTint();
 }
 

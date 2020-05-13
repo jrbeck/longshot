@@ -32,8 +32,6 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
   mInclineMin = DEG2RAD(DEFAULT_INCLINE_MIN);
   mInclineMax = DEG2RAD(DEFAULT_INCLINE_MAX);
 
-  updateCameraTarget();
-
   mLastUpdateTime = 0.0;
   mNextShotTimePrimary = 0.0;
   mNextShotTimeSecondary = 0.0;
@@ -237,7 +235,6 @@ void Player::updateOrientation(double facingDelta, double inclinationDelta) {
   mFacing += facingDelta;
   mIncline += inclinationDelta;
   constrainViewAngles();
-  updateCameraTarget();
   updateTargetBlock();
 }
 

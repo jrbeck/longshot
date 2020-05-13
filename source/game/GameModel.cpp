@@ -299,7 +299,8 @@ void GameModel::resetForNewLocation(v3d_t playerStartPosition, bool resetPlayer)
     mAiManager->setMaxCritters(0);
   }
   else {
-    mAiManager->setMaxCritters(20);
+    // mAiManager->setMaxCritters(20);
+    mAiManager->setMaxCritters(0);
   }
 
   // TODO: handle the ItemManager:

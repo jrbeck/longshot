@@ -8,7 +8,7 @@ HeadBobble::HeadBobble() {
 
 
 
-void HeadBobble::reset(void) {
+void HeadBobble::reset() {
   mLastTime = 0.0;
   mAnimationTime = 0.0;
   mOffset = v3d_v(0.0, 0.0, 0.0);
@@ -73,8 +73,6 @@ void HeadBobble::update(int action, double time) {
 
 
 
-v3d_t HeadBobble::getOffset(void) const {
+v3d_t HeadBobble::getOffset() const {
   return mOffset;
 }
-
-
