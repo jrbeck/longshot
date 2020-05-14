@@ -52,7 +52,6 @@ private:
 
   void gameLoop();
   int handleMenuChoice(int menuChoice);
-  void updateControllers();
   void update();
   int draw();
 

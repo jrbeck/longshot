@@ -232,6 +232,10 @@ v3d_t Player::getLookTarget() const {
   return mLookTarget;
 }
 
+v3d_t Player::getLookVector() const {
+  return mLookVector;
+}
+
 void Player::updateOrientation(double facingDelta, double inclinationDelta) {
   mFacing += facingDelta;
   mIncline += inclinationDelta;

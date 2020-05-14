@@ -67,6 +67,7 @@ public:
   bool isHeadInWater();
 
   v3d_t getLookTarget() const;
+  v3d_t getLookVector() const;
 
   v3d_t get_pos() const;
   v3d_t getHeadPosition() const;

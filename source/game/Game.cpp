@@ -111,7 +111,6 @@ void game_c::gameLoop() {
   bool escapePressed;
 
   while (quit == 0) {
-    updateControllers();
     // FIXME: this masks the doing of interface stuff in the PlayerController
     escapePressed = mGameInput->isEscapePressed();
 
@@ -275,14 +274,12 @@ int game_c::handleMenuChoice(int menuChoice) {
   return 0;
 }
 
-void game_c::updateControllers() {
-  mPlayerController->update(mGameInput);
-}
-
 void game_c::update() {
   double ticks = (double)SDL_GetTicks() / 1000.0;
 
   while (mLastUpdateTime < ticks) {
+    mPlayerController->update(mGameInput);
+
     mNumPhysicsObjects = mGameModel->mPhysics->update(mLastUpdateTime, mAssetManager);
     mGameModel->mPlayer->update(mAssetManager);
     mNumAiObjects = mGameModel->mAiManager->update();

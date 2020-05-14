@@ -53,12 +53,12 @@ void PlayerController::update(GameInput* gameInput) {
     mPlayer->godMode();
   }
 
-  // if (mGameInput->isTogglePhysics()) {
-  //   mGameModel->mPhysics->togglePause();
-  // }
-  // if (mGameInput->isAdvanceOneFrame()) {
-  //   mGameModel->mPhysics->advanceOneFrame();
-  // }
+  if (mGameInput->isTogglePhysics()) {
+    mGameModel->mPhysics->togglePause();
+  }
+  if (mGameInput->isAdvanceOneFrame()) {
+    mGameModel->mPhysics->advanceOneFrame();
+  }
 
   updateMovementInput();
   applyMovementInput();
@@ -193,51 +193,51 @@ void PlayerController::applyMovementInputDry(PhysicsEntity* physicsEntity) {
 }
 
 void PlayerController::applyMovementInputWet(PhysicsEntity* physicsEntity) {
-  // double lastUpdateTime = mGameModel->mPhysics->getLastUpdateTime();
-  // v3d_t swimForce = v3d_zero();
+  double lastUpdateTime = mGameModel->mPhysics->getLastUpdateTime();
+  v3d_t swimForce = v3d_zero();
 
-  // if (physicsEntity->on_ground && mMovementInput.isJumping) {
-  //   mGameModel->mPhysics->add_force(physicsEntity->handle, v3d_v(0.0, 4000.0, 0.0));
-  // }
+  if (physicsEntity->on_ground && mMovementInput.isJumping) {
+    mGameModel->mPhysics->add_force(physicsEntity->handle, v3d_v(0.0, 4000.0, 0.0));
+  }
 
-  // if (v2d_mag(mMovementInput.walkInput) > EPSILON) {
-  //   v2d_t walkVector = mPlayer->computeWalkVector(mMovementInput.walkInput);
-  //   v3d_t force = v3d_zero();
+  if (v2d_mag(mMovementInput.walkInput) > EPSILON) {
+    v2d_t walkVector = mPlayer->computeWalkVector(mMovementInput.walkInput);
+    v3d_t force = v3d_zero();
 
-  //   if (mMovementInput.walkInput.y > 0.0) { // w is pressed
-  //     double mag = 2500.0 * (sin(lastUpdateTime * 10.0) + 1.5);
-  //     force = v3d_scale(mag, v3d_normalize(mLookVector));
+    if (mMovementInput.walkInput.y > 0.0) { // w is pressed
+      double mag = 2500.0 * (sin(lastUpdateTime * 10.0) + 1.5);
+      force = v3d_scale(mag, v3d_normalize(mPlayer->getLookVector()));
 
-  //     if (mHeadInWater) {
-  //       force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
-  //     }
-  //   }
-  //   else if (mMovementInput.walkInput.y < 0.0) { // s is pressed
-  //     double mag = -2500.0 * (sin(lastUpdateTime * 6.0) + 1.5);
-  //     force = v3d_scale(mag, v3d_normalize(mLookVector));
+      if (mPlayer->isHeadInWater()) {
+        force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
+      }
+    }
+    else if (mMovementInput.walkInput.y < 0.0) { // s is pressed
+      double mag = -2500.0 * (sin(lastUpdateTime * 6.0) + 1.5);
+      force = v3d_scale(mag, v3d_normalize(mPlayer->getLookVector()));
 
-  //     if (mHeadInWater) {
-  //       force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
-  //     }
-  //   }
-  //   if (mMovementInput.walkInput.x != 0.0) {
-  //     double mag = 2500.0 * (sin (lastUpdateTime * 6.0) + 1.5);
-  //     force.x += mag * walkVector.x;
-  //     force.z += mag * walkVector.y;
+      if (mPlayer->isHeadInWater()) {
+        force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
+      }
+    }
+    if (mMovementInput.walkInput.x != 0.0) {
+      double mag = 2500.0 * (sin (lastUpdateTime * 6.0) + 1.5);
+      force.x += mag * walkVector.x;
+      force.z += mag * walkVector.y;
 
-  //     if (mHeadInWater) {
-  //       force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
-  //     }
-  //   }
+      if (mPlayer->isHeadInWater()) {
+        force = v3d_add(force, v3d_v(0.0, 600.0, 0.0));
+      }
+    }
 
-  //   swimForce = v3d_add(swimForce, force);
-  // }
-  // if (mMovementInput.isSwimming) {
-  //   // 'up' force
-  //   double mag = 1500.0 * (sin(lastUpdateTime * 10.0) + 1.5);
-  //   mGameModel->mPhysics->add_force(physicsEntity->handle, v3d_v(0.0, mag, 0.0));
-  // }
+    swimForce = v3d_add(swimForce, force);
+  }
+  if (mMovementInput.isSwimming) {
+    // 'up' force
+    double mag = 1500.0 * (sin(lastUpdateTime * 10.0) + 1.5);
+    mGameModel->mPhysics->add_force(physicsEntity->handle, v3d_v(0.0, mag, 0.0));
+  }
 
-  // swimForce = v3d_scale(1900.0, v3d_normalize(swimForce));
-  // mGameModel->mPhysics->add_force(physicsEntity->handle, swimForce);
+  swimForce = v3d_scale(1900.0, v3d_normalize(swimForce));
+  mGameModel->mPhysics->add_force(physicsEntity->handle, swimForce);
 }
