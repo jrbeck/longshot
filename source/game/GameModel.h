@@ -69,4 +69,6 @@ public:
   AiManager* mAiManager;
   ItemManager* mItemManager;
   MessageBus* mMessageBus;
+
+  bool isDisplayingCharacterSheet;
 };

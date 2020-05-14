@@ -66,16 +66,16 @@ public:
 
   void set_far(double new_far);
 
-  v2d_t getNearAndFar(void);
+  v2d_t getNearAndFar() const;
   void setNearAndFar(v2d_t nearAndFar);
 
-  v3d_t getPosition(void);
+  v3d_t getPosition() const;
 
-  void perspective(void);
+  void perspective();
   void look_at(v3d_t position, v3d_t target, v3d_t upVector);
-  void updateGlVariables(void);
+  void updateGlVariables();
 
-  void set_planes(void);
+  void set_planes();
 
   int point_visible(v3d_t p);
   int point_visible(v3di_t p);

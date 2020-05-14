@@ -3,13 +3,8 @@
 PlayerView::PlayerView(GameModel* gameModel, AssetManager* assetManager) :
   mGameModel(gameModel),
   mAssetManager(assetManager),
-  mUpVector(v3d_v(0, 1, 0))
+  mHudView(new HudView(gameModel))
 {
-  mHudView = new HudView(gameModel);
-
-  mCamera.resize_screen(gScreenW, gScreenH);
-  mCamera.set_fov_near_far(45.0, 0.15, 500.0);
-  setDrawDistance(500.0);
   mVisionTint[0] = 0.0;
   mVisionTint[1] = 0.0;
   mVisionTint[2] = 0.0;
@@ -17,9 +12,7 @@ PlayerView::PlayerView(GameModel* gameModel, AssetManager* assetManager) :
 }
 
 PlayerView::~PlayerView() {
-  if (mHudView != NULL) {
-    delete mHudView;
-  }
+  delete mHudView;
 }
 
 void PlayerView::update() {
@@ -238,18 +231,4 @@ void PlayerView::drawWaterOverlay() {
   glEnable(GL_TEXTURE_2D);
 
   glPopMatrix();
-}
-
-void PlayerView::setDrawDistance(double distance) {
-  mCamera.set_far(distance);
-}
-
-void PlayerView::adjustDrawDistance(double amount) {
-  mCamera.adjust_far(amount);
-}
-
-GlCamera PlayerView::glCamSetup() {
-  mCamera.perspective();
-  mCamera.look_at(mGameModel->mPlayer->getHeadPosition(), mGameModel->mPlayer->getLookTarget(), mUpVector);
-  return mCamera;
 }

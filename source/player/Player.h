@@ -95,6 +95,9 @@ public:
   void placeLight(GameInput* gameInput);
   Inventory* getInventory();
 
+  void toggleCharacterSheet();
+  bool isDisplayingCharacterSheet();
+
 private:
   GameModel* mGameModel;
   PhysicsEntity* mPhysicsEntity;
@@ -140,4 +143,5 @@ private:
   double mInclineMax; // lower constraint for incline angle
 
   bool mPlacedBlock;
+  bool mIsDisplayingCharacterSheet;
 };

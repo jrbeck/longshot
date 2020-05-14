@@ -9,13 +9,13 @@ public:
   CharacterSheetView(GameModel* gameModel);
   ~CharacterSheetView();
 
+  void handleInput(GameInput* gameInput);
+
   void draw();
 
 private:
   void update();
-  void handleInput(GameInput* gameInput);
 
   GameModel* mGameModel;
-
   GameMenu* mCharacterSheet;
 };

@@ -1228,8 +1228,7 @@ int Physics::clipDisplacementAgainstOtherObjects(size_t index) {
           numCollisions++;
         }
       }
-      else if (otherPhysicsEntity->type == OBJTYPE_GRENADE ||
-           otherPhysicsEntity->type == OBJTYPE_ROCKET) {
+      else if (otherPhysicsEntity->type == OBJTYPE_GRENADE || otherPhysicsEntity->type == OBJTYPE_ROCKET) {
         if (sweepObjects(index, other, t0, t1, axis)) {
           expireEntity(other);
 

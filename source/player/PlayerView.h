@@ -4,6 +4,7 @@
 #include "../assets/AssetManager.h"
 #include "../game/GameModel.h"
 #include "../player/HudView.h"
+#include "../player/CharacterSheetView.h"
 
 class PlayerView {
 public:
@@ -24,19 +25,12 @@ public:
   void updateVisionTint();
   void drawWaterOverlay();
 
-  void setDrawDistance(double distance);
-  void adjustDrawDistance(double amount);
-
-  GlCamera glCamSetup();
-
 private:
   GameModel* mGameModel;
   AssetManager* mAssetManager;
 
   HudView* mHudView;
-  GlCamera mCamera;
 
   bool mHeadPostionBlockType;
   GLfloat mVisionTint[4];
-  v3d_t mUpVector;
 };

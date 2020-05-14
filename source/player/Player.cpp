@@ -60,6 +60,7 @@ int Player::reset(size_t physicsHandle, size_t aiHandle) {
   }
 
   mPlacedBlock = false;
+  mIsDisplayingCharacterSheet = false;
 
   return 0;
 }
@@ -547,4 +548,12 @@ void Player::placeLight(GameInput* gameInput) {
 
 Inventory* Player::getInventory() {
   return mInventory;
+}
+
+void Player::toggleCharacterSheet() {
+  mIsDisplayingCharacterSheet = !mIsDisplayingCharacterSheet;
+}
+
+bool Player::isDisplayingCharacterSheet() {
+  return mIsDisplayingCharacterSheet;
 }

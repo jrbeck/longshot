@@ -6,20 +6,20 @@ GameView::GameView(GameModel *gameModel, AssetManager* assetManager, GameWindow*
   mAssetManager(assetManager),
   mGameWindow(gameWindow),
   mPlayerView(NULL),
-  mCharacterSheetView(NULL),
   mAiView(NULL),
   mWorldMapView(NULL),
   mPhysicsView(NULL),
-  mMenu(NULL)
+  mMenu(NULL),
+  mUpVector(v3d_v(0, 1, 0))
 {
+  mCamera.resize_screen(gScreenW, gScreenH);
+  mCamera.set_fov_near_far(45.0, 0.15, 500.0);
+  setDrawDistance(500.0);
 }
 
 GameView::~GameView() {
   if (mPlayerView != NULL) {
     delete mPlayerView;
-  }
-  if (mCharacterSheetView != NULL) {
-    delete mCharacterSheetView;
   }
   if (mAiView != NULL) {
     delete mAiView;
@@ -55,22 +55,29 @@ void GameView::initializeForLocation() {
 
 }
 
-void GameView::update(double lastUpdateTime) {
+void GameView::update(double lastUpdateTime, GameInput* gameInput) {
+  if (gameInput->isDecreasingDrawDistance()) {
+    adjustDrawDistance(-20);
+  }
+  if (gameInput->isIncreasingDrawDistance()) {
+    adjustDrawDistance(20);
+  }
+
   mWorldMapView->update(*mGameModel->mLocation->getLightManager());
   mPhysicsView->update(mGameModel->mPhysics->getEntityVector(), lastUpdateTime);
   mPlayerView->update();
 }
 
-void GameView::draw(int gameState, MerchantView* merchantView) {
+void GameView::draw(int gameState, CharacterSheetView* characterSheetView, MerchantView* merchantView) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  GlCamera camera = mPlayerView->glCamSetup();
+  glCamSetup();
 
-  mPhysicsView->setViewPosition(camera.getPosition());
+  mPhysicsView->setViewPosition(mCamera.getPosition());
 
-  mGameModel->mLocation->drawEnvironment(camera);
+  mGameModel->mLocation->drawEnvironment(mCamera);
 
-  mWorldMapView->drawSolidBlocks(camera);
+  mWorldMapView->drawSolidBlocks(mCamera);
   mPhysicsView->drawSolidEntities(mGameModel->mPhysics->getEntityVector(), *mGameModel->mLocation->getWorldMap(), mAssetManager);
   mPlayerView->drawPlayerTargetBlock();
   mPlayerView->drawEquipped();
@@ -79,10 +86,13 @@ void GameView::draw(int gameState, MerchantView* merchantView) {
   // draw the transparent physics objs
   bool playerHeadInWater = mGameModel->mPlayer->isHeadInWater();
   mPhysicsView->drawTransparentEntities(mGameModel->mPhysics->getEntityVector(), mAssetManager, !playerHeadInWater);
-  mWorldMapView->drawLiquidBlocks(camera);
+  mWorldMapView->drawLiquidBlocks(mCamera);
   mPhysicsView->drawTransparentEntities(mGameModel->mPhysics->getEntityVector(), mAssetManager, playerHeadInWater);
 
   mPlayerView->drawHud();
+  if (mGameModel->mPlayer->isDisplayingCharacterSheet()) {
+    characterSheetView->draw();
+  }
 
   if (gameState == GAMESTATE_MENU) {
     mMenu->draw();
@@ -207,4 +217,18 @@ void GameView::initializeWorldViews() {
     delete mAiView;
   }
   mAiView = new AiView();
+}
+
+void GameView::setDrawDistance(double distance) {
+  mCamera.set_far(distance);
+}
+
+void GameView::adjustDrawDistance(double amount) {
+  mCamera.adjust_far(amount);
+}
+
+GlCamera GameView::glCamSetup() {
+  mCamera.perspective();
+  mCamera.look_at(mGameModel->mPlayer->getHeadPosition(), mGameModel->mPlayer->getLookTarget(), mUpVector);
+  return mCamera;
 }

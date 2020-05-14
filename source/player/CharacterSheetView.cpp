@@ -2,15 +2,11 @@
 
 CharacterSheetView::CharacterSheetView(GameModel* gameModel) :
   mGameModel(gameModel),
-  mCharacterSheet(NULL)
-{
-  mCharacterSheet = new GameMenu;
-}
+  mCharacterSheet(new GameMenu)
+{}
 
 CharacterSheetView::~CharacterSheetView() {
-  if (mCharacterSheet != NULL) {
-    delete mCharacterSheet;
-  }
+  delete mCharacterSheet;
 }
 
 void CharacterSheetView::draw() {

@@ -13,29 +13,17 @@ void PlayerController::update(GameInput* gameInput) {
 
   // does the player want to mess with the draw distance?
   // FIXME: this sheeit is temporarily borkened
-  // if (mGameInput->isDecreasingDrawDistance()) {
-  //   adjust_draw_distance(-20);
-  // }
-  // if (mGameInput->isIncreasingDrawDistance()) {
-  //   adjust_draw_distance(20);
-  // }
 
-  // if (mGameInput->isToggleCharacterSheet()) {
-  //   mPlayerView->mShowCharacterSheet = !mPlayerView->mShowCharacterSheet;
-  // }
-  //
-  // if (mPlayerView->mShowCharacterSheet) {
-  //   if (mGameInput->isEscapePressed()) {
-  //     mPlayerView->mShowCharacterSheet = false;
-  //   }
-  // }
-  //
-  // if (mPlayerView->mShowCharacterSheet) {
-  //   handleInventoryInput();
-  // }
-  // else {
-  //   handleItemUsage();
-  // }
+  if (mGameInput->isToggleCharacterSheet()) {
+    mPlayer->toggleCharacterSheet();
+  }
+
+  if (mPlayer->isDisplayingCharacterSheet()) {
+    // handleInventoryInput();
+  }
+  else {
+    handleItemUsage();
+  }
 
   if (mPlayer->isDead()) {
     handleDeadPlayerInput();

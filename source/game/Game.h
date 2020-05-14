@@ -61,6 +61,7 @@ private:
   GameModel* mGameModel;
   GameInput* mGameInput;
   GameView* mGameView;
+  CharacterSheetView* mCharacterSheetView;
   MerchantView* mMerchantView;
 
   AssetManager* mAssetManager;

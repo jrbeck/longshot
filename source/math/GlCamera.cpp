@@ -26,11 +26,8 @@ void GlCamera::resize_screen(int w, int h) {
 void GlCamera::set_fov_near_far(double fov, double n, double f) {
   fovy = fov;
 
-//  near_d = constrain_num (n, near_min, near_max);
-//  far_d = constrain_num (f, far_min, far_max);
-
-  near_d = n;
-  far_d = f;
+  near_d = clamp(n, near_min, near_max);
+  far_d = clamp(f, far_min, far_max);
 
   tan_fovy = tan(DEG2RAD(fovy * 0.5));
 
@@ -59,14 +56,14 @@ void GlCamera::adjust_near(double amount) {
 }
 
 void GlCamera::adjust_far(double amount) {
-  set_fov_near_far (fovy, near_d, far_d + amount);
+  set_fov_near_far(fovy, near_d, far_d + amount);
 }
 
 void GlCamera::set_far(double new_far) {
-  set_fov_near_far (fovy, near_d, new_far);
+  set_fov_near_far(fovy, near_d, new_far);
 }
 
-v2d_t GlCamera::getNearAndFar() {
+v2d_t GlCamera::getNearAndFar() const {
   return v2d_v(near_d, far_d);
 }
 
@@ -75,7 +72,7 @@ void GlCamera::setNearAndFar(v2d_t nearAndFar) {
   updateGlVariables();
 }
 
-v3d_t GlCamera::getPosition() {
+v3d_t GlCamera::getPosition() const {
   return mPosition;
 }
 

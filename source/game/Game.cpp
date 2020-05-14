@@ -9,6 +9,7 @@ game_c::game_c(GameWindow* gameWindow) :
   mAssetManager(NULL),
   mGameModel(NULL),
   mGameView(NULL),
+  mCharacterSheetView(NULL),
   mMerchantView(NULL),
   mPlayerController(NULL),
   mGameWindow(gameWindow)
@@ -26,6 +27,9 @@ game_c::~game_c() {
   }
   if (mMerchantView != NULL) {
     delete mMerchantView;
+  }
+  if (mCharacterSheetView != NULL) {
+    delete mCharacterSheetView;
   }
   if (mPlayerController != NULL) {
     delete mPlayerController;
@@ -60,6 +64,7 @@ void game_c::setup(bool createNewWorld) {
   // mAssetManager->mSoundSystem.playSoundByHandle(SOUND_AMBIENT, 64);
 
   mGameView = new GameView(mGameModel, mAssetManager, mGameWindow);
+  mCharacterSheetView = new CharacterSheetView(mGameModel);
 
   if (createNewWorld) {
     printf("game_c::enterGameMode(): new game\n");
@@ -114,8 +119,8 @@ void game_c::gameLoop() {
 
     update();
 
-    mGameView->update(mLastUpdateTime);
-    mGameView->draw(mGameState, mMerchantView);
+    mGameView->update(mLastUpdateTime, mGameInput);
+    mGameView->draw(mGameState, mCharacterSheetView, mMerchantView);
 
     // should this be in GameView??
     mGameWindow->swapBuffers();
@@ -136,6 +141,15 @@ void game_c::gameLoop() {
         delete mMerchantView;
         mMerchantView = NULL;
         mGameState = GAMESTATE_MENU;
+      }
+    }
+
+    if (mGameModel->mPlayer->isDisplayingCharacterSheet()) {
+      if (mGameInput->isEscapePressed()) {
+        mGameModel->mPlayer->toggleCharacterSheet();
+      }
+      else {
+        mCharacterSheetView->handleInput(mGameInput);
       }
     }
 
@@ -225,7 +239,8 @@ int game_c::handleMenuChoice(int menuChoice) {
 
     if (planetMap->chooseLocation(*mGameModel->mCurrentPlanet, planetPos)) {
       mGameModel->saveLocation();
-      mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
+      // mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
+      mGameModel->initializePlanet(false, &planetPos, false, mGameWindow);
       mGameView->initializeForLocation();
       XXXpostLocationInitializeSetup();
     }

@@ -3,7 +3,6 @@
 #include "../game/Constants.h"
 #include "../game/GameWindow.h"
 #include "../player/PlayerView.h"
-#include "../player/CharacterSheetView.h"
 #include "../world/WorldMapView.h"
 #include "../ai/AiView.h"
 #include "../physics/PhysicsView.h"
@@ -16,8 +15,8 @@ public:
   ~GameView();
 
   void initializeForLocation();
-  void update(double lastUpdateTime);
-  void draw(int gameState, MerchantView* merchantView);
+  void update(double lastUpdateTime, GameInput* gameInput);
+  void draw(int gameState, CharacterSheetView* characterSheetView, MerchantView* merchantView);
 
   int getMenuChoice();
 
@@ -27,12 +26,17 @@ public:
   void loadPlanetMenu();
   void loadShipMenu();
 
-  // HACK - hide this ... PlayerController wants it for some reason
-  PlayerView* mPlayerView;
+  void setDrawDistance(double distance);
+  void adjustDrawDistance(double amount);
+
+  GlCamera glCamSetup();
+
 private:
   void setupOpenGl();
 
   void initializeWorldViews();
+
+  GlCamera mCamera;
 
   GameModel* mGameModel;
   AssetManager* mAssetManager;
@@ -40,11 +44,12 @@ private:
 
   GameMenu* mMenu;
 
-  CharacterSheetView* mCharacterSheetView;
+  PlayerView* mPlayerView;
   AiView* mAiView;
   WorldMapView* mWorldMapView;
   PhysicsView* mPhysicsView;
 
   // HACKS
   char mPlanetNameString[100];
+  v3d_t mUpVector;
 };
