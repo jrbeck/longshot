@@ -102,9 +102,9 @@ void MerchantView::draw() {
 }
 
 void MerchantView::setupMenu() {
-  if (mMenu != 0) {
+  if (mMenu != NULL) {
     delete mMenu;
-    mMenu = 0;
+    mMenu = NULL;
   }
   mMenu = new GameMenu();
 

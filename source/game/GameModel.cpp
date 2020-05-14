@@ -86,7 +86,7 @@ int GameModel::load(GameWindow* gameWindow) {
   // PLAYER * * * * * * *
   GameSaveData gameSaveData = loadGameData();
   if (!gameSaveData.loadSucceeded) {
-    printf("game_c::load(): UNSUCCESSFUL 1\n");
+    printf("GameModel::load(): UNSUCCESSFUL 1\n");
     return LOAD_UNSUCCESSFUL;
   }
 
@@ -99,7 +99,7 @@ int GameModel::load(GameWindow* gameWindow) {
     fclose(file);
   }
   else {
-    printf(" game_c::load(): UNSUCCESSFUL 2\n");
+    printf(" GameModel::load(): UNSUCCESSFUL 2\n");
     return LOAD_UNSUCCESSFUL;
   }
 
@@ -107,16 +107,16 @@ int GameModel::load(GameWindow* gameWindow) {
 
   switch (gameSaveData.locationType) {
   case LOCATION_SHIP:
-    printf("game_c::load(): loading ship\n");
+    printf("GameModel::load(): loading ship\n");
     initializeStarShip(true);
     break;
   case LOCATION_WORLD:
-    printf("game_c::load(): loading planet\n");
+    printf("GameModel::load(): loading planet\n");
     mCurrentPlanet = mGalaxy->getPlanetByHandle(gameSaveData.planetHandle);
     initializePlanet(true, &gameSaveData.physicsPos, false, gameWindow);
     break;
   default:
-    printf("game_c::load(): error, default location\n");
+    printf("GameModel::load(): error, default location\n");
     return LOAD_UNSUCCESSFUL;
   }
 
@@ -145,7 +145,7 @@ int GameModel::saveGameData(void) {
   gameSaveData.loadSucceeded = true;
 
   gameSaveData.physicsPos = mPhysics->getNearCorner(mPhysics->getPlayerHandle());
-  v3d_print("game_c::saveGameData(): saving playerPos, ", gameSaveData.physicsPos);
+  v3d_print("GameModel::saveGameData(): saving playerPos, ", gameSaveData.physicsPos);
 
   gameSaveData.locationType = mLocation->getType();
   gameSaveData.planetHandle = mCurrentPlanet->mHandle;
@@ -189,7 +189,7 @@ void GameModel::saveLocation() {
 }
 
 void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createFeatures, GameWindow* gameWindow) {
-  printf("game_c::initializePlanet()\n");
+  printf("GameModel::initializePlanet()\n");
   if (mLocation != 0) {
     delete mLocation;
   }
@@ -211,21 +211,21 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
   }
   else {
     // try to open the file for this planet
-    printf("game_c::initializePlanet(): loading planet\n");
+    printf("GameModel::initializePlanet(): loading planet\n");
     char fileName[48];
     sprintf(fileName, "save/planet%d.dat", mCurrentPlanet->mHandle);
-    printf("game_c::initializePlanet(): trying to load file: %s\n", fileName);
+    printf("GameModel::initializePlanet(): trying to load file: %s\n", fileName);
     file = fopen(fileName, "rb");
     mWorldSeed = mCurrentPlanet->mSeed;
   }
 
   if (startPos != NULL) {
-    v3d_print("game_c::initializePlanet(): setting startPos, ", *startPos);
+    v3d_print("GameModel::initializePlanet(): setting startPos, ", *startPos);
     static_cast<World*>(mLocation)->setStartPosition(*startPos);
     playerStartPosition = *startPos;
   }
 
-  printf("game_c::initializePlanet(): initializing location\n");
+  printf("GameModel::initializePlanet(): initializing location\n");
   mLocation->initialize(file, mGalaxy, mCurrentPlanet->mHandle);
   if (file != NULL) {
     fclose(file);
@@ -235,7 +235,7 @@ void GameModel::initializePlanet(bool resetPlayer, v3d_t* startPos, bool createF
     playerStartPosition = mLocation->getStartPosition();
   }
   else if (createFeatures) {
-    printf("game_c::initializePlanet(): creating features\n");
+    printf("GameModel::initializePlanet(): creating features\n");
     v3di_t worldIndex = WorldUtil::getRegionIndex(*startPos);
     FeatureGenerator::createSetPieces(worldIndex.x, worldIndex.z, *static_cast<World*>(mLocation), loadScreen);
   }

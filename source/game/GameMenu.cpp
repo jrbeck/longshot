@@ -126,47 +126,28 @@ size_t GameMenu::addText(
 }
 
 int GameMenu::gameMenuChoice(bool waitForInput) {
-  // release the mouse
   SDL_SetRelativeMouseMode(SDL_FALSE);
   SDL_ShowCursor(1);
 
   SDL_Event sdlevent;
-
-//  setupOpenGl ();
-
   int click = -1;
-  // only wait if we're told
-  if (waitForInput) {
-    SDL_WaitEvent(&sdlevent);
-  }
-  else {
-    if (!SDL_PollEvent(&sdlevent)) {
-      return -1;
+  bool done = false;
+
+  while (SDL_PollEvent(&sdlevent) && !done) {
+    switch (sdlevent.type) {
+      case SDL_QUIT:
+        click = MENU_APPLICATION_QUIT;
+        done = true;
+        break;
+
+      case SDL_MOUSEBUTTONUP:
+        if (sdlevent.button.button == SDL_BUTTON_LEFT) {
+          click = mouseUp((double)sdlevent.button.x / (double)gScreenW, (double)sdlevent.button.y / (double)gScreenH);
+          done = true;
+        }
+        break;
     }
   }
-
-  switch (sdlevent.type) {
-    case SDL_QUIT:
-      click = MENU_APPLICATION_QUIT;
-      break;
-
-    // handle the mousebuttondown event
-    case SDL_MOUSEBUTTONDOWN:
-//        handle_mouse_button_down (sdlevent.button.button, v2d_v (sdlevent.button.x, gScreenH - sdlevent.button.y));
-      break;
-
-    case SDL_MOUSEBUTTONUP:
-      if (sdlevent.button.button == SDL_BUTTON_LEFT) {
-//        click = mouseUp(sdlevent.button.x / (double)gScreenW, ((double)gScreenH - sdlevent.button.y) / (double)gScreenH);
-        click = mouseUp((double)sdlevent.button.x / (double)gScreenW, (double)sdlevent.button.y / (double)gScreenH);
-      }
-
-      break;
-
-    default:
-      break;
-  }
-
 
   if (click <= 0) {
     return click;
@@ -176,7 +157,6 @@ int GameMenu::gameMenuChoice(bool waitForInput) {
 }
 
 int GameMenu::mouseUp(double x, double y) {
-  // see if the dummy actually managed to hit something
   for (size_t i = 0; i < mMenuItems.size(); ++i) {
     if (mMenuItems[i].type == MENUITEM_BUTTON) {
       if (x >= mMenuItems[i].position[0] &&
@@ -189,12 +169,10 @@ int GameMenu::mouseUp(double x, double y) {
     }
   }
 
-  // better luck next time
   return -1;
 }
 
 void GameMenu::draw() {
-  // set up the opengl viewport
   glPushMatrix();
 
   glMatrixMode(GL_PROJECTION);

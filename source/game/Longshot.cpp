@@ -31,7 +31,7 @@ Longshot::Longshot() :
 }
 
 Longshot::~Longshot() {
-  printf("%6d: Longshot destructor\n", SDL_GetTicks());
+  printf("Longshot destructor - execution time: %.2fs\n", (double)SDL_GetTicks() / 1000.0);
   printf("---------------------------------------------------------\n");
 
   if (mMainMenu != NULL) {
@@ -54,10 +54,6 @@ Longshot::~Longshot() {
     delete mGameWindow;
     mGameWindow = NULL;
   }
-
-  printf("\n");
-  printf("---------------------------------------------------------\n");
-  printf("program execution time: %fs\n", (double)SDL_GetTicks() / 1000.0);
 }
 
 void Longshot::reloadMenu() {
@@ -116,10 +112,8 @@ int Longshot::loop() {
     mMainMenu->draw();
     mGameWindow->swapBuffers();
 
-    // figure out what the user wants to do
     mProgramMode = mMainMenu->gameMenuChoice(true);
 
-    // and do it
     switch (mProgramMode) {
       case PROGRAM_MODE_NEW_GAME:
         printf("menu choice: new game\n");

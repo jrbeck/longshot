@@ -52,7 +52,6 @@ void GameView::initializeForLocation() {
   setupOpenGl();
 
   mGameWindow->swapBuffers();
-
 }
 
 void GameView::update(double lastUpdateTime, GameInput* gameInput) {

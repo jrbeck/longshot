@@ -28,15 +28,18 @@ enum {
 // TODO: move this into it's own header/cpp files
 class Merchant {
 public:
+  Merchant() :
+    mInventory(8)
+  {};
 
-  ItemContainer* getInventory() { return mInventory; }
+  ItemContainer* getInventory() { return &mInventory; }
 
   // void save(FILE *file);
   // void load(FILE *file);
 
 private:
   size_t mCredits;
-  ItemContainer* mInventory;
+  ItemContainer mInventory;
 };
 
 

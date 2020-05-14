@@ -1,12 +1,11 @@
 #include "../world/WorldMapView.h"
 
 WorldMapView::WorldMapView(AssetManager* assetManager, GameModel* gameModel) :
-  mAssetManager(NULL),
+  mAssetManager(assetManager),
   mWorldMap(NULL),
   mColumnInfo(NULL),
   mDrawChunkBoxes(false)
 {
-  mAssetManager = assetManager;
   setGameModel(gameModel);
 }
 

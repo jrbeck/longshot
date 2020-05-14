@@ -10,7 +10,7 @@ PhysicsView::PhysicsView() {
 }
 
 PhysicsView::~PhysicsView() {
-  freeAssets ();
+  freeAssets();
 }
 
 void PhysicsView::loadAssets() {
@@ -38,7 +38,7 @@ void PhysicsView::freeAssets() {
 
   for (int i = 0; i < NUM_OBJSKINS; ++i) {
     if (mTextureHandles[i] > 0) {
-      glDeleteTextures (1, &mTextureHandles[i]);
+      glDeleteTextures(1, &mTextureHandles[i]);
       mTextureHandles[i] = 0;
     }
   }
