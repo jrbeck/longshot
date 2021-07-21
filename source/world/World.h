@@ -54,7 +54,7 @@ public:
 
   int loadColumn(int xIndex, int zIndex, bool doOutcroppings);
   int loadColumn(int xIndex, int zIndex, const int *heightMap);
-  int loadColumn(WorldColumn &wc, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings);
+  int loadColumn(WorldColumn &worldColumn, int xIndex, int zIndex, const int *heightMap, bool doOutCroppings);
 
   void applyOverdrawBlocks(WorldColumn &wc);
 

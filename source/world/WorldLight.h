@@ -15,27 +15,15 @@
 class IntColor {
 public:
 
-  void constrain( int minValue, int maxValue ) {
-    if (r > maxValue) {
-      r = maxValue;
-    }
-    else if (r < minValue) {
-      r = minValue;
-    }
+  void constrain(int minValue, int maxValue) {
+    if (r > maxValue) { r = maxValue; }
+    else if (r < minValue) { r = minValue; }
 
-    if (g > maxValue) {
-      g = maxValue;
-    }
-    else if (g < minValue) {
-      g = minValue;
-    }
+    if (g > maxValue) { g = maxValue; }
+    else if (g < minValue) { g = minValue; }
 
-    if (b > maxValue) {
-      b = maxValue;
-    }
-    else if (b < minValue) {
-      b = minValue;
-    }
+    if (b > maxValue) { b = maxValue; }
+    else if (b < minValue) { b = minValue; }
   }
 
   int r;
@@ -49,18 +37,18 @@ public:
   WorldLight();
   ~WorldLight();
 
-  void set( const v3d_t& position, double radius, const IntColor& color );
+  void set(const v3d_t& position, double radius, const IntColor& color);
   void initBuffer();
 
-  IntColor getLevel( const v3di_t& worldPosition ) const;
-  bool isInVolume( const v3di_t& worldPosition ) const;
+  const IntColor& getLevel(const v3di_t& worldPosition) const;
+  bool isInVolume(const v3di_t& worldPosition) const;
 
   // delete the buffer or create a new one
   void turnOff();
   void turnOn();
 
-  void save( FILE* file ) const;
-  void load( FILE* file );
+  void save(FILE* file) const;
+  void load(FILE* file);
 
 //private:
   size_t mHandle;

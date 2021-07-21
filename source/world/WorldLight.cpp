@@ -1,14 +1,12 @@
 #include "../world/WorldLight.h"
 
 WorldLight::WorldLight() :
-  mBuffer(NULL)
+  mBuffer(nullptr)
 {
 }
 
 WorldLight::~WorldLight() {
-  if (mBuffer != NULL) {
-    delete [] mBuffer;
-  }
+  delete [] mBuffer;
 }
 
 void WorldLight::set(const v3d_t& position, double radius, const IntColor& color) {
@@ -36,56 +34,56 @@ void WorldLight::set(const v3d_t& position, double radius, const IntColor& color
 }
 
 void WorldLight::initBuffer() {
-  if (mBuffer != NULL) {
+  if (mBuffer != nullptr) {
     delete [] mBuffer;
-    mBuffer = NULL;
+    mBuffer = nullptr;
   }
 
   mBuffer = new IntColor[mBufferDimensions.x * mBufferDimensions.y * mBufferDimensions.z];
-  if (mBuffer == NULL) {
+  if (mBuffer == nullptr) {
     printf("WorldLight::initBuffer(): error: out of memory\n");
     return;
   }
 
-  v3di_t bufPos;
-  v3d_t wp;  // the v3d version of the current block world position
+  v3di_t bufferPos;
+  v3d_t worldPos;  // the v3d version of the current block world position
 
-  int bufIndex = 0;
-  for (bufPos.z = 0; bufPos.z < mBufferDimensions.z; bufPos.z++) {
+  int bufferIndex = 0;
+  for (bufferPos.z = 0; bufferPos.z < mBufferDimensions.z; bufferPos.z++) {
     // the +0.5 puts it in the center of the block area
-    wp.z = (double)(mBufferNear.z + bufPos.z) + 0.5;
-    for (bufPos.y = 0; bufPos.y < mBufferDimensions.y; bufPos.y++) {
-      wp.y = (double)(mBufferNear.y + bufPos.y) + 0.5;
-      for (bufPos.x = 0; bufPos.x < mBufferDimensions.x; bufPos.x++) {
-        wp.x = (double)(mBufferNear.x + bufPos.x) + 0.5;
+    worldPos.z = (double)(mBufferNear.z + bufferPos.z) + 0.5;
+    for (bufferPos.y = 0; bufferPos.y < mBufferDimensions.y; bufferPos.y++) {
+      worldPos.y = (double)(mBufferNear.y + bufferPos.y) + 0.5;
+      for (bufferPos.x = 0; bufferPos.x < mBufferDimensions.x; bufferPos.x++) {
+        worldPos.x = (double)(mBufferNear.x + bufferPos.x) + 0.5;
 
-        v3d_t diff = v3d_sub(wp, mWorldPosition);
+        v3d_t diff = v3d_sub(worldPos, mWorldPosition);
         double sum = (diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z);
         double dist = sqrt(sum);
 
         if (dist <= mRadius) {
           double scalar = (1.0 - (dist / mRadius));
-          mBuffer[bufIndex].r = (int)floor((double)mColor.r * scalar);
-          mBuffer[bufIndex].g = (int)floor((double)mColor.g * scalar);
-          mBuffer[bufIndex].b = (int)floor((double)mColor.b * scalar);
+          mBuffer[bufferIndex].r = (int)floor((double)mColor.r * scalar);
+          mBuffer[bufferIndex].g = (int)floor((double)mColor.g * scalar);
+          mBuffer[bufferIndex].b = (int)floor((double)mColor.b * scalar);
         }
         else {
-          mBuffer[bufIndex].r = 0;
-          mBuffer[bufIndex].g = 0;
-          mBuffer[bufIndex].b = 0;
+          mBuffer[bufferIndex].r = 0;
+          mBuffer[bufferIndex].g = 0;
+          mBuffer[bufferIndex].b = 0;
         }
 
         // on to the next position
-        bufIndex++;
+        bufferIndex++;
       }
     }
   }
 }
 
-IntColor WorldLight::getLevel(const v3di_t& worldPosition) const {
+const IntColor& WorldLight::getLevel(const v3di_t& worldPosition) const {
   static IntColor noColor = { 0, 0, 0 };
   if (isInVolume(worldPosition) == false ||
-    mBuffer == NULL)
+    mBuffer == nullptr)
   {
     return noColor;
   }
@@ -113,10 +111,8 @@ bool WorldLight::isInVolume(const v3di_t& worldPosition) const {
 }
 
 void WorldLight::turnOff() {
-  if (mBuffer != NULL) {
-    delete [] mBuffer;
-    mBuffer = NULL;
-  }
+  delete [] mBuffer;
+  mBuffer = nullptr;
 }
 
 void WorldLight::turnOn() {

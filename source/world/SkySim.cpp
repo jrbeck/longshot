@@ -30,20 +30,20 @@ void SkySim::initialize(v3d_t playerStartPosition) {
 
   // set up stars
   for (size_t i = 0; i < NUM_STARS; ++i) {
-    mStars[i].x = r_num (-10.0, 10.0);
-    mStars[i].y = r_num (-10.0, 10.0);
-    mStars[i].z = r_num (-10.0, 10.0);
+    mStars[i].x = r_num(-10.0, 10.0);
+    mStars[i].y = r_num(-10.0, 10.0);
+    mStars[i].z = r_num(-10.0, 10.0);
 
     mStars[i] = v3d_scale (10000.0, v3d_normalize (mStars[i]));
   }
 
   // set up sun
-  mCurrentSunPosition.x = (mSunPosition.x * cos (0.0)) - (mSunPosition.y * sin (0.0));
-  mCurrentSunPosition.y = (mSunPosition.x * sin (0.0)) + (mSunPosition.y * cos (0.0));
+  mCurrentSunPosition.x = (mSunPosition.x * cos(0.0)) - (mSunPosition.y * sin(0.0));
+  mCurrentSunPosition.y = (mSunPosition.x * sin(0.0)) + (mSunPosition.y * cos(0.0));
   mCurrentSunPosition.z = mSunPosition.z;
 
-//  assetManager.setDirectionalLightPositions (mCurrentSunPosition,
-//    v3d_neg (mCurrentSunPosition));
+//  assetManager.setDirectionalLightPositions(mCurrentSunPosition,
+//    v3d_neg(mCurrentSunPosition));
 
   // now figure out the sky color and the world lighting
   setSkyColorAndWorldLighting ();
@@ -53,12 +53,12 @@ void SkySim::initialize(v3d_t playerStartPosition) {
     delete mCloudSim;
   }
   mCloudSim = new CloudSim();
-  mCloudSim->newClouds (playerStartPosition);
+  mCloudSim->newClouds(playerStartPosition);
 }
 
 
-void SkySim::setSkyColorAndWorldLighting(void) {
-  mStarAlpha = static_cast<GLfloat>(v3d_dot (v3d_normalize (mCurrentSunPosition), v3d_v (0.0, -1.0, 0.0)));
+void SkySim::setSkyColorAndWorldLighting() {
+  mStarAlpha = static_cast<GLfloat>(v3d_dot(v3d_normalize (mCurrentSunPosition), v3d_v (0.0, -1.0, 0.0)));
   mStarAlpha *= 1.5;
   if (mStarAlpha > 1.0) {
     mStarAlpha = 1.0;
@@ -91,11 +91,11 @@ void SkySim::setSkyColorAndWorldLighting(void) {
 
 void SkySim::update() {
   static Uint32 lastCloudTick = -1000;
-  Uint32 thisTick = SDL_GetTicks ();
+  Uint32 thisTick = SDL_GetTicks();
 
   // now for the cloud updates
   if (thisTick - lastCloudTick > 2000) {
-    mCloudSim->update (mStarAlpha);
+    mCloudSim->update(mStarAlpha);
     lastCloudTick = thisTick;
   }
 }
@@ -103,16 +103,16 @@ void SkySim::update() {
 
 
 void SkySim::draw(GlCamera &cam, v3d_t playerPosition) {
-  double secs = (static_cast<double>(SDL_GetTicks ()) / mTimeFactor) + mInitialTimeOfDay;
+  double secs = (static_cast<double>(SDL_GetTicks()) / mTimeFactor) + mInitialTimeOfDay;
 
 //  secs = 0.0;
 //  secs = 3.14;
 
-  mCurrentSunPosition.x = (mSunPosition.x * cos (secs)) - (mSunPosition.y * sin (secs));
-  mCurrentSunPosition.y = (mSunPosition.x * sin (secs)) + (mSunPosition.y * cos (secs));
+  mCurrentSunPosition.x = (mSunPosition.x * cos(secs)) - (mSunPosition.y * sin(secs));
+  mCurrentSunPosition.y = (mSunPosition.x * sin(secs)) + (mSunPosition.y * cos(secs));
   mCurrentSunPosition.z = mSunPosition.z;
 
-//  assetManager.setDirectionalLightPositions (mCurrentSunPosition, v3d_neg (mCurrentSunPosition));
+//  assetManager.setDirectionalLightPositions(mCurrentSunPosition, v3d_neg (mCurrentSunPosition));
 
   // 0.075, 0.35, 0.45 is a great color!
   setSkyColorAndWorldLighting ();
@@ -121,85 +121,82 @@ void SkySim::draw(GlCamera &cam, v3d_t playerPosition) {
   v2d_t oldNearAndFar = cam.getNearAndFar ();
 
   v2d_t sunClippingDistances = v2d_v (10.0, 100000.0);
-  cam.setNearAndFar (sunClippingDistances);
+  cam.setNearAndFar(sunClippingDistances);
 
-  glDisable (GL_DEPTH_TEST);
-  glDisable (GL_TEXTURE_2D);
-  glEnable (GL_COLOR_MATERIAL);
-  glDisable (GL_FOG);
-  glEnable (GL_BLEND);
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_TEXTURE_2D);
+  glEnable(GL_COLOR_MATERIAL);
+  glDisable(GL_FOG);
+  glEnable(GL_BLEND);
 
   // draw the sun
-  glPushMatrix ();
-    glTranslated (mCurrentSunPosition.x + playerPosition.x,
+  glPushMatrix();
+    glTranslated(mCurrentSunPosition.x + playerPosition.x,
       mCurrentSunPosition.y + playerPosition.y,
       mCurrentSunPosition.z + playerPosition.z);
 
-    glScaled (500.0, 500.0, 500.0);
-    glColor4f (mSunColor[0], mSunColor[1], mSunColor[2], -(mStarAlpha - 0.25f));
+    glScaled(500.0, 500.0, 500.0);
+    glColor4f(mSunColor[0], mSunColor[1], mSunColor[2], -(mStarAlpha - 0.25f));
 
-    glBegin (GL_QUADS);
-      AssetManager::drawBlankBlock ();
-    glEnd ();
-  glPopMatrix ();
+    glBegin(GL_QUADS);
+      AssetManager::drawBlankBlock();
+    glEnd();
+  glPopMatrix();
 
   // draw the moon
-  glPushMatrix ();
-    glTranslated (-mCurrentSunPosition.x + playerPosition.x,
+  glPushMatrix();
+    glTranslated(-mCurrentSunPosition.x + playerPosition.x,
       -mCurrentSunPosition.y + playerPosition.y,
       -mCurrentSunPosition.z + playerPosition.z);
 
-    glScaled (900.0, 900.0, 900.0);
+    glScaled(900.0, 900.0, 900.0);
     // nice moon blue color
-//    glColor4f (0.75, 1.0, 1.0, mStarAlpha + 0.25);
+//    glColor4f(0.75, 1.0, 1.0, mStarAlpha + 0.25);
 
     // red
-    glColor4f (0.8f, 0.0f, 0.1f, mStarAlpha + 0.25f);
+    glColor4f(0.8f, 0.0f, 0.1f, mStarAlpha + 0.25f);
 
-    glBegin (GL_QUADS);
-      AssetManager::drawBlankBlock ();
-    glEnd ();
-  glPopMatrix ();
+    glBegin(GL_QUADS);
+      AssetManager::drawBlankBlock();
+    glEnd();
+  glPopMatrix();
 
 
   // draw the clouds
-  mCloudSim->draw (cam);
+  mCloudSim->draw(cam);
 
   // draw the stars
   for (size_t i = 0; i < NUM_STARS; ++i) {
-    glPushMatrix ();
-      glRotated (secs, 0.0, 0.0, 1.0);
+    glPushMatrix();
+      glRotated(secs, 0.0, 0.0, 1.0);
 
-      glTranslated (mStars[i].x + playerPosition.x,
+      glTranslated(mStars[i].x + playerPosition.x,
         mStars[i].y + playerPosition.y,
         mStars[i].z + playerPosition.z);
 
-      glScalef (100.0f, 100.0f, 100.0f);
-      glColor4f (1.0f, 1.0f, 0.5f, mStarAlpha);
+      glScalef(100.0f, 100.0f, 100.0f);
+      glColor4f(1.0f, 1.0f, 0.5f, mStarAlpha);
 
-      glBegin (GL_QUADS);
-        AssetManager::drawBlankBlock ();
-      glEnd ();
-    glPopMatrix ();
+      glBegin(GL_QUADS);
+        AssetManager::drawBlankBlock();
+      glEnd();
+    glPopMatrix();
   }
 
-  glDisable (GL_BLEND);
-  glEnable (GL_FOG);
-  glDisable (GL_COLOR_MATERIAL);
-  glEnable (GL_TEXTURE_2D);
-  glEnable (GL_DEPTH_TEST);
+  glDisable(GL_BLEND);
+  glEnable(GL_FOG);
+  glDisable(GL_COLOR_MATERIAL);
+  glEnable(GL_TEXTURE_2D);
+  glEnable(GL_DEPTH_TEST);
 
   // restore the view volume
-  cam.setNearAndFar (oldNearAndFar);
+  cam.setNearAndFar(oldNearAndFar);
 }
 
 
-int SkySim::getSkyLightLevel(void) {
+int SkySim::getSkyLightLevel() {
   double lightRange = (LIGHT_LEVEL_MAX - 8) - (LIGHT_LEVEL_MIN);
 //  return LIGHT_LEVEL_MIN + (BYTE)(lightRange * (1.0 - max(mStarAlpha, 0.0f)));
   static BYTE MOON_LEVEL_HACK = 4;
   return MOON_LEVEL_HACK + (BYTE)(lightRange * (1.0 - max(mStarAlpha, 0.0f)));
 }
-
-
-

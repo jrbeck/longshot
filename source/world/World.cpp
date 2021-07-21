@@ -161,6 +161,7 @@ int World::update(v3d_t playerPosition) {
 
   // load the columns around the player
   if (thisTick - lastChunkTick > 50) {
+  // if (thisTick - lastChunkTick > 0) {
     loadSurroundingColumns(playerPosition);
     lastChunkTick = thisTick;
   }
@@ -179,7 +180,7 @@ int World::update(v3d_t playerPosition) {
 }
 
 int World::preloadColumns(int numColumns, v3d_t pos, LoadScreen* loadScreen) {
-  int start_ticks = SDL_GetTicks ();
+  int start_ticks = SDL_GetTicks();
   printf("%6d:  World::preloadColumns()", SDL_GetTicks ());
 
   // resize the WorldMap in case someone was monkeying with it
@@ -223,7 +224,7 @@ int World::loadSurroundingColumns(v3d_t pos) {
     loadColumn(regionIndex.x, regionIndex.z, true);
   }
 
-  for (int count = 1; count < maxCount; /*count++*/ ) {
+  for (int count = 1; count < maxCount; /*++count*/ ) {
     for (int i = 0; i < runLength; ++i) {
       // move to the next column region
       regionIndex.x += nextAdd[direction][0];
@@ -239,7 +240,7 @@ int World::loadSurroundingColumns(v3d_t pos) {
           return numColumnsLoaded;
         }
       }
-      count++;
+      ++count;
       if (count == maxCount) {
         return 0;
       }
@@ -315,15 +316,15 @@ int World::loadColumn(int xIndex, int zIndex, const int* heightMap) {
   return numBlocks;
 }
 
-int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* heightMap, bool doOutCroppings) {
+int World::loadColumn(WorldColumn& worldColumn, int xIndex, int zIndex, const int* heightMap, bool doOutCroppings) {
   int worldX = xIndex * WORLD_CHUNK_SIDE;
   int worldZ = zIndex * WORLD_CHUNK_SIDE;
 
-  wc.mWorldIndex.x = xIndex;
-  wc.mWorldIndex.z = zIndex;
+  worldColumn.mWorldIndex.x = xIndex;
+  worldColumn.mWorldIndex.z = zIndex;
 
-  wc.mWorldPosition.x = worldX;
-  wc.mWorldPosition.z = worldZ;
+  worldColumn.mWorldPosition.x = worldX;
+  worldColumn.mWorldPosition.z = worldZ;
 
   block_t block;
   block.faceVisibility = 0;
@@ -400,10 +401,10 @@ int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* height
           // this will generate the ground block and all the water above
           block.type = mPeriodics.generateBlockAtWorldPosition(worldPosition);
           if (block.type > BLOCK_TYPE_AIR) {
-            wc.setBlockAtWorldPosition(worldPosition, block);
+            worldColumn.setBlockAtWorldPosition(worldPosition, block);
 
             if (gBlockData.get(block.type)->solidityType == BLOCK_SOLIDITY_TYPE_LIQUID) {
-              wc.mNumUnderWater++;
+              worldColumn.mNumUnderWater++;
             }
           }
         }
@@ -421,7 +422,7 @@ int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* height
             floorBlockType = block.type;
           }
           if (block.type > BLOCK_TYPE_AIR) {
-            wc.setBlockAtWorldPosition(worldPosition, block);
+            worldColumn.setBlockAtWorldPosition(worldPosition, block);
           }
         }
 
@@ -430,7 +431,7 @@ int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* height
           if (treePossible && r_numi(0, 10) >= 5) {
             // reset this to the ground level
             worldPosition.y = worldY;
-            growTree(worldPosition, floorBlockType, wc.mNumUnderWater);
+            growTree(worldPosition, floorBlockType, worldColumn.mNumUnderWater);
           }
           else {
             worldPosition.y = worldY;
@@ -441,7 +442,7 @@ int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* height
     }
   }
 
-  int lowest = wc.getLowestBlockHeight();
+  int lowest = worldColumn.getLowestBlockHeight();
 
   // fill in the underground
 /*  for (relativePosition.z = 0; relativePosition.z < DEFAULT_REGION_SIDE; relativePosition.z++) {
@@ -456,7 +457,7 @@ int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* height
       for (worldPosition.y = lowest; worldPosition.y < terrainHeight; worldPosition.y++) {
         block_t block = mPeriodics.generateBlockAtWorldPosition (worldPosition);
 
-        wc.setBlockAtWorldPosition (worldPosition, block, mPeriodics);
+        worldColumn.setBlockAtWorldPosition (worldPosition, block, mPeriodics);
       }
 
     }
@@ -479,12 +480,12 @@ int World::loadColumn(WorldColumn& wc, int xIndex, int zIndex, const int* height
         else {
           block.type = mPeriodics.generateBlockAtWorldPosition(worldPosition, terrainHeight);
         }
-        wc.setBlockAtWorldPosition(worldPosition, block);
+        worldColumn.setBlockAtWorldPosition(worldPosition, block);
       }
     }
   }
 
-  applyOverdrawBlocks(wc);
+  applyOverdrawBlocks(worldColumn);
 
   return 1;
 }
@@ -623,7 +624,7 @@ void World::growBlockTree(v3di_t position) {
   height = r_numi(5, 9);
 
   // lay the trunk
-  for (int j = 0; j < height; j++) {
+  for (int j = 0; j < height; ++j) {
     mWorldMap->setBlock(position, block);
     position.y++;
   }
@@ -636,9 +637,9 @@ void World::growBlockTree(v3di_t position) {
 
   height = r_numi(1, 6);
 
-  for (int j = 0; j < height; j++) {
+  for (int j = 0; j < height; ++j) {
     for (int i = -2; i <= 2; ++i) {
-      for (int k = -2; k <= 2; k++) {
+      for (int k = -2; k <= 2; ++k) {
         leafPosition.x = position.x + i;
         leafPosition.y = position.y + j;
         leafPosition.z = position.z + k;
@@ -917,15 +918,15 @@ void World::growPalmTree(v3di_t position) {
 
 void World::growGroundCover(v3di_t position) {
   BYTE groundType = mWorldMap->getBlockType(position);
-  GroundCoverInfo gci = mPeriodics.getGroundCoverInfo(position, groundType);
+  GroundCoverInfo groundCoverInfo = mPeriodics.getGroundCoverInfo(position, groundType);
 
-  if (gci.height <= 0) {
+  if (groundCoverInfo.height <= 0) {
     return;
   }
 
   block_t block;
-  block.type = gci.blockType;
-  for (int y = 0; y < gci.height; y++) {
+  block.type = groundCoverInfo.blockType;
+  for (int y = 0; y < groundCoverInfo.height; ++y) {
     position.y++;
     mWorldMap->setBlock(position, block);
   }

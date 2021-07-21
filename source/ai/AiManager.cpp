@@ -1,8 +1,9 @@
 #include "../ai/AiManager.h"
 
-AiManager::AiManager(GameModel* gameModel) {
-  mGameModel = gameModel;
-  mMaxCrittersHACK = 0;
+AiManager::AiManager(GameModel* gameModel) :
+  mGameModel(gameModel),
+  mMaxCrittersHACK(0)
+{
 }
 
 AiManager::~AiManager() {
@@ -350,7 +351,7 @@ vector<size_t> AiManager::getAllItemHandles(void) {
   vector<size_t> itemList;
 
   for (size_t i = 0; i < mAiEntities.size(); ++i) {
-    for (size_t j = 0; j < AiEntity::AI_INVENTORY_SIZE; j++) {
+    for (size_t j = 0; j < AiEntity::AI_INVENTORY_SIZE; ++j) {
       if (mAiEntities[i]->mInventory[j] > 0) {
         itemList.push_back(mAiEntities[i]->mInventory[j]);
       }

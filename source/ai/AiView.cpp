@@ -17,7 +17,6 @@ AiView::~AiView() {
 
 void AiView::loadAssets() {
   mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_tiger.png");
-
   //  mHeadTextureHandles[AITYPE_HOPPER] = AssetManager::loadImg("art/32_head_peopleeater.bmp");
 
   mHeadTextureHandles[AITYPE_SHOOTER] = AssetManager::loadImg("art/32_head_shooter.bmp");

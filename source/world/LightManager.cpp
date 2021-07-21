@@ -116,10 +116,9 @@ void LightManager::removeLight(size_t handle) {
 
 IntColor LightManager::getLightLevel(const v3di_t& position) const {
   IntColor level = { 0, 0, 0 };
-  IntColor temp;
   size_t numLights = mLights.size();
   for (size_t i = 0; i < numLights; ++i) {
-    temp = mLights[i]->getLevel(position);
+    const IntColor& temp = mLights[i]->getLevel(position);
     level.r += temp.r;
     level.g += temp.g;
     level.b += temp.b;
@@ -228,14 +227,10 @@ void LightManager::load(FILE* file) {
   fread(&numLights, sizeof(size_t), 1, file);
   //  printf("LightManager::load(): loading %d lights\n", numLights);
   for (size_t i = 0; i < numLights; ++i) {
-    WorldLight *light = new WorldLight;
+    WorldLight* light = new WorldLight;
     light->load(file);
     light->mHandle = mNextHandle++;
     mInactiveLights.push_back(light);
   }
   printf("LightManager::load(): loaded %lu lights\n", mInactiveLights.size());
 }
-
-
-
-

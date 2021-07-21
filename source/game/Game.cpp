@@ -106,7 +106,6 @@ void game_c::gameLoop() {
   unsigned int ticks = SDL_GetTicks();
   mLastUpdateTime = (double)ticks / 1000.0;
   mGameState = GAMESTATE_PLAY;
-
   int quit = 0;
   bool escapePressed;
 
@@ -211,6 +210,8 @@ int game_c::handleMenuChoice(int menuChoice) {
   case GAMEMENU_SHIP:
     if (mGameModel->mLocation->getType() != LOCATION_SHIP) {
       mGameModel->saveLocation();
+      delete mGameView;
+      mGameView = new GameView(mGameModel, mAssetManager, mGameWindow);
       mGameModel->initializeStarShip(false);
       mGameView->initializeForLocation();
       XXXpostLocationInitializeSetup();
@@ -238,6 +239,8 @@ int game_c::handleMenuChoice(int menuChoice) {
 
     if (planetMap->chooseLocation(*mGameModel->mCurrentPlanet, planetPos)) {
       mGameModel->saveLocation();
+      delete mGameView;
+      mGameView = new GameView(mGameModel, mAssetManager, mGameWindow);
       // mGameModel->initializePlanet(false, &planetPos, true, mGameWindow);
       mGameModel->initializePlanet(false, &planetPos, false, mGameWindow);
       mGameView->initializeForLocation();

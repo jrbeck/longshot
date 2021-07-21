@@ -1,9 +1,9 @@
 #include "Longshot.h"
 
 Longshot::Longshot() :
-  mMainMenu(NULL),
-  mGame(NULL),
-  mRogueViewer(NULL)
+  mMainMenu(nullptr),
+  mGame(nullptr),
+  mRogueViewer(nullptr)
 {
   printf("Longshot constructor ----------------\n");
 
@@ -34,25 +34,25 @@ Longshot::~Longshot() {
   printf("Longshot destructor - execution time: %.2fs\n", (double)SDL_GetTicks() / 1000.0);
   printf("---------------------------------------------------------\n");
 
-  if (mMainMenu != NULL) {
+  if (mMainMenu != nullptr) {
     delete mMainMenu;
-    mMainMenu = NULL;
+    mMainMenu = nullptr;
   }
 
   // this should never happen
-  if (mGame != NULL) {
-    printf("Longshot::~Longshot(): error: mGame not NULL\n");
+  if (mGame != nullptr) {
+    printf("Longshot::~Longshot(): error: mGame not nullptr\n");
     delete mGame;
-    mGame = NULL;
+    mGame = nullptr;
   }
 
   if (gDefaultFontTextureHandle != 0) {
     glDeleteTextures(1, &gDefaultFontTextureHandle);
   }
 
-  if (mGameWindow != NULL) {
+  if (mGameWindow != nullptr) {
     delete mGameWindow;
-    mGameWindow = NULL;
+    mGameWindow = nullptr;
   }
 }
 
@@ -69,9 +69,8 @@ void Longshot::reloadMenu() {
   GameMenu::setDefaultTextureHandle(gDefaultFontTextureHandle);
 
   // create a new menu
-  if (mMainMenu != NULL) {
+  if (mMainMenu != nullptr) {
     delete mMainMenu;
-    mMainMenu = NULL;
   }
   mMainMenu = new GameMenu();
 
@@ -151,9 +150,9 @@ int Longshot::loop() {
         break;
     }
 
-    if (mGame != NULL) {
+    if (mGame != nullptr) {
       delete mGame;
-      mGame = NULL;
+      mGame = nullptr;
     }
   }
 

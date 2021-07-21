@@ -52,7 +52,7 @@ enum {
   LIGHT_LEVEL_NOT_SET
 };
 
-#define ONE_OVER_LIGHT_LEVEL_MAX    (1.0f/((float)LIGHT_LEVEL_MAX))
+#define ONE_OVER_LIGHT_LEVEL_MAX (1.0f/((float)LIGHT_LEVEL_MAX))
 
 enum {
   BIT_MASK_1 = 0x01,

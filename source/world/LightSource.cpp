@@ -2,46 +2,46 @@
 
 
 
-LightSource::LightSource (void) {
+LightSource::LightSource() {
 }
 
 
 
-LightSource::~LightSource (void) {
+LightSource::~LightSource() {
 }
 
 
 
-void LightSource::setColor (v3d_t color) {
+void LightSource::setColor(v3d_t color) {
   mColor = color;
 }
 
 
 
-v3d_t LightSource::getColor (void) {
+v3d_t LightSource::getColor() {
   return mColor;
 }
 
 
 
-void LightSource::setDirection (v3d_t direction) {
-  mDirection = v3d_normalize (direction);
+void LightSource::setDirection(v3d_t direction) {
+  mDirection = v3d_normalize(direction);
 }
 
 
-v3d_t LightSource::getDirection (void) {
+v3d_t LightSource::getDirection() {
   return mDirection;
 }
 
 
-v3d_t LightSource::computeDirectionalLightIntensity (v3d_t normalVector, bool isTheSun) {
-  double intensityScalar = v3d_dot (mDirection, normalVector);
+v3d_t LightSource::computeDirectionalLightIntensity(v3d_t normalVector, bool isTheSun) {
+  double intensityScalar = v3d_dot(mDirection, normalVector);
 
   if (intensityScalar < 0.0) {
     intensityScalar = 0.0;
   }
 
-  double overheadIntensity = v3d_dot (mDirection, v3d_v (0.0, 1.0, 0.0));
+  double overheadIntensity = v3d_dot(mDirection, v3d_v (0.0, 1.0, 0.0));
 
   if (overheadIntensity < 0.0) {
     intensityScalar += (overheadIntensity * 4.0);
@@ -79,9 +79,7 @@ v3d_t LightSource::computeDirectionalLightIntensity (v3d_t normalVector, bool is
     intensityScalar = 1.0;
   }
 
-  v3d_t color = v3d_scale (intensityScalar, mColor);
+  v3d_t color = v3d_scale(intensityScalar, mColor);
 
   return color;
 }
-
-
